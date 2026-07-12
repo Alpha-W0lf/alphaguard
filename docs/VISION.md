@@ -4,7 +4,7 @@
 
 **Status:** Planning
 
-**Last Updated:** July 12, 2026 (GitHub-only sharing; Loom removed)
+**Last Updated:** July 12, 2026 (GitHub-only; Loom removed; LLM `gemma4:e2b`; LangSmith + Phoenix fallback locked)
 
 **Owner:** Tom
 
@@ -168,9 +168,9 @@ Each item adds days of work without improving the core outcome: **technical inte
 | Streaming | Apache Kafka (Docker) | Enterprise data eng signal; interview topics |
 | Vector DB | Qdrant | In-demand vs Chroma; payload filtering |
 | Orchestration | LangGraph | Stateful multi-agent standard in 2026 |
-| Local LLM | Ollama + config-driven model (see selection table) | Free; swappable without code changes |
+| Local LLM | Ollama + config-driven model (**default `gemma4:e2b`**) | Modern edge model; swappable |
 | Embeddings | `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) | Local, fast; separate from agent LLM |
-| LLMOps | LangSmith | Market leader for traces in AI eng interviews |
+| LLMOps | LangSmith (default) + Phoenix local fallback | Market leader for traces; offline/no-signup path |
 | API | FastAPI | Thin trigger/replay endpoint |
 | ML Gate | XGBoost + scikit-learn | Fast local training; DE interview staple |
 | Sentiment features | FinBERT inference (HF) | Financial domain signal without training |
@@ -202,35 +202,26 @@ Each item adds days of work without improving the core outcome: **technical inte
 
 ### Local LLM Selection (Config-Driven, Not Hardcoded)
 
-Early brainstorming cited `llama3` 8B as a safe default. For v1 on a **16GB M2 Pro**, prefer a **2026-era model** that fits alongside Docker (Kafka, Qdrant) and produces reliable structured JSON via Ollama's `format` + JSON schema.
+**Purpose of the model:** Demonstrate Agent 1 structured JSON + RAG on **commodity 16GB hardware** — not SOTA chat quality. Tag is always `OLLAMA_MODEL` (never hardcoded).
 
-**Important:** The **Qwen 3.6** family exists on Ollama (`qwen3.6:27b`, `qwen3.6:35b`) but there is **no official Qwen 3.6 8B dense model**. Qwen 3.6 sizes are primarily **27B dense** and **35B-A3B MoE** (~24GB quantized)—too large to run concurrently with full Docker stack on 16GB. For AlphaGuard v1, treat Qwen 3.6 as a **future upgrade path** on 32GB+ hardware or when Ollama is the only heavy service running—not the default for this machine.
+**Reality check (2026-07-12):**
+- **Qwen 3.7** — not available as open local weights on Ollama (API-only).
+- **Qwen 3.6** — open, but **no small dense 4B**; 27B / 35B-A3B only → not a concurrent default with Kafka+Qdrant on 16GB.
+- **Qwen 3.5:4b** — small (~3.4GB) and comfortable with Docker, but **not the newest** family.
+- **Gemma 4** — current Google open family on Ollama; edge tags `gemma4:e2b` (~7.2GB) and `gemma4:e4b` (~9.6GB); agent/tooling-oriented; multimodal-capable (we still use **text-only** for AlphaGuard Agent 1).
 
-**Selection criteria (16GB M2 Pro):**
-- Quantized load roughly **5–10GB** with headroom for OS + containers
-- Ollama **structured outputs** (`format` + JSON schema) for Agent 1
-- Swappable via config (`OLLAMA_MODEL`); never hardcoded in agent logic
+**Locked default (portfolio / 16GB M2 Pro):** `gemma4:e2b`
 
-**Recommended candidates (benchmark one at implementation):**
+| Priority | Ollama tag | Approx. size | Role |
+|----------|------------|--------------|------|
+| **1 — Default** | `gemma4:e2b` | ~7.2GB | Modern edge model; agent-oriented; use with **sequential RAM** (see below) |
+| **2 — Low-RAM / concurrent fallback** | `qwen3.5:4b` | ~3.4GB | Best headroom if Compose + IDE + browser must stay hot |
+| 3 — Optional quality (infra stopped) | `gemma4:e4b` | ~9.6GB | Only when Kafka/Qdrant are down or machine has more RAM |
+| Avoid as default | `qwen3.6:*`, `gemma4:12b+`, `gemma4:26b/31b` | ≥17GB class | Breaks 16GB + Docker + background apps |
 
-| Priority | Ollama tag | Approx. size | Why consider |
-|----------|------------|--------------|--------------|
-| 1 | `qwen3.5:9b` | ~6GB | Workspace-validated; good quality/speed on Apple Silicon |
-| 2 | `qwen3:8b` | ~5GB | Fast, proven on 16GB Macs |
-| 3 | `gemma4:latest` / `gemma4:e4b` | ~9–10GB | Agent-oriented; native tool/JSON calling |
-| 4 | `qwen3.5:4b` | ~3GB | If RAM is tight after Docker is up |
+**RAM operating rule:** Prefer **not** holding Kafka + Qdrant + Ollama + FinBERT all resident. Replay demos may stop unused containers; training/feature jobs run FinBERT offline in batch.
 
-**Future / not v1 default on 16GB:**
-
-| Model | Notes |
-|-------|--------|
-| `qwen3.6:35b` | MoE; ~24GB—fits 32GB M2 Max with care, not 16GB + Docker |
-| `qwen3.6:27b` | ~17GB dense—marginal on 16GB alone |
-| `llama3.1:8b` | Legacy fallback only |
-
-**Cross-reference:** `second_brain/docs/guides/best_practices_local_llm.md`, `best_practices_ollama_thinking_models.md`, and `simple_content_platform` model registry research for M2 Max vs M2 Pro constraints.
-
-**Interview story:** *"Agent LLM is config-driven. We benchmarked [model] for structured JSON on 16GB hardware with structured outputs—not model hype."*
+**Interview story:** *"Default is `gemma4:e2b` for a current open edge model. Config allows `qwen3.5:4b` when reviewers need maximum concurrent headroom. We do not chase Qwen 3.6/3.7 large-only locals on 16GB."*
 
 ### Key Patterns
 
@@ -290,7 +281,12 @@ Detailed mitigations belong in the architecture doc and dev guides.
 | Label definition | HIGH_RISK per Technical Approach |
 | Tickers | 8 names (see above) |
 | Historical news | Kaggle/CSV batch + RSS for live demo |
-| Local LLM | Config-driven; see model table below | |
+| Local LLM | **Default `gemma4:e2b`**; fallback `qwen3.5:4b`; config `OLLAMA_MODEL` |
+| Observability | **LangSmith free default**; **Phoenix local fallback**; replay + screenshots required |
+| FinBERT concurrency | **Batch offline** — do not require FinBERT resident with Kafka+Qdrant+Ollama on 16GB |
+| Sharing | Public GitHub + docs; **no Loom**; no required live hosted demo |
+
+**Program SSOT:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`
 
 ---
 
