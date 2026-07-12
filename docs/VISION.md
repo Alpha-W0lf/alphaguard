@@ -4,7 +4,7 @@
 
 **Status:** Planning
 
-**Last Updated:** June 23, 2026
+**Last Updated:** July 12, 2026 (GitHub-only sharing; Loom removed)
 
 **Owner:** Tom
 
@@ -50,7 +50,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 1. **Build** the pipeline locally on M2 Pro (16GB) with Docker Compose.
 2. **Study** each component daily: hand-write core pieces without AI after implementing with AI.
-3. **Share** public GitHub repo + LangSmith screenshots + short Loom walkthrough before technical rounds.
+3. **Share** public GitHub repo + README/GETTING_STARTED + LangSmith (or local) trace screenshots in `docs/` — no Loom or required live demo.
 4. **Defend** architecture, tradeoffs, leakage controls, and failure modes in system design interviews.
 
 ### Key Capabilities
@@ -65,7 +65,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 ```
 Study job posting → Map skills gap → Build/rehearse AlphaGuard component →
-Send repo + Loom before technical round → Whiteboard same architecture live
+Point interviewers at public repo + docs artifacts → Whiteboard same architecture live
 ```
 
 AlphaGuard does **not** run in production, manage capital, or connect to live brokerage APIs.
@@ -248,11 +248,12 @@ Early brainstorming cited `llama3` 8B as a safe default. For v1 on a **16GB M2 P
 | Artifact | Purpose |
 |----------|---------|
 | Public GitHub (pinned) | Primary proof |
-| LangSmith trace screenshots | LLMOps proof |
-| 3–5 min Loom | For HMs/interviewers who won't clone repo |
+| README + GETTING_STARTED | Skim + clone-and-run path |
+| LangSmith (or Phoenix) trace screenshots in `docs/` | LLMOps proof without video |
+| Replay/fixture smoke output | Proof the path runs without live feeds |
 | `INTERVIEW.md` | Deep-dive prep + send before technical round |
 
-No full cloud deploy required for v1.
+No Loom. No required live hosted demo. No full cloud deploy required for v1.
 
 ---
 
