@@ -1,0 +1,7 @@
+{"case_id":"schema_valid_buy","check":"schema","action":"BUY","confidence":0.7,"expect":"ok"}
+{"case_id":"schema_reject_sell","check":"schema","action":"SELL","confidence":0.7,"expect":"reject"}
+{"case_id":"identity_overwrite","check":"identity","llm_ticker":"MSFT","input_ticker":"AAPL","expect":"AAPL"}
+{"case_id":"asof_drop_future","check":"asof","expect":"future_hit_dropped"}
+{"case_id":"gate_buy_high_risk_reject","check":"gate","action":"BUY","force_score":0.95,"expect":"reject"}
+{"case_id":"gate_hold_approve","check":"gate","action":"HOLD","force_score":0.95,"expect":"approve"}
+{"case_id":"oou_ticker_reject","check":"oou","ticker":"TSLA","expect":"reject"}

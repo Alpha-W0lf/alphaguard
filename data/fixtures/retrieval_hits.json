@@ -1,0 +1,80 @@
+{
+  "evt-aapl-001": [
+    {
+      "document_id": "doc-aapl-prior-1",
+      "text": "Apple suppliers reported higher component orders ahead of spring launches.",
+      "ticker": "AAPL",
+      "available_at": "2024-03-11T18:00:00Z",
+      "source": "fixture",
+      "score": 0.91
+    },
+    {
+      "document_id": "doc-aapl-future-leak",
+      "text": "LEAK FIXTURE — must be filtered: Apple secret product roadmap published after event.",
+      "ticker": "AAPL",
+      "available_at": "2024-03-13T12:00:00Z",
+      "source": "fixture",
+      "score": 0.99
+    }
+  ],
+  "evt-msft-001": [
+    {
+      "document_id": "doc-msft-prior-1",
+      "text": "Microsoft signed multi-year cloud deals with enterprise customers.",
+      "ticker": "MSFT",
+      "available_at": "2024-04-01T20:00:00Z",
+      "source": "fixture",
+      "score": 0.88
+    }
+  ],
+  "evt-nvda-001": [
+    {
+      "document_id": "doc-nvda-prior-1",
+      "text": "Chipmakers saw rising backlog for AI accelerators in prior quarter.",
+      "ticker": "NVDA",
+      "available_at": "2024-05-07T16:30:00Z",
+      "source": "fixture",
+      "score": 0.9
+    }
+  ],
+  "evt-googl-001": [
+    {
+      "document_id": "doc-googl-prior-1",
+      "text": "Regulators previously outlined concerns about search advertising concentration.",
+      "ticker": "GOOGL",
+      "available_at": "2024-06-17T12:00:00Z",
+      "source": "fixture",
+      "score": 0.85
+    }
+  ],
+  "evt-amzn-001": [
+    {
+      "document_id": "doc-amzn-prior-1",
+      "text": "Amazon warehouse automation investments showed early efficiency gains.",
+      "ticker": "AMZN",
+      "available_at": "2024-07-08T19:00:00Z",
+      "source": "fixture",
+      "score": 0.84
+    }
+  ],
+  "evt-meta-001": [
+    {
+      "document_id": "doc-meta-prior-1",
+      "text": "Meta previously signaled higher CapEx for GPU clusters.",
+      "ticker": "META",
+      "available_at": "2024-08-20T15:00:00Z",
+      "source": "fixture",
+      "score": 0.86
+    }
+  ],
+  "evt-spy-001": [
+    {
+      "document_id": "doc-spy-prior-1",
+      "text": "Macro desks noted cooling CPI prints in the prior session.",
+      "ticker": "SPY",
+      "available_at": "2024-09-09T21:00:00Z",
+      "source": "fixture",
+      "score": 0.8
+    }
+  ]
+}

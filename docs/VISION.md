@@ -2,13 +2,13 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Planning
+**Status:** Vertical slice shipped (guide 01) — **not** “v1 complete”
 
-**Last Updated:** July 12, 2026 (GitHub-only; Loom removed; LLM `gemma4:e2b`; LangSmith + Phoenix fallback locked)
+**Last Updated:** July 13, 2026 (Pass 10 Align docs: status ↔ repo; guide-01 Implement+Review done)
 
 **Owner:** Tom
 
-**Guide:** Structured per [`second_brain/docs/guides/meta_creating_vision_docs.md`](../../second_brain/docs/guides/meta_creating_vision_docs.md). Detailed architecture belongs in a separate doc; this file is the decision framework.
+**Guide:** Structured per [`second_brain/docs/guides/meta_creating_vision_docs.md`](../../second_brain/docs/guides/meta_creating_vision_docs.md). This file is the **product / why** decision framework. Binding contracts, as-of rules, and gate policy live in [`ARCHITECTURE.md`](./ARCHITECTURE.md). Program locks **AG1–AG3:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`.
 
 **Related project:** [Lowd Capital](../lowd_capital/docs/VISION.md) — private, real trading factory. AlphaGuard is intentionally separate; no proprietary alpha logic lives here.
 
@@ -42,7 +42,7 @@ Intensive build over **6–7 days max**. Interview prep (explain-without-AI dril
 
 ### What It Does
 
-**AlphaGuard** is a stateful multi-agent financial research pipeline that ingests news, retrieves context via RAG, proposes structured trade ideas (Agent 1), and gates them through a supervised ML risk classifier (Agent 2)—with full LangSmith tracing.
+**AlphaGuard** is a stateful multi-agent financial research pipeline that ingests news, retrieves context via RAG, proposes structured trade ideas (Agent 1), and gates them through a supervised ML **downside-risk scorer + deterministic policy** (Agent 2)—with LangSmith/Phoenix best-effort tracing and a mandatory local run summary.
 
 It simulates institutional “analyst + risk” separation using tools employers recognize in mid-2026: **Kafka, Qdrant, LangGraph, Ollama, LangSmith, FastAPI, XGBoost**.
 
@@ -55,10 +55,10 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 ### Key Capabilities
 
-1. **Event-driven ingestion:** Financial headlines flow through Kafka; consumers embed and upsert into Qdrant (rolling context window).
-2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven ~8B model; see Technical Approach) reads RAG context and outputs structured JSON (`action`, `ticker`, `confidence`, `rationale`) via Ollama structured outputs.
-3. **Agent 2 — ML Risk Gate:** XGBoost classifier trained on **500 historical headline events** (Option B data strategy) approves or rejects Agent 1 proposals based on market-regime features—not Agent 1 backtest labels.
-4. **LLMOps observability:** Every agent step traced in LangSmith (latency, tokens, trajectories).
+1. **Event-driven ingestion:** Financial headlines flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). Replay fixtures bypass live Kafka for demos.
+2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
+3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
+4. **LLMOps observability:** Local run summary always; LangSmith default + Phoenix fallback (fail-open).
 5. **Interview artifacts:** README architecture diagram, `INTERVIEW.md` FAQ, optional replay demo of cached end-to-end runs.
 
 ### Workflow Integration
@@ -90,13 +90,13 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 **Rationale:** Senior AI/DE roles expect both agentic systems and tabular ML discipline.
 
-**In Practice:** Agent 1 = LLM. Agent 2 = XGBoost on engineered features. README states clearly: Agent 2 is a **regime/risk gate**, not an alpha model.
+**In Practice:** Agent 1 = LLM (`BUY|HOLD|PASS`). Agent 2 = XGBoost **downside-risk scorer** + deterministic approve/reject policy on engineered features. README states clearly: Agent 2 is a **regime / downside-risk gate**, not an alpha model.
 
 ### 4. Honest Data Science
 
 **Rationale:** Interviewers will probe leakage, labels, and train/test methodology.
 
-**In Practice:** 500 events, time-based split, features computed only from data available at headline time, labels from forward returns after event. Document limitations openly.
+**In Practice:** ~500 events, time-based split **before** any threshold fit, features computed only from completed sessions at/before headline time (`feature_as_of`), labels from **forward downside return only** (AG2). Volatility is a predictor and/or deterministic BUY veto — never a learned-label branch. Document limitations openly.
 
 ### 5. Public Shell, No Secret Sauce
 
@@ -112,15 +112,27 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 ---
 
+## Implementation progress (honest — do not inflate)
+
+| Milestone | Status | Evidence |
+|-----------|--------|----------|
+| Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
+| Option B ~500-event train + real metrics | **Not started** | No `training_events.parquet`; U4 source still open |
+| Live RSS → Kafka E2E | **Not started** | Compose present; no producer/consumer path |
+| `INTERVIEW.md` / GETTING_STARTED / trace screenshots | **Not started** | Absences are intentional debt, not silent wins |
+| Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
+
+README / AGENTS must keep saying **vertical slice**, not “v1 complete,” until Minimum Viable boxes below are honestly checked.
+
 ## Success Criteria
 
 ### Minimum Viable (v1 Done)
 
-- [ ] `docker compose up` runs Kafka + Qdrant locally
+- [ ] `docker compose up` runs Kafka + Qdrant locally *(Compose file exists; not yet proven as an operator path)*
 - [ ] 500 headline events dataset built (`data/training_events.parquet`) with documented schema
-- [ ] XGBoost risk model trained with time-based holdout; metrics logged in README
-- [ ] One live headline (or replayed sample) flows: ingest → RAG → Agent 1 → Agent 2 → LangSmith trace
-- [ ] Public GitHub with architecture diagram, stack table, and limitations section
+- [ ] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics logged in README *(fixture bundle ≠ Option B)*
+- [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(LangSmith/Phoenix = envelope status stubs today; real spans later)*
+- [ ] Public GitHub polish with architecture diagram, stack table, and limitations section *(README stub exists)*
 - [ ] `INTERVIEW.md` with 15+ gotcha Q&A
 - [ ] Tom can give 10-minute unprompted architecture walkthrough without opening code
 - [ ] Parallel interview prep: 15–30 min/day hand-coding (separate from build) while project runs
@@ -148,6 +160,9 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 - Model fine-tuning or full MLOps platform (MLflow registry, K8s, Terraform)
 - Cloud deployment of full Kafka stack
 - Second adversarial LLM agent (Agent 2 is ML, not LLM)
+- `SELL` proposals in v1 (AG1 — unsupported)
+- Volatility as a learned-label branch (AG2 — predictor / optional policy veto only)
+- Neural reranker / hybrid RRF ranking showcase for Agent 1 RAG
 - Cybersecurity / SOC log analysis theme
 - Beating recruiter screens (already not the bottleneck)
 - Training Agent 2 on historical Agent 1 outputs (Option C — deferred)
@@ -172,7 +187,7 @@ Each item adds days of work without improving the core outcome: **technical inte
 | Embeddings | `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) | Local, fast; separate from agent LLM |
 | LLMOps | LangSmith (default) + Phoenix local fallback | Market leader for traces; offline/no-signup path |
 | API | FastAPI | Thin trigger/replay endpoint |
-| ML Gate | XGBoost + scikit-learn | Fast local training; DE interview staple |
+| ML Gate | XGBoost downside scorer + scikit-learn + deterministic policy | Fast local training; DE interview staple; AG1 |
 | Sentiment features | FinBERT inference (HF) | Financial domain signal without training |
 | Prices | yfinance | Free OHLCV for features and labels |
 | Packaging | Docker Compose | One-command local infra |
@@ -181,20 +196,20 @@ Each item adds days of work without improving the core outcome: **technical inte
 
 **Training corpus:** 500 headline events aligned to tickers and trading days.
 
-**Per-event features (computed at headline time `t`):**
-- FinBERT sentiment score
-- `volatility_20d`, `return_5d_prior`, `return_20d_prior` for ticker
+**Per-event features (AG3 — last completed session at/before event; record `feature_as_of`):**
+- FinBERT sentiment score (batch offline)
+- `volatility_20d`, `return_5d_prior`, `return_20d_prior` for ticker (**predictors only**)
 - `spy_return_5d` (market context)
 - Optional: headline source bucket, word count
 
-**Label (training only):**
-- `HIGH_RISK = 1` if forward 5-trading-day return `< -3%` OR `volatility_20d` ≥ 90th percentile of training set
-- `OK = 0` otherwise
-- Drop ambiguous middle zone if needed to reduce noise
+**Label (training only — AG2; superseded vol-OR definition removed):**
+- `label_high_risk = 1` iff `fwd_return_5d < -0.03`; else `0`
+- `fwd_return_5d` = return from the **first completed session close at or after** the event’s calendar session to the close **5 trading sessions later** (labels may use post-event closes; features must not)
+- `volatility_20d` is **never** a branch of the learned label; it may remain a feature and/or an optional **deterministic BUY veto** outside the learned target
 
-**Split:** Time-ordered 80/20 (no random shuffle).
+**Split / thresholds:** Time-ordered 80/20 (no random shuffle). **Split first**, then fit `score_threshold` on **train only** by maximizing train F1 on `proba_high_risk` (optional `vol_veto_threshold` also train-only); freeze into the model bundle manifest.
 
-**Inference:** Agent 1 JSON + live features → `approve` / `reject` + `risk_score`. LangSmith logs both.
+**Inference (AG1):** Agent 1 JSON (`BUY|HOLD|PASS`) + as-of features → XGBoost `downside_risk_score` (`proba_high_risk`) → deterministic policy → `approve` / `reject`. Application stamps `event_id`/`ticker`. Local run summary always; LangSmith/Phoenix best-effort.
 
 **Headline sources (default):** Primary = curated CSV/Kaggle financial news archive for historical 500; live demo = RSS (Yahoo Finance). Document exact dataset in README.
 
@@ -226,8 +241,9 @@ Each item adds days of work without improving the core outcome: **technical inte
 ### Key Patterns
 
 - **Brains never call exchange APIs** — no execution layer in v1
-- **Structured JSON contracts** between agents with schema validation
-- **Separation of concerns:** `ingest/`, `agents/`, `ml/`, `infra/` modules
+- **Structured JSON contracts** between agents with schema validation (`BUY|HOLD|PASS` only; `SELL` rejected)
+- **Application owns identity** — `event_id` / `ticker` from the input event, not the LLM
+- **Separation of concerns:** `ingest/`, `pipeline/`, `agents/`, `ml/`, `infra/` modules; contracts in `ARCHITECTURE.md`
 
 ### Automation
 
@@ -276,17 +292,20 @@ Detailed mitigations belong in the architecture doc and dev guides.
 |----------|--------|
 | Repo visibility | Public |
 | Build budget | 6–7 days max |
-| Agent 2 algorithm | XGBoost |
-| Training events | 500 (Option B) |
-| Label definition | HIGH_RISK per Technical Approach |
-| Tickers | 8 names (see above) |
+| Agent 1 actions (AG1) | `BUY \| HOLD \| PASS` only; **`SELL` unsupported** |
+| Agent 2 role (AG1) | XGBoost **downside-risk scorer** + deterministic approve/reject policy |
+| Training events | ~500 (Option B) |
+| Label definition (AG2) | `label_high_risk = 1` iff `fwd_return_5d < -0.03`; **no volatility OR-branch** |
+| As-of (AG3) | UTC event clock; exchange calendar; completed-session features + `feature_as_of`; retrieval `available_at <= published_at` |
+| Tickers | 8 names (see above); reject out-of-universe in v1 training/fixtures |
 | Historical news | Kaggle/CSV batch + RSS for live demo |
 | Local LLM | **Default `gemma4:e2b`**; fallback `qwen3.5:4b`; config `OLLAMA_MODEL` |
-| Observability | **LangSmith free default**; **Phoenix local fallback**; replay + screenshots required |
+| Observability | **Local run summary mandatory**; LangSmith free default; Phoenix local fallback; screenshots required |
 | FinBERT concurrency | **Batch offline** — do not require FinBERT resident with Kafka+Qdrant+Ollama on 16GB |
 | Sharing | Public GitHub + docs; **no Loom**; no required live hosted demo |
 
-**Program SSOT:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`
+**Program SSOT (AG1–AG3):** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`  
+**Contracts SSOT:** [`ARCHITECTURE.md`](./ARCHITECTURE.md) — do not reintroduce superseded label/action text here.
 
 ---
 

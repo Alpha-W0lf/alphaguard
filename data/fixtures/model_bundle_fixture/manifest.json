@@ -1,0 +1,46 @@
+{
+  "bundle_id": "fixture-downside-v1",
+  "model_version": "0.1.0-fixture",
+  "bundle_kind": "fixture",
+  "feature_names": [
+    "finbert_sentiment",
+    "volatility_20d",
+    "return_5d_prior",
+    "return_20d_prior",
+    "spy_return_5d"
+  ],
+  "feature_dtypes": {
+    "finbert_sentiment": "float",
+    "volatility_20d": "float",
+    "return_5d_prior": "float",
+    "return_20d_prior": "float",
+    "spy_return_5d": "float"
+  },
+  "score_kind": "proba_high_risk",
+  "score_threshold": 0.45000000000000007,
+  "threshold_fitting": "train_f1_max",
+  "vol_veto_enabled": false,
+  "vol_veto_threshold": null,
+  "policy_version": "v1",
+  "label_definition": "fwd_return_5d < -0.03",
+  "label_window": {
+    "start": "first_completed_session_close_at_or_after_event_session",
+    "end": "close_5_trading_sessions_later"
+  },
+  "train_window": {
+    "start": "synthetic",
+    "end": "synthetic"
+  },
+  "dataset_hash": "588c726bfa83eb57",
+  "dataset_source": "scripts/build_fixture_bundle.py synthetic",
+  "metrics": {
+    "train_f1_at_threshold": 1.0,
+    "n_rows": 64
+  },
+  "library_versions": {
+    "xgboost": "3.3.0",
+    "numpy": "2.5.1"
+  },
+  "created_at": "2026-07-13T04:06:40.776659Z",
+  "model_filename": "model.json"
+}

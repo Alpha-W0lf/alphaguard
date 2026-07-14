@@ -1,0 +1,58 @@
+{
+  "evt-aapl-001": {
+    "finbert_sentiment": 0.42,
+    "volatility_20d": 0.18,
+    "return_5d_prior": 0.015,
+    "return_20d_prior": 0.04,
+    "spy_return_5d": 0.01,
+    "feature_as_of": "2024-03-11"
+  },
+  "evt-msft-001": {
+    "finbert_sentiment": 0.35,
+    "volatility_20d": 0.16,
+    "return_5d_prior": 0.01,
+    "return_20d_prior": 0.03,
+    "spy_return_5d": 0.008,
+    "feature_as_of": "2024-04-01"
+  },
+  "evt-nvda-001": {
+    "finbert_sentiment": 0.55,
+    "volatility_20d": 0.32,
+    "return_5d_prior": 0.05,
+    "return_20d_prior": 0.12,
+    "spy_return_5d": 0.012,
+    "feature_as_of": "2024-05-07"
+  },
+  "evt-googl-001": {
+    "finbert_sentiment": -0.25,
+    "volatility_20d": 0.22,
+    "return_5d_prior": -0.02,
+    "return_20d_prior": -0.01,
+    "spy_return_5d": 0.004,
+    "feature_as_of": "2024-06-17"
+  },
+  "evt-amzn-001": {
+    "finbert_sentiment": 0.3,
+    "volatility_20d": 0.2,
+    "return_5d_prior": 0.02,
+    "return_20d_prior": 0.05,
+    "spy_return_5d": 0.009,
+    "feature_as_of": "2024-07-08"
+  },
+  "evt-meta-001": {
+    "finbert_sentiment": 0.05,
+    "volatility_20d": 0.28,
+    "return_5d_prior": -0.01,
+    "return_20d_prior": 0.02,
+    "spy_return_5d": 0.006,
+    "feature_as_of": "2024-08-20"
+  },
+  "evt-spy-001": {
+    "finbert_sentiment": 0.2,
+    "volatility_20d": 0.12,
+    "return_5d_prior": 0.008,
+    "return_20d_prior": 0.025,
+    "spy_return_5d": 0.008,
+    "feature_as_of": "2024-09-09"
+  }
+}
