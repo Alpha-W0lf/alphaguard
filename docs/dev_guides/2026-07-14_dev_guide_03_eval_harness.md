@@ -195,9 +195,17 @@ All boxes start unchecked. Implement checks them with evidence. **Do not check b
   - `asof_drop_future` — add `published_at` + `hits` (mixed past + future; expect `future_hit_dropped`)  
   - `identity_overwrite` — add `llm_event_id` + `input_event_id`; migrate `expect` from `"AAPL"` → **`stamped_from_input`**  
 - [ ] **A4.** Confirm gate boundary cases use `force_score` sentinels `"eq_threshold"` / `"just_below_threshold"` resolved from live manifest (`just_below` = `threshold - 1e-6`); no hardcoded `0.45`.  
-- [ ] **A5.** Plan **required** vol-veto golden(s): tmp manifest with `vol_veto_enabled=true` + threshold; do **not** change committed fixture flags.  
-- [ ] **A6.** Plan **required** fixture-path OOU case (`via: "fixture"` + tmp replay JSONL / `load_replay_events`).  
-- [ ] **A6.** Confirm determinism twin is **one row** + double `apply_policy` (expect `same_decision`) — not a nested twin payload.
+- [ ] **A5.** Plan **required** vol-veto golden(s) with this **pinned recipe** (pass 37):  
+  - Copy `data/fixtures/model_bundle_fixture/{manifest.json,model.json}` into a pytest `tmp_path` bundle dir (same pattern as `tests/test_gate.py` skewed-manifest test).  
+  - In the **tmp** `manifest.json` only: set `vol_veto_enabled=true` and `vol_veto_threshold=0.05` (do **not** edit committed fixture).  
+  - Construct `DownsideRiskGate(tmp_bundle_dir)`.  
+  - Call `apply_policy(action="BUY", downside_risk_score=<resolved force_score below score_threshold e.g. "just_below_threshold">, volatility_20d=0.20)` so veto fires (`volatility_20d >= 0.05`) while score alone would approve.  
+  - JSONL row: `case_id=gate_vol_veto_reject`, `check=gate`, `expect=reject`, plus optional harness-only flag `tmp_vol_veto=true` (or detect by `case_id`) so dispatch uses tmp gate — do **not** flip committed fixture flags.  
+- [ ] **A6.** Plan **required** fixture-path OOU case with this **pinned recipe** (pass 37):  
+  - Write tmp JSONL with **one** `NewsEvent`-shaped line: `event_id`, `headline`, `ticker="TSLA"` (OOU), `source="fixture"`, `published_at` ISO-Z (mirror `replay_events.jsonl` shape).  
+  - Harness calls `load_replay_events(tmp_path)` and expects `FixtureLoadError` **or** `OutOfUniverseTickerError` / validation fail-closed (whatever `load_replay_events` raises today — do not soften).  
+  - JSONL: `case_id=oou_fixture_path_reject`, `check=oou`, `via="fixture"`, `ticker="TSLA"`, `expect=reject`.  
+- [ ] **A7.** Confirm determinism twin is **one row** + double `apply_policy` (expect `same_decision`) — not a nested twin payload.
 
 ### Phase B — Author ≥21 goldens (allocation recipe)
 
@@ -228,7 +236,7 @@ All boxes start unchecked. Implement checks them with evidence. **Do not check b
 | `oou_fixture_path_reject` | oou | reject | **new / required** — `via: "fixture"` + non-universe ticker via `load_replay_events` |
 | `gate_vol_veto_reject` | gate | reject | **new / required** — tmp manifest vol-veto path (committed fixture unchanged) |
 
-- [ ] **B1.** Grow / rewrite `eval/golden_cases.jsonl` to **≥21** rows matching allocation **5/3/4/6/3** (sum ≥21; theme minima respected) with expects from the frozen protocol, **plus** ≥1 vol-veto golden (may be additional beyond the 21 theme rows if cleaner).  
+- [ ] **B1.** Grow / rewrite `eval/golden_cases.jsonl` to **≥21** theme rows matching allocation **5/3/4/6/3**, **plus** ≥1 vol-veto golden (may be a 22nd row if cleaner — DoD is themes ≥21 **and** vol-veto present). Expects from the frozen protocol.  
 - [ ] **B2.** Enrich sparse stubs in the same edit (`asof_drop_future`, `identity_overwrite` + expect migrate).  
 - [ ] **B3.** Verify unique `case_id`s; every row has universal + per-`check` required keys; boundary gates use sentinels not `0.45`.  
 - [ ] **B4.** Ensure no case requires live Ollama, Kafka, or Option B train artifacts.  
@@ -304,9 +312,8 @@ rows=[json.loads(l) for l in Path("eval/golden_cases.jsonl").read_text().splitli
 ids=[r["case_id"] for r in rows]
 assert len(rows) >= 21 and len(ids) == len(set(ids))
 print(Counter(r["check"] for r in rows))
-assert any(r.get("via") == "fixture" or r.get("check") == "oou" and "fixture" in r.get("case_id","") for r in rows) or True
-# Prefer explicit case_id oou_fixture_path_reject present:
 assert any(r.get("case_id") == "oou_fixture_path_reject" for r in rows)
+assert any(r.get("case_id") == "gate_vol_veto_reject" or "vol_veto" in r.get("case_id","") for r in rows)
 PY
 uv run pytest tests/test_eval_stubs.py -q                        # or successor path
 uv run pytest -q                                                 # full suite green
@@ -424,33 +431,19 @@ If a stack or contract change seems required, **stop and ask** — eval harness 
 
 ---
 
-## Honest readiness (Refine pass 33 — human scope expand)
+## Honest readiness (pass 37 VERIFY)
 
-- **Ready-check readiness score:** **9.0 / 10** — prior soft extras (vol-veto, fixture-path OOU, AGENTS one-liner, same-delivery VISION/ARCHITECTURE status updates) promoted into Definition of Done per human. **Not 10:** Implement still authors concrete JSONL row payloads from recipes (not a full dump in this guide).  
-- **Ready for Ready check?** **Yes** (after this scope expand is accepted).  
-- **Status:** **Refined — awaiting Ready check.** All Implement checkboxes remain `[ ]`. Live tree still baseline (7 JSONL stubs).  
-- **Not authorized:** Implement / code / JSONL growth / Ready “READY” stamp.  
-- **Still soft (non-blocking):** exact JSONL row authorship (recipes pinned, not full dump); Kafka-as-04 hub note.  
-- **Next human gate:** Ready-check — then Implement only if READY.
+- **Implement readiness score:** **9.4 / 10** — pass 37 pinned concrete vol-veto tmp-bundle recipe + fixture-path OOU JSONL recipe (closes remaining harness invent). **Not 10:** remaining schema/asof/identity/gate theme rows still authored from soft-default recipes (not a full JSONL dump).  
+- **Status:** **READY** — awaiting Implement authorize. Live tree still baseline (7 JSONL stubs; loader test-local; floor `>= 5`).  
+- **Not authorized:** Implement until human says so.  
+- **Still soft (non-blocking):** exact non-vol/non-fixture-OOU JSONL payloads; Kafka-as-04 hub note.  
 
-### Pass 33 material scope change (human)
+### Prior scores
 
-Promoted into core DoD: tmp-manifest **vol-veto** golden(s); **fixture-path OOU**; **`AGENTS.md` one-liner**; **same-delivery VISION/ARCHITECTURE status alignment**. Theme allocation **5/3/4/6/3 (≥21)**.
+- Pass 36: **9.1** · Pass 33: **9.0**
 
-### QUALITY_STANDARD §5 (this Refine)
+### QUALITY_STANDARD §5 (this VERIFY)
 
-- [x] Assumptions replaced with pass-29 expect protocol + pass-30 recipe/kwarg/rollback pins (evidence from façades/tests)  
-- [x] Did not rush; did not implement; did not check Implement boxes; did not inflate to 9–10  
-- [x] Mode/Stage/artifacts declared (spoke Refine-dev-guide pass 30 VERIFY)  
-- [x] Edge cases + blast radius + Rollback re-verified executable  
-- [x] Findings written to this guide + refine note + handoff Results  
-- [x] Spoke stayed in AlphaGuard eval slice; no Kafka/Option B/packaging redo  
-- [x] Verification plan explicit; honest Ready-check readiness + score  
-
-### Prior Refine readiness (pass 29 — superseded)
-
-- Pass 29 scored **8 / 10** Ready Y after freezing expect protocol / twin / sentinels. Pass 30 verify closed recipe + Rollback executability residuals; score **8.5**.
-
-### Prior Write readiness (pass 28 — superseded)
-
-- Write Draft met Write-dev-guide DoD; status was Draft awaiting Ready/Refine. Pass 29–30 refined in place.
+- [x] Live baselines re-verified (7 goldens; vol_veto_enabled=false; score_threshold float noise; test-local loader)  
+- [x] Material invent gaps closed with evidence from `gate.py` / `test_gate.py` / `replay.py` / `TICKER_UNIVERSE`  
+- [x] No Implement; scores not inflated  
