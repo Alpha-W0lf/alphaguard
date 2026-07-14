@@ -71,7 +71,7 @@ No. Compose proves pinned images exist for later work. Smoke must succeed with K
 
 Universe is locked (`AAPL`, `MSFT`, …). Out-of-universe tickers are **rejected** in builders/fixtures — no silent remap. Invalid proposals (`SELL`, malformed JSON): schema reject / one repair retry, then fail closed — no fake approve. See §7.1–7.2 and failure-mode table.
 
-## 15. Where do unit tests vs golden stubs carry the interview invariants today?
+## 15. Where do unit tests vs executable goldens carry the interview invariants today?
 
 **Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not Option B proven.
 
