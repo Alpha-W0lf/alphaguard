@@ -1,6 +1,6 @@
 # Agent guidance — AlphaGuard
 
-**Vertical slice only** (guide 01). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`).
+**Vertical slice only** (guide 01). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates / not Option B).
 
 ## Locked stack (do not reopen)
 

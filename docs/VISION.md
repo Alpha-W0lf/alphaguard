@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice shipped (guide 01) — **not** “v1 complete”
+**Status:** Vertical slice shipped (guides 01–03) — **not** “v1 complete” / **not** eval-complete / **not** Option B
 
-**Last Updated:** July 13, 2026 (Pass 10 Align docs: status ↔ repo; guide-01 Implement+Review done)
+**Last Updated:** July 14, 2026 (Guide 03 Implement: ≥21 executable goldens)
 
 **Owner:** Tom
 
@@ -117,9 +117,10 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Milestone | Status | Evidence |
 |-----------|--------|----------|
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
+| Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
+| Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Not started** | No `training_events.parquet`; U4 source still open |
 | Live RSS → Kafka E2E | **Not started** | Compose present; no producer/consumer path |
-| `INTERVIEW.md` / GETTING_STARTED / trace screenshots | **Not started** | Absences are intentional debt, not silent wins |
 | Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
 
 README / AGENTS must keep saying **vertical slice**, not “v1 complete,” until Minimum Viable boxes below are honestly checked.

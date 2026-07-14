@@ -1,6 +1,6 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guide 01 vertical slice **implemented**; later slices (Kafka E2E, Option B train) not started  
+**Status:** Binding contracts SSOT — guides 01–03 **implemented** (eval ≥21 executed goldens); later slices (Kafka E2E, Option B train) not started  
 **Created:** 2026-07-12  
 **Last Updated:** 2026-07-13 (pass-10 Align docs: status ↔ repo; component existence honesty)  
 **Owner:** Tom  
@@ -136,7 +136,7 @@ flowchart LR
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, optional `/trigger` — thin wrappers over `PipelineService` | **Present** (`/health`, `/replay`; no `/trigger` yet) | Host |
 | `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LS/Phoenix = **status stubs** (no SDK spans yet) | Host |
-| `eval/` | Golden set (≥20 target): schema, identity preservation, as-of/retrieval invariants, gate determinism | **Stub** — `eval/golden_cases.jsonl` (7 cases); invariants live in `tests/` | Host |
+| `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
 | `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Absent** | Local / CI |
 
@@ -456,7 +456,7 @@ Package root (implemented): `src/alphaguard/`.
 | Contract | Fixture event → Agent 1 JSON shape (may mock LLM in CI); no `SELL` accepted |
 | Smoke | `make smoke` / `uv run alphaguard replay` — **Kafka not required** |
 | Integration (optional local) | Compose up → consumer path once replay is green (later slice) |
-| Eval | ≥20 golden cases target: schema pass rate; identity preservation; as-of/retrieval invariants; gate deterministic given fixed features+bundle; unsupported-action rejection. Numeric LLM schema-pass rate deferred until live-Ollama eval. Do **not** inflate fixture-bundle gate metrics into Option B claims |
+| Eval | ≥21 **executed** goldens: structural schema ok/reject; identity preservation; as-of/retrieval invariants; gate determinism + tmp-manifest vol-veto; OOU (NewsEvent + fixture-path). Numeric LLM schema-pass rate deferred until live-Ollama eval. Do **not** inflate fixture-bundle gate metrics into Option B claims |
 | Arch tests | After package layout exists: 1–2 import-boundary rules; pipeline is sole orchestrator and sole retrieval owner for the run path |
 
 **Honesty rule:** A fixture `bundle_kind=fixture` proving smoke plumbing is **not** evidence that the Option B downside model works. README/status language must say “vertical slice,” not “v1 complete,” until Option B metrics exist.

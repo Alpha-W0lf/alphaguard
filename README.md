@@ -78,7 +78,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
 - No brokerage APIs; no live trading
 - FinBERT not loaded during smoke (precomputed fixture column)
-- Eval golden set starts small (≥5 in-slice; grow to ≥20 before portfolio claim)
+- Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates; still **not** Option B metrics
 - Live RSS → Kafka E2E and full ~500-event Option B training are later guides
 - LangSmith/Phoenix on the run envelope are **status stubs** today (no SDK spans yet); local `artifacts/runs/` envelope is the real LLMOps baseline
 - Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete

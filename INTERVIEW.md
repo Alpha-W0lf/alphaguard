@@ -73,7 +73,7 @@ Universe is locked (`AAPL`, `MSFT`, …). Out-of-universe tickers are **rejected
 
 ## 15. Where do unit tests vs golden stubs carry the interview invariants today?
 
-**Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`. `eval/golden_cases.jsonl` is a **stub** (≥5 in-slice; grow to ≥20 before portfolio claims). Do not treat the stub file as a finished eval suite.
+**Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not Option B proven.
 
 ## 16. (Bonus) Is FinBERT in the smoke path?
 

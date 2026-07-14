@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 03 — eval harness ≥21 goldens (executable, anti-theater; vol-veto + fixture-path OOU + docs alignment in DoD)  
 **Stage that authored this:** Write-dev-guide (pass 28); Refine-dev-guide (pass 29–33)  
-**Status:** **READY** (Ready check pass 35 — awaiting Implement authorize)
+**Status:** **IMPLEMENTED** (pass 38 — ≥21 executable goldens + vol-veto + fixture OOU)
 
 **Context SSOT:** `alphaguard/docs/2026-07-14_guide03_eval_harness_context_summary.md`  
 **Prerequisite:** Guide 01 vertical slice shippable; Guide 02 interview packaging shippable (pass-24). This guide grows **eval goldens + thin harness** only — no Kafka, no Option B, no packaging redo.
@@ -168,18 +168,18 @@ Grow the interview eval surface from a **7-stub count theater** to an **executab
 
 Copied/refined from context SSOT — do not invent extra scope:
 
-- [ ] `eval/golden_cases.jsonl` contains **≥21** distinct `case_id`s (evidence: `wc -l` / JSON parse ≥21; unique ids)  
-- [ ] Cases cover themes: **schema**, **identity** overwrite, **as-of** / future-hit rejection, **gate** determinism (BUY reject vs HOLD/PASS approve), **SELL** reject, **OOU** ticker reject (NewsEvent **and** fixture-path) — allocation **5/3/4/6/3** (or ≥ soft minima with sum ≥21)  
-- [ ] **≥1 vol-veto golden** executes via **tmp manifest** only (committed fixture vol-veto flags unchanged)  
-- [ ] Goldens are **not** count-only theater: pytest parametrize executes each case against real façades  
-- [ ] `load_golden_cases` (or equivalent) lives under **`src/alphaguard/eval/`**; tests import it  
-- [ ] Presence/coverage assert raises floor from `>= 5` to **`>= 21`** and asserts theme coverage / required checks present (incl. fixture-path OOU + vol-veto)  
-- [ ] Sparse stubs enriched (`asof_drop_future` payloads; `identity_overwrite` gains event_id pair; identity `expect` → `stamped_from_input`)  
-- [ ] Harness follows frozen **expect / assert protocol** + boundary `force_score` sentinels (no invent)  
-- [ ] Documented **deferred**: live-Ollama numeric LLM schema-pass rate; Agent 1 hold-out on 50 headlines; Option B metrics; fixture-bundle F1 never quoted as model quality  
-- [ ] No Kafka; no Option B / U4 / `ml/train`; no packaging redo  
-- [ ] README Limitations + INTERVIEW §15 + **`AGENTS.md` one-liner** updated; **VISION / ARCHITECTURE status language** updated in this same delivery to match ≥21 executed goldens (trustworthy docs — no stale “≥5 stub” claims)  
-- [ ] Existing unit tests remain green; smoke path unchanged (Kafka still not required)  
+- [x] `eval/golden_cases.jsonl` contains **≥21** distinct `case_id`s (evidence: `wc -l` / JSON parse ≥21; unique ids)  
+- [x] Cases cover themes: **schema**, **identity** overwrite, **as-of** / future-hit rejection, **gate** determinism (BUY reject vs HOLD/PASS approve), **SELL** reject, **OOU** ticker reject (NewsEvent **and** fixture-path) — allocation **5/3/4/6/3** (or ≥ soft minima with sum ≥21)  
+- [x] **≥1 vol-veto golden** executes via **tmp manifest** only (committed fixture vol-veto flags unchanged)  
+- [x] Goldens are **not** count-only theater: pytest parametrize executes each case against real façades  
+- [x] `load_golden_cases` (or equivalent) lives under **`src/alphaguard/eval/`**; tests import it  
+- [x] Presence/coverage assert raises floor from `>= 5` to **`>= 21`** and asserts theme coverage / required checks present (incl. fixture-path OOU + vol-veto)  
+- [x] Sparse stubs enriched (`asof_drop_future` payloads; `identity_overwrite` gains event_id pair; identity `expect` → `stamped_from_input`)  
+- [x] Harness follows frozen **expect / assert protocol** + boundary `force_score` sentinels (no invent)  
+- [x] Documented **deferred**: live-Ollama numeric LLM schema-pass rate; Agent 1 hold-out on 50 headlines; Option B metrics; fixture-bundle F1 never quoted as model quality  
+- [x] No Kafka; no Option B / U4 / `ml/train`; no packaging redo  
+- [x] README Limitations + INTERVIEW §15 + **`AGENTS.md` one-liner** updated; **VISION / ARCHITECTURE status language** updated in this same delivery to match ≥21 executed goldens (trustworthy docs — no stale “≥5 stub” claims)  
+- [x] Existing unit tests remain green; smoke path unchanged (Kafka still not required)  
 
 ---
 
@@ -189,23 +189,23 @@ All boxes start unchecked. Implement checks them with evidence. **Do not check b
 
 ### Phase A — Freeze JSONL contract + enrich plan
 
-- [ ] **A1.** Confirm `eval/golden_cases.jsonl` baseline is still **7** unique rows before edits (`wc -l` + parse).  
-- [ ] **A2.** Freeze universal keys + per-`check` skeleton + **expect / assert protocol** from Soft pins (do not reopen). Loader fail-closed: missing universal/skeleton key, duplicate `case_id`, unknown `check`.  
-- [ ] **A3.** Plan enrichment for existing sparse rows:  
+- [x] **A1.** Confirm `eval/golden_cases.jsonl` baseline is still **7** unique rows before edits (`wc -l` + parse).  
+- [x] **A2.** Freeze universal keys + per-`check` skeleton + **expect / assert protocol** from Soft pins (do not reopen). Loader fail-closed: missing universal/skeleton key, duplicate `case_id`, unknown `check`.  
+- [x] **A3.** Plan enrichment for existing sparse rows:  
   - `asof_drop_future` — add `published_at` + `hits` (mixed past + future; expect `future_hit_dropped`)  
   - `identity_overwrite` — add `llm_event_id` + `input_event_id`; migrate `expect` from `"AAPL"` → **`stamped_from_input`**  
-- [ ] **A4.** Confirm gate boundary cases use `force_score` sentinels `"eq_threshold"` / `"just_below_threshold"` resolved from live manifest (`just_below` = `threshold - 1e-6`); no hardcoded `0.45`.  
-- [ ] **A5.** Plan **required** vol-veto golden(s) with this **pinned recipe** (pass 37):  
+- [x] **A4.** Confirm gate boundary cases use `force_score` sentinels `"eq_threshold"` / `"just_below_threshold"` resolved from live manifest (`just_below` = `threshold - 1e-6`); no hardcoded `0.45`.  
+- [x] **A5.** Plan **required** vol-veto golden(s) with this **pinned recipe** (pass 37):  
   - Copy `data/fixtures/model_bundle_fixture/{manifest.json,model.json}` into a pytest `tmp_path` bundle dir (same pattern as `tests/test_gate.py` skewed-manifest test).  
   - In the **tmp** `manifest.json` only: set `vol_veto_enabled=true` and `vol_veto_threshold=0.05` (do **not** edit committed fixture).  
   - Construct `DownsideRiskGate(tmp_bundle_dir)`.  
   - Call `apply_policy(action="BUY", downside_risk_score=<resolved force_score below score_threshold e.g. "just_below_threshold">, volatility_20d=0.20)` so veto fires (`volatility_20d >= 0.05`) while score alone would approve.  
   - JSONL row: `case_id=gate_vol_veto_reject`, `check=gate`, `expect=reject`, plus optional harness-only flag `tmp_vol_veto=true` (or detect by `case_id`) so dispatch uses tmp gate — do **not** flip committed fixture flags.  
-- [ ] **A6.** Plan **required** fixture-path OOU case with this **pinned recipe** (pass 37):  
+- [x] **A6.** Plan **required** fixture-path OOU case with this **pinned recipe** (pass 37):  
   - Write tmp JSONL with **one** `NewsEvent`-shaped line: `event_id`, `headline`, `ticker="TSLA"` (OOU), `source="fixture"`, `published_at` ISO-Z (mirror `replay_events.jsonl` shape).  
   - Harness calls `load_replay_events(tmp_path)` and expects `FixtureLoadError` **or** `OutOfUniverseTickerError` / validation fail-closed (whatever `load_replay_events` raises today — do not soften).  
   - JSONL: `case_id=oou_fixture_path_reject`, `check=oou`, `via="fixture"`, `ticker="TSLA"`, `expect=reject`.  
-- [ ] **A7.** Confirm determinism twin is **one row** + double `apply_policy` (expect `same_decision`) — not a nested twin payload.
+- [x] **A7.** Confirm determinism twin is **one row** + double `apply_policy` (expect `same_decision`) — not a nested twin payload.
 
 ### Phase B — Author ≥21 goldens (allocation recipe)
 
@@ -236,42 +236,42 @@ All boxes start unchecked. Implement checks them with evidence. **Do not check b
 | `oou_fixture_path_reject` | oou | reject | **new / required** — `via: "fixture"` + non-universe ticker via `load_replay_events` |
 | `gate_vol_veto_reject` | gate | reject | **new / required** — tmp manifest vol-veto path (committed fixture unchanged) |
 
-- [ ] **B1.** Grow / rewrite `eval/golden_cases.jsonl` to **≥21** theme rows matching allocation **5/3/4/6/3**, **plus** ≥1 vol-veto golden (may be a 22nd row if cleaner — DoD is themes ≥21 **and** vol-veto present). Expects from the frozen protocol.  
-- [ ] **B2.** Enrich sparse stubs in the same edit (`asof_drop_future`, `identity_overwrite` + expect migrate).  
-- [ ] **B3.** Verify unique `case_id`s; every row has universal + per-`check` required keys; boundary gates use sentinels not `0.45`.  
-- [ ] **B4.** Ensure no case requires live Ollama, Kafka, or Option B train artifacts.  
-- [ ] **B5.** Ensure no case asserts fixture F1 / Option B metrics.
+- [x] **B1.** Grow / rewrite `eval/golden_cases.jsonl` to **≥21** theme rows matching allocation **5/3/4/6/3**, **plus** ≥1 vol-veto golden (may be a 22nd row if cleaner — DoD is themes ≥21 **and** vol-veto present). Expects from the frozen protocol.  
+- [x] **B2.** Enrich sparse stubs in the same edit (`asof_drop_future`, `identity_overwrite` + expect migrate).  
+- [x] **B3.** Verify unique `case_id`s; every row has universal + per-`check` required keys; boundary gates use sentinels not `0.45`.  
+- [x] **B4.** Ensure no case requires live Ollama, Kafka, or Option B train artifacts.  
+- [x] **B5.** Ensure no case asserts fixture F1 / Option B metrics.
 
 ### Phase C — Thin loader + check dispatch (`src/alphaguard/eval/`)
 
-- [ ] **C1.** Move/share `load_golden_cases` into `src/alphaguard/eval/` (new module e.g. `loader.py` or `cases.py`; export from package `__init__` as appropriate). Prefer ≤300 lines/file.  
-- [ ] **C2.** Implement fail-closed validation: missing `case_id`/`check`/`expect`; duplicate ids; **unknown `check`**; missing per-check skeleton keys.  
-- [ ] **C3.** Implement thin `check` → façade dispatch helpers (or keep dispatch inside the parametrized test module if still thin — loader **must** still live in package). Follow **expect / assert protocol** exactly. Do **not** add a second orchestration stack / PipelineService E2E runner.  
-- [ ] **C4.** Gate helpers: load fixture gate once (module-scoped fixture); resolve `force_score` sentinels from live manifest; map to `downside_risk_score` kwarg; call `apply_policy`; for `same_decision`, double-call and compare tuples.  
-- [ ] **C5.** Update `tests/test_eval_stubs.py` (or successor) to import loader from `alphaguard.eval` — remove duplicate test-local-only loader as SSOT (test may keep a thin wrapper if needed).
+- [x] **C1.** Move/share `load_golden_cases` into `src/alphaguard/eval/` (new module e.g. `loader.py` or `cases.py`; export from package `__init__` as appropriate). Prefer ≤300 lines/file.  
+- [x] **C2.** Implement fail-closed validation: missing `case_id`/`check`/`expect`; duplicate ids; **unknown `check`**; missing per-check skeleton keys.  
+- [x] **C3.** Implement thin `check` → façade dispatch helpers (or keep dispatch inside the parametrized test module if still thin — loader **must** still live in package). Follow **expect / assert protocol** exactly. Do **not** add a second orchestration stack / PipelineService E2E runner.  
+- [x] **C4.** Gate helpers: load fixture gate once (module-scoped fixture); resolve `force_score` sentinels from live manifest; map to `downside_risk_score` kwarg; call `apply_policy`; for `same_decision`, double-call and compare tuples.  
+- [x] **C5.** Update `tests/test_eval_stubs.py` (or successor) to import loader from `alphaguard.eval` — remove duplicate test-local-only loader as SSOT (test may keep a thin wrapper if needed).
 
 ### Phase D — Pytest parametrize + floor raise
 
-- [ ] **D1.** Add parametrized test(s) that load all goldens and execute each `check` against façades; one failure → that `case_id` visible in pytest output.  
-- [ ] **D2.** Raise presence assert from `len >= 5` to **`len >= 21`**.  
-- [ ] **D3.** Assert theme coverage: required checks present; **assert soft minima** (schema≥3, identity≥2, asof≥3, gate≥4, oou≥3) and fixture-path OOU + vol-veto coverage present.  
-- [ ] **D4.** Assert all `case_id`s unique.  
-- [ ] **D5.** Keep existing unit tests (`test_contracts`, `test_gate`, `test_asof`, `test_fixtures`, …) — do not delete for “dedupe” in this guide.  
-- [ ] **D6.** Confirm goldens do not require Kafka up or live Ollama.
+- [x] **D1.** Add parametrized test(s) that load all goldens and execute each `check` against façades; one failure → that `case_id` visible in pytest output.  
+- [x] **D2.** Raise presence assert from `len >= 5` to **`len >= 21`**.  
+- [x] **D3.** Assert theme coverage: required checks present; **assert soft minima** (schema≥3, identity≥2, asof≥3, gate≥4, oou≥3) and fixture-path OOU + vol-veto coverage present.  
+- [x] **D4.** Assert all `case_id`s unique.  
+- [x] **D5.** Keep existing unit tests (`test_contracts`, `test_gate`, `test_asof`, `test_fixtures`, …) — do not delete for “dedupe” in this guide.  
+- [x] **D6.** Confirm goldens do not require Kafka up or live Ollama.
 
 ### Phase E — Operator / interview honesty
 
-- [ ] **E1.** Update README Limitations: eval grown to ≥21 **executed** goldens (incl. fixture-path OOU + tmp-manifest vol-veto); still not live-Ollama numeric rates; still not Option B; still vertical slice / not v1 complete.  
-- [ ] **E2.** Update INTERVIEW §15 (eval / invariants location): unit tests **and** ≥21 executable goldens; clarify structural schema checks ≠ live LLM pass-rate %.  
-- [ ] **E3.** Add **required** one-liner in `AGENTS.md` (“guide 03 eval harness landed — ≥21 executable goldens”) — do not reopen stack locks.  
-- [ ] **E4.** Update VISION / ARCHITECTURE status language in **this same delivery** so checkboxes/prose match ≥21 executed goldens (trustworthy docs). Do **not** claim Kafka / Option B / live-Ollama rates done.  
-- [ ] **E5.** Grep for accidental “eval complete,” “portfolio-ready,” “Option B proven,” or “schema pass rate N%” live-Ollama claims; fix if introduced.
+- [x] **E1.** Update README Limitations: eval grown to ≥21 **executed** goldens (incl. fixture-path OOU + tmp-manifest vol-veto); still not live-Ollama numeric rates; still not Option B; still vertical slice / not v1 complete.  
+- [x] **E2.** Update INTERVIEW §15 (eval / invariants location): unit tests **and** ≥21 executable goldens; clarify structural schema checks ≠ live LLM pass-rate %.  
+- [x] **E3.** Add **required** one-liner in `AGENTS.md` (“guide 03 eval harness landed — ≥21 executable goldens”) — do not reopen stack locks.  
+- [x] **E4.** Update VISION / ARCHITECTURE status language in **this same delivery** so checkboxes/prose match ≥21 executed goldens (trustworthy docs). Do **not** claim Kafka / Option B / live-Ollama rates done.  
+- [x] **E5.** Grep for accidental “eval complete,” “portfolio-ready,” “Option B proven,” or “schema pass rate N%” live-Ollama claims; fix if introduced.
 
 ### Phase F — Verification + stop
 
-- [ ] **F1.** Run verification commands in Definition of Done below; record evidence.  
-- [ ] **F2.** Confirm smoke path / Makefile unchanged for Kafka requirement (Kafka still not required).  
-- [ ] **F3.** Stop. Do not start Kafka E2E, Option B, packaging screenshot redo, or replay-fixture ≥20 headline growth.
+- [x] **F1.** Run verification commands in Definition of Done below; record evidence.  
+- [x] **F2.** Confirm smoke path / Makefile unchanged for Kafka requirement (Kafka still not required).  
+- [x] **F3.** Stop. Do not start Kafka E2E, Option B, packaging screenshot redo, or replay-fixture ≥20 headline growth.
 
 ---
 
