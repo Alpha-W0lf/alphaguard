@@ -22,7 +22,17 @@ Smoke prints Agent 1 JSON, Agent 2 decision (incl. `downside_risk_score`), and l
 
 **Ollama / `gemma4:e2b`:** Default is `OLLAMA_MODEL=gemma4:e2b` (`.env.example` + config). Requires a current Ollama server (`GET http://127.0.0.1:11434/api/version` — Gemma 4 needs a post-0.18 build). If `pull` returns **412**, upgrade Ollama, then pull again. Documented D1 fallback remains `qwen3.5:4b` / `OLLAMA_FALLBACK_MODEL`. Preflight uses fallback when the primary tag is missing.
 
-Optional later: `docker compose up -d` for Kafka + Qdrant. Flip `ALPHAGUARD_RAG_MODE=qdrant` when Qdrant is up. Smoke does **not** require Compose (fixture RAG is the default smoke path).
+Optional **Kafka integration** (Guide 04): `docker compose up -d`, wait for healthchecks, then:
+
+```bash
+export ALPHAGUARD_MODE=live ALPHAGUARD_RAG_MODE=qdrant
+uv run alphaguard kafka consume          # terminal 1
+uv run alphaguard kafka produce --event-id evt-aapl-001   # or POST /trigger
+# Live pytest (Compose must be up):
+ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration -q
+```
+
+Compose image pin: Kafka is `bitnamilegacy/kafka:3.9.0` (free `bitnami/kafka:3.9.0` 404 on Docker Hub as of 2026-07-15). Smoke does **not** require Compose (fixture RAG is the default smoke path). Rebuild Qdrant collection if migrating from old hash-based point ids.
 
 ## Architecture (critical path)
 
@@ -38,7 +48,8 @@ flowchart LR
   A2 --> LOCAL[Local run summary]
   LOCAL -.-> LS[LS / Phoenix status stubs]
   QDR[Qdrant optional] -.-> HITS
-  KFK[Kafka later / optional for smoke] -.-> REPLAY
+  KFK[Kafka news.raw] -.-> CONS[Consumer ingest_event]
+  CONS -.-> QDR
 ```
 
 ## Stack
@@ -79,6 +90,6 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 - No brokerage APIs; no live trading
 - FinBERT not loaded during smoke (precomputed fixture column)
 - Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates; still **not** Option B metrics
-- Live RSS → Kafka E2E and full ~500-event Option B training are later guides
+- Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert — **not** live RSS reliability
 - LangSmith/Phoenix on the run envelope are **status stubs** today (no SDK spans yet); local `artifacts/runs/` envelope is the real LLMOps baseline
 - Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete

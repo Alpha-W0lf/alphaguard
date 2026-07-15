@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from datetime import datetime, timezone
 from typing import Any
 
@@ -13,6 +14,11 @@ from alphaguard.rag.asof import filter_hits_as_of
 logger = logging.getLogger(__name__)
 
 _EMBEDDER: Any | None = None
+
+
+def event_point_id(event_id: str) -> str:
+    """Stable Qdrant point id (Guide 04 pin — not Python hash())."""
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"alphaguard:event:{event_id}"))
 
 
 def _get_embedder() -> Any:
@@ -65,7 +71,7 @@ class QdrantRag:
         client = self._connect()
         vector = _embed([event.headline])[0]
         point = qm.PointStruct(
-            id=abs(hash(event.event_id)) % (2**63 - 1),
+            id=event_point_id(event.event_id),
             vector=vector,
             payload={
                 "document_id": event.event_id,

@@ -1,6 +1,6 @@
 # Agent guidance — AlphaGuard
 
-**Vertical slice only** (guide 01). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates / not Option B).
+**Vertical slice only** (guides 01–04). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates / not Option B). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`).
 
 ## Locked stack (do not reopen)
 

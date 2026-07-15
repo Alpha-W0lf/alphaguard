@@ -41,11 +41,11 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 ## 7. What does replay-first prove vs what Kafka E2E still needs to prove?
 
-Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. Kafka E2E still must prove produce/consume, delivery, idempotent upsert, and live-path ops — Compose alone does not prove that.
+Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. Guide 04 adds produce/consume + idempotent Qdrant upsert + `/trigger` when Compose is up — **not** live RSS scheduling/reliability.
 
 ## 8. What is `replay_fixture` vs `kafka_integration`?
 
-ARCHITECTURE §16 resource modes. Smoke defaults to `resource_mode=replay_fixture` (`ALPHAGUARD_RAG_MODE=fixture`, Kafka optional/down). `kafka_integration` is the later live/Compose-exercised mode. Do not claim Kafka maturity from a fixture smoke envelope.
+ARCHITECTURE §16 resource modes. Smoke defaults to `resource_mode=replay_fixture` (`ALPHAGUARD_RAG_MODE=fixture`, Kafka optional/down). `kafka_integration` = `ALPHAGUARD_MODE=live` + `ALPHAGUARD_RAG_MODE=qdrant`; `/health` probes Kafka (2s). Do not claim Kafka maturity from fixture smoke alone.
 
 ## 9. What happens on old Ollama 412, and what is the documented fallback?
 
@@ -65,7 +65,7 @@ Agent 1 is LLM-sampled (stochastic). Agent 2’s **policy table is deterministic
 
 ## 13. Does `docker-compose.yml` prove Kafka delivery contracts?
 
-No. Compose proves pinned images exist for later work. Smoke must succeed with Kafka **stopped** (`Makefile` comment). Delivery contracts (producer/consumer, upsert, live path) are a later guide — not packaging.
+Compose proves pinned images + operator path. Guide 04 ships producer/consumer, DLQ, UUID5 upsert, and `/trigger`. Smoke must still succeed with Kafka **stopped** (`Makefile` comment). Live RSS reliability is **not** in scope.
 
 ## 14. What happens to an out-of-universe ticker or invalid proposal?
 

@@ -1,1 +1,1 @@
-"""Ingest layer — replay fixtures and (later) Kafka producers/consumers."""
+"""Ingest layer — replay fixtures and Kafka producers/consumers."""

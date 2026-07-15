@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice shipped (guides 01–03) — **not** “v1 complete” / **not** eval-complete / **not** Option B
+**Status:** Vertical slice shipped (guides 01–04) — **not** “v1 complete” / **not** eval-complete / **not** Option B. Guide 04 = Kafka+Qdrant thin integration (upsert durable handle); smoke still Kafka-down.
 
-**Last Updated:** July 14, 2026 (Guide 03 Implement: ≥21 executable goldens)
+**Last Updated:** July 15, 2026 (Guide 04 P0: consumer `run_once` seek/commit; guides 01–04 status)
 
 **Owner:** Tom
 
@@ -120,7 +120,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Not started** | No `training_events.parquet`; U4 source still open |
-| Live RSS → Kafka E2E | **Not started** | Compose present; no producer/consumer path |
+| Live RSS → Kafka E2E | **Thin integration done** (Guide 04) | Producer/consumer + `/trigger` + UUID5 upsert; **not** live RSS reliability |
 | Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
 
 README / AGENTS must keep saying **vertical slice**, not “v1 complete,” until Minimum Viable boxes below are honestly checked.
@@ -129,7 +129,7 @@ README / AGENTS must keep saying **vertical slice**, not “v1 complete,” unti
 
 ### Minimum Viable (v1 Done)
 
-- [ ] `docker compose up` runs Kafka + Qdrant locally *(Compose file exists; not yet proven as an operator path)*
+- [x] `docker compose up` runs Kafka + Qdrant locally *(operator path documented in README; smoke still Kafka-down)*
 - [ ] 500 headline events dataset built (`data/training_events.parquet`) with documented schema
 - [ ] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics logged in README *(fixture bundle ≠ Option B)*
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(LangSmith/Phoenix = envelope status stubs today; real spans later)*

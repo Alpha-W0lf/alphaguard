@@ -2,7 +2,7 @@
 
 Clone-depth operator path for the **replay-first vertical slice**. For contracts see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); for interview gotchas see [`INTERVIEW.md`](INTERVIEW.md); skim + diagram in [`README.md`](README.md).
 
-This is **not** “v1 complete.” Kafka E2E and Option B training are out of scope here.
+This is **not** “v1 complete.” Option B training is out of scope here; Kafka thin integration (Guide 04) is optional for smoke.
 
 **Why packaging before Kafka (ARCHITECTURE §15 soft override):** interview ROI prioritizes a defendable FAQ + clone path + local-envelope evidence around the green vertical slice. Contracts unchanged.
 
@@ -69,9 +69,22 @@ brew install libomp
 | Topic | Truth |
 |-------|--------|
 | Default RAG | `ALPHAGUARD_RAG_MODE=fixture` |
-| Kafka / Qdrant | Optional later; smoke does **not** need `docker compose up` |
-| Compose file present | ≠ Kafka delivery maturity (see INTERVIEW) |
+| Kafka / Qdrant | Optional; smoke does **not** need `docker compose up` |
 | `bundle_kind=fixture` | Plumbing only — do not cite synthetic F1 as model quality |
 | Primary model missing | Preflight may use fallback; document which model actually ran |
+
+## Optional: Kafka + Qdrant integration (Guide 04)
+
+```bash
+docker compose up -d
+# wait for kafka + qdrant healthy
+export ALPHAGUARD_MODE=live ALPHAGUARD_RAG_MODE=qdrant
+uv run alphaguard kafka consume
+# other terminal:
+uv run alphaguard kafka produce --event-id evt-aapl-001
+# or: curl -X POST localhost:8000/trigger -H 'Content-Type: application/json' -d '...'
+```
+
+Default smoke path remains Kafka-down (`make smoke`). Integration tests: `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration`.
 
 Do **not** tick VISION MV packaging boxes from this file — Align-docs owns checkbox updates after Review evidence.

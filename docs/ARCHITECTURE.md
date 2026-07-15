@@ -1,6 +1,6 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guides 01–03 **implemented** (eval ≥21 executed goldens); later slices (Kafka E2E, Option B train) not started  
+**Status:** Binding contracts SSOT — guides 01–04 **implemented** (replay slice, packaging, eval ≥21 goldens, Kafka+Qdrant thin integration); Option B train not started  
 **Created:** 2026-07-12  
 **Last Updated:** 2026-07-13 (pass-10 Align docs: status ↔ repo; component existence honesty)  
 **Owner:** Tom  
@@ -124,8 +124,8 @@ flowchart LR
 | Component | Responsibility | Existence (2026-07-13) | Runs where |
 |-----------|----------------|------------------------|------------|
 | `infra/compose` | Kafka + Qdrant (pinned images, healthchecks) | **Present** (`docker-compose.yml`) | Docker |
-| `ingest/producer` | Publish normalized news events to Kafka | **Not started** (later slice) | Host |
-| `ingest/consumer` | Consume → embed → upsert Qdrant | **Not started** (later slice) | Host |
+| `ingest/producer` | Publish normalized news events to Kafka | **Present** (`ingest/producer.py` → `news.raw`) | Host |
+| `ingest/consumer` | Consume → validate → embed → upsert Qdrant | **Present** (`ingest/consumer.py`; DLQ `news.raw.dlq`) | Host |
 | `ingest/replay` | Load fixture event(s); **bypass live Kafka**; call `PipelineService` | **Present** | Host |
 | `pipeline/` | **`PipelineService`**: single orchestration façade for replay / API / future Kafka consumer | **Present** | Host |
 | `rag/` | Embedding + Qdrant query; **as-of filter**; returns `RetrievalHit[]` (simple top-k). Called by **`PipelineService` only** for the run path | **Present** (fixture + qdrant modes) | Host |
@@ -134,7 +134,7 @@ flowchart LR
 | `ml/features` | Unified as-of feature builders; emit `feature_as_of` | **Present** (fixture path; not full yfinance builder) | Host (batch / smoke fixtures) |
 | `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **Not started** (fixture bundle builder only: `scripts/build_fixture_bundle.py`) | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
-| `api/` | FastAPI: `/health`, `/replay`, optional `/trigger` — thin wrappers over `PipelineService` | **Present** (`/health`, `/replay`; no `/trigger` yet) | Host |
+| `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
 | `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LS/Phoenix = **status stubs** (no SDK spans yet) | Host |
 | `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
@@ -164,10 +164,10 @@ flowchart LR
 ### 6.2 Live path (optional after replay works)
 
 1. RSS (or manual POST) → producer → Kafka `news.raw`.  
-2. Consumer embeds + upserts Qdrant (idempotent by document id).  
-3. Same `PipelineService` → Agent 1 → Agent 2 → obs path as replay.  
+2. Consumer durable handle = validate + embed + idempotent Qdrant upsert via `PipelineService.ingest_event` only (Guide 04). **Full Agent 1→2 is not invoked on consume** — use `/replay` (or a later slice) for the agent path.  
+3. Obs / gate path remains the replay `PipelineService.run` path until an explicit later guide wires agent-on-consume.
 
-Do **not** block the vertical slice on live RSS reliability. Full Kafka delivery contract is specified in §17 for the later slice — not required for smoke.
+Do **not** block the vertical slice on live RSS reliability. Full Kafka delivery contract is specified in §17 — smoke stays Kafka-down.
 
 ### 6.3 ML training path (batch; separate from demo RAM)
 
@@ -509,25 +509,28 @@ CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 |------|-------|--------|--------|---------|---------|------------------------|
 | `replay_fixture` | Down | Down OK | Up | Down | Default smoke | App + Ollama OK; infra deps reported skipped |
 | `replay_qdrant` | Down | Up | Up | Down | Real RAG demo | App + Ollama + Qdrant OK |
-| `kafka_integration` | Up | Up | Up | Down | Later DE slice | All three infra OK |
+| `kafka_integration` | Up | Up | Up | Down | Guide 04 DE slice | Kafka + Qdrant + Ollama OK in `/health` |
 | `finbert_train` | Prefer down | Prefer down | Prefer down | Up | Batch feature/label build | Training job health only; do not co-schedule with full demo stack |
 
 `/health` must report per-dependency status so reviewers can distinguish intentional degradation from an untested stack. Smoke defaults to `replay_fixture` unless config flips RAG mode.
 
 ---
 
-## 17. Kafka delivery contract (later slice — not smoke)
+## 17. Kafka delivery contract (Guide 04 — thin integration; not smoke)
 
-When the Kafka integration guide starts, implement at least:
+Implemented (Guide 04):
 
-- Topic payload versioned; key = `event_id`  
-- At-least-once delivery assumed  
-- Idempotent Qdrant upsert by `document_id` / `event_id`  
-- Consumer commits offset **only after** durable handling succeeds  
-- Bounded retries + dead-letter / poison path  
-- Same `PipelineService` entry as replay (no duplicate orchestration)
+- Topic **`news.raw`**; DLQ **`news.raw.dlq`**; consumer group **`alphaguard-news-raw`**
+- Flat JSON payload `payload_version="1"`; key = `event_id`
+- At-least-once delivery; consumer commits offset **only after** `PipelineService.ingest_event` succeeds (or poison committed after successful DLQ)
+- Bounded failed durable-handle attempts (**3** / `MAX_ATTEMPTS`) then DLQ; poison commit after successful DLQ produce
+- On durable-handle failure: **seek** back to the failed offset and stop the poll batch — never commit past an unhandled record
+- Idempotent Qdrant upsert via **UUID5** point id (`alphaguard:event:{event_id}`) — not Python `hash()`
+- Thin **`POST /trigger`** produces to `news.raw` (not a second orchestrator)
+- **`resource_mode=kafka_integration`** when `ALPHAGUARD_MODE=live` + `ALPHAGUARD_RAG_MODE=qdrant`
 
-Do **not** expand smoke to require this. Do **not** remove Kafka from Compose/architecture.
+Do **not** expand smoke to require this. Do **not** claim live RSS reliability or v1 Done.  
+**Compose proof (2026-07-15):** `bitnamilegacy/kafka:3.9.0` + `qdrant/qdrant:v1.13.2` healthy; `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration` → **3 passed** (happy produce→consume→Qdrant upsert; redelivery idempotent; poison→DLQ via seek loop). Default `uv run pytest -q` still excludes the marker (smoke Kafka-down).
 
 ---
 

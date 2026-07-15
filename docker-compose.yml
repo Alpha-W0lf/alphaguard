@@ -1,6 +1,8 @@
 services:
   kafka:
-    image: bitnami/kafka:3.9.0
+    # Bitnami moved free Hub images to bitnamilegacy (bitnami/kafka:3.9.0 404 as of 2026-07-15).
+    # Same Bitnami KRaft env as before — smallest pin change for Compose proof.
+    image: bitnamilegacy/kafka:3.9.0
     ports:
       - "9092:9092"
     environment:

@@ -41,7 +41,11 @@ class Settings(BaseSettings):
     top_k: int = 5
 
     @property
-    def resource_mode(self) -> Literal["replay_fixture", "replay_qdrant"]:
+    def resource_mode(self) -> Literal[
+        "replay_fixture", "replay_qdrant", "kafka_integration"
+    ]:
+        if self.alphaguard_mode == "live" and self.alphaguard_rag_mode == "qdrant":
+            return "kafka_integration"
         if self.alphaguard_rag_mode == "qdrant":
             return "replay_qdrant"
         return "replay_fixture"

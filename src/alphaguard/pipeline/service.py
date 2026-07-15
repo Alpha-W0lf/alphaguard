@@ -65,6 +65,10 @@ class PipelineService:
             update={"event_id": event.event_id, "ticker": event.ticker}
         )
 
+    def ingest_event(self, event: NewsEvent) -> None:
+        """§17 durable handle: validate + idempotent Qdrant upsert (no Agent 1/2)."""
+        self.rag.upsert_event(event)
+
     def run(self, event: NewsEvent) -> PipelineRunEnvelope:
         run_id = str(uuid.uuid4())
         started = datetime.now(timezone.utc)

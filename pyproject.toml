@@ -19,6 +19,7 @@ dependencies = [
   "qdrant-client>=1.11",
   "sentence-transformers>=3.0",
   "python-dotenv>=1.0",
+  "kafka-python>=2.0",
 ]
 
 [project.optional-dependencies]
@@ -49,6 +50,10 @@ dev-dependencies = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+  "kafka_integration: requires docker compose Kafka+Qdrant (excluded by default)",
+]
+addopts = "-m 'not kafka_integration'"
 
 [tool.ruff]
 line-length = 100
