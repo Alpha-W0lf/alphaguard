@@ -2,7 +2,8 @@
 
 **Date:** 2026-07-16  
 **Repo:** `alphaguard`  
-**Status:** **Refined** (pass 72) — Write-dev-guide readiness **8.7 / 10**  
+**Status:** **Refined** (pass 72) — Write-dev-guide **authored** pass 73 → `docs/dev_guides/2026-07-16_dev_guide_05b_option_b_xgboost_train.md`  
+**Next:** Refine-dev-guide or Ready-check (human)  
 **Mode last used:** hub  
 **Prioritize SSOT:** `second_brain/docs/2026-07-16_prioritize_next_work_pass70_fan_in.md`  
 **Gather fan-in:** `second_brain/docs/2026-07-16_gather_context_guide05b_pass71_fan_in.md`  
