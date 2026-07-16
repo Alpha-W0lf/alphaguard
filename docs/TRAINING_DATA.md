@@ -30,9 +30,20 @@ Raw `stock` counts in `analyst_ratings_processed.csv` for locked universe symbol
 | MSFT | **0** | absent from preferred CSV **and** `raw_analyst_ratings.csv` |
 | SPY | **0** | absent from preferred CSV; only 14 rows in `raw_partner_headlines.csv` |
 
-Cross-check: Yahoo Finance treats legacy ticker `FB` as delisted; continuous Meta history is under **`META`**. Any future FB→META soft pin must fetch prices as `META`, not `FB`.
+Cross-check (2026-07-16 evidence):
 
-Stratified sample + refill concentrates on the five present tickers. **FB→META alias deferred** for 05a (see Review pass 69); revisit before Guide 05b if desired.
+| Probe | Result |
+|-------|--------|
+| Yahoo `FB` download (2020) | **Fails** — “possibly delisted” |
+| Yahoo `FB` quote identity today | Resolves to **ProShares S&P 500 Dynamic Buffer ETF** — **not** Facebook/Meta |
+| Yahoo `META` (2020-02→06) | **103** adjusted daily closes; covers FB headline window |
+| Yahoo `META` (2013) | Present (Facebook-era continuous series under META) |
+| Yahoo `META` (2011 pre-IPO) | Empty (expected) |
+| Local FB headlines | 389 rows; 86 unique ET calendar days; **77/86** have same-day META close (rest are non-sessions — as-of join already drops/shifts via XNYS) |
+
+**Alias pricing rule (when soft-pinned later):** map archive `stock=FB` → training `ticker=META` **and** fetch closes as **`META` only**. Never fetch `FB` for prices. Fail closed if META series missing for the required window (existing builder behavior).
+
+**Confidence:** High for **this archive’s FB window (2020)** under current Yahoo/yfinance behavior. **Not** a forever guarantee — Yahoo can remap symbols (FB already did). Soft pin later must include a one-line join probe in DoD.
 
 ## Source (locked)
 
