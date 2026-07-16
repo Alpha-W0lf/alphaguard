@@ -5,9 +5,10 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -16,6 +17,7 @@ from alphaguard.contracts.events import TICKER_UNIVERSE
 SOURCE_DATASET_ID = "miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests"
 BUILDER_VERSION = "0.1.0"
 _WS = re.compile(r"\s+")
+ET = ZoneInfo("America/New_York")
 
 
 @dataclass(frozen=True)
@@ -39,18 +41,31 @@ def discover_news_csv(raw_dir: Path) -> Path:
     candidates = sorted(raw_dir.rglob("*.csv"))
     if not candidates:
         raise FileNotFoundError(f"no CSV under {raw_dir}")
+    # Prefer minute-precision processed ratings (Kaggle data card).
+    for p in candidates:
+        if p.name.lower() == "analyst_ratings_processed.csv":
+            return p
     preferred = [
         p
         for p in candidates
-        if any(tok in p.name.lower() for tok in ("analyst", "news", "headline", "benzinga"))
+        if "processed" in p.name.lower()
+        and any(tok in p.name.lower() for tok in ("analyst", "news", "headline", "benzinga"))
     ]
-    pool = preferred or candidates
-    # Prefer largest file when multiple match (full dump vs sample).
+    pool = preferred or [
+        p
+        for p in candidates
+        if any(tok in p.name.lower() for tok in ("analyst", "news", "headline", "benzinga"))
+    ] or candidates
     return max(pool, key=lambda p: p.stat().st_size)
 
 
 def _require_columns(df: pd.DataFrame) -> pd.DataFrame:
-    lower = {c.lower(): c for c in df.columns}
+    lower = {c.lower().strip(): c for c in df.columns}
+    # title is the processed-file alias for headline (Kaggle data card).
+    if "headline" not in lower and "title" in lower:
+        lower["headline"] = lower["title"]
+    if "headline" not in lower and "article title" in lower:
+        lower["headline"] = lower["article title"]
     need = {"date": None, "stock": None, "headline": None}
     for logical in need:
         if logical not in lower:
@@ -66,6 +81,30 @@ def _require_columns(df: pd.DataFrame) -> pd.DataFrame:
         }
     )
     return out[["date", "stock", "headline"]].copy()
+
+
+def parse_published_timestamp(value: Any) -> datetime | None:
+    """Parse source timestamp when a clock is present.
+
+    Kaggle processed file documents Eastern wall time (UTC-4). Naive datetimes are
+    interpreted as America/New_York, then converted to UTC.
+    Date-only values return None so the caller can apply the 09:30 ET soft pin.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    ts = pd.to_datetime(value, errors="coerce")
+    if pd.isna(ts):
+        return None
+    raw = str(value).strip()
+    has_clock = bool(re.search(r"\d{1,2}:\d{2}", raw))
+    if not has_clock and ts.hour == 0 and ts.minute == 0 and ts.second == 0:
+        return None
+    if ts.tzinfo is None:
+        local = datetime(
+            ts.year, ts.month, ts.day, ts.hour, ts.minute, int(ts.second), tzinfo=ET
+        )
+        return local.astimezone(timezone.utc)
+    return ts.to_pydatetime().astimezone(timezone.utc)
 
 
 def parse_calendar_date(value: Any) -> date | None:
@@ -131,23 +170,26 @@ def load_filter_dedup_sample(
 
     # Stratified sample across tickers when possible.
     if rows_after_dedup <= target_rows:
-        sampled = df
+        sampled = df.copy()
     else:
         per = max(1, target_rows // len(TICKER_UNIVERSE))
         parts: list[pd.DataFrame] = []
+        taken_idx: set[Any] = set()
         for ticker in sorted(TICKER_UNIVERSE):
             sub = df.loc[df["ticker"] == ticker]
             if sub.empty:
                 continue
             n = min(len(sub), per)
-            parts.append(sub.sample(n=n, random_state=random_seed))
-        sampled = pd.concat(parts, ignore_index=True) if parts else df.head(0)
+            part = sub.sample(n=n, random_state=random_seed)
+            parts.append(part)
+            taken_idx.update(part.index.tolist())
+        sampled = pd.concat(parts, axis=0) if parts else df.head(0)
         if len(sampled) < target_rows:
-            remain = df.loc[~df.index.isin(sampled.index)]
+            remain = df.loc[~df.index.isin(taken_idx)]
             need = target_rows - len(sampled)
             if need > 0 and len(remain) > 0:
                 extra = remain.sample(n=min(need, len(remain)), random_state=random_seed)
-                sampled = pd.concat([sampled, extra], ignore_index=True)
+                sampled = pd.concat([sampled, extra], axis=0)
         if len(sampled) > target_rows:
             sampled = sampled.sample(n=target_rows, random_state=random_seed)
 
@@ -161,7 +203,14 @@ def load_filter_dedup_sample(
         event_id_for(str(r.ticker), r.calendar_date, str(r.normalized_headline))
         for r in sampled.itertuples(index=False)
     ]
+    if bool(sampled["event_id"].duplicated().any()):
+        raise RuntimeError(
+            "duplicate event_id after sample — stratified sampling bug or colliding headlines"
+        )
     sampled["builder_version"] = BUILDER_VERSION
+    sampled["published_at_parsed"] = [
+        parse_published_timestamp(r.date) for r in sampled.itertuples(index=False)
+    ]
 
     stats = IngestStats(
         rows_raw=rows_raw,

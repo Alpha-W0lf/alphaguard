@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 05a — offline Option B training-row builder (Kaggle source locked; FinBERT batch; **no** XGBoost train)  
 **Stage that authored this:** Write-dev-guide (pass 61); Refine-dev-guide (pass 62–64)  
-**Status:** **Implement partial** 2026-07-16 — builder+tests+docs landed; live Kaggle download / license paste / full parquet e2e **blocked** (no kaggle CLI creds; network proxy)
+**Status:** **Review pass 67** — code/tests/docs hardened; live Kaggle e2e **blocked on missing `~/.kaggle/kaggle.json`** (yfinance verified outside sandbox). Train (05b) parked.
 
 **Context SSOT:** `alphaguard/docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  

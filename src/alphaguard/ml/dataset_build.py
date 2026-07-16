@@ -105,7 +105,9 @@ def build_training_events(
     rows: list[dict[str, Any]] = []
     dropped_label = 0
     for r in sampled.itertuples(index=False):
-        published_at = published_at_from_calendar_date(r.calendar_date)
+        published_at = getattr(r, "published_at_parsed", None)
+        if published_at is None or (isinstance(published_at, float) and pd.isna(published_at)):
+            published_at = published_at_from_calendar_date(r.calendar_date)
         feats = compute_features_and_label(
             ticker=str(r.ticker),
             published_at=published_at,
@@ -132,8 +134,13 @@ def build_training_events(
 
     df = pd.DataFrame(rows)
     if skip_finbert:
+        if out_path == DEFAULT_OUT or "training_events.parquet" in out_path.name:
+            raise RuntimeError(
+                "--skip-finbert cannot write the canonical training_events.parquet. "
+                "Pass --out to a noncanonical path (e.g. data/derived/training_events_dev_nofinbert.parquet)."
+            )
         df["finbert_sentiment"] = 0.0
-        print("WARNING: skip_finbert=True — finbert_sentiment set to 0.0 (dev only)")
+        print("WARNING: skip_finbert=True — noncanonical output only")
     else:
         print(
             "FinBERT batch: prefer Kafka/Qdrant/Ollama down (resource_mode=finbert_train)"
@@ -161,7 +168,9 @@ def build_training_events(
     print(df["ticker"].value_counts().sort_index().to_string())
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(out_path, index=False)
+    tmp_path = out_path.with_suffix(out_path.suffix + ".tmp")
+    df.to_parquet(tmp_path, index=False)
+    tmp_path.replace(out_path)
     print(f"wrote {out_path} rows={n}")
     return df
 
