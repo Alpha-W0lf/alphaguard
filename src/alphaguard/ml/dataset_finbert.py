@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Iterable, Sequence
 
-FINBERT_MODEL_ID = "ProsusAI/finbert-tone"
+# Soft pin (human-locked 2026-07-16): Hub ID is ProsusAI/finbert — ProsusAI/finbert-tone does not exist.
+FINBERT_MODEL_ID = "ProsusAI/finbert"
 
 
 def sentiment_from_probs(pos: float, neg: float) -> float:
@@ -18,7 +19,10 @@ def score_headlines(
     model_id: str = FINBERT_MODEL_ID,
     batch_size: int = 16,
 ) -> list[float]:
-    """Run FinBERT-tone offline. Lazy-imports transformers/torch."""
+    """Run FinBERT offline. Lazy-imports transformers/torch.
+
+    Uses the default Hub auth (HF cache / HF_TOKEN). Public weights; no token=False workaround.
+    """
     if not headlines:
         return []
     from transformers import AutoModelForSequenceClassification, AutoTokenizer

@@ -12,6 +12,7 @@ import pandas as pd
 
 from alphaguard.ml.dataset_asof import (
     compute_features_and_label,
+    make_cached_close_fetcher,
     published_at_from_calendar_date,
 )
 from alphaguard.ml.dataset_finbert import score_headlines
@@ -102,6 +103,8 @@ def build_training_events(
     )
     print(f"csv_discovered={csv_path}")
 
+    closer = fetch_closes or make_cached_close_fetcher()
+
     rows: list[dict[str, Any]] = []
     dropped_label = 0
     for r in sampled.itertuples(index=False):
@@ -111,7 +114,7 @@ def build_training_events(
         feats = compute_features_and_label(
             ticker=str(r.ticker),
             published_at=published_at,
-            fetch_closes=fetch_closes,
+            fetch_closes=closer,
         )
         if feats is None:
             dropped_label += 1

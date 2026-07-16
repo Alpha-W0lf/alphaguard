@@ -1,7 +1,36 @@
 # Training data — Option B dataset builder (Guide 05a)
 
-**Status:** Builder code + Review fixes landed 2026-07-16. **Live e2e parquet** requires Kaggle API token (human). **XGBoost train (Guide 05b) not started.**  
+**Status:** Builder + live e2e parquet landed 2026-07-16. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored; regenerate locally). **XGBoost train (Guide 05b) not started.**  
 **Fixture gate ≠ Option B evidence.**
+
+### Live e2e evidence (2026-07-16)
+
+| Check | Result |
+|-------|--------|
+| Ingest | raw=1,400,469 → universe=8,617 → dedup=8,278 → sample=500 |
+| CSV | `data/raw/kaggle_stock_news/analyst_ratings_processed.csv` |
+| Parquet rows | **500**; unique `event_id`; all §7.5 + provenance columns |
+| Tickers in parquet | `AAPL, AMZN, GOOGL, NVDA, QQQ` (see universe note below) |
+| FinBERT | `ProsusAI/finbert`; scores in ≈[-0.97, 0.94]; no NaN |
+| Split preview | train=400 / test=100 (counts only; **no train**) |
+| Tests | `uv run pytest -q` → 65 passed |
+
+### Universe coverage honesty (preferred CSV)
+
+Raw `stock` counts in `analyst_ratings_processed.csv` for locked universe symbols:
+
+| Symbol | Rows | Note |
+|--------|------|------|
+| AAPL | 469 | present |
+| AMZN | 330 | present |
+| GOOGL | 1585 | present (`GOOG` also exists: 1209 — not remapped) |
+| NVDA | 3133 | present |
+| QQQ | 3100 | present |
+| META | **0** | archive uses **`FB`** (389) — soft pin forbids silent remap |
+| MSFT | **0** | absent from this preferred CSV |
+| SPY | **0** | absent from this preferred CSV |
+
+Stratified sample + refill therefore concentrates on the five present tickers. **Do not** invent FB→META without a new human soft-pin.
 
 ## Source (locked)
 
@@ -68,7 +97,7 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 | Dedup | `(ticker, calendar_date, normalized_headline)` keep first |
 | Sample | ≈500 stratified; `random_seed=42`; **unique `event_id` required** |
 | Label | `label_high_risk = 1` iff `fwd_return_5d < -0.03` |
-| FinBERT | `ProsusAI/finbert-tone`; score = `P(pos) - P(neg)`; offline batch only |
+| FinBERT | `ProsusAI/finbert`; score = `P(pos) - P(neg)`; offline batch only |
 | `--skip-finbert` | **Forbidden** for canonical `training_events.parquet` |
 | Split preview | Time-ordered 80/20 counts printed — **does not train** |
 

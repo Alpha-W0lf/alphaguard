@@ -98,6 +98,27 @@ def default_yfinance_closes(ticker: str, start: date, end: date) -> pd.Series:
     return closes.astype(float)
 
 
+def make_cached_close_fetcher(
+    *,
+    history_start: date = date(2008, 1, 1),
+    history_end: date = date(2021, 6, 1),
+) -> CloseFetcher:
+    """Download each ticker once over the archive window (e2e performance)."""
+    cache: dict[str, pd.Series] = {}
+
+    def fetch(ticker: str, start: date, end: date) -> pd.Series:
+        if ticker not in cache:
+            print(f"yfinance cache miss: downloading {ticker} …")
+            cache[ticker] = default_yfinance_closes(ticker, history_start, history_end)
+        series = cache[ticker]
+        if series.empty:
+            return series
+        idx = [d for d in series.index if start <= d <= end]
+        return series.loc[idx] if idx else pd.Series(dtype=float)
+
+    return fetch
+
+
 def _close_on(series: pd.Series, d: date) -> float | None:
     if d not in series.index:
         # try Timestamp key

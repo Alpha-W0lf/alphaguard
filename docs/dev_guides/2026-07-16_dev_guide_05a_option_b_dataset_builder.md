@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 05a — offline Option B training-row builder (Kaggle source locked; FinBERT batch; **no** XGBoost train)  
 **Stage that authored this:** Write-dev-guide (pass 61); Refine-dev-guide (pass 62–64)  
-**Status:** **Review pass 67** — code/tests/docs hardened; live Kaggle e2e **blocked on missing `~/.kaggle/kaggle.json`** (yfinance verified outside sandbox). Train (05b) parked.
+**Status:** **Implement complete (2026-07-16)** — soft pin FinBERT = **`ProsusAI/finbert`**; Kaggle cache + live `training_events.parquet` (500 rows) verified. Train (05b) parked.
 
 **Context SSOT:** `alphaguard/docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
@@ -77,7 +77,7 @@ Build a reproducible offline path that:
 | Forward label window | Per §8 item 6: `fwd_return_5d` from first completed session close at/after event session → close 5 trading sessions later |
 | Price series | yfinance **adjusted** closes; document in `TRAINING_DATA.md` |
 | Label | `label_high_risk = 1` iff `fwd_return_5d < -0.03` else `0` |
-| FinBERT model | **`ProsusAI/finbert-tone`** |
+| FinBERT model | **`ProsusAI/finbert`** (locked 2026-07-16; `ProsusAI/finbert-tone` is not a Hub repo) |
 | FinBERT input | Headline text only |
 | FinBERT score | Map model probs to scalar: **`P(positive) - P(negative)`** ∈ `[-1, 1]` → column `finbert_sentiment`. Do not invent an alternate mapping without a new human soft-pin. |
 | CLI entry | **`scripts/build_training_events.py`** (thin) |
@@ -99,11 +99,11 @@ Plus provenance columns (**required**): `source_dataset_id` (const Kaggle id str
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] Kaggle download (or documented offline path) works for a stranger with Kaggle CLI/token  
-- [ ] ≈500 rows (or honest shortfall note + exit non-zero / human gate)  
-- [ ] All §7.5 columns present; dtypes sane; no NaN labels without documented drop  
+- [x] Kaggle download (or documented offline path) works for a stranger with Kaggle CLI/token  
+- [x] ≈500 rows (or honest shortfall note + exit non-zero / human gate)  
+- [x] All §7.5 columns present; dtypes sane; no NaN labels without documented drop  
 - [x] FinBERT runs only in explicit builder command; smoke/pytest default path unchanged  
-- [ ] `docs/TRAINING_DATA.md`: license string, regenerate commands, as-of/dedup policy  
+- [x] `docs/TRAINING_DATA.md`: license string, regenerate commands, as-of/dedup policy  
 - [x] VISION Option B / ARCHITECTURE `ml/train` / README honesty: **dataset builder landed; train not started**; fixture ≠ Option B  
 - [x] Unit tests for: OOU reject, dedup, date→published_at, label rule, empty-input fail-closed (mock yfinance/FinBERT where needed)
 
@@ -115,14 +115,14 @@ All boxes start unchecked. **Do not check boxes in Write / Ready-check.**
 
 ### Phase A — License + layout
 
-- [ ] **A1.** Open Kaggle dataset page; copy license/access text into `docs/TRAINING_DATA.md`.  
+- [x] **A1.** Open Kaggle dataset page; copy license/access text into `docs/TRAINING_DATA.md`.  
 - [x] **A2.** Ensure `.gitignore` covers `data/raw/` (add if missing). Confirm `data/derived/` / `*.parquet` already ignored.  
 - [x] **A3.** Add thin `scripts/build_training_events.py` + `src/alphaguard/ml/dataset_build.py` (split helpers only to stay ≤300 lines). Do not put FinBERT into `ml/features.py`.  
 - [x] **A4.** Add `exchange_calendars` (and builder deps) to project dependency file; document in `TRAINING_DATA.md`.
 
 ### Phase B — Ingest + filter
 
-- [ ] **B1.** Download/unzip via Kaggle CLI (document exact commands + discovered CSV name).  
+- [x] **B1.** Download/unzip via Kaggle CLI (document exact commands + discovered CSV name).  
 - [x] **B2.** Parse `date`/`stock`/`headline`; map to universe; drop OOU with counts.  
 - [x] **B3.** Apply dedup + stratified sample ≈500 with `seed=42`.  
 - [x] **B4.** Assign stable `event_id` per soft pin.
@@ -142,7 +142,7 @@ All boxes start unchecked. **Do not check boxes in Write / Ready-check.**
 
 ### Phase E — Output + docs
 
-- [ ] **E1.** Write `data/derived/training_events.parquet`; print row counts by ticker + 80/20 time-split counts.  
+- [x] **E1.** Write `data/derived/training_events.parquet`; print row counts by ticker + 80/20 time-split counts.  
 - [x] **E2.** Update VISION / ARCHITECTURE / README / AGENTS honesty.  
 - [x] **E3.** Stop. **Do not** train XGBoost (Guide 05b).
 
