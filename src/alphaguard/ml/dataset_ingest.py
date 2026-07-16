@@ -28,6 +28,8 @@ class IngestStats:
     rows_sampled: int
     oou_dropped: int
     missing_fields_dropped: int
+    universe_tickers_absent: tuple[str, ...]
+    alias_candidates_oou: dict[str, int]
 
 
 def normalize_headline(text: str) -> str:
@@ -148,10 +150,21 @@ def load_filter_dedup_sample(
     df = df.loc[~missing].copy()
 
     df["ticker"] = df["stock"].astype(str).str.strip().str.upper()
+    # Known rename symbols that appear in this archive but are OOU under soft pin
+    # (no silent remap — counts are for operator honesty / future soft-pin decisions).
+    alias_watch = ("FB", "GOOG")
+    alias_candidates_oou: dict[str, int] = {}
+    for sym in alias_watch:
+        n = int((df["ticker"] == sym).sum())
+        if n:
+            alias_candidates_oou[sym] = n
     in_u = df["ticker"].isin(TICKER_UNIVERSE)
     oou_dropped = int((~in_u).sum())
     df = df.loc[in_u].copy()
     rows_universe = len(df)
+    universe_tickers_absent = tuple(
+        sorted(t for t in TICKER_UNIVERSE if int((df["ticker"] == t).sum()) == 0)
+    )
 
     df["calendar_date"] = df["date"].map(parse_calendar_date)
     bad_date = df["calendar_date"].isna()
@@ -219,6 +232,8 @@ def load_filter_dedup_sample(
         rows_sampled=len(sampled),
         oou_dropped=oou_dropped,
         missing_fields_dropped=missing_fields_dropped,
+        universe_tickers_absent=universe_tickers_absent,
+        alias_candidates_oou=alias_candidates_oou,
     )
     return sampled, stats
 

@@ -79,6 +79,23 @@ def test_empty_csv_fail_closed(tmp_path: Path) -> None:
         load_filter_dedup_sample(csv, target_rows=10)
 
 
+def test_ingest_reports_absent_universe_and_fb_alias_candidate(tmp_path: Path) -> None:
+    csv = tmp_path / "news.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-01,AAPL,Apple news\n"
+        "2020-03-02,FB,Facebook news\n"
+        "2020-03-03,GOOG,Alphabet class C\n",
+        encoding="utf-8",
+    )
+    _df, stats = load_filter_dedup_sample(csv, target_rows=10, random_seed=42)
+    assert stats.rows_universe == 1  # only AAPL in universe
+    assert "META" in stats.universe_tickers_absent
+    assert "MSFT" in stats.universe_tickers_absent
+    assert stats.alias_candidates_oou.get("FB") == 1
+    assert stats.alias_candidates_oou.get("GOOG") == 1
+
+
 def test_event_id_stable() -> None:
     a = event_id_for("AAPL", date(2024, 3, 12), "apple rises")
     b = event_id_for("AAPL", date(2024, 3, 12), "apple rises")

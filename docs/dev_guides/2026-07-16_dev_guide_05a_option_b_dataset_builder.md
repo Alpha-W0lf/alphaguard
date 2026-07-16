@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 05a — offline Option B training-row builder (Kaggle source locked; FinBERT batch; **no** XGBoost train)  
 **Stage that authored this:** Write-dev-guide (pass 61); Refine-dev-guide (pass 62–64)  
-**Status:** **Implement complete (2026-07-16)** — soft pin FinBERT = **`ProsusAI/finbert`**; Kaggle cache + live `training_events.parquet` (500 rows) verified. Train (05b) parked.
+**Status:** **Review shippable (2026-07-16 pass 69)** — soft pin FinBERT = **`ProsusAI/finbert`**; live parquet 500 rows verified; universe gaps documented (META/MSFT/SPY). Train (05b) parked.
 
 **Context SSOT:** `alphaguard/docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  

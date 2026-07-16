@@ -1,6 +1,6 @@
 # Training data — Option B dataset builder (Guide 05a)
 
-**Status:** Builder + live e2e parquet landed 2026-07-16. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored; regenerate locally). **XGBoost train (Guide 05b) not started.**  
+**Status:** **Review shippable (2026-07-16)** — live parquet verified; soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). **XGBoost train (Guide 05b) not started.**  
 **Fixture gate ≠ Option B evidence.**
 
 ### Live e2e evidence (2026-07-16)
@@ -13,9 +13,9 @@
 | Tickers in parquet | `AAPL, AMZN, GOOGL, NVDA, QQQ` (see universe note below) |
 | FinBERT | `ProsusAI/finbert`; scores in ≈[-0.97, 0.94]; no NaN |
 | Split preview | train=400 / test=100 (counts only; **no train**) |
-| Tests | `uv run pytest -q` → 65 passed |
+| Tests | `uv run pytest -q` → 65+ passed |
 
-### Universe coverage honesty (preferred CSV)
+### Universe coverage honesty (preferred CSV + archive scan)
 
 Raw `stock` counts in `analyst_ratings_processed.csv` for locked universe symbols:
 
@@ -26,11 +26,13 @@ Raw `stock` counts in `analyst_ratings_processed.csv` for locked universe symbol
 | GOOGL | 1585 | present (`GOOG` also exists: 1209 — not remapped) |
 | NVDA | 3133 | present |
 | QQQ | 3100 | present |
-| META | **0** | archive uses **`FB`** (389) — soft pin forbids silent remap |
-| MSFT | **0** | absent from this preferred CSV |
-| SPY | **0** | absent from this preferred CSV |
+| META | **0** | archive uses **`FB`** (389; dates ≈2020-02 → 2020-06) — soft pin forbids silent remap |
+| MSFT | **0** | absent from preferred CSV **and** `raw_analyst_ratings.csv` |
+| SPY | **0** | absent from preferred CSV; only 14 rows in `raw_partner_headlines.csv` |
 
-Stratified sample + refill therefore concentrates on the five present tickers. **Do not** invent FB→META without a new human soft-pin.
+Cross-check: Yahoo Finance treats legacy ticker `FB` as delisted; continuous Meta history is under **`META`**. Any future FB→META soft pin must fetch prices as `META`, not `FB`.
+
+Stratified sample + refill concentrates on the five present tickers. **FB→META alias deferred** for 05a (see Review pass 69); revisit before Guide 05b if desired.
 
 ## Source (locked)
 

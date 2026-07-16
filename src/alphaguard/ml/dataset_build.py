@@ -102,6 +102,16 @@ def build_training_events(
         f"oou_dropped={stats.oou_dropped} missing_dropped={stats.missing_fields_dropped}"
     )
     print(f"csv_discovered={csv_path}")
+    if stats.universe_tickers_absent:
+        print(
+            "WARNING: universe tickers with 0 rows after filter "
+            f"(no silent remap): {list(stats.universe_tickers_absent)}"
+        )
+    if stats.alias_candidates_oou:
+        print(
+            "NOTE: OOU rename candidates seen in CSV (soft pin forbids remap unless locked): "
+            f"{stats.alias_candidates_oou}"
+        )
 
     closer = fetch_closes or make_cached_close_fetcher()
 
