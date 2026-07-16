@@ -1,125 +1,133 @@
 # Context: Guide 05b — Option B XGBoost train + option_b bundle
 
 **Date:** 2026-07-16  
-**Repos:** `alphaguard`  
-**Status:** Draft (Gather) — **Ready for Write-dev-guide**  
+**Repo:** `alphaguard`  
+**Status:** **Refined** (pass 72) — Write-dev-guide readiness **8.7 / 10**  
 **Mode last used:** hub  
 **Prioritize SSOT:** `second_brain/docs/2026-07-16_prioritize_next_work_pass70_fan_in.md`  
-**Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md` (incl. FinBERT soft pin + FB→META defer)  
+**Gather fan-in:** `second_brain/docs/2026-07-16_gather_context_guide05b_pass71_fan_in.md`  
+**Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
 **Upstream:** Guide 05a Review-shippable — `docs/TRAINING_DATA.md`, `docs/dev_guides/2026-07-16_dev_guide_05a_option_b_dataset_builder.md`  
 **Role lens:** ML engineer (+ backend for gate load / fail-closed)
 
 ## Problem
 
-Guide 05a produces `data/derived/training_events.parquet` (~500 rows, FinBERT + as-of features + forward-downside labels). Agent 2 still loads a **`bundle_kind=fixture`** stub from `scripts/build_fixture_bundle.py`. Interviewers will correctly reject “Option B gate” claims until an **`option_b`** bundle exists with train/test metrics, train-only threshold fit, and fail-closed load rules (ARCHITECTURE §7.4–§7.6, AG2).
+Guide 05a produces regenerable `data/derived/training_events.parquet` (~500 rows; live e2e verified 2026-07-16). Agent 2 still loads **`bundle_kind=fixture`** (`scripts/build_fixture_bundle.py`). Interviewers correctly reject “Option B gate” claims until an **`option_b`** bundle exists with time-split train/test metrics, **train-only** threshold fit, and fail-closed load (ARCHITECTURE §7.4–§7.6, AG2).
+
+**Live parquet facts (do not invent):** tickers `AAPL, AMZN, GOOGL, NVDA, QQQ`; `label_high_risk` rate ≈ **0.164**; FinBERT = `ProsusAI/finbert`; MSFT/META/SPY absent from preferred CSV; FB→META deferred.
 
 ## Acceptance criteria
 
-- [ ] CLI/script trains XGBoost **downside-risk scorer** on regenerable parquet (Guide 05a path)  
-- [ ] Time-ordered **80/20** split by `published_at` (**no shuffle**); thresholds fit on **train only**  
-- [ ] `score_kind=proba_high_risk`; `score_threshold` = train-F1 max (ARCHITECTURE §7.4)  
-- [ ] Writes model bundle + `manifest.json` with `bundle_kind=option_b` and required §7.6 fields  
-- [ ] Gate can load Option B bundle; fixture bundle remains for smoke; no silent claim that fixture = Option B  
-- [ ] Docs honesty: VISION Option B row / ARCHITECTURE `ml/train` / README show train landed + metrics; still not “v1 complete” without eval judgment  
-- [ ] Default smoke still FinBERT-free / does not retrain  
-- [ ] Explicit: 5-ticker parquet coverage accepted for first train (MSFT/META/SPY absent from preferred CSV; FB→META deferred)
+- [ ] Thin CLI trains XGBoost downside-risk scorer on Guide 05a parquet  
+- [ ] Time-ordered **80/20** by `published_at` (**no shuffle**); fit thresholds on **train only**  
+- [ ] `score_kind=proba_high_risk`; `score_threshold` = train-F1 max (§7.4)  
+- [ ] Bundle dir + `manifest.json` with `bundle_kind=option_b` and all §7.6 required fields  
+- [ ] Gate loads Option B via existing `MODEL_BUNDLE_DIR` (or documented env); **default smoke stays fixture**  
+- [ ] Fail-closed honesty: docs + load path never present fixture metrics as Option B; guide specifies any new `bundle_kind` guard if needed  
+- [ ] Same-delivery VISION / ARCHITECTURE / README / TRAINING_DATA honesty + printed train/test metrics  
+- [ ] Unit tests: split order, train-only threshold, NaN fail-closed, manifest feature_names match `FEATURE_NAMES`  
+- [ ] 5-ticker coverage accepted with documented honesty (no invented MSFT/META/SPY)
 
 ## In scope
 
-- Train path under `src/alphaguard/ml/` (+ thin `scripts/` CLI)  
-- Threshold fitting + metrics logging (train/test)  
-- Option B bundle dir under `data/derived/` (gitignored) or documented path  
-- Fail-closed gate load for `bundle_kind`  
-- Same-delivery docs honesty  
+- `src/alphaguard/ml/` train helpers + thin `scripts/train_option_b_gate.py` (name soft-pinned in guide)  
+- Threshold fitting + metrics (train/test precision, recall, F1, confusion counts, threshold)  
+- Output: `data/derived/model_bundle_option_b/` (gitignored under `data/derived/`)  
+- Docs honesty; optional explicit env to point smoke/demo at Option B (**not** default)
 
 ## Out of scope
 
-- Rebuilding Guide 05a dataset builder  
-- FB→META alias (deferred; revisit only with soft pin + price-as-META)  
-- Live RSS; Option C (train on Agent 1 outputs); brokerage; Lowd Capital  
+- Rebuilding 05a builder; FB→META alias; live RSS; Option C; brokerage; Lowd Capital  
 - Neural calibrator; confidence-weighted thresholds  
-- Claiming v1 / interview “model proven” from one small train  
+- Switching default CI/smoke to Option B  
+- Claiming v1 complete / “alpha proven” from n≈500  
 
 ## Prior art (paths only)
 
 - `docs/ARCHITECTURE.md` §6.3, §7.4–§7.6, §11, AG1–AG3  
-- `docs/VISION.md` Option B row / MV checklist  
-- `docs/TRAINING_DATA.md` (parquet regenerate + universe honesty)  
-- `docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md` (05a; train was out of scope)  
-- `scripts/build_fixture_bundle.py` (pattern for train-F1 threshold + manifest — **fixture only**)  
+- `docs/VISION.md` Option B / Minimum Viable  
+- `docs/TRAINING_DATA.md`  
+- `docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
+- `scripts/build_fixture_bundle.py` (train-F1 + manifest pattern — **fixture only**)  
 - `src/alphaguard/contracts/manifest.py`, `contracts/decisions.py` (`FEATURE_NAMES`)  
-- `src/alphaguard/ml/gate.py` (load / fail-closed)  
+- `src/alphaguard/ml/gate.py` (`DownsideRiskGate`, `MODEL_BUNDLE_DIR` in error text)  
 - `AGENTS.md`  
 
 ## Risks and blast radius
 
 | Risk | Blast radius | Mitigation |
 |------|--------------|------------|
-| Train/serve skew (feature order, dtypes) | Silent bad gates | Manifest `feature_names` must match `FEATURE_NAMES`; fail closed |
-| Threshold fit on full data | Inflated metrics / AG2 violation | Split first; fit train only; freeze into manifest |
-| Claiming Option B from fixture | Interview honesty fail | `bundle_kind` gate; docs language |
-| Overfitting tiny n≈500 | Weak generalization | Honest metrics; no “alpha” claims; time split |
-| Overwriting fixture default smoke | Break Guides 01–04 | Separate bundle path; smoke keeps fixture unless explicit env |
-| Scope into FB alias mid-train | Join bugs / wrong Yahoo `FB` ETF | Soft pin deferred; document only |
+| Train/serve skew | Bad gates in demos | Manifest `feature_names` == `FEATURE_NAMES`; fail closed |
+| Threshold fit on all rows | AG2 violation / inflated test F1 | Split first; fit train only; freeze |
+| Fixture quoted as Option B | Interview fail | `bundle_kind` in docs + metrics; keep smoke on fixture |
+| Tiny n / imbalance (~16% positive) | Unstable F1 / threshold | Honest metrics; document; F1-undefined fallback soft pin |
+| Overwriting fixture path | Break Guides 01–04 | Separate derived bundle dir only |
+| Gate lacks mode×`bundle_kind` assert today | Honesty hole if docs claim Option B while fixture loaded | Guide: either env `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` for Option B demos **or** document that path selection is operator-owned; prefer small fail-closed check when env set |
 
 ## Edge cases
 
-- Missing parquet → fail closed with regenerate command  
-- Class imbalance / all-negative train F1 path → document threshold fallback (e.g. if F1 undefined)  
-- Feature NaNs → reject rows or fail closed (prefer fail closed if any NaN in FEATURE_NAMES)  
-- `bundle_kind=option_b` requested but fixture path loaded → fail closed  
-- Re-train idempotency → overwrite derived bundle dir atomically or versioned `bundle_id`  
-- Vol veto: default **off** unless soft-pinned on (ARCHITECTURE allows optional)  
+- Missing parquet → fail closed + regenerate command from TRAINING_DATA  
+- Train F1 undefined (no positives/negatives) → fail closed or documented fallback threshold (soft pin: **fail closed** with clear error)  
+- NaNs in `FEATURE_NAMES` columns → fail closed  
+- Re-train → atomic replace of derived bundle dir (write tmp → replace)  
+- `vol_veto_enabled=false` for first Option B bundle (soft pin)  
+- Yahoo/FB alias **not** in this guide  
 
-## Unknowns (must resolve or escalate)
+## Unknowns → soft pins for Write-dev-guide
 
-| Unknown | How to resolve | Blocking? |
-|---------|----------------|-----------|
-| Exact CLI name / bundle output path | Soft pin in Write-dev-guide | No for Gather |
-| XGBoost hyperparams (depth, eta, rounds) | Soft pin small defaults mirroring fixture unless evidence says otherwise | No — pin in guide |
-| Enable vol veto in first Option B bundle? | Soft pin: **off** (match fixture default; policy can enable later) | No — recommend off |
-| Default smoke switches to Option B? | Soft pin: **no** — fixture remains default smoke | No — recommend no |
-| Metrics to print/store | Soft pin: train/test precision/recall/F1 + confusion counts + threshold | No |
+| Soft pin | Recommended lock |
+|----------|------------------|
+| CLI | `scripts/train_option_b_gate.py` |
+| Bundle out | `data/derived/model_bundle_option_b/` |
+| Parquet in | `data/derived/training_events.parquet` (require exists; `--parquet` override OK) |
+| XGBoost params | Mirror fixture starter: `max_depth=3`, `eta=0.1`, `num_boost_round=50`, `seed=42`, `objective=binary:logistic` (small; guide may note tune later) |
+| Vol veto | **`vol_veto_enabled=false`** |
+| Default smoke | **Fixture** remains default; Option B via `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b` |
+| Metrics | Train+test: precision, recall, F1, TP/FP/TN/FN, `score_threshold` |
+| F1 undefined | **Fail closed** |
+| `bundle_id` | `option-b-downside-v1` |
+| `model_version` | `0.1.0-option-b` |
 
 ## Recommended approach
 
-1. **Do not** rebuild multi-repo architecture context or a second comprehensive Option B dataset context — 05a + ARCHITECTURE are SSOT for data.  
-2. Write-dev-guide 05b: thin train CLI, reuse fixture threshold pattern, write `option_b` bundle, wire gate load path, docs honesty.  
-3. Implement only after Ready-check.  
-4. FB→META stays deferred until optional pre-Implement soft pin.
+1. Write-dev-guide with ordered checklist + DoD from soft pins above.  
+2. Ready-check → Implement train only.  
+3. Review → metrics honesty.  
+4. FB→META still deferred.
 
-## Open decisions (human) — locked this pass unless reopened
+## Open decisions (human)
 
-Tom agreed 2026-07-16 (Prioritize pass 70 recommendations):
+### Locked (Tom 2026-07-16)
 
-| Decision | Locked choice |
-|----------|---------------|
-| Authorize Guide 05b path | **Yes** — Gather → Write-dev-guide next |
-| FB→META alias | **Deferred** |
-| First train ticker coverage | **Accept 5-ticker** parquet (AAPL/AMZN/GOOGL/NVDA/QQQ) with honesty docs |
-| Mechanic freeze / Vehicle S9 / AI KB deeper eval | **Parked** for now |
+| Decision | Lock |
+|----------|------|
+| Guide 05b path | Authorized |
+| FB→META | Deferred |
+| 5-ticker first train | Accepted |
+| Mechanic freeze / Vehicle S9 / AI KB deeper eval | Parked |
 
-### Soft pins to set in Write-dev-guide (not blocking Gather)
+### Soft pins (recommend lock at Write-dev-guide; not blocking Refine)
 
-- **Plain title:** Should the first Option B bundle enable volatility veto?  
-  - Recommendation: **No** (`vol_veto_enabled=false`) — keep policy simple; fixture already demonstrates veto path in eval harness.  
-  - Tradeoffs: Less policy surface; can enable in a later guide with train-fitted percentile.  
+1. **Vol veto off** for first Option B bundle — yes.  
+2. **Smoke stays fixture** — yes.  
+3. **XGBoost starter hyperparams** as table above — yes (simple, reproducible).  
+4. **Canvas:** replace stale architecture-review canvas with current portfolio progress board (this hub pass) — yes.
 
-- **Plain title:** Should default smoke load the Option B bundle after train?  
-  - Recommendation: **No** — keep fixture as default smoke; document how to point gate at Option B for demos.  
-  - Tradeoffs: Demo path needs an env/flag; avoids breaking CI/smoke on missing derived bundle.  
+## Evidence opened this refine pass
 
-## Evidence opened this pass
-
-- ARCHITECTURE §6.3 / §7.4–§7.6 / §11  
-- `scripts/build_fixture_bundle.py` threshold + manifest pattern  
-- `FEATURE_NAMES` in `contracts/decisions.py`  
-- TRAINING_DATA live e2e + Yahoo META/FB evidence (pass 70)  
-- Prioritize pass 70; Review pass 69  
-- Canvas `multi-repo-architecture-review.canvas.tsx` — **stale** (July 12 “no repo ready to implement”); not SSOT for Guide 05 delivery  
+- Re-read ARCHITECTURE §7.4–§7.6; `gate.py` (no `bundle_kind`×mode assert yet)  
+- `build_fixture_bundle.py` threshold loop  
+- TRAINING_DATA e2e ticker/label facts  
+- VISION Minimum Viable checkboxes (05b still open)  
+- Portfolio VISION/status for Mechanic, AI KB, Vehicle (progress report)
 
 ## Honest readiness
 
-- Ready for Write-dev-guide? **Yes.**  
-- Why not rebuild comprehensive context: Guide 05a context + ARCHITECTURE already lock labels, split order, score kind, manifest schema, and feature list. This file only adds **train-specific** scope, risks, and soft-pin recommendations.  
-- Context quality: **good enough** for an executable Guide 05b. Refine-context optional if Write-dev-guide surfaces forks.  
+| Score | Value |
+|-------|--------|
+| **Write-dev-guide readiness** | **8.7 / 10** |
+| Ready? | **Yes** |
+
+**Why not 10:** (1) Exact hyperparams are recommended not yet human-echoed as soft pins in a guide file; (2) whether to add env-gated `bundle_kind` assert is a small design fork for the guide; (3) Implement will still discover edge cases on real class imbalance. None block writing an executable guide.
+
+**Do we need more context first?** **No.** Next stage: **Write-dev-guide**.
