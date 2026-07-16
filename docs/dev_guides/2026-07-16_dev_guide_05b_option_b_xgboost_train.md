@@ -3,80 +3,126 @@
 **Date:** 2026-07-16  
 **Repo:** `alphaguard`  
 **Work item:** Guide 05b — train downside-risk XGBoost on Guide 05a parquet; write Option B model bundle  
-**Stage that authored this:** Write-dev-guide (pass 73)  
-**Status:** **Draft guide** — ready for Refine-dev-guide / Ready-check; **no Implement yet**
+**Stage that authored this:** Write-dev-guide (pass 73); **Refine-dev-guide (pass 74)**  
+**Status:** **Refined** — Ready-check readiness **9.1 / 10**; **no Implement yet**
 
 **Context SSOT:** `alphaguard/docs/2026-07-16_guide05b_option_b_train_context_summary.md`  
 **Upstream dataset:** Guide 05a Review-shippable — `docs/TRAINING_DATA.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
-**Prerequisite:** Regenerable `data/derived/training_events.parquet` (or documented regenerate). Guides 01–04 shippable. Fixture gate remains default smoke.
+**Prerequisite:** Regenerable `data/derived/training_events.parquet`. Guides 01–04 shippable. Fixture gate remains default smoke.
 
 ---
 
 ## Objective
 
-Train a reproducible **XGBoost binary classifier** that emits `downside_risk_score = P(label_high_risk=1)`, fit **`score_threshold` on train only** (train-F1 max), write a loadable bundle with `bundle_kind=option_b`, and update docs honesty — **without** claiming v1 Done or switching default smoke off the fixture bundle.
+Train a reproducible **XGBoost binary classifier** that emits `downside_risk_score = P(label_high_risk=1)`, using **nested time-aware hyperparameter selection on train only**, fit **`score_threshold` on train only** (train-F1 max), write `bundle_kind=option_b`, and update docs honesty — **without** claiming v1 Done or switching default smoke off the fixture bundle.
 
-**Success signal:** Operator runs one CLI; gets `data/derived/model_bundle_option_b/`; can point `MODEL_BUNDLE_DIR` at it for a demo; default `make smoke` still uses fixture; README shows train/test metrics labeled Option B.
+**Success signal:** One CLI produces `data/derived/model_bundle_option_b/` with audited manifest (params, search method, train/test metrics); default `make smoke` still fixture; Option B demo via `MODEL_BUNDLE_DIR` + optional `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b`.
 
 ---
 
-## Learning notes — training vs “fine-tuning” (binding mental model)
+## Are hyperparams necessary?
 
-### What this guide is **not**
+**Yes — for a senior portfolio gate.** Skipping selection entirely looks like a demo shortcut. Blind Optuna on the full dataset (or on the test fold) looks worse.
 
-| Term people say | What we do in 05b |
-|-----------------|-------------------|
-| LLM fine-tuning | **Do not** fine-tune Gemma/Ollama or any generative LLM |
-| FinBERT fine-tuning | **Do not** update FinBERT weights — Guide 05a already scored headlines with frozen `ProsusAI/finbert` |
-| End-to-end deep learning | **Do not** train a neural net on raw text |
+**Right-sized practice for n≈500 temporal rows:**
 
-### What this guide **is**
+| Do | Do not |
+|----|--------|
+| Small **grid** on **train only** via `TimeSeriesSplit` | Random K-fold (leaks future → past) |
+| Select booster by **mean validation logloss** | Optimize test F1 during search |
+| Refit winner on **full train**; fit threshold on train | Tune threshold on test |
+| Log search space + winner into manifest | Hide how params were chosen |
+| Keep grid tiny (overfit-aware) | Huge Bayesian search / dozens of trials |
 
-**Supervised tabular training:** features already in parquet (`FEATURE_NAMES`) → XGBoost → probability → deterministic gate policy (ARCHITECTURE §7.4).
+**Soft-pinned search space (8 candidates):**
 
-Industry names for interview fluency:
+| Dim | Values |
+|-----|--------|
+| `max_depth` | `{2, 3}` |
+| `eta` | `{0.05, 0.1}` |
+| `num_boost_round` | `{40, 60}` |
 
-1. **Train/serve skew** — Serving must use the same feature order/dtypes as the manifest.  
-2. **Temporal leakage** — No random shuffle; time-ordered split; never tune or fit thresholds on the final test fold.  
-3. **Nested evaluation** — Outer time holdout for reporting; any hyperparameter search only on **train** (inner time folds).  
-4. **Calibration vs threshold** — We use raw `predict_proba` + a fitted threshold (train-F1). Full probability calibration (Platt/isotonic) is **out of scope** for 05b.  
-5. **Class imbalance** — ~16% positive in live parquet; report confusion counts; do not fake balance by shuffling across time.
-
-### Data collection (already Guide 05a — do not redo)
-
-Locked practices we rely on (do not reopen without human):
-
-- Static Kaggle archive + license recorded (CC0)  
-- Universe filter + dedup + stratified sample + as-of joins (AG3)  
-- Forward-downside label only (AG2)  
-- FinBERT offline batch only  
-- Raw dump + parquet gitignored; regenerate documented  
-
-05b **consumes** that parquet; it does not re-collect news.
-
-### Hyperparameter handling — modern practice for **this** n≈500 setting
-
-| Practice | Why | 05b soft pin |
-|----------|-----|--------------|
-| Prefer **simple fixed defaults** for first shippable Option B bundle | Large grids on n≈400 train rows overfit; interviewers prefer honest small models | **Fixed soft-pinned params** (below) |
-| If search later: **time-ordered inner CV on train only** (e.g. `TimeSeriesSplit`), never touch final test | Nested CV / purged CV family for temporal data | **Out of 05b Implement** — optional Guide 05c / later |
-| Fit **decision threshold** separately on train probs (ARCHITECTURE already locks train-F1 max) | Threshold ≠ booster hyperparams | **In scope** |
-| Log params + metrics into manifest | Reproducibility / audit | **In scope** |
-| Do not Optuna/Bayesian-search in 05b | Extra surface + leakage risk for tiny n | **Parked** |
-
-**Soft-pinned XGBoost defaults (first Option B train):**
+**Fixed for all candidates (regularization / imbalance):**
 
 ```text
 objective=binary:logistic
 eval_metric=logloss
-max_depth=3
-eta=0.1
-num_boost_round=50
 seed=42
+min_child_weight=1
+subsample=0.8
+colsample_bytree=0.8
+reg_lambda=1.0
+scale_pos_weight = n_neg_train / n_pos_train   # train only; fail closed if n_pos_train==0
 ```
 
-Slightly more capacity than the synthetic fixture (`max_depth=2`, 20 rounds) because we have real rows — still conservative.
+**Inner CV:** `sklearn.model_selection.TimeSeriesSplit(n_splits=3)` on the **train** partition only.  
+**Selection rule:** lowest mean validation **logloss** across the 3 folds; ties → smaller `max_depth`, then smaller `num_boost_round`.  
+**After selection:** refit on full train with winning params; then threshold search on full-train probabilities.
+
+Optuna / large Bayesian search remains **out of scope** (diminishing returns + complexity for this n).
+
+---
+
+## Avoiding overfitting & common pitfalls (binding)
+
+| Pitfall | Why it kills interviews | Mitigation in 05b |
+|---------|-------------------------|-------------------|
+| Random shuffle split | Future headlines train the past | Time-ordered 80/20 only |
+| Tune on test / peek often | Inflated “generalization” | One test evaluation after freeze |
+| Deep trees / huge rounds | Memorize 400 rows | Grid caps depth≤3, rounds≤60 |
+| No regularization | Overfit noise | `subsample`/`colsample`/`reg_lambda` soft pins |
+| Ignore class imbalance | Threshold/F1 nonsense | `scale_pos_weight` from **train** counts; report confusion |
+| Leak labels into features | `fwd_return_5d` in X | Feature matrix = `FEATURE_NAMES` only |
+| Leakage via FinBERT/yfinance redo | Train/serve skew | Consume 05a parquet; do not re-score FinBERT in train CLI |
+| Quote fixture F1 as Option B | Honesty fail | Separate bundle path + `bundle_kind` |
+| Early-stop using test | Hidden leakage | If early stop used, watch set ⊆ **train** only (optional: last 20% of train chronological); default = **no early stop** on final refit (soft pin: off) |
+| Underspecified metrics | Can’t audit | Manifest metrics keys required below |
+
+**Train vs test gap:** Print `|train_f1 - test_f1|`. If gap > **0.25**, still write the bundle but print `WARNING: large train/test F1 gap — possible overfit` (do not auto-fail — document in README). Soft pin threshold for warning only.
+
+---
+
+## MLOps — what we demonstrate (local, honest)
+
+This is a **laptop interview lab**, not a cloud training platform. Senior signal = **reproducible artifacts + fail-closed serve**, not fake MLflow theater.
+
+| MLOps practice | In 05b? | How |
+|----------------|---------|-----|
+| Versioned training data pointer | Yes | `dataset_source` + `dataset_hash` in manifest |
+| Reproducible params/seed | Yes | Soft pins + `seed=42` + logged `xgb_params` / `hpo` block |
+| Atomic model publish | Yes | Write tmp dir → replace `model_bundle_option_b/` |
+| Train/serve contract | Yes | `feature_names` must match `FEATURE_NAMES`; gate fail-closed |
+| Bundle kind / stage honesty | Yes | `bundle_kind=option_b`; env require guard |
+| Local run summary | Yes | Write `artifacts/runs/option_b_train_<utc>.json` (gitignored under `artifacts/`) with metrics + winner params + paths |
+| Remote experiment tracking (W&B/MLflow) | **No** | Explicit non-goal — mention in docs as future |
+| Model registry / shadow deploy | **No** | Non-goal |
+| CI trains Option B every PR | **No** | CI keeps fixture; train is operator/local (parquet gitignored) |
+
+---
+
+## Evals — what we demonstrate
+
+| Eval layer | In 05b? | Notes |
+|------------|---------|-------|
+| Offline train/test classification metrics | **Yes** | precision/recall/F1 + confusion on train **and** test at frozen threshold |
+| HPO inner-fold logloss | **Yes** | Logged in manifest (`hpo.fold_scores`) |
+| Gate policy goldens (Guide 03) | **Keep** | Still run on **fixture** by default — proves plumbing |
+| Option B end-to-end smoke | **Optional demo** | `MODEL_BUNDLE_DIR=...` + `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` — not default CI |
+| Live trading PnL / backtest | **No** | Out of scope — downside gate ≠ alpha |
+| LLM schema-pass rates | **No** | Separate from XGBoost train |
+| Ablation (drop FinBERT feature) | **No** | Nice later; not 05b |
+
+**Honesty rule:** Test F1 on n_test≈100 with ~16% positives is **noisy**. Report it; do not market as production risk model.
+
+---
+
+## Learning notes (short)
+
+1. **Nested evaluation** — Outer time holdout for reporting; inner `TimeSeriesSplit` only on train for HPO.  
+2. **Threshold ≠ booster HPO** — Select trees by logloss; choose operating point by train F1.  
+3. **Train/serve skew** — Manifest feature order is the contract.  
+4. **Imbalance** — `scale_pos_weight` from train; always publish confusion counts.
 
 ---
 
@@ -84,11 +130,11 @@ Slightly more capacity than the synthetic fixture (`max_depth=2`, 20 rounds) bec
 
 - `alphaguard/docs/2026-07-16_guide05b_option_b_train_context_summary.md`
 - `alphaguard/docs/ARCHITECTURE.md` (§6.3, §7.4–§7.6, §11, AG1–AG3)
-- `alphaguard/docs/VISION.md` (Option B / Minimum Viable)
+- `alphaguard/docs/VISION.md`
 - `alphaguard/docs/TRAINING_DATA.md`
-- `alphaguard/scripts/build_fixture_bundle.py` (pattern only — fixture)
+- `alphaguard/scripts/build_fixture_bundle.py`
 - `alphaguard/src/alphaguard/contracts/manifest.py`
-- `alphaguard/src/alphaguard/contracts/decisions.py` (`FEATURE_NAMES`)
+- `alphaguard/src/alphaguard/contracts/decisions.py`
 - `alphaguard/src/alphaguard/ml/gate.py`
 - `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`
 - `second_brain/docs/workflow_os/rails/QUALITY_STANDARD.md`
@@ -97,164 +143,166 @@ Slightly more capacity than the synthetic fixture (`max_depth=2`, 20 rounds) bec
 
 ## Architecture constraints (binding)
 
-1. **Train only** — no live RSS; no Option C (Agent 1 labels); no FinBERT retrain.  
-2. **AG2** — label is forward downside only; never OR volatility into the label.  
-3. **Split first** — sort by `published_at`; first 80% train / last 20% test; **no shuffle**.  
-4. **Threshold on train only** — `threshold_fitting=train_f1_max`; freeze into manifest; evaluate test with frozen threshold.  
-5. **`score_kind=proba_high_risk`** — XGBoost `predict` on binary:logistic (proba).  
-6. **`bundle_kind=option_b`** — never write Option B metrics into the fixture bundle path.  
-7. **Default smoke stays fixture** — Option B demos use `MODEL_BUNDLE_DIR`.  
-8. Prefer ≤300 lines/file (hard max 400) for new modules.  
-9. Same-delivery docs honesty — Option B trained with metrics; still not “v1 complete.”  
-10. 5-ticker parquet coverage accepted (honesty in TRAINING_DATA); FB→META deferred.
+1. Train only — no live RSS; no Option C; no FinBERT retrain.  
+2. AG2 / AG3 honored via 05a labels/features.  
+3. Split first — time-ordered 80/20; **no shuffle**.  
+4. HPO + threshold on **train only**; one test eval after freeze.  
+5. `score_kind=proba_high_risk`; `bundle_kind=option_b`.  
+6. Default smoke = fixture.  
+7. ≤300 lines/file preferred (hard max 400).  
+8. Same-delivery docs honesty; still not v1 complete.  
+9. 5-ticker coverage accepted; FB→META deferred.
 
 ---
 
-## Soft pins (locked for Implement — do not reopen without human)
+## Soft pins (locked for Implement)
 
 | Pin | Locked default |
 |-----|----------------|
-| Parquet in | `data/derived/training_events.parquet` (`--parquet` override OK) |
-| CLI | `scripts/train_option_b_gate.py` (thin) |
-| Library home | `src/alphaguard/ml/train_option_b.py` (+ tiny helpers only if ≤300 lines) |
+| Parquet in | `data/derived/training_events.parquet` (`--parquet` OK) |
+| CLI | `scripts/train_option_b_gate.py` |
+| Library | `src/alphaguard/ml/train_option_b.py` (+ helpers only if needed for ≤300 lines) |
 | Bundle out | `data/derived/model_bundle_option_b/` |
-| Features | Exactly `FEATURE_NAMES` order from `contracts/decisions.py` |
-| Label column | `label_high_risk` |
-| Split | Time-ordered 80/20 on `published_at` |
-| XGBoost params | Soft-pinned block above |
-| Hyperparam search | **None in 05b** — fixed defaults; document nested time-CV as future work |
-| Threshold grid | `np.linspace(0.05, 0.95, 19)` on **train** probs; maximize F1; ties → lower threshold |
-| F1 undefined | **Fail closed** with clear error |
-| Vol veto | `vol_veto_enabled=false`, `vol_veto_threshold=null` |
-| `bundle_id` | `option-b-downside-v1` |
-| `model_version` | `0.1.0-option-b` |
-| `dataset_source` | Kaggle id string from parquet `source_dataset_id` (or const) |
-| `dataset_hash` | sha256 of train+test feature matrix bytes + labels (document algorithm in TRAINING_DATA) |
-| Atomic write | Write to `*.tmp` dir then replace bundle dir |
-| Default smoke | Fixture path unchanged |
-| Option B demo | `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b` |
-| Honesty guard | If `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` is set, gate load **fails closed** when manifest `bundle_kind != option_b` (small additive check in `gate.py`) |
+| Features / label | `FEATURE_NAMES` / `label_high_risk` |
+| Outer split | Time-ordered 80/20 on `published_at` |
+| HPO | Grid above + `TimeSeriesSplit(n_splits=3)` on train; select by mean val **logloss** |
+| Final early stop | **Off** |
+| Threshold grid | `np.linspace(0.05, 0.95, 19)` on full-train probs; max F1; ties → lower threshold |
+| F1 undefined | Fail closed |
+| Vol veto | `false` / `null` |
+| `bundle_id` / `model_version` | `option-b-downside-v1` / `0.1.0-option-b` |
+| `dataset_hash` | sha256 of full feature matrix (all rows used) + labels; document in TRAINING_DATA |
+| Atomic write | tmp dir → replace |
+| Run summary | `artifacts/runs/option_b_train_<utc>.json` |
+| Smoke | Fixture default; Option B via `MODEL_BUNDLE_DIR` |
+| Honesty guard | `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` → fail closed if mismatch |
+| Overfit warning | Warn if `|train_f1 - test_f1| > 0.25` |
 
-### Manifest metrics (required keys)
+### Manifest `metrics` / `hpo` required keys
 
-At minimum in `manifest.metrics`:
-
-- `n_train`, `n_test`, `n_positive_train`, `n_positive_test`  
-- `score_threshold`  
-- `train_precision`, `train_recall`, `train_f1`, `train_tp`, `train_fp`, `train_tn`, `train_fn`  
-- `test_precision`, `test_recall`, `test_f1`, `test_tp`, `test_fp`, `test_tn`, `test_fn`  
-- `xgb_params` (dict copy of soft-pinned params + `num_boost_round`)  
-- `hyperparam_search` = `"none_fixed_soft_pin_05b"`  
+- Counts: `n_train`, `n_test`, `n_positive_train`, `n_positive_test`  
+- Threshold + train/test precision, recall, F1, TP/FP/TN/FN  
+- `train_test_f1_gap`  
+- `xgb_params` (winner)  
+- `scale_pos_weight`  
+- `hpo`: `{ "method": "timeseries_split_grid", "n_splits": 3, "space": {...}, "selection": "mean_val_logloss", "candidates_evaluated": N, "winner": {...}, "fold_mean_logloss": [...] }`  
+- `hyperparam_search` = `"timeseries_split_grid_05b"`  
 
 ---
 
-## Acceptance criteria (Implement must meet)
+## Acceptance criteria (Implement)
 
-- [ ] CLI trains from parquet; writes Option B bundle + valid `manifest.json`  
-- [ ] Unit tests: time split order; threshold uses train only; NaN fail-closed; feature_names match  
-- [ ] Loading via `MODEL_BUNDLE_DIR` works; default smoke still fixture  
-- [ ] Optional `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` fail-closed path tested  
-- [ ] Docs: VISION Option B row / ARCHITECTURE `ml/train` / README / TRAINING_DATA show train landed + metrics; fixture ≠ Option B  
-- [ ] No FinBERT import on default pytest path; no 05a rebuild  
+- [ ] CLI runs HPO + train + threshold + atomic bundle write  
+- [ ] Unit tests: time split; HPO never sees test indices; threshold train-only; NaN fail-closed; feature_names; require-bundle-kind guard  
+- [ ] Default smoke fixture; optional Option B demo documented  
+- [ ] Run summary JSON written under `artifacts/runs/`  
+- [ ] Docs honesty (VISION / ARCHITECTURE / README / TRAINING_DATA / AGENTS)  
+- [ ] No FinBERT in default pytest path  
 
 ---
 
 ## Ordered step checklist
 
-All boxes start unchecked. **Do not check in Write-dev-guide.**
+All boxes start unchecked at Implement. **Do not check during Refine.**
 
-### Phase A — Layout + load
+### Phase A — Layout + load + split
 
-- [ ] **A1.** Add `src/alphaguard/ml/train_option_b.py` + thin `scripts/train_option_b_gate.py`.  
-- [ ] **A2.** Load parquet; require `FEATURE_NAMES` + `label_high_risk` + `published_at`; fail closed on missing/NaN features.  
-- [ ] **A3.** Sort by `published_at`; split 80/20; record `train_window` start/end ISO from train rows.
+- [ ] **A1.** `train_option_b.py` + thin CLI.  
+- [ ] **A2.** Load parquet; require features/label/`published_at`; NaN fail-closed.  
+- [ ] **A3.** Sort by `published_at`; 80/20 split; record `train_window`.
 
-### Phase B — Train + threshold
+### Phase B — HPO + final train + threshold
 
-- [ ] **B1.** Train XGBoost with soft-pinned params on train only.  
-- [ ] **B2.** Fit `score_threshold` on train probs (train-F1 max).  
-- [ ] **B3.** Score test with **frozen** threshold; compute metrics dict.  
-- [ ] **B4.** If train F1 undefined → fail closed.
+- [ ] **B1.** Compute `scale_pos_weight` from train.  
+- [ ] **B2.** Run soft-pinned grid with `TimeSeriesSplit(n_splits=3)` on train; pick min mean val logloss.  
+- [ ] **B3.** Refit winner on full train.  
+- [ ] **B4.** Fit `score_threshold` on full-train probs (train-F1 max).  
+- [ ] **B5.** Evaluate test once; build metrics + `hpo` block; warn on large F1 gap.
 
-### Phase C — Bundle + gate honesty
+### Phase C — Bundle + MLOps + gate honesty
 
-- [ ] **C1.** Atomic write `model.json` + `manifest.json` (`bundle_kind=option_b`) + short README in bundle dir.  
-- [ ] **C2.** Add env-gated `bundle_kind` require check in `gate.py` (soft pin).  
-- [ ] **C3.** Document Option B demo env in TRAINING_DATA / README; smoke default unchanged.
+- [ ] **C1.** Atomic write model + manifest + bundle README.  
+- [ ] **C2.** Write `artifacts/runs/option_b_train_<utc>.json`.  
+- [ ] **C3.** Env-gated `bundle_kind` require in `gate.py`.  
+- [ ] **C4.** Document Option B demo env; smoke default unchanged.
 
 ### Phase D — Tests + docs
 
-- [ ] **D1.** Unit tests with tiny synthetic time-ordered frame (no live parquet required in CI).  
-- [ ] **D2.** Update VISION / ARCHITECTURE / README / TRAINING_DATA / AGENTS honesty.  
-- [ ] **D3.** Stop. Do **not** claim v1 complete; do **not** enable Optuna; do **not** FB→META.
+- [ ] **D1.** Synthetic time-ordered unit tests (CI without live parquet).  
+- [ ] **D2.** Docs honesty updates.  
+- [ ] **D3.** Stop — no Optuna platform; no FB→META; no v1 claim.
 
 ---
 
 ## Verification / Definition of Done
 
 ```bash
-# From alphaguard/ — parquet must exist (or regenerate via Guide 05a):
 uv run python scripts/train_option_b_gate.py
 test -f data/derived/model_bundle_option_b/manifest.json
-test -f data/derived/model_bundle_option_b/model.json
-python -c "import json; m=json.load(open('data/derived/model_bundle_option_b/manifest.json')); assert m['bundle_kind']=='option_b'; print(m['metrics'])"
+python -c "import json; m=json.load(open('data/derived/model_bundle_option_b/manifest.json')); assert m['bundle_kind']=='option_b'; assert m['metrics']['hpo']['method']=='timeseries_split_grid'; print(m['metrics']['test_f1'], m['metrics']['hpo']['winner'])"
 
 uv run pytest -q
-ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke   # still fixture
+ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 
-# Optional Option B demo (not default CI):
 MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b \
 ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b \
 ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 
-rg -n 'option_b|Option B|train_option_b' docs/VISION.md docs/ARCHITECTURE.md README.md docs/TRAINING_DATA.md
-rg -n 'finbert|ProsusAI' src/alphaguard/ml/features.py || true   # still FinBERT-free
+rg -n 'option_b|timeseries_split_grid|Option B' docs/VISION.md docs/ARCHITECTURE.md README.md docs/TRAINING_DATA.md
 ```
 
-**DoD:** Bundle green; metrics printed; docs honest; smoke fixture default; no hyperparam search theater; Guide 05c nested tuning not started.
+**DoD:** Bundle + HPO audit trail + metrics + docs honest + fixture smoke green.
 
 ---
 
 ## Blast radius and risks
 
-| Risk | Blast radius | Mitigation |
-|------|--------------|------------|
-| Overfitting tiny n | Misleading test F1 | Fixed small trees; honest metrics; no search on test |
-| Threshold leakage | Fake gate quality | Train-only fit |
-| Overwriting fixture | Break Guides 01–04 | Separate derived path |
-| Claiming LLM fine-tune | Interview confusion | Docs learning notes |
-| Scope into Optuna/FB alias | Calendar burn | Hard stop |
+| Risk | Mitigation |
+|------|------------|
+| HPO overfit to train folds | Tiny grid; logloss selection; shallow trees; warn on train/test F1 gap |
+| Threshold leakage | Train-only fit |
+| Fixture overwrite | Separate derived path |
+| CI depends on parquet | Unit tests synthetic; live train operator-only |
+| Scope into W&B/Optuna | Hard stop |
 
 ### Rollback
 
-Delete `data/derived/model_bundle_option_b/`; revert train commits; smoke must pass on fixture.
+Delete derived Option B bundle + train run JSON; revert commits; fixture smoke must pass.
 
 ---
 
-## Edge-case handling
+## Edge cases
 
-| Case | Required behavior |
-|------|-------------------|
-| Missing parquet | Fail closed + point to TRAINING_DATA regenerate |
+| Case | Behavior |
+|------|----------|
+| Missing parquet | Fail closed + TRAINING_DATA regenerate |
+| `n_pos_train==0` | Fail closed |
 | NaN features | Fail closed |
-| Zero positives in train | Fail closed (F1 undefined) |
 | Re-run train | Atomic replace bundle |
-| `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` + fixture path | Fail closed |
-| Class imbalance | Report counts; do not rebalance by shuffling time |
+| Require option_b + fixture path | Fail closed |
+| Inner fold too small | Fail closed with clear error if a fold has <2 classes or <10 rows |
 
 ---
 
 ## Stop conditions
 
-- Option B bundle + docs honesty landed  
-- **Do not** start nested hyperparam search guide unless human authorizes  
-- **Do not** switch default smoke to Option B  
-- **Do not** claim v1 / alpha complete  
+- Option B bundle + HPO audit + docs honesty  
+- **Do not** add MLflow/W&B  
+- **Do not** default CI to Option B smoke  
+- **Do not** claim v1 / production risk model  
 
 ---
 
-## Ready for Ready-check?
+## Refine pass 74 notes
 
-**Yes**, after one Refine-dev-guide pass if soft pins need tightening. Write-dev-guide readiness from context was **8.7 / 10**; this guide locks the soft pins that blocked 10.
+- Elevated HPO from “fixed only” → **nested time-grid** (senior-credible, still small).  
+- Added explicit overfitting, MLOps, and eval sections.  
+- Added `scale_pos_weight`, regularization soft pins, run summary artifact, F1-gap warning.  
 
-**Recommended next stage:** `Refine-dev-guide` (one pass) **or** `Ready check before code` if Tom accepts soft pins as written.
+## Ready-check readiness
+
+| Score | **9.1 / 10** |
+|-------|----------------|
+| Ready for Ready-check? | **Yes** |
+
+**Why not 10:** Implement still proves live parquet HPO runtime and may tune error messages; wording craft only. No material invent risk left.
