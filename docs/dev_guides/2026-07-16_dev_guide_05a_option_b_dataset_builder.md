@@ -3,8 +3,8 @@
 **Date:** 2026-07-16  
 **Repo:** `alphaguard`  
 **Work item:** Guide 05a — offline Option B training-row builder (Kaggle source locked; FinBERT batch; **no** XGBoost train)  
-**Stage that authored this:** Write-dev-guide (pass 61)  
-**Status:** Draft — ready for Refine-dev-guide / Ready-check; **not implemented**
+**Stage that authored this:** Write-dev-guide (pass 61); Refine-dev-guide (pass 62–64)  
+**Status:** Refined (pass 64 VERIFY — no material edits; scores held) — ready for Ready-check; **not implemented**
 
 **Context SSOT:** `alphaguard/docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
@@ -67,30 +67,33 @@ Build a reproducible offline path that:
 | Pin | Locked default |
 |-----|----------------|
 | Kaggle id | `miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests` |
-| Expected columns used | `date`, `stock`, `headline` (map `stock` → `ticker`) |
-| Target rows | ≈**500** after filter+dedup (honest shortfall OK if documented + human decide) |
-| Sampling | Prefer stratified across universe tickers when enough rows exist; else document shortfall |
+| CSV discovery | After unzip, discover news CSV under cache (document actual filename in `TRAINING_DATA.md` on first successful download). Required logical columns: `date`, `stock`, `headline` (map `stock` → `ticker`). |
+| Target rows | ≈**500** after filter+dedup (honest shortfall OK if documented + `--allow-shortfall`) |
+| Sampling | Stratified across universe tickers when enough rows exist; **`random_seed=42`** for reproducibility; else document shortfall |
 | Dedup key | `(ticker, calendar_date, normalized_headline)` — keep first occurrence |
 | Headline normalize | lower-case; collapse whitespace; strip |
-| `published_at` | Date-only → UTC timestamp: **`YYYY-MM-DDT20:00:00+00:00`** (approx US equity close); document in README |
-| `feature_as_of` | Last **completed** NYSE session at or before event session per ARCHITECTURE §8 |
+| `published_at` (date-only rows) | Interpret `date` as **America/New_York calendar date**; set `published_at` to that date **09:30 America/New_York** converted to UTC. Rationale: ARCHITECTURE §8 forbids using the same session’s close for features when the headline is intra-day; open-stamp keeps `feature_as_of` on the **prior** completed session. Document in `TRAINING_DATA.md`. |
+| `feature_as_of` | Last **fully completed** NYSE regular session at or before `published_at` (ARCHITECTURE §8). Calendar lib: **`exchange_calendars`** session calendar **`XNYS`** (required dependency for this guide). |
+| Forward label window | Per §8 item 6: `fwd_return_5d` from first completed session close at/after event session → close 5 trading sessions later |
+| Price series | yfinance **adjusted** closes; document in `TRAINING_DATA.md` |
 | Label | `label_high_risk = 1` iff `fwd_return_5d < -0.03` else `0` |
-| FinBERT model | **`ProsusAI/finbert-tone`** (soft pin; document actual id in README if Implement substitutes with green batch) |
+| FinBERT model | **`ProsusAI/finbert-tone`** |
 | FinBERT input | Headline text only |
-| FinBERT score | Scalar in `[-1, 1]` or documented mapping from model outputs; one column `finbert_sentiment` |
-| Builder home | `scripts/build_training_events.py` **or** `src/alphaguard/ml/build_dataset.py` — pick one; do not fork both |
-| Output | `data/training_events.parquet` |
-| Raw cache | `data/raw/kaggle_stock_news/` (gitignored) |
-| Parquet in git | **No** by default — gitignore parquet; commit schema note + regenerate docs |
+| FinBERT score | Map model probs to scalar: **`P(positive) - P(negative)`** ∈ `[-1, 1]` → column `finbert_sentiment`. Do not invent an alternate mapping without a new human soft-pin. |
+| CLI entry | **`scripts/build_training_events.py`** (thin) |
+| Library home | **`src/alphaguard/ml/dataset_build.py`** (+ split helpers only if needed to stay ≤300 lines/file). **Do not** overload `ml/features.py`. |
+| Output | **`data/derived/training_events.parquet`** (repo already gitignores `data/derived/` and `*.parquet`) |
+| Raw cache | `data/raw/kaggle_stock_news/` — **add `data/raw/` to `.gitignore`** if missing |
 | License record | Implement copies **exact license string** from Kaggle dataset page into `docs/TRAINING_DATA.md` |
 | Resource mode | Document `finbert_train`; prefer Kafka/Qdrant/Ollama down during FinBERT |
-| Split preview | Builder may write a small train/test **count** summary by time order (80/20) but **must not** train the gate |
+| Split preview | Print train/test **counts** by time order (80/20); **must not** train the gate |
+| `event_id` | `uuid.uuid5(uuid.NAMESPACE_URL, f"alphaguard:train:{ticker}:{calendar_date}:{sha256(normalized_headline)[:16]}")` |
 
 ### §7.5 columns required in parquet
 
 `event_id`, `headline`, `ticker`, `published_at`, `feature_as_of`, `finbert_sentiment`, `volatility_20d`, `return_5d_prior`, `return_20d_prior`, `spy_return_5d`, `fwd_return_5d`, `label_high_risk`
 
-Plus provenance soft columns (recommended): `source_dataset_id`, `source_row_hash`, `builder_version`.
+Plus provenance columns (**required**): `source_dataset_id` (const Kaggle id string), `source_row_hash` (sha256 of raw row fields), `builder_version` (semver string starting `0.1.0`).
 
 ---
 
@@ -112,33 +115,34 @@ All boxes start unchecked. **Do not check boxes in Write / Ready-check.**
 
 ### Phase A — License + layout
 
-- [ ] **A1.** Open Kaggle dataset page; copy license/access text into `docs/TRAINING_DATA.md`. If license forbids redistributing raw CSV, confirm gitignore of `data/raw/`.  
-- [ ] **A2.** Add gitignore entries for `data/raw/kaggle_stock_news/` and `data/training_events.parquet` if missing.  
-- [ ] **A3.** Choose builder home (scripts vs `ml/`); create module skeleton + CLI entry.
+- [ ] **A1.** Open Kaggle dataset page; copy license/access text into `docs/TRAINING_DATA.md`.  
+- [ ] **A2.** Ensure `.gitignore` covers `data/raw/` (add if missing). Confirm `data/derived/` / `*.parquet` already ignored.  
+- [ ] **A3.** Add thin `scripts/build_training_events.py` + `src/alphaguard/ml/dataset_build.py` (split helpers only to stay ≤300 lines). Do not put FinBERT into `ml/features.py`.  
+- [ ] **A4.** Add `exchange_calendars` (and builder deps) to project dependency file; document in `TRAINING_DATA.md`.
 
 ### Phase B — Ingest + filter
 
-- [ ] **B1.** Download/unzip via Kaggle CLI (document commands).  
+- [ ] **B1.** Download/unzip via Kaggle CLI (document exact commands + discovered CSV name).  
 - [ ] **B2.** Parse `date`/`stock`/`headline`; map to universe; drop OOU with counts.  
-- [ ] **B3.** Apply dedup + sample ≈500; write intermediate parquet/CSV under `data/raw/` (gitignored) optional.  
-- [ ] **B4.** Assign stable `event_id` (e.g. uuid5 or hash of ticker+date+headline).
+- [ ] **B3.** Apply dedup + stratified sample ≈500 with `seed=42`.  
+- [ ] **B4.** Assign stable `event_id` per soft pin.
 
 ### Phase C — As-of features + labels
 
-- [ ] **C1.** Implement NYSE session / `feature_as_of` per §8 (reuse any existing calendar helpers if present).  
-- [ ] **C2.** yfinance joins for feature columns + `fwd_return_5d`; drop rows that cannot label honestly.  
+- [ ] **C1.** Implement NYSE completed-session `feature_as_of` per §8 + open-stamp `published_at`.  
+- [ ] **C2.** yfinance adjusted closes for feature columns + `fwd_return_5d`; drop rows that cannot label honestly.  
 - [ ] **C3.** Compute `label_high_risk` from soft pin.  
-- [ ] **C4.** Assert no future leakage unit tests (synthetic timelines).
+- [ ] **C4.** Unit tests: Tuesday morning headline must not use Tuesday close as a **feature**; label window may use post-event closes.
 
 ### Phase D — FinBERT batch
 
-- [ ] **D1.** Offline batch over headlines; write `finbert_sentiment`; resume/idempotent if mid-batch fail.  
+- [ ] **D1.** Offline batch; write `finbert_sentiment` via soft-pin mapping; resume/idempotent if mid-batch fail.  
 - [ ] **D2.** Document RAM guidance: stop Compose/Ollama during batch.  
-- [ ] **D3.** Prove smoke still does **not** import FinBERT weights.
+- [ ] **D3.** Prove default smoke/pytest does **not** import FinBERT weights (`rg` / import guard).
 
 ### Phase E — Output + docs
 
-- [ ] **E1.** Write final `data/training_events.parquet`; print row counts by ticker + train/test time-split counts.  
+- [ ] **E1.** Write `data/derived/training_events.parquet`; print row counts by ticker + 80/20 time-split counts.  
 - [ ] **E2.** Update VISION / ARCHITECTURE / README / AGENTS honesty.  
 - [ ] **E3.** Stop. **Do not** train XGBoost (Guide 05b).
 
@@ -150,14 +154,15 @@ All boxes start unchecked. **Do not check boxes in Write / Ready-check.**
 # From alphaguard/
 # With Kaggle credentials configured:
 #   kaggle datasets download -d miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests -p data/raw/kaggle_stock_news --unzip
-uv run python scripts/build_training_events.py   # or chosen CLI
-python -c "import pandas as pd; df=pd.read_parquet('data/training_events.parquet'); print(len(df), df.columns.tolist())"
+uv run python scripts/build_training_events.py
+python -c "import pandas as pd; df=pd.read_parquet('data/derived/training_events.parquet'); print(len(df), sorted(df.columns.tolist()))"
 uv run pytest -q
 ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
+rg -n 'ProsusAI/finbert|finbert' src/alphaguard/ml/features.py || true   # must stay FinBERT-free
 rg -n 'Option B|training_events|finbert_train|fixture bundle' docs/VISION.md docs/ARCHITECTURE.md README.md docs/TRAINING_DATA.md
 ```
 
-**DoD:** Builder green; §7.5 columns; license documented; smoke FinBERT-free; no Option B train claims; Guide 05b not started.
+**DoD:** Builder green; §7.5 columns; license documented; smoke FinBERT-free; `features.py` unchanged as fixture-only; no Option B train claims; Guide 05b not started.
 
 ---
 
@@ -186,7 +191,8 @@ Delete generated parquet/raw cache; revert builder commits; smoke must still pas
 | yfinance gap / delist | Drop row; do not invent prices |
 | FinBERT partial failure | Resume or fail closed with clear error; no silent half-file as success |
 | &lt;500 after filters | Document shortfall; non-zero exit or explicit `--allow-shortfall` flag requiring human |
-| Naive timezone | Soft-pin UTC close; reject ambiguous strings |
+| Ambiguous / missing date | Reject row; do not invent |
+| Same-session feature peek | Fail unit test (ARCHITECTURE §8 example) |
 
 ---
 
@@ -199,6 +205,15 @@ Delete generated parquet/raw cache; revert builder commits; smoke must still pas
 
 ---
 
-## Ready for Refine-dev-guide?
+## Refine pass 62 notes
 
-**Yes** — soft pins are explicit; license string copy is an Implement step, not a context blocker.
+- Fixed date-only `published_at` soft pin (open stamp, not close stamp) to match §8.  
+- Pinned builder layout, output path under `data/derived/`, FinBERT score mapping, sampling seed, calendar library.  
+- Explicit: do not load FinBERT via `ml/features.py`.
+
+---
+
+## Ready for Ready-check?
+
+**Yes.** Ready-check readiness score: **8.7 / 10**.  
+Not 10: Implement still discovers the real Kaggle CSV filename, runs live yfinance/FinBERT, and copies license text from the Kaggle page. Those are runtime proofs, not missing design forks.
