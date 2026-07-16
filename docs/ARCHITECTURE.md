@@ -1,6 +1,6 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guides 01–04 **implemented** (replay slice, packaging, eval ≥21 goldens, Kafka+Qdrant thin integration); Option B train not started  
+**Status:** Binding contracts SSOT — guides 01–04 **implemented**; Guide **05a** Option B **dataset builder** landed (`docs/TRAINING_DATA.md`); Option B **XGBoost train (05b) not started**  
 **Created:** 2026-07-12  
 **Last Updated:** 2026-07-13 (pass-10 Align docs: status ↔ repo; component existence honesty)  
 **Owner:** Tom  
@@ -132,13 +132,13 @@ flowchart LR
 | `agents/analyst` | LangGraph: **consume** preloaded `RetrievalHit[]` from graph state → prompt → structured JSON → validate/retry. Must **not** open a second retrieve path unless it calls the same `rag/` API with the same event clock | **Present** | Host + Ollama |
 | `contracts/` | Top-level Pydantic schemas (events, proposals, hits, decisions, run envelope, model manifest) | **Present** | Host |
 | `ml/features` | Unified as-of feature builders; emit `feature_as_of` | **Present** (fixture path; not full yfinance builder) | Host (batch / smoke fixtures) |
-| `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **Not started** (fixture bundle builder only: `scripts/build_fixture_bundle.py`) | Host (batch; FinBERT offline) |
+| `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **Dataset builder landed (05a)**; **train not started** (fixture bundle still `scripts/build_fixture_bundle.py`) | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
 | `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LS/Phoenix = **status stubs** (no SDK spans yet) | Host |
 | `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
-| `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Absent** | Local / CI |
+| `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Builder path ready** (`data/derived/`; regenerate via Guide 05a); committed parquet **not** required | Local / CI |
 
 **Package naming (AG-P2-1 resolved):** top-level `contracts/` only. Do not nest a second `agents/contracts` package.
 
@@ -171,7 +171,7 @@ Do **not** block the vertical slice on live RSS reliability. Full Kafka delivery
 
 ### 6.3 ML training path (batch; separate from demo RAM)
 
-1. Ingest ~500 historical headlines (see §11 recommendation; U4 still open for exact source).  
+1. Ingest ~500 historical headlines (U4 locked: Kaggle `miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests` — see `docs/TRAINING_DATA.md`).  
 2. Align tickers + event timestamps (UTC).  
 3. Run FinBERT **offline batch** → sentiment column.  
 4. Pull yfinance OHLCV; compute features under §8 as-of rules; record `feature_as_of` per row.  
@@ -441,10 +441,10 @@ Package root (implemented): `src/alphaguard/`.
 **Recommendation (default):**
 
 1. **Committed fixtures** (`data/fixtures/`): ≥20 redistributable synthetic or clearly redistributable headlines covering the 8-ticker universe — enough for smoke, eval, and interview demos. Include `available_at` on retrieval sidecars and `feature_as_of` on feature rows.  
-2. **Builder script** (`scripts/build_training_events.py` or `ml/build_dataset.py`): downloads or reads a **documented free CSV/Kaggle financial news archive** chosen at implement time; filters to ticker universe; samples/constructs **≈500** rows; joins yfinance + offline FinBERT; writes `data/training_events.parquet`.  
+2. **Builder script** (`scripts/build_training_events.py` + `src/alphaguard/ml/dataset_build.py`): **landed Guide 05a** — Kaggle archive → filter/dedup/sample → yfinance as-of + offline FinBERT → `data/derived/training_events.parquet`. See `docs/TRAINING_DATA.md`.  
 3. Do **not** require a paid news API for v1. Do **not** block architecture or the first guide on finalizing the exact Kaggle slug — record the chosen source in README when the builder lands.  
 4. If license blocks committing raw headlines, commit **schema + builder + fixtures only**; reviewers run the builder locally.  
-5. **Hard gate for Option B training guide only:** human selects U4 source with license/access, timestamp granularity, ticker mapping, and duplicate policy recorded (AG-P1-5). Fixtures remain unblocked.
+5. **Hard gate for Option B training guide only:** U4 source locked (pass 60) + builder (05a). **Train (05b)** still requires human authorize. Fixtures remain unblocked.
 
 ---
 
@@ -497,7 +497,7 @@ CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 
 1. **Replay-first vertical slice** (first guide) — contracts (incl. RetrievalHit, run envelope, fixture bundle manifest), fixtures, `PipelineService`, Agent 1 (`BUY|HOLD|PASS`), downside scorer + policy gate, local obs, smoke.  
 2. Compose Kafka+Qdrant wiring proven against the same contracts (delivery contract §17).  
-3. Option B dataset builder + FinBERT batch + XGBoost train **after U4 selected**.  
+3. Option B **dataset builder** landed (05a); FinBERT batch offline; XGBoost train = **Guide 05b** (not started).  
 4. Thin eval harness + packaging docs (README, GETTING_STARTED, INTERVIEW).  
 5. Optional live RSS producer — only after replay smoke is green.
 

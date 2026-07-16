@@ -2,7 +2,7 @@
 
 Bounded public **interview lab**: one financial headline flows through replay ingest → RAG context → LangGraph Agent 1 (`BUY|HOLD|PASS`) → XGBoost downside-risk gate → local run summary.
 
-This repo currently ships a **replay-first vertical slice**, not “v1 complete.” Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only; it is **not** Option B training proof.
+This repo currently ships a **replay-first vertical slice**, not “v1 complete.” Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only; it is **not** Option B training proof. Guide **05a** adds an offline dataset builder (`docs/TRAINING_DATA.md`) — **train not started**.
 
 ## Quick Start (replay smoke)
 
@@ -89,7 +89,8 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
 - No brokerage APIs; no live trading
 - FinBERT not loaded during smoke (precomputed fixture column)
-- Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates; still **not** Option B metrics
+- Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates; still **not** Option B **trained** metrics (05a = dataset builder only)
+- Option B dataset builder: `uv run python scripts/build_training_events.py` (needs Kaggle creds + yfinance + FinBERT RAM) — see `docs/TRAINING_DATA.md`
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert — **not** live RSS reliability
 - LangSmith/Phoenix on the run envelope are **status stubs** today (no SDK spans yet); local `artifacts/runs/` envelope is the real LLMOps baseline
 - Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete

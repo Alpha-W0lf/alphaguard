@@ -10,6 +10,7 @@ dist/
 *.egg-info/
 .DS_Store
 data/derived/
+data/raw/
 *.parquet
 !data/fixtures/**
 .coverage

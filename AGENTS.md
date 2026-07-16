@@ -1,6 +1,6 @@
 # Agent guidance — AlphaGuard
 
-**Vertical slice only** (guides 01–04). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates / not Option B). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`).
+**Vertical slice only** (guides 01–04 + **05a dataset builder**). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates / not Option B). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`). Guide **05a** Option B training-row builder landed (`scripts/build_training_events.py`, `docs/TRAINING_DATA.md`) — **no** XGBoost train yet (05b).
 
 ## Locked stack (do not reopen)
 

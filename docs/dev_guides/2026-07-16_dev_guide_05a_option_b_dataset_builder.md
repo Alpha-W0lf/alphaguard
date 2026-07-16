@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 05a — offline Option B training-row builder (Kaggle source locked; FinBERT batch; **no** XGBoost train)  
 **Stage that authored this:** Write-dev-guide (pass 61); Refine-dev-guide (pass 62–64)  
-**Status:** Refined (pass 64 VERIFY — no material edits; scores held) — ready for Ready-check; **not implemented**
+**Status:** **Implement partial** 2026-07-16 — builder+tests+docs landed; live Kaggle download / license paste / full parquet e2e **blocked** (no kaggle CLI creds; network proxy)
 
 **Context SSOT:** `alphaguard/docs/2026-07-15_guide05_option_b_u4_dataset_context_summary.md`  
 **Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
@@ -102,10 +102,10 @@ Plus provenance columns (**required**): `source_dataset_id` (const Kaggle id str
 - [ ] Kaggle download (or documented offline path) works for a stranger with Kaggle CLI/token  
 - [ ] ≈500 rows (or honest shortfall note + exit non-zero / human gate)  
 - [ ] All §7.5 columns present; dtypes sane; no NaN labels without documented drop  
-- [ ] FinBERT runs only in explicit builder command; smoke/pytest default path unchanged  
+- [x] FinBERT runs only in explicit builder command; smoke/pytest default path unchanged  
 - [ ] `docs/TRAINING_DATA.md`: license string, regenerate commands, as-of/dedup policy  
-- [ ] VISION Option B / ARCHITECTURE `ml/train` / README honesty: **dataset builder landed; train not started**; fixture ≠ Option B  
-- [ ] Unit tests for: OOU reject, dedup, date→published_at, label rule, empty-input fail-closed (mock yfinance/FinBERT where needed)
+- [x] VISION Option B / ARCHITECTURE `ml/train` / README honesty: **dataset builder landed; train not started**; fixture ≠ Option B  
+- [x] Unit tests for: OOU reject, dedup, date→published_at, label rule, empty-input fail-closed (mock yfinance/FinBERT where needed)
 
 ---
 
@@ -116,35 +116,35 @@ All boxes start unchecked. **Do not check boxes in Write / Ready-check.**
 ### Phase A — License + layout
 
 - [ ] **A1.** Open Kaggle dataset page; copy license/access text into `docs/TRAINING_DATA.md`.  
-- [ ] **A2.** Ensure `.gitignore` covers `data/raw/` (add if missing). Confirm `data/derived/` / `*.parquet` already ignored.  
-- [ ] **A3.** Add thin `scripts/build_training_events.py` + `src/alphaguard/ml/dataset_build.py` (split helpers only to stay ≤300 lines). Do not put FinBERT into `ml/features.py`.  
-- [ ] **A4.** Add `exchange_calendars` (and builder deps) to project dependency file; document in `TRAINING_DATA.md`.
+- [x] **A2.** Ensure `.gitignore` covers `data/raw/` (add if missing). Confirm `data/derived/` / `*.parquet` already ignored.  
+- [x] **A3.** Add thin `scripts/build_training_events.py` + `src/alphaguard/ml/dataset_build.py` (split helpers only to stay ≤300 lines). Do not put FinBERT into `ml/features.py`.  
+- [x] **A4.** Add `exchange_calendars` (and builder deps) to project dependency file; document in `TRAINING_DATA.md`.
 
 ### Phase B — Ingest + filter
 
 - [ ] **B1.** Download/unzip via Kaggle CLI (document exact commands + discovered CSV name).  
-- [ ] **B2.** Parse `date`/`stock`/`headline`; map to universe; drop OOU with counts.  
-- [ ] **B3.** Apply dedup + stratified sample ≈500 with `seed=42`.  
-- [ ] **B4.** Assign stable `event_id` per soft pin.
+- [x] **B2.** Parse `date`/`stock`/`headline`; map to universe; drop OOU with counts.  
+- [x] **B3.** Apply dedup + stratified sample ≈500 with `seed=42`.  
+- [x] **B4.** Assign stable `event_id` per soft pin.
 
 ### Phase C — As-of features + labels
 
-- [ ] **C1.** Implement NYSE completed-session `feature_as_of` per §8 + open-stamp `published_at`.  
-- [ ] **C2.** yfinance adjusted closes for feature columns + `fwd_return_5d`; drop rows that cannot label honestly.  
-- [ ] **C3.** Compute `label_high_risk` from soft pin.  
-- [ ] **C4.** Unit tests: Tuesday morning headline must not use Tuesday close as a **feature**; label window may use post-event closes.
+- [x] **C1.** Implement NYSE completed-session `feature_as_of` per §8 + open-stamp `published_at`.  
+- [x] **C2.** yfinance adjusted closes for feature columns + `fwd_return_5d`; drop rows that cannot label honestly.  
+- [x] **C3.** Compute `label_high_risk` from soft pin.  
+- [x] **C4.** Unit tests: Tuesday morning headline must not use Tuesday close as a **feature**; label window may use post-event closes.
 
 ### Phase D — FinBERT batch
 
-- [ ] **D1.** Offline batch; write `finbert_sentiment` via soft-pin mapping; resume/idempotent if mid-batch fail.  
-- [ ] **D2.** Document RAM guidance: stop Compose/Ollama during batch.  
-- [ ] **D3.** Prove default smoke/pytest does **not** import FinBERT weights (`rg` / import guard).
+- [x] **D1.** Offline batch; write `finbert_sentiment` via soft-pin mapping; resume/idempotent if mid-batch fail.  
+- [x] **D2.** Document RAM guidance: stop Compose/Ollama during batch.  
+- [x] **D3.** Prove default smoke/pytest does **not** import FinBERT weights (`rg` / import guard).
 
 ### Phase E — Output + docs
 
 - [ ] **E1.** Write `data/derived/training_events.parquet`; print row counts by ticker + 80/20 time-split counts.  
-- [ ] **E2.** Update VISION / ARCHITECTURE / README / AGENTS honesty.  
-- [ ] **E3.** Stop. **Do not** train XGBoost (Guide 05b).
+- [x] **E2.** Update VISION / ARCHITECTURE / README / AGENTS honesty.  
+- [x] **E3.** Stop. **Do not** train XGBoost (Guide 05b).
 
 ---
 

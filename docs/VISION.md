@@ -119,7 +119,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
 | Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
-| Option B ~500-event train + real metrics | **Not started** | No `training_events.parquet`; U4 source still open |
+| Option B ~500-event train + real metrics | **Dataset builder landed (Guide 05a); train not started** | Builder → `data/derived/training_events.parquet`; see `docs/TRAINING_DATA.md`. **No** XGBoost Option B train yet; fixture bundle ≠ Option B |
 | Live RSS → Kafka E2E | **Thin integration done** (Guide 04) | Producer/consumer + `/trigger` + UUID5 upsert; **not** live RSS reliability |
 | Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
 
@@ -130,8 +130,8 @@ README / AGENTS must keep saying **vertical slice**, not “v1 complete,” unti
 ### Minimum Viable (v1 Done)
 
 - [x] `docker compose up` runs Kafka + Qdrant locally *(operator path documented in README; smoke still Kafka-down)*
-- [ ] 500 headline events dataset built (`data/training_events.parquet`) with documented schema
-- [ ] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics logged in README *(fixture bundle ≠ Option B)*
+- [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
+- [ ] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics logged in README *(fixture bundle ≠ Option B)* — **Guide 05b**
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(LangSmith/Phoenix = envelope status stubs today; real spans later)*
 - [ ] Public GitHub polish with architecture diagram, stack table, and limitations section *(README stub exists)*
 - [ ] `INTERVIEW.md` with 15+ gotcha Q&A
