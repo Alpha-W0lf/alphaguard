@@ -2,10 +2,11 @@
 
 **Date:** 2026-07-15  
 **Repos:** `alphaguard`  
-**Status:** Refined (pass 59)  
+**Status:** Refined (pass 59); **source locked 2026-07-16** (Kaggle — see pass 60)  
 **Mode last used:** hub  
 **Prioritize SSOT:** `second_brain/docs/2026-07-15_prioritize_next_work_pass58_fan_in.md`  
 **Refine fan-in:** `second_brain/docs/2026-07-15_refine_context_pass59_fan_in.md`  
+**Locks:** `second_brain/docs/2026-07-16_human_locks_pass60_fan_in.md`  
 **Role lens:** ML engineer + data engineer  
 
 ## Problem
@@ -78,12 +79,17 @@ ARCHITECTURE §11 (**U4**) still requires a **human-selected** free CSV/Kaggle (
 
 ## Open decisions (human)
 
-- **H-AG-U4**
-  - Options: (A) soft-pin Kaggle `miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests` after license confirm; (B) FNSPID / other HF archive; (C) different free CSV after skim; (D) park Option B.
-  - Recommendation: **(A)** — confirm license on the Kaggle page, then lock; builder downloads locally; do **not** commit raw dump if license forbids; filter to AG ticker universe; sample ≈500; UTC coerce policy documented.
-  - Reasoning: Fields (`date`, `stock`, `headline`) match builder needs; widely used in NLP-backtest tutorials; aligns with ARCHITECTURE §11 “free CSV/Kaggle.” FNSPID notes commercial-use restrictions on code — worse fit for a public portfolio narrative.
-  - Tradeoffs: Day-level timestamps may need careful as-of rules (AG3); license still human-verified (agent has not signed off legality); large download vs fixture-only path.
-- Split Guide 05a vs 05b — **recommended yes** (pass 58). Unchanged.
+- **Plain title:** Which free training-news archive should AlphaGuard use for Option B? (id: H-AG-U4)
+  - In plain terms: We need ~500 historical headlines with tickers and dates to build a training file. This is for offline model training, not a live news feed.
+  - Options:
+    - (A) Kaggle “Daily Financial News for 6000+ Stocks” (`miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests`) after you confirm license
+    - (B) Free news API (Finnhub company news, Alpha Vantage news sentiment) — rate-limited; more glue code
+    - (C) Another static free archive (e.g. Hugging Face FNSPID) after license skim
+    - (D) Park Option B
+  - Recommendation: **(A)** for training. Confirm license on Kaggle; builder downloads locally; do not commit the raw dump if license forbids; filter to the locked ticker list; sample ≈500.
+  - Reasoning: Static historical CSV matches Option B (reproducible offline train). Papers cite coverage ~2009–2020 — **not live-updating**, which is fine for training. Fields `date` / `stock` / `headline` fit the builder. Live APIs add keys, rate limits, and backfill pain for little training benefit.
+  - Tradeoffs: Archive is frozen history (no “fresh headlines every day”); day-level timestamps need careful as-of rules; you still must confirm license. Live RSS/API is a later product path, not this training slice.
+- Split dataset builder vs model train into two guides — **recommended yes**.
 
 ## Evidence opened this pass
 
@@ -94,5 +100,5 @@ ARCHITECTURE §11 (**U4**) still requires a **human-selected** free CSV/Kaggle (
 
 ## Honest readiness
 
-- Ready for Write-dev-guide? **No** until **H-AG-U4** is locked (AG-P1-5). Soft-pin above is a recommendation, not a lock.  
-- Context quality after refine: **good enough** once U4 is locked; no further Gather needed for 05a scope.  
+- Ready for Write-dev-guide? **Yes** — Tom locked Kaggle source 2026-07-16. Guide must still record license text from the Kaggle page and timestamp/ticker/dedup policy.  
+- Context quality after refine: **good enough** for Write-dev-guide.  
