@@ -2,7 +2,7 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice shipped (guides 01–04) — **not** “v1 complete” / **not** eval-complete / **not** Option B. Guide 04 = Kafka+Qdrant thin integration (upsert durable handle); smoke still Kafka-down.
+**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; default smoke still Kafka-down **fixture**.
 
 **Last Updated:** July 15, 2026 (Guide 04 P0: consumer `run_once` seek/commit; guides 01–04 status)
 

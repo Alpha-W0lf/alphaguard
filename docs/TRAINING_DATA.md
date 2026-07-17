@@ -1,6 +1,6 @@
 # Training data — Option B dataset builder (Guide 05a)
 
-**Status:** **Review-ready for 05b train path (2026-07-17)** — parquet (05a) + Option B train CLI (05b) verified. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). Default smoke still **fixture**.  
+**Status:** **Review shippable (2026-07-17)** — parquet (05a) + Option B train (05b) verified and Review-complete. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). Default smoke still **fixture**.  
 **Fixture gate ≠ Option B evidence** — use `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b` for Option B demos.
 
 ### Live e2e evidence (2026-07-16)

@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 05b — train downside-risk XGBoost on Guide 05a parquet; write Option B model bundle  
 **Stage that authored this:** Write-dev-guide (pass 73); Refine-dev-guide (pass 74); **verify Refine (pass 76)**  
-**Status:** **Implement complete (pass 77)** — awaiting Review-implementation. Ready-check was **9.0/10**.
+**Status:** **Review shippable (pass 78)** — Implement complete; smallest honesty doc refinements applied.
 
 **Context SSOT:** `alphaguard/docs/2026-07-16_guide05b_option_b_train_context_summary.md`  
 **Upstream dataset:** Guide 05a Review-shippable — `docs/TRAINING_DATA.md`  
@@ -323,3 +323,11 @@ Delete derived Option B bundle + train run JSON; revert commits; fixture smoke m
 | Guide good to go as refined? | **Yes** |
 
 **Why not 10:** Live parquet HPO runtime proof belongs to Implement — not another guide pass.
+
+## Review implementation (pass 78)
+
+| Call | **Shippable as-is** after smallest honesty doc fixes |
+|------|------------------------------------------------------|
+| Code vs guide | Matches soft pins; train already run; fixture + Option B smoke green |
+| Residual | Lab `test_f1=0.0` is honesty signal, not a defect; INTERVIEW/VISION/ARCHITECTURE wording updated |
+| Unrelated refactors | None |

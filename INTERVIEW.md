@@ -2,7 +2,7 @@
 
 Staff-interview gotchas for the **replay-first vertical slice**. Contracts SSOT: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Product / why: [`docs/VISION.md`](docs/VISION.md).
 
-This is packaging around a green smoke path — **not** “v1 Done.” Kafka E2E and Option B training are later slices.
+This is packaging around a green smoke path — **not** “v1 Done.” Default smoke is still **fixture**. Guide **05b** lands a local `bundle_kind=option_b` train path (lab metrics; noisy test F1) — do not market it as a production risk model. Live RSS reliability remains a later slice.
 
 **Why packaging now (vs ARCHITECTURE §15):** program pass-12 soft-overrides the architecture sequencing sketch for interview ROI — packaging needs only the shippable vertical slice. Contracts (AG1–AG3) are unchanged.
 
@@ -37,7 +37,7 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 ## 6. Why must we not cite fixture `train_f1_at_threshold=1.0` as model quality?
 
-`bundle_kind=fixture` is synthetic plumbing (`n_rows=64`). Perfect fixture F1 proves the load/score/policy path — **not** Option B generalization. Quote Option B metrics only after a real train slice; until then say “fixture bundle.”
+`bundle_kind=fixture` is synthetic plumbing (`n_rows=64`). Perfect fixture F1 proves the load/score/policy path — **not** Option B generalization. Quote Option B only from a local `bundle_kind=option_b` manifest (`scripts/train_option_b_gate.py`); lab-scale test F1 can be near zero / noisy — still not production proof.
 
 ## 7. What does replay-first prove vs what Kafka E2E still needs to prove?
 
@@ -73,7 +73,7 @@ Universe is locked (`AAPL`, `MSFT`, …). Out-of-universe tickers are **rejected
 
 ## 15. Where do unit tests vs executable goldens carry the interview invariants today?
 
-**Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not Option B proven.
+**Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, `test_train_option_b.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`, train-only HPO/threshold. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not production Option B.
 
 ## 16. (Bonus) Is FinBERT in the smoke path?
 

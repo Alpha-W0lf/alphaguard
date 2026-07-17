@@ -459,7 +459,7 @@ Package root (implemented): `src/alphaguard/`.
 | Eval | ≥21 **executed** goldens: structural schema ok/reject; identity preservation; as-of/retrieval invariants; gate determinism + tmp-manifest vol-veto; OOU (NewsEvent + fixture-path). Numeric LLM schema-pass rate deferred until live-Ollama eval. Do **not** inflate fixture-bundle gate metrics into Option B claims |
 | Arch tests | After package layout exists: 1–2 import-boundary rules; pipeline is sole orchestrator and sole retrieval owner for the run path |
 
-**Honesty rule:** A fixture `bundle_kind=fixture` proving smoke plumbing is **not** evidence that the Option B downside model works. README/status language must say “vertical slice,” not “v1 complete,” until Option B metrics exist.
+**Honesty rule:** A fixture `bundle_kind=fixture` proving smoke plumbing is **not** evidence that the Option B downside model generalizes. Option B metrics live in a locally trained `bundle_kind=option_b` manifest (lab-scale; noisy). README/status language must say “vertical slice,” not “v1 complete,” until MV Done boxes are honestly checked.
 
 CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 
