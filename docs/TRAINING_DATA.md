@@ -1,7 +1,7 @@
 # Training data — Option B dataset builder (Guide 05a)
 
-**Status:** **Review shippable (2026-07-16)** — live parquet verified; soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). **XGBoost train (Guide 05b) not started.**  
-**Fixture gate ≠ Option B evidence.**
+**Status:** **Review-ready for 05b train path (2026-07-17)** — parquet (05a) + Option B train CLI (05b) verified. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). Default smoke still **fixture**.  
+**Fixture gate ≠ Option B evidence** — use `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b` for Option B demos.
 
 ### Live e2e evidence (2026-07-16)
 
@@ -114,6 +114,29 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 | `--skip-finbert` | **Forbidden** for canonical `training_events.parquet` |
 | Split preview | Time-ordered 80/20 counts printed — **does not train** |
 
+## Train Option B gate (Guide 05b)
+
+```bash
+# Requires data/derived/training_events.parquet (05a)
+uv run python scripts/train_option_b_gate.py
+# → data/derived/model_bundle_option_b/ (gitignored)
+# → artifacts/runs/option_b_train_<utc>.json
+
+# Optional Option B smoke (default smoke stays fixture):
+MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b \
+ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b \
+ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
+```
+
+| Pin | Value |
+|-----|--------|
+| HPO | Train-only `TimeSeriesSplit(n_splits=3)` grid; select by mean val logloss |
+| Threshold | Train-F1 max on full-train probs |
+| `bundle_kind` | `option_b` |
+| Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py`) |
+
+**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model.
+
 ## Builder layout
 
 | Path | Role |
@@ -125,10 +148,14 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 | `src/alphaguard/ml/dataset_asof.py` | Calendar + yfinance features/labels |
 | `src/alphaguard/ml/dataset_finbert.py` | Offline FinBERT |
 | `src/alphaguard/ml/features.py` | **Fixture-only** — must stay FinBERT-free |
+| `scripts/train_option_b_gate.py` | Guide 05b train CLI |
+| `src/alphaguard/ml/train_option_b.py` | Option B train orchestration |
+| `src/alphaguard/ml/train_hpo.py` | Nested time-grid HPO |
+| `src/alphaguard/ml/train_eval.py` | Threshold + PRF1 helpers |
 
 ## Honesty
 
-- Dataset builder ≠ Option B model trained.
+- Dataset builder ≠ production risk model.
+- Option B bundle proves **lab train path** (HPO audit + metrics) — default smoke still fixture.
 - Smoke / default pytest must not load FinBERT weights.
-- Do not claim v1 complete from this guide.
-- **05b XGBoost train stays parked** until e2e parquet exists and Review says ready.
+- Do not claim v1 complete from 05a/05b alone.

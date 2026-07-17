@@ -3,8 +3,8 @@
 **Date:** 2026-07-16  
 **Repo:** `alphaguard`  
 **Work item:** Guide 05b — train downside-risk XGBoost on Guide 05a parquet; write Option B model bundle  
-**Stage that authored this:** Write-dev-guide (pass 73); **Refine-dev-guide (pass 74)**  
-**Status:** **Refined** — Ready-check readiness **9.1 / 10**; **no Implement yet**
+**Stage that authored this:** Write-dev-guide (pass 73); Refine-dev-guide (pass 74); **verify Refine (pass 76)**  
+**Status:** **Implement complete (pass 77)** — awaiting Review-implementation. Ready-check was **9.0/10**.
 
 **Context SSOT:** `alphaguard/docs/2026-07-16_guide05b_option_b_train_context_summary.md`  
 **Upstream dataset:** Guide 05a Review-shippable — `docs/TRAINING_DATA.md`  
@@ -21,7 +21,9 @@ Train a reproducible **XGBoost binary classifier** that emits `downside_risk_sco
 
 ---
 
-## Are hyperparams necessary?
+## Are hyperparameters (HPO) necessary?
+
+**HPO** = **hyperparameter optimization** (choosing model knobs like tree depth and learning rate — not the learned tree weights themselves).
 
 **Yes — for a senior portfolio gate.** Skipping selection entirely looks like a demo shortcut. Blind Optuna on the full dataset (or on the test fold) looks worse.
 
@@ -57,7 +59,8 @@ scale_pos_weight = n_neg_train / n_pos_train   # train only; fail closed if n_po
 ```
 
 **Inner CV:** `sklearn.model_selection.TimeSeriesSplit(n_splits=3)` on the **train** partition only.  
-**Selection rule:** lowest mean validation **logloss** across the 3 folds; ties → smaller `max_depth`, then smaller `num_boost_round`.  
+**Fold score:** `sklearn.metrics.log_loss(y_true, y_proba)` on each validation fold (probabilities from that fold’s booster).  
+**Selection rule:** lowest **mean** validation logloss across the 3 folds; ties → smaller `max_depth`, then smaller `eta`, then smaller `num_boost_round`.  
 **After selection:** refit on full train with winning params; then threshold search on full-train probabilities.
 
 Optuna / large Bayesian search remains **out of scope** (diminishing returns + complexity for this n).
@@ -106,7 +109,7 @@ This is a **laptop interview lab**, not a cloud training platform. Senior signal
 | Eval layer | In 05b? | Notes |
 |------------|---------|-------|
 | Offline train/test classification metrics | **Yes** | precision/recall/F1 + confusion on train **and** test at frozen threshold |
-| HPO inner-fold logloss | **Yes** | Logged in manifest (`hpo.fold_scores`) |
+| HPO inner-fold logloss | **Yes** | Logged in manifest (`hpo.fold_logloss` + mean) |
 | Gate policy goldens (Guide 03) | **Keep** | Still run on **fixture** by default — proves plumbing |
 | Option B end-to-end smoke | **Optional demo** | `MODEL_BUNDLE_DIR=...` + `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` — not default CI |
 | Live trading PnL / backtest | **No** | Out of scope — downside gate ≠ alpha |
@@ -174,9 +177,13 @@ This is a **laptop interview lab**, not a cloud training platform. Senior signal
 | `dataset_hash` | sha256 of full feature matrix (all rows used) + labels; document in TRAINING_DATA |
 | Atomic write | tmp dir → replace |
 | Run summary | `artifacts/runs/option_b_train_<utc>.json` |
-| Smoke | Fixture default; Option B via `MODEL_BUNDLE_DIR` |
+| Smoke | Fixture default; Option B via `MODEL_BUNDLE_DIR` → `Settings.model_bundle_dir` (`src/alphaguard/config.py`) |
 | Honesty guard | `ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b` → fail closed if mismatch |
 | Overfit warning | Warn if `|train_f1 - test_f1| > 0.25` |
+| `label_window` | Exact ARCHITECTURE strings: start=`first_completed_session_close_at_or_after_event_session`, end=`close_5_trading_sessions_later` |
+| `label_definition` | `fwd_return_5d < -0.03` |
+| `library_versions` | Must include `xgboost`, `numpy`, `sklearn`, `python` version strings |
+| Val fold score | `sklearn.metrics.log_loss` on fold probabilities |
 
 ### Manifest `metrics` / `hpo` required keys
 
@@ -185,19 +192,19 @@ This is a **laptop interview lab**, not a cloud training platform. Senior signal
 - `train_test_f1_gap`  
 - `xgb_params` (winner)  
 - `scale_pos_weight`  
-- `hpo`: `{ "method": "timeseries_split_grid", "n_splits": 3, "space": {...}, "selection": "mean_val_logloss", "candidates_evaluated": N, "winner": {...}, "fold_mean_logloss": [...] }`  
+- `hpo`: `{ "method": "timeseries_split_grid", "n_splits": 3, "space": {...}, "selection": "mean_val_logloss", "candidates_evaluated": N, "winner": {...}, "fold_logloss": [..per fold for winner..], "fold_mean_logloss": float }`  
 - `hyperparam_search` = `"timeseries_split_grid_05b"`  
 
 ---
 
 ## Acceptance criteria (Implement)
 
-- [ ] CLI runs HPO + train + threshold + atomic bundle write  
-- [ ] Unit tests: time split; HPO never sees test indices; threshold train-only; NaN fail-closed; feature_names; require-bundle-kind guard  
-- [ ] Default smoke fixture; optional Option B demo documented  
-- [ ] Run summary JSON written under `artifacts/runs/`  
-- [ ] Docs honesty (VISION / ARCHITECTURE / README / TRAINING_DATA / AGENTS)  
-- [ ] No FinBERT in default pytest path  
+- [x] CLI runs HPO + train + threshold + atomic bundle write  
+- [x] Unit tests: time split; HPO never sees test indices; threshold train-only; NaN fail-closed; feature_names; require-bundle-kind guard  
+- [x] Default smoke fixture; optional Option B demo documented  
+- [x] Run summary JSON written under `artifacts/runs/`  
+- [x] Docs honesty (VISION / ARCHITECTURE / README / TRAINING_DATA / AGENTS)  
+- [x] No FinBERT in default pytest path  
 
 ---
 
@@ -207,30 +214,30 @@ All boxes start unchecked at Implement. **Do not check during Refine.**
 
 ### Phase A — Layout + load + split
 
-- [ ] **A1.** `train_option_b.py` + thin CLI.  
-- [ ] **A2.** Load parquet; require features/label/`published_at`; NaN fail-closed.  
-- [ ] **A3.** Sort by `published_at`; 80/20 split; record `train_window`.
+- [x] **A1.** `train_option_b.py` + thin CLI.  
+- [x] **A2.** Load parquet; require features/label/`published_at`; NaN fail-closed.  
+- [x] **A3.** Sort by `published_at`; 80/20 split; record `train_window`.
 
 ### Phase B — HPO + final train + threshold
 
-- [ ] **B1.** Compute `scale_pos_weight` from train.  
-- [ ] **B2.** Run soft-pinned grid with `TimeSeriesSplit(n_splits=3)` on train; pick min mean val logloss.  
-- [ ] **B3.** Refit winner on full train.  
-- [ ] **B4.** Fit `score_threshold` on full-train probs (train-F1 max).  
-- [ ] **B5.** Evaluate test once; build metrics + `hpo` block; warn on large F1 gap.
+- [x] **B1.** Compute `scale_pos_weight` from train.  
+- [x] **B2.** Run soft-pinned grid with `TimeSeriesSplit(n_splits=3)` on train; pick min mean val logloss.  
+- [x] **B3.** Refit winner on full train.  
+- [x] **B4.** Fit `score_threshold` on full-train probs (train-F1 max).  
+- [x] **B5.** Evaluate test once; build metrics + `hpo` block; warn on large F1 gap.
 
 ### Phase C — Bundle + MLOps + gate honesty
 
-- [ ] **C1.** Atomic write model + manifest + bundle README.  
-- [ ] **C2.** Write `artifacts/runs/option_b_train_<utc>.json`.  
-- [ ] **C3.** Env-gated `bundle_kind` require in `gate.py`.  
-- [ ] **C4.** Document Option B demo env; smoke default unchanged.
+- [x] **C1.** Atomic write model + manifest + bundle README.  
+- [x] **C2.** Write `artifacts/runs/option_b_train_<utc>.json`.  
+- [x] **C3.** Env-gated `bundle_kind` require in `gate.py`.  
+- [x] **C4.** Document Option B demo env; smoke default unchanged.
 
 ### Phase D — Tests + docs
 
-- [ ] **D1.** Synthetic time-ordered unit tests (CI without live parquet).  
-- [ ] **D2.** Docs honesty updates.  
-- [ ] **D3.** Stop — no Optuna platform; no FB→META; no v1 claim.
+- [x] **D1.** Synthetic time-ordered unit tests (CI without live parquet).  
+- [x] **D2.** Docs honesty updates.  
+- [x] **D3.** Stop — no Optuna platform; no FB→META; no v1 claim.
 
 ---
 
@@ -299,10 +306,20 @@ Delete derived Option B bundle + train run JSON; revert commits; fixture smoke m
 - Added explicit overfitting, MLOps, and eval sections.  
 - Added `scale_pos_weight`, regularization soft pins, run summary artifact, F1-gap warning.  
 
-## Ready-check readiness
+## Verify refine pass 76 notes
 
-| Score | **9.1 / 10** |
-|-------|----------------|
-| Ready for Ready-check? | **Yes** |
+- Clarified **HPO** acronym; soft-pinned `sklearn.log_loss` + tie-break includes `eta`.  
+- Soft-pinned §7.6 `label_window` / `label_definition` / `library_versions`.  
+- Confirmed Option B demo path: env `MODEL_BUNDLE_DIR` → `Settings.model_bundle_dir` (already exists).  
+- Aligned `hpo.fold_logloss` naming.  
+- **No material invent risk remaining.** Ready-check already passed — next human gate is **Authorize Implement**.
 
-**Why not 10:** Implement still proves live parquet HPO runtime and may tune error messages; wording craft only. No material invent risk left.
+## Ready-check / Implement readiness (verify — do not inflate)
+
+| Score | Value |
+|-------|--------|
+| Ready-check readiness (unchanged) | **9.1 / 10** |
+| Implement readiness (pass 75) | **9.0 / 10** |
+| Guide good to go as refined? | **Yes** |
+
+**Why not 10:** Live parquet HPO runtime proof belongs to Implement — not another guide pass.

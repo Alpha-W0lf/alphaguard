@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from pathlib import Path
 
 import numpy as np
@@ -48,6 +49,14 @@ class DownsideRiskGate:
             raise GateLoadError(
                 f"unsupported score_kind={manifest.score_kind!r}; expected proba_high_risk"
             )
+        required = os.environ.get("ALPHAGUARD_REQUIRE_BUNDLE_KIND", "").strip()
+        if required and manifest.bundle_kind != required:
+            raise GateLoadError(
+                f"bundle_kind mismatch: required {required!r} via "
+                f"ALPHAGUARD_REQUIRE_BUNDLE_KIND, got {manifest.bundle_kind!r} "
+                f"from {path}. Point MODEL_BUNDLE_DIR at an Option B bundle "
+                "or unset ALPHAGUARD_REQUIRE_BUNDLE_KIND."
+            )
         return manifest
 
     @staticmethod
@@ -64,7 +73,10 @@ class DownsideRiskGate:
 
     def score(self, row: FeatureRow) -> float:
         vector = row.ordered_vector(self.manifest.feature_names)
-        dmatrix = xgb.DMatrix(np.asarray([vector], dtype=float))
+        dmatrix = xgb.DMatrix(
+            np.asarray([vector], dtype=float),
+            feature_names=list(self.manifest.feature_names),
+        )
         proba = float(self.model.predict(dmatrix)[0])
         return max(0.0, min(1.0, proba))
 
