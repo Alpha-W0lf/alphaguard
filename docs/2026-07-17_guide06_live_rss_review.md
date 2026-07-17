@@ -17,7 +17,7 @@ Guide DoD vs `d077cb8` (+ Review must-fix): Yahoo RSS fetch/normalize/produce, C
 |----------|---------|---------|--------|
 | **Must-fix** | `--max-items` with negative/`0` used Python slice semantics (`events[:-1]` truncates) instead of usage error | Guide soft pin max_items; edge-case / fail-closed CLI | **Fixed** — reject `max_items < 1` in `poll_once` + CLI exit 2; reject `interval_sec < 1` with `--loop` |
 | Soft | Live Compose+Yahoo E3 demo not run | Guide E3 residual | Park — not DoD blocker |
-| Soft | Context summary still narrates WALKTHROUGH as “RSS later” (historical Gather prose) | Doc drift | Non-blocking; Align can refresh |
+| Soft | Context summary still narrates WALKTHROUGH as “RSS later” (historical Gather prose) | Doc drift | **Closed Align pass 116** — context superseded |
 | Soft | Mid-ticker Kafka fail after partial produces leaves some messages on topic | At-least-once + idempotent upsert | Acceptable; documented by existing Kafka story |
 
 ## Architecture / quality
@@ -35,8 +35,8 @@ uv run pytest tests/test_rss_*.py -q  → green (incl. new max_items guard)
 
 ## Shippable call
 
-**Shippable after must-fix** (included in this Review commit).  
-Fixture smoke remains default. **Do not** self-start Align.
+**Shippable after must-fix** (included in Review commit `2c8f0ea`).  
+Fixture smoke remains default. **Align-docs pass 116** refreshed Gather context + status stamps.
 
 ## QUALITY §5
 

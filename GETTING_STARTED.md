@@ -2,7 +2,7 @@
 
 Clone-depth operator path for the **replay-first vertical slice**. For contracts see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); for interview gotchas see [`INTERVIEW.md`](INTERVIEW.md); skim + diagram in [`README.md`](README.md).
 
-This is **not** “v1 complete.” Option B training is out of scope here; Kafka thin integration (Guide 04) is optional for smoke.
+This is **not** “v1 complete.” Option B training is out of scope here; Kafka thin integration (Guide 04) and Yahoo RSS poll (Guide 06) are optional for smoke — default smoke stays Kafka-down fixture.
 
 **Why packaging before Kafka (ARCHITECTURE §15 soft override):** interview ROI prioritizes a defendable FAQ + clone path + local-envelope evidence around the green vertical slice. Contracts unchanged.
 

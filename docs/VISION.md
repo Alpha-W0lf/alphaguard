@@ -4,7 +4,7 @@
 
 **Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS operator path — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); default smoke still Kafka-down **fixture**.
 
-**Last Updated:** July 15, 2026 (Guide 04 P0: consumer `run_once` seek/commit; guides 01–04 status)
+**Last Updated:** July 17, 2026 (Guide 06 thin Yahoo RSS poll Align; guides 01–06 status; MV walkthrough still human)
 
 **Owner:** Tom
 

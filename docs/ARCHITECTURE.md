@@ -2,7 +2,7 @@
 
 **Status:** Binding contracts SSOT — guides 01–04 **implemented**; Guide **05a** dataset builder + Guide **05b** Option B **XGBoost train** landed; Guide **06** thin Yahoo RSS poll landed; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-07-13 (pass-10 Align docs: status ↔ repo; component existence honesty)  
+**Last Updated:** 2026-07-17 (Align Guide 06: RSS poll modules + §6.2 honesty; default smoke still fixture)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 

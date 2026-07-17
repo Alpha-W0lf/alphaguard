@@ -3,8 +3,8 @@
 **Date:** 2026-07-17  
 **Repo:** `alphaguard`  
 **Work item:** Guide 06 — Yahoo RSS → normalize → Kafka produce (operator path) on top of Guide 04  
-**Stage that authored this:** Write-dev-guide (pass 104); Ready-check (pass 106)  
-**Status:** **Review shippable** (pass 112) — must-fix: reject non-positive `--max-items` / loop interval; fixture smoke default unchanged  
+**Stage that authored this:** Write-dev-guide (pass 104); Ready-check (pass 106); Implement (pass 107); Review (pass 112); Align-docs (pass 116)  
+**Status:** **Aligned / slice closed** (pass 116) — Review shippable; docs match shipped reality; fixture smoke default unchanged  
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_guide06_live_rss_reliability_context_summary.md`  
 **Prerequisite:** Guides 01–05b shippable. Guide 04 Kafka thin integration **done** (producer/consumer/`/trigger`/UUID5/DLQ). Default smoke remains fixture / Kafka-down.
@@ -269,7 +269,7 @@ ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live -q
 - **Implement (pass 107):** **Done** — offline tests + docs honesty; `make smoke` green (fixture).  
 - **Review (pass 112):** **Shippable** after must-fix (non-positive `max_items` / loop interval guard). See `docs/2026-07-17_guide06_live_rss_review.md`.  
 - **E3 residual:** Live Compose+Yahoo operator demo **not** run this pass (optional; not DoD blocker).  
-- **Next stage:** Align docs only if hub authorizes — do not self-start.
+- **Next stage:** Guide 06 **closed** after Align pass 116. Further work (agent-on-consume, live Yahoo ops proof) needs a new guide/authorize.
 
 ## QUALITY self-check (§5)
 
@@ -278,3 +278,4 @@ ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live -q
 - [x] Locks mirrored from handoff (Yahoo; one-shot+loop; N=10; agent-on-consume out; fixture smoke)  
 - [x] Implement completed per checklist; no Review self-start  
 - [x] Docs honesty + human MV boxes left unchecked  
+- [x] Align-docs pass 116 — status stamps / Gather context match shipped Guide 06  
