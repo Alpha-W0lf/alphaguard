@@ -4,7 +4,7 @@
 
 **Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS + Guide **07** LangSmith real fail-open spans — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured (Phoenix still stub); default smoke still Kafka-down **fixture** (never requires LangSmith key).
 
-**Last Updated:** July 17, 2026 (Guide 07 LangSmith fail-open spans Implement; MV walkthrough still human)
+**Last Updated:** July 17, 2026 (Guide 07 LangSmith fail-open spans **Align Met**; MV walkthrough still human)
 
 **Owner:** Tom
 

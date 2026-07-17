@@ -34,7 +34,7 @@ It is **not** a trading system, brokerage connector, Lowd Capital surrogate, or 
 | Orchestration | LangGraph |
 | Local LLM | Host **Ollama**; default `gemma4:e2b`; fallback `qwen3.5:4b` via `OLLAMA_MODEL` |
 | Embeddings | Local `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) — separate from agent LLM |
-| LLMOps | **LangSmith free default** + **Phoenix local fallback**; **local run summary always required** |
+| LLMOps | **LangSmith free default** (Guide 07: real fail-open spans when configured) + **Phoenix local fallback (status stub today)**; **local run summary always required** |
 | API | FastAPI (thin trigger / replay) |
 | Agent 2 | **XGBoost** downside-risk scorer + scikit-learn; deterministic approve/reject policy |
 | Sentiment features | **FinBERT batch offline only** (not concurrent with Kafka+Qdrant+Ollama on 16GB) |
@@ -114,7 +114,7 @@ flowchart LR
   LS -.-> PX
 ```
 
-**Critical path for v1 credibility:** `Replay runner` → `PipelineService` → embed/upsert (or fixture `RetrievalHit`s) → Agent 1 → Agent 2 policy → local run summary (+ best-effort LangSmith/Phoenix).  
+**Critical path for v1 credibility:** `Replay runner` → `PipelineService` → embed/upsert (or fixture `RetrievalHit`s) → Agent 1 → Agent 2 policy → local run summary (+ LangSmith real spans when configured; Phoenix status stub).  
 **Kafka is mandatory in the architecture and Compose file; it is optional for smoke.**
 
 ---
@@ -157,7 +157,7 @@ flowchart LR
 6. **Application** stamps `event_id` and `ticker` from the input event onto the proposal (LLM values for those fields are ignored or rejected if present and mismatched — see §7.2).  
 7. Build as-of features per §8; smoke prefers fixture feature columns.  
 8. Agent 2: XGBoost → `downside_risk_score` (`proba_high_risk`) → deterministic policy → `approve` / `reject`.  
-9. Persist **local run summary** (success or structured error). Emit best-effort LangSmith/Phoenix spans; tracer failure must not flip a valid pipeline result.  
+9. Persist **local run summary** (success or structured error). Emit LangSmith Client runs when configured (Guide 07); Phoenix remains status-stub; tracer failure must not flip a valid pipeline result.  
 10. Exit non-zero on contract failure.
 
 **Smoke must succeed with Kafka containers stopped** when `ALPHAGUARD_MODE=replay`. Qdrant may be required for the “real RAG” variant; if Qdrant is down, documented `ALPHAGUARD_RAG_MODE=fixture` still proves Agent 1→2 + local summary.
@@ -372,7 +372,7 @@ Every `PipelineService.run` writes a local artifact under `artifacts/runs/` (git
 
 Every Agent 1/2 invocation records: `run_id`, `event_id`, model/bundle tags, latency, token usage when available, validation outcome, `downside_risk_score`, gate decision, `feature_as_of`.  
 **Baseline:** local run summary (mandatory).  
-**Adapters:** LangSmith if configured; else try Phoenix; failures recorded in envelope, do not rewrite a valid decision.
+**Adapters:** LangSmith emits real Client runs when tracing+key configured (Guide 07); Phoenix remains a **status stub** until a later guide. Failures recorded in envelope; do not rewrite a valid decision.
 
 ---
 

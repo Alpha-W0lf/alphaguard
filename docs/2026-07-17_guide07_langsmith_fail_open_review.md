@@ -18,7 +18,7 @@ Guide DoD vs `287a82a`: real LangSmith Client emit when tracing+key; `ok` only a
 |----------|---------|---------|--------|
 | Soft | Optional D3 live LangSmith probe not run (no operator key) | Guide D3 residual / DoD explicit non-blocker | Park — mocks prove emit contract |
 | Soft | No dedicated unit for `create_run` ok then `update_run` raises → `failed` | Edge-case completeness | Park — broad `except` covers; optional Align/follow-on test |
-| Soft | Post–Guide 06 inventory context still narrates “LS status stubs” in Gather prose | Historical Gather text | Align can stamp / supersede — not a code defect |
+| Soft | Post–Guide 06 inventory context still narrates “LS status stubs” in Gather prose | Historical Gather text | **Closed Align pass 127** — inventory superseded |
 | Soft | Phoenix `try: phoenix = "ok"` remains status theater | Locked Phoenix stub | Accept — docs honest |
 
 **Must-fix:** none.
@@ -53,7 +53,7 @@ uv run pytest tests/test_langsmith_obs.py -q
 
 ## Shippable call
 
-**Shippable as-is.** No must-fix. Next stage: **Align-docs** (status stamps / residual Gather prose) — hub authorize; do not self-start.
+**Shippable as-is.** No must-fix. **Align-docs pass 127** closed inventory Gather prose + status stamps. Slice closed.
 
 ## QUALITY §5
 
