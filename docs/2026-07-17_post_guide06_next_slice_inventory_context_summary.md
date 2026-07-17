@@ -2,12 +2,14 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Draft — ready for Write-dev-guide on recommended Guide 07 (after human lock)  
-**Mode last used:** spoke (pass 121 Gather)  
-**Stage:** Gather context  
+**Status:** Write-dev-guide authored (pass 123) — Guide 07 locks locked; Ready-check next  
+**Mode last used:** spoke (pass 123 Write-dev-guide)  
+**Stage:** Write-dev-guide (complete) → Ready-check before code  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
-**Handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_next_gather_pass121_handoff.md`  
-**Prioritize:** `second_brain/docs/2026-07-17_prioritize_hub_pass121.md`  
+**Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
+**Write handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide07_write_pass123_handoff.md`  
+**Hub:** `second_brain/docs/2026-07-17_hub_fanin_ag_gather_authorize_write_pass123.md`  
+**Prior Gather handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_next_gather_pass121_handoff.md`  
 **Guide 06 closed:** Align Met pass 118 (`d795005`); Review shippable `2c8f0ea`
 
 ## Problem
@@ -108,34 +110,11 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**. Do
 4. Same-delivery VISION/ARCHITECTURE/INTERVIEW/AGENTS honesty: stubs → “real spans when configured.”  
 5. **Out:** agent-on-consume; smoke requires LangSmith; fabricated UI screenshots; Optuna; MV checkbox ticks.
 
-**Soft-pin next stage after human lock:** Write-dev-guide for Guide 07 (not Implement yet).
+**Soft-pin next stage:** Ready-check before code → Implement Guide 07 (Write complete pass 123).
 
 ## Open decisions (human)
 
-### 1. Which Guide 07 to Write next
-
-- **Plain title:** Pick the next AlphaGuard guide after Guide 06  
-- **In plain terms:** We need one bounded agent slice that improves interview honesty without pretending the walkthrough is done.  
-- **Options:**  
-  - **A** — LangSmith real fail-open spans (recommended)  
-  - **B** — Guide 06 live Yahoo operator proof only (too thin)  
-  - **C** — U4 FB→META alias / train coverage hygiene  
-  - **D** — Agent-on-consume  
-  - **E** — Live-Ollama eval rates  
-- **Recommendation:** **A**  
-- **Reasoning:** Largest remaining agent-movable honesty gap vs marketed stack (LangSmith). U4 train path already shipped; Guide 06 E3 is optional ops; agent-on-consume is a larger RAM/scope guide.  
-- **Tradeoffs:** Needs careful fail-open + no-secrets design; without a free-tier key, demos stay `skipped` (honest). Defers agent-on-consume and train-alias work.  
-- **Needs from you:** `Lock Guide 07 = LangSmith spans` (or name B/C/D/E)
-
-### 2. Phoenix in the same Guide 07?
-
-- **Plain title:** Ship Phoenix real spans with LangSmith or leave Phoenix stub  
-- **In plain terms:** Phoenix is the offline fallback story; wiring both doubles scope.  
-- **Options:** (A) LangSmith only this guide; Phoenix stub remains · (B) Both in Guide 07  
-- **Recommendation:** **A — LangSmith only**  
-- **Reasoning:** Smallest correct; Phoenix can be Guide 07b/08 if needed.  
-- **Tradeoffs:** Docs must keep saying Phoenix is still stub/fallback-shaped until wired.  
-- **Needs from you:** Lock A / expand to B  
+**Locked (hub pass 123):** Guide 07 = LangSmith real fail-open spans only; Phoenix stub stays; fixture smoke default; MV walkthrough / daily-prep human-only. No residual Write decisions.
 
 ## Evidence opened this pass
 
@@ -149,10 +128,11 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**. Do
 
 ## Honest readiness
 
-- **Ready for Write-dev-guide?** **Yes** — once human locks Guide 07 candidate (recommend A).  
-- **Not ready for Implement** until Write (+ optional Refine) + Ready-check.  
+- **Write-dev-guide:** **Done** — `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`.  
+- **Ready for Ready-check before code?** **Yes** (hub pre-authorized).  
+- **Not ready for Implement** until Ready-check Met.  
 - **Will not** tick MV walkthrough / daily-prep from any agent stage.  
-- Soft-pin next: **Write-dev-guide Guide 07 — LangSmith fail-open real spans**.
+- Soft-pin next: **Ready-check → Implement Guide 07**.
 
 ## QUALITY self-check (§5)
 
