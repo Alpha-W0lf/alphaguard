@@ -2,9 +2,10 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Draft — ready for Write-dev-guide (soft-pin)  
-**Mode last used:** spoke (pass 101 Gather)  
-**Stage:** Gather context  
+**Status:** Context accepted — Write-dev-guide authored (pass 104); ready for Ready-check / Implement  
+**Mode last used:** spoke (pass 104 Write-dev-guide)  
+**Stage:** Write-dev-guide complete (Gather was pass 101)  
+**Dev guide:** `docs/dev_guides/2026-07-17_dev_guide_06_live_rss_reliability.md`  
 **Role lens:** Data engineer (primary) + backend operator path; interview honesty on reliability claims  
 **Handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide06_gather_pass101_handoff.md`
 
@@ -147,26 +148,37 @@ Interview risk: reviewers who see “Kafka+Qdrant” and “RSS in VISION” may
 4. Produce via existing `produce_event`; consumer unchanged (`ingest_event` only).
 5. Commit 1–2 small RSS XML fixtures under `data/fixtures/rss/`; unit tests parse→NewsEvent→serialize round-trip.
 6. Keep smoke fixture; document optional live demo steps in README/GETTING_STARTED.
-7. **Next stage:** Write-dev-guide (soft-pin). No Implement until guide approved.
+7. **Next stage:** Ready-check / Implement (hub-gated). Write-dev-guide **done** pass 104.
 
-## Soft pins (spoke recommendations — not locks until Write-dev-guide / human)
+## Soft pins (LOCKED pass 104 — mirrored in Guide 06)
 
-| Pin | Recommended default |
-|-----|---------------------|
+| Pin | Locked default |
+|-----|----------------|
 | Feed | Yahoo Finance RSS per ticker: `https://feeds.finance.yahoo.com/rss/2.0/headline?s={TICKER}&lang=en-US` |
-| HTTP client | Existing `httpx` + timeout (e.g. 10s) + User-Agent header |
-| CLI | `alphaguard rss poll [--ticker AAPL\|all] [--max-items N]` one-shot DoD; optional `--loop --interval-sec` |
-| Max items / poll | **10** per ticker (bounded backfill) |
-| Retries | **3** attempts with exponential backoff + jitter on transport/5xx |
+| HTTP client | Existing `httpx` + timeout 10s + User-Agent header |
+| CLI | `alphaguard rss poll` one-shot DoD; optional `--loop --interval-sec` (default 120) |
+| Max items / poll | **10** per ticker (bounded backfill); **no** watermark |
+| Retries | **3** attempts with exponential backoff + jitter on transport/5xx/429 |
 | `event_id` | UUID5 as above from guid/link |
 | `source` | `"rss"` |
-| Watermark file | **None** in Guide 06 |
-| Live network tests | Opt-in mark / env; default skip |
+| Live network tests | Opt-in mark `rss_live` / env; default skip |
 | Smoke | Unchanged `replay_fixture` |
 | Agent-on-consume | **Out** |
 | Optuna / W&B | **Out** |
 
-## Open decisions (human)
+## Open decisions (human) — LOCKED pass 104
+
+All four Gather decisions are **locked** (see Soft pins + Guide 06). Historical options retained below for audit only — do not reopen without human.
+
+### 1. Feed source and URL template — LOCKED A (Yahoo)
+
+### 2. Operator shape — LOCKED B (one-shot + optional `--loop`)
+
+### 3. Bounded backfill / watermark — LOCKED A (N=10, no watermark)
+
+### 4. Agent-on-consume — LOCKED A (out)
+
+<details><summary>Historical decision text (pre-lock)</summary>
 
 ### 1. Feed source and URL template
 
@@ -208,6 +220,8 @@ Interview risk: reviewers who see “Kafka+Qdrant” and “RSS in VISION” may
 - **Tradeoffs:** Live demo still needs separate `/replay` (or later guide) for agent path after RSS fills Qdrant.
 - **Needs from you:** Confirm A (default) or expand to B.
 
+</details>
+
 ## Evidence opened this pass
 
 - `second_brain/docs/workflow_os/rails/{QUALITY_STANDARD,ALWAYS,LEARNING_MODE}.md`
@@ -222,10 +236,9 @@ Interview risk: reviewers who see “Kafka+Qdrant” and “RSS in VISION” may
 
 ## Honest readiness
 
-- **Ready for Write-dev-guide?** **Yes** — problem, Guide 04 baseline, gaps, edge cases, blast radius, and soft-pin recommendations are explicit enough to author a thin Guide 06 without Implement creeping in.
-- **Not ready for Implement** until Write (+ optional Refine) locks soft pins and DoD.
+- **Write-dev-guide:** **Done** (pass 104) — `docs/dev_guides/2026-07-17_dev_guide_06_live_rss_reliability.md`.
+- **Ready for Ready-check / Implement?** Yes after hub authorizes — locks applied; DoD executable.
 - **Will not move** VISION MV walkthrough / daily-prep checkboxes from this work alone (human rehearsal).
-- Soft-pin next stage: **Write-dev-guide** for Guide 06 live RSS reliability / operator hardening.
 
 ## Learning notes (portable — interview)
 
