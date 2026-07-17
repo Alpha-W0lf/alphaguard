@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 06 — Yahoo RSS → normalize → Kafka produce (operator path) on top of Guide 04  
 **Stage that authored this:** Write-dev-guide (pass 104); Ready-check (pass 106)  
-**Status:** **READY for Implement** (pass 106 Ready-check **8.8/10** — wait for human authorize; no code yet)
+**Status:** **Implemented** (pass 107 Implement) — wait for Review; fixture smoke default unchanged
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_guide06_live_rss_reliability_context_summary.md`  
 **Prerequisite:** Guides 01–05b shippable. Guide 04 Kafka thin integration **done** (producer/consumer/`/trigger`/UUID5/DLQ). Default smoke remains fixture / Kafka-down.
@@ -126,17 +126,17 @@ One-shot prints a final JSON object to stdout (in addition to logs), e.g.:
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] Yahoo RSS fetch + normalize → `NewsEvent` (`source="rss"`) → `produce_event` → `news.raw`
-- [ ] Stable `event_id` (same item → same id); UUID5 Qdrant path unchanged
-- [ ] CLI `alphaguard rss poll` one-shot DoD; optional `--loop --interval-sec`
-- [ ] N=10 max items; no watermark file; retries/backoff/timeouts/User-Agent as pinned
-- [ ] Edge cases: empty feed exit 0; malformed item skip; OOU reject before fetch; Kafka produce failure → non-zero; partial multi-ticker continue + non-zero
-- [ ] Committed RSS XML fixtures + always-on unit tests (no live Yahoo in default CI)
-- [ ] Optional `rss_live` mark skipped by default
-- [ ] Consumer **not** changed to call `PipelineService.run`
-- [ ] `make smoke` / default pytest still Kafka-down fixture green
-- [ ] Same-delivery docs honesty (VISION/ARCHITECTURE/README/GETTING_STARTED/INTERVIEW/AGENTS/WALKTHROUGH); **no** MV walkthrough/daily-prep checkbox invent
-- [ ] No Optuna/W&B; no paid APIs; no HTML scrape primary path
+- [x] Yahoo RSS fetch + normalize → `NewsEvent` (`source="rss"`) → `produce_event` → `news.raw`
+- [x] Stable `event_id` (same item → same id); UUID5 Qdrant path unchanged
+- [x] CLI `alphaguard rss poll` one-shot DoD; optional `--loop --interval-sec`
+- [x] N=10 max items; no watermark file; retries/backoff/timeouts/User-Agent as pinned
+- [x] Edge cases: empty feed exit 0; malformed item skip; OOU reject before fetch; Kafka produce failure → non-zero; partial multi-ticker continue + non-zero
+- [x] Committed RSS XML fixtures + always-on unit tests (no live Yahoo in default CI)
+- [x] Optional `rss_live` mark skipped by default
+- [x] Consumer **not** changed to call `PipelineService.run`
+- [x] `make smoke` / default pytest still Kafka-down fixture green
+- [x] Same-delivery docs honesty (VISION/ARCHITECTURE/README/GETTING_STARTED/INTERVIEW/AGENTS/WALKTHROUGH); **no** MV walkthrough/daily-prep checkbox invent
+- [x] No Optuna/W&B; no paid APIs; no HTML scrape primary path
 
 ---
 
@@ -146,38 +146,38 @@ All boxes start unchecked. Implement checks them with evidence. **Do not check b
 
 ### Phase A — Normalize + fixtures (offline first)
 
-- [ ] **A1.** Add `data/fixtures/rss/yahoo_aapl_sample.xml` with ≥3 `<item>`s (title, link, guid, pubDate) plus one deliberately malformed item (e.g. missing title) for skip tests.
-- [ ] **A2.** `ingest/rss_normalize.py`: parse XML bytes → list of `NewsEvent` for a given `ticker`; apply `event_id` pin; `source="rss"`; UTC `published_at`; skip malformed items with warning.
-- [ ] **A3.** Unit tests: happy parse count; malformed skipped; same guid → same `event_id`; different guids → different ids; OOU ticker rejected at API boundary (caller validates ticker ∈ universe before normalize/fetch).
-- [ ] **A4.** Round-trip: normalized event → `serialize_event` / `deserialize_bytes` succeeds (`payload_version="1"`).
+- [x] **A1.** Add `data/fixtures/rss/yahoo_aapl_sample.xml` with ≥3 `<item>`s (title, link, guid, pubDate) plus one deliberately malformed item (e.g. missing title) for skip tests.
+- [x] **A2.** `ingest/rss_normalize.py`: parse XML bytes → list of `NewsEvent` for a given `ticker`; apply `event_id` pin; `source="rss"`; UTC `published_at`; skip malformed items with warning.
+- [x] **A3.** Unit tests: happy parse count; malformed skipped; same guid → same `event_id`; different guids → different ids; OOU ticker rejected at API boundary (caller validates ticker ∈ universe before normalize/fetch).
+- [x] **A4.** Round-trip: normalized event → `serialize_event` / `deserialize_bytes` succeeds (`payload_version="1"`).
 
 ### Phase B — Fetch + retries
 
-- [ ] **B1.** `ingest/rss_fetch.py`: `fetch_feed(ticker) -> bytes` using URL template + httpx timeout + User-Agent; retries as pinned; raise typed error after exhaustion.
-- [ ] **B2.** Unit tests: mock httpx (or injectable transport) for 200 XML, 500 then 200, and hard-fail after 3 attempts — **no live network**.
-- [ ] **B3.** Optional: register pytest mark `rss_live`; one skipped-by-default test that hits Yahoo for `AAPL` when `ALPHAGUARD_RUN_RSS_LIVE=1`. Update `pyproject.toml` `addopts` to exclude `rss_live`.
+- [x] **B1.** `ingest/rss_fetch.py`: `fetch_feed(ticker) -> bytes` using URL template + httpx timeout + User-Agent; retries as pinned; raise typed error after exhaustion.
+- [x] **B2.** Unit tests: mock httpx (or injectable transport) for 200 XML, 500 then 200, and hard-fail after 3 attempts — **no live network**.
+- [x] **B3.** Optional: register pytest mark `rss_live`; one skipped-by-default test that hits Yahoo for `AAPL` when `ALPHAGUARD_RUN_RSS_LIVE=1`. Update `pyproject.toml` `addopts` to exclude `rss_live`.
 
 ### Phase C — Poll orchestration + CLI
 
-- [ ] **C1.** Poll helper: for each requested ticker → fetch → normalize → take ≤`max_items` → `produce_event` each; aggregate counts/errors per exit-code table.
-- [ ] **C2.** Wire `alphaguard rss poll` in `cli.py` with `--ticker`, `--max-items` (default 10), `--loop`, `--interval-sec` (default 120).
-- [ ] **C3.** One-shot path is DoD; `--loop` sleeps between iterations until KeyboardInterrupt.
-- [ ] **C4.** Do **not** modify `NewsRawConsumer` / `ingest_event` to run Agent 1→2.
+- [x] **C1.** Poll helper: for each requested ticker → fetch → normalize → take ≤`max_items` → `produce_event` each; aggregate counts/errors per exit-code table.
+- [x] **C2.** Wire `alphaguard rss poll` in `cli.py` with `--ticker`, `--max-items` (default 10), `--loop`, `--interval-sec` (default 120).
+- [x] **C3.** One-shot path is DoD; `--loop` sleeps between iterations until KeyboardInterrupt.
+- [x] **C4.** Do **not** modify `NewsRawConsumer` / `ingest_event` to run Agent 1→2.
 
 ### Phase D — Operator docs + honesty
 
-- [ ] **D1.** README + GETTING_STARTED: optional section — Compose up → `kafka consume` → `rss poll --ticker AAPL` → note consumer must be running; smoke still Kafka-down.
-- [ ] **D2.** VISION progress row: Live RSS reliability → **thin operator path landed** (not production reliability / not v1 Done). Do **not** check MV walkthrough or daily-prep boxes.
-- [ ] **D3.** ARCHITECTURE §6.2 / component table: RSS fetch present; still optional; agent-on-consume still deferred.
-- [ ] **D4.** INTERVIEW / AGENTS / WALKTHROUGH: replace “live RSS later” with honest “thin poll CLI; Yahoo may flake; fixture smoke default.”
-- [ ] **D5.** Grep stale claims (“RSS reliability done”, “v1 complete”, “live RSS later” contradictions); fix.
+- [x] **D1.** README + GETTING_STARTED: optional section — Compose up → `kafka consume` → `rss poll --ticker AAPL` → note consumer must be running; smoke still Kafka-down.
+- [x] **D2.** VISION progress row: Live RSS reliability → **thin operator path landed** (not production reliability / not v1 Done). Do **not** check MV walkthrough or daily-prep boxes.
+- [x] **D3.** ARCHITECTURE §6.2 / component table: RSS fetch present; still optional; agent-on-consume still deferred.
+- [x] **D4.** INTERVIEW / AGENTS / WALKTHROUGH: replace “live RSS later” with honest “thin poll CLI; Yahoo may flake; fixture smoke default.”
+- [x] **D5.** Grep stale claims (“RSS reliability done”, “v1 complete”, “live RSS later” contradictions); fix.
 
 ### Phase E — Verification + stop
 
-- [ ] **E1.** `uv run pytest -q` green without Kafka/Yahoo.
-- [ ] **E2.** `make smoke` still fixture / Kafka-down.
-- [ ] **E3.** Manual optional (operator): Compose + consume + `rss poll` once when network allows — record outcome in Implement notes; live failure is residual, not DoD blocker if offline tests green.
-- [ ] **E4.** Stop. Do not start Agent-on-consume, Optuna, Option B smoke flip, or walkthrough checkbox edits.
+- [x] **E1.** `uv run pytest -q` green without Kafka/Yahoo.
+- [x] **E2.** `make smoke` still fixture / Kafka-down.
+- [x] **E3.** Manual optional (operator): Compose + consume + `rss poll` once when network allows — record outcome in Implement notes; live failure is residual, not DoD blocker if offline tests green.
+- [x] **E4.** Stop. Do not start Agent-on-consume, Optuna, Option B smoke flip, or walkthrough checkbox edits.
 
 ---
 
@@ -265,14 +265,15 @@ ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live -q
 ## Honest readiness
 
 - **Write-dev-guide DoD:** met (pass 104).  
-- **Ready-check (pass 106):** **READY** — Implement readiness **8.8 / 10** (see `docs/2026-07-17_guide06_ready_check_before_implement.md`).  
-- **Next stage:** Implement **only after** human `Authorize Implement Guide 06`.  
-- **Not started:** any application code for RSS.
+- **Ready-check (pass 106):** **READY** — Implement readiness **8.8 / 10**.  
+- **Implement (pass 107):** **Done** — offline tests + docs honesty; `make smoke` green (fixture).  
+- **E3 residual:** Live Compose+Yahoo operator demo **not** run this pass (optional; not DoD blocker).  
+- **Next stage:** Review (hub-authorized) — do not self-start.
 
 ## QUALITY self-check (§5)
 
 - [x] Executable steps + DoD + verification commands  
 - [x] Edge cases + blast radius explicit  
 - [x] Locks mirrored from handoff (Yahoo; one-shot+loop; N=10; agent-on-consume out; fixture smoke)  
-- [x] No implementation in this stage  
-- [x] Docs honesty + human MV boxes called out  
+- [x] Implement completed per checklist; no Review self-start  
+- [x] Docs honesty + human MV boxes left unchecked  

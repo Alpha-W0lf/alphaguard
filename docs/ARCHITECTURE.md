@@ -1,6 +1,6 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guides 01–04 **implemented**; Guide **05a** dataset builder + Guide **05b** Option B **XGBoost train** landed; default smoke still `bundle_kind=fixture`  
+**Status:** Binding contracts SSOT — guides 01–04 **implemented**; Guide **05a** dataset builder + Guide **05b** Option B **XGBoost train** landed; Guide **06** thin Yahoo RSS poll landed; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
 **Last Updated:** 2026-07-13 (pass-10 Align docs: status ↔ repo; component existence honesty)  
 **Owner:** Tom  
@@ -126,6 +126,7 @@ flowchart LR
 | `infra/compose` | Kafka + Qdrant (pinned images, healthchecks) | **Present** (`docker-compose.yml`) | Docker |
 | `ingest/producer` | Publish normalized news events to Kafka | **Present** (`ingest/producer.py` → `news.raw`) | Host |
 | `ingest/consumer` | Consume → validate → embed → upsert Qdrant | **Present** (`ingest/consumer.py`; DLQ `news.raw.dlq`) | Host |
+| `ingest/rss_*` | Yahoo RSS fetch/normalize/poll → produce | **Present** (Guide 06; optional operator path; smoke does not require) | Host |
 | `ingest/replay` | Load fixture event(s); **bypass live Kafka**; call `PipelineService` | **Present** | Host |
 | `pipeline/` | **`PipelineService`**: single orchestration façade for replay / API / future Kafka consumer | **Present** | Host |
 | `rag/` | Embedding + Qdrant query; **as-of filter**; returns `RetrievalHit[]` (simple top-k). Called by **`PipelineService` only** for the run path | **Present** (fixture + qdrant modes) | Host |
@@ -163,11 +164,12 @@ flowchart LR
 
 ### 6.2 Live path (optional after replay works)
 
-1. RSS (or manual POST) → producer → Kafka `news.raw`.  
+1. RSS (`alphaguard rss poll`) or manual POST → producer → Kafka `news.raw`.  
 2. Consumer durable handle = validate + embed + idempotent Qdrant upsert via `PipelineService.ingest_event` only (Guide 04). **Full Agent 1→2 is not invoked on consume** — use `/replay` (or a later slice) for the agent path.  
-3. Obs / gate path remains the replay `PipelineService.run` path until an explicit later guide wires agent-on-consume.
+3. Guide 06 ships a **thin** Yahoo RSS operator path (one-shot + optional demo `--loop`, N=10, retries). Yahoo may flake; offline XML fixtures are CI truth. This is **not** 24/7 production reliability.  
+4. Obs / gate path remains the replay `PipelineService.run` path until an explicit later guide wires agent-on-consume.
 
-Do **not** block the vertical slice on live RSS reliability. Full Kafka delivery contract is specified in §17 — smoke stays Kafka-down.
+Do **not** block smoke on live RSS. Full Kafka delivery contract is specified in §17 — smoke stays Kafka-down.
 
 ### 6.3 ML training path (batch; separate from demo RAM)
 
@@ -499,7 +501,7 @@ CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 2. Compose Kafka+Qdrant wiring proven against the same contracts (delivery contract §17).  
 3. Option B **dataset builder** (05a) + **XGBoost train** (05b) landed; default smoke still fixture.  
 4. Thin eval harness + packaging docs (README, GETTING_STARTED, INTERVIEW).  
-5. Optional live RSS producer — only after replay smoke is green.
+5. Optional live RSS producer — **Guide 06 thin path landed** (`rss poll`); agent-on-consume still deferred.
 
 ---
 
@@ -529,7 +531,7 @@ Implemented (Guide 04):
 - Thin **`POST /trigger`** produces to `news.raw` (not a second orchestrator)
 - **`resource_mode=kafka_integration`** when `ALPHAGUARD_MODE=live` + `ALPHAGUARD_RAG_MODE=qdrant`
 
-Do **not** expand smoke to require this. Do **not** claim live RSS reliability or v1 Done.  
+Do **not** expand smoke to require this. Guide 06 adds optional Yahoo RSS → produce; still **not** 24/7 reliability, **not** agent-on-consume, **not** v1 Done.
 **Compose proof (2026-07-15):** `bitnamilegacy/kafka:3.9.0` + `qdrant/qdrant:v1.13.2` healthy; `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration` → **3 passed** (happy produce→consume→Qdrant upsert; redelivery idempotent; poison→DLQ via seek loop). Default `uv run pytest -q` still excludes the marker (smoke Kafka-down).
 
 ---

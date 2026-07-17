@@ -1,6 +1,6 @@
 # Agent guidance — AlphaGuard
 
-**Vertical slice only** (guides 01–04 + **05a** dataset builder + **05b** Option B XGBoost train). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`). Guide **05a** training-row builder + Guide **05b** `bundle_kind=option_b` train CLI landed — **default smoke still fixture**.
+**Vertical slice only** (guides 01–04 + **05a** dataset builder + **05b** Option B XGBoost train + **06** thin live RSS poll). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`). Guide **05a** training-row builder + Guide **05b** `bundle_kind=option_b` train CLI landed — **default smoke still fixture**. Guide **06** Yahoo RSS → produce (`alphaguard rss poll`) — thin operator path; Yahoo may flake; **not** agent-on-consume / **not** 24/7 reliability.
 
 ## Locked stack (do not reopen)
 

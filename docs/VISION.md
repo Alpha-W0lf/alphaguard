@@ -2,7 +2,7 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; default smoke still Kafka-down **fixture**.
+**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS operator path — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); default smoke still Kafka-down **fixture**.
 
 **Last Updated:** July 15, 2026 (Guide 04 P0: consumer `run_once` seek/commit; guides 01–04 status)
 
@@ -120,7 +120,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model / not v1 Done |
-| Live RSS → Kafka E2E | **Thin integration done** (Guide 04) | Producer/consumer + `/trigger` + UUID5 upsert; **not** live RSS reliability |
+| Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume / not v1 Done |
 | Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
 
 README / AGENTS must keep saying **vertical slice**, not “v1 complete,” until Minimum Viable boxes below are honestly checked.

@@ -85,6 +85,16 @@ uv run alphaguard kafka produce --event-id evt-aapl-001
 # or: curl -X POST localhost:8000/trigger -H 'Content-Type: application/json' -d '...'
 ```
 
-Default smoke path remains Kafka-down (`make smoke`). Integration tests: `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration`.
+### Optional: Yahoo RSS poll (Guide 06)
+
+Requires Compose Kafka + a running consumer (same as above). **Not** required for smoke.
+
+```bash
+uv run alphaguard rss poll --ticker AAPL --max-items 10
+# demo loop only (not a production daemon):
+# uv run alphaguard rss poll --ticker AAPL --loop --interval-sec 120
+```
+
+Yahoo may flake or block; offline fixtures under `data/fixtures/rss/` are CI truth. Default smoke path remains Kafka-down (`make smoke`). Integration tests: `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration`. Optional live RSS probe: `ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live`.
 
 Do **not** tick VISION MV packaging boxes from this file — Align-docs owns checkbox updates after Review evidence.

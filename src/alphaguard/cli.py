@@ -15,10 +15,19 @@ import sys
 from pathlib import Path
 
 from alphaguard.config import get_settings
+from alphaguard.contracts.events import OutOfUniverseTickerError
 from alphaguard.infra.preflight import PreflightError, preflight_ollama
 from alphaguard.ingest.consumer import NewsRawConsumer
 from alphaguard.ingest.producer import KafkaProduceError, create_producer, produce_event
 from alphaguard.ingest.replay import FixtureLoadError, get_event_by_id, run_replay
+from alphaguard.ingest.rss_poll import (
+    DEFAULT_INTERVAL_SEC,
+    DEFAULT_MAX_ITEMS,
+    exit_code_for_summary,
+    poll_loop,
+    poll_once,
+    resolve_tickers,
+)
 from alphaguard.pipeline.service import PipelineService
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
@@ -99,6 +108,38 @@ def cmd_kafka_produce(event_id: str) -> int:
     return 0
 
 
+def cmd_rss_poll(
+    ticker: str,
+    *,
+    max_items: int,
+    loop: bool,
+    interval_sec: int,
+) -> int:
+    """Yahoo RSS → produce to news.raw. One-shot DoD; --loop is demo-only."""
+    try:
+        tickers = resolve_tickers(ticker)
+    except (OutOfUniverseTickerError, ValueError) as exc:
+        print(f"rss poll usage error: {exc}", file=sys.stderr)
+        return 2
+
+    settings = get_settings()
+    producer = create_producer(settings.kafka_bootstrap_servers)
+    try:
+        if loop:
+            poll_loop(
+                tickers,
+                producer,
+                max_items=max_items,
+                interval_sec=interval_sec,
+            )
+            return 0
+        summary = poll_once(tickers, producer, max_items=max_items)
+        print(json.dumps(summary.to_dict()))
+        return exit_code_for_summary(summary)
+    finally:
+        producer.close()
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="alphaguard")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -118,6 +159,17 @@ def main(argv: list[str] | None = None) -> None:
     produce = kafka_sub.add_parser("produce", help="One-shot produce from fixture event_id")
     produce.add_argument("--event-id", default="evt-aapl-001")
 
+    rss = sub.add_parser("rss", help="Live RSS operator helpers (requires Kafka for produce)")
+    rss_sub = rss.add_subparsers(dest="rss_command", required=True)
+    poll = rss_sub.add_parser(
+        "poll",
+        help="Fetch Yahoo RSS → produce to news.raw (one-shot; optional --loop demo)",
+    )
+    poll.add_argument("--ticker", default="AAPL", help="Ticker or 'all'")
+    poll.add_argument("--max-items", type=int, default=DEFAULT_MAX_ITEMS)
+    poll.add_argument("--loop", action="store_true", help="Demo loop (not a production daemon)")
+    poll.add_argument("--interval-sec", type=int, default=DEFAULT_INTERVAL_SEC)
+
     args = parser.parse_args(argv)
     if args.command == "preflight":
         settings = get_settings()
@@ -134,6 +186,16 @@ def main(argv: list[str] | None = None) -> None:
         if args.kafka_command == "consume":
             sys.exit(cmd_kafka_consume())
         sys.exit(cmd_kafka_produce(args.event_id))
+
+    if args.command == "rss":
+        sys.exit(
+            cmd_rss_poll(
+                args.ticker,
+                max_items=args.max_items,
+                loop=args.loop,
+                interval_sec=args.interval_sec,
+            )
+        )
 
     event_id = getattr(args, "event_id", None)
     code = cmd_smoke(event_id)

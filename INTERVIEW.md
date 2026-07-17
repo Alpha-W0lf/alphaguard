@@ -2,7 +2,7 @@
 
 Staff-interview gotchas for the **replay-first vertical slice**. Contracts SSOT: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Product / why: [`docs/VISION.md`](docs/VISION.md).
 
-This is packaging around a green smoke path — **not** “v1 Done.” Default smoke is still **fixture**. Guide **05b** lands a local `bundle_kind=option_b` train path (lab metrics; noisy test F1) — do not market it as a production risk model. Live RSS reliability remains a later slice.
+This is packaging around a green smoke path — **not** “v1 Done.” Default smoke is still **fixture**. Guide **05b** lands a local `bundle_kind=option_b` train path (lab metrics; noisy test F1) — do not market it as a production risk model. Guide **06** adds a thin Yahoo RSS poll CLI (`alphaguard rss poll`) — Yahoo may flake; **not** 24/7 reliability / **not** agent-on-consume.
 
 **Why packaging now (vs ARCHITECTURE §15):** program pass-12 soft-overrides the architecture sequencing sketch for interview ROI — packaging needs only the shippable vertical slice. Contracts (AG1–AG3) are unchanged.
 
@@ -41,7 +41,7 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 ## 7. What does replay-first prove vs what Kafka E2E still needs to prove?
 
-Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. Guide 04 adds produce/consume + idempotent Qdrant upsert + `/trigger` when Compose is up — **not** live RSS scheduling/reliability.
+Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. Guide 04 adds produce/consume + idempotent Qdrant upsert + `/trigger` when Compose is up. Guide 06 adds optional Yahoo RSS → produce (`rss poll`); still **not** production SRE / agent-on-consume.
 
 ## 8. What is `replay_fixture` vs `kafka_integration`?
 
@@ -65,7 +65,7 @@ Agent 1 is LLM-sampled (stochastic). Agent 2’s **policy table is deterministic
 
 ## 13. Does `docker-compose.yml` prove Kafka delivery contracts?
 
-Compose proves pinned images + operator path. Guide 04 ships producer/consumer, DLQ, UUID5 upsert, and `/trigger`. Smoke must still succeed with Kafka **stopped** (`Makefile` comment). Live RSS reliability is **not** in scope.
+Compose proves pinned images + operator path. Guide 04 ships producer/consumer, DLQ, UUID5 upsert, and `/trigger`. Guide 06 ships thin `rss poll` (Yahoo may flake; fixture XML for CI). Smoke must still succeed with Kafka **stopped** (`Makefile` comment).
 
 ## 14. What happens to an out-of-universe ticker or invalid proposal?
 

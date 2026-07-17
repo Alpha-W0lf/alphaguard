@@ -57,8 +57,9 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 markers = [
   "kafka_integration: requires docker compose Kafka+Qdrant (excluded by default)",
+  "rss_live: optional live Yahoo RSS probe (excluded by default; set ALPHAGUARD_RUN_RSS_LIVE=1)",
 ]
-addopts = "-m 'not kafka_integration'"
+addopts = "-m 'not kafka_integration and not rss_live'"
 
 [tool.ruff]
 line-length = 100

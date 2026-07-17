@@ -33,13 +33,13 @@ Use this as a prompt card. Practice **aloud without opening the repo**. Check th
 
 ## Minute 7–9 — Ops / failure modes
 
-- Replay-first; Compose Kafka+Qdrant for thin E2E; live RSS reliability still later.  
+- Replay-first; Compose Kafka+Qdrant for thin E2E; Guide 06 thin `rss poll` (Yahoo may flake) — not 24/7 SRE.  
 - Ollama default `gemma4:e2b`, fallback `qwen3.5:4b` on old builds.  
 - Eval: ≥21 goldens structural — not live-Ollama schema-pass rates.
 
 ## Minute 9–10 — What you would build next (honest)
 
-- Live RSS reliability **or** packaging/walkthrough polish — not “flip smoke to Option B by default.”  
+- Packaging/walkthrough polish or agent-on-consume — not “flip smoke to Option B by default.”  
 - Stop before overclaiming production risk model.
 
 ## Self-check

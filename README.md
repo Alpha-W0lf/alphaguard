@@ -28,6 +28,8 @@ Optional **Kafka integration** (Guide 04): `docker compose up -d`, wait for heal
 export ALPHAGUARD_MODE=live ALPHAGUARD_RAG_MODE=qdrant
 uv run alphaguard kafka consume          # terminal 1
 uv run alphaguard kafka produce --event-id evt-aapl-001   # or POST /trigger
+# Optional Yahoo RSS → news.raw (Guide 06; Yahoo may flake — not required for smoke):
+uv run alphaguard rss poll --ticker AAPL --max-items 10
 # Live pytest (Compose must be up):
 ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration -q
 ```
@@ -94,6 +96,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 - Option B dataset (05a): `uv run python scripts/build_training_events.py` — see `docs/TRAINING_DATA.md`
 - Option B train (05b): `uv run python scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Lab-scale metrics only; **default smoke stays fixture**. Optional demo:
   `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b make smoke`
-- Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert — **not** live RSS reliability
+- Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
+- Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
 - LangSmith/Phoenix on the run envelope are **status stubs** today (no SDK spans yet); local `artifacts/runs/` envelope is the real LLMOps baseline
 - Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete
