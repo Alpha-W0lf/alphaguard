@@ -116,6 +116,15 @@ def cmd_rss_poll(
     interval_sec: int,
 ) -> int:
     """Yahoo RSS → produce to news.raw. One-shot DoD; --loop is demo-only."""
+    if max_items < 1:
+        print(f"rss poll usage error: max_items must be >= 1, got {max_items}", file=sys.stderr)
+        return 2
+    if loop and interval_sec < 1:
+        print(
+            f"rss poll usage error: interval_sec must be >= 1 when --loop, got {interval_sec}",
+            file=sys.stderr,
+        )
+        return 2
     try:
         tickers = resolve_tickers(ticker)
     except (OutOfUniverseTickerError, ValueError) as exc:

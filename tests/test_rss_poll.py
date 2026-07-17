@@ -37,6 +37,17 @@ def test_resolve_tickers_all_and_oou() -> None:
         resolve_tickers("TSLA")
 
 
+def test_poll_once_rejects_non_positive_max_items() -> None:
+    with pytest.raises(ValueError, match="max_items"):
+        poll_once(
+            ["AAPL"],
+            producer=object(),  # type: ignore[arg-type]
+            max_items=0,
+            fetch_fn=lambda t: b"",
+            normalize_fn=normalize_rss_xml,
+        )
+
+
 def test_poll_once_produces_capped_items(monkeypatch: pytest.MonkeyPatch) -> None:
     xml = FIXTURE.read_bytes()
     produced: list[NewsEvent] = []

@@ -68,6 +68,8 @@ def poll_once(
     normalize_fn: Callable[[bytes, str], NormalizeResult] = normalize_rss_xml,
 ) -> PollSummary:
     """Fetch/normalize/produce for each ticker. Continues on hard failures; records errors."""
+    if max_items < 1:
+        raise ValueError(f"max_items must be >= 1, got {max_items}")
     summary = PollSummary(tickers=list(tickers))
     for ticker in tickers:
         try:
