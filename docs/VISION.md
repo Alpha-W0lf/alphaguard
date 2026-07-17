@@ -133,10 +133,10 @@ README / AGENTS must keep saying **vertical slice**, not “v1 complete,” unti
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(LangSmith/Phoenix = envelope status stubs today; real spans later)*
-- [ ] Public GitHub polish with architecture diagram, stack table, and limitations section *(README stub exists)*
-- [ ] `INTERVIEW.md` with 15+ gotcha Q&A
-- [ ] Tom can give 10-minute unprompted architecture walkthrough without opening code
-- [ ] Parallel interview prep: 15–30 min/day hand-coding (separate from build) while project runs
+- [x] Public GitHub polish with architecture diagram, stack table, and limitations section *(README mermaid + Stack + Limitations + `docs/assets/`; Guide 02)*
+- [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
+- [ ] Tom can give 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — human rehearsal still required)*
+- [ ] Parallel interview prep: 15–30 min/day hand-coding (separate from build) while project runs *(human habit — not an agent deliverable)*
 
 ### Signs It's Working
 

@@ -80,6 +80,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — clean-clone operator path
 - [`INTERVIEW.md`](INTERVIEW.md) — staff FAQ / gotchas (≥15 themes)
+- [`docs/WALKTHROUGH_10MIN.md`](docs/WALKTHROUGH_10MIN.md) — spoken 10-minute architecture outline (rehearse aloud)
 - [`docs/VISION.md`](docs/VISION.md) — product / why
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how (SSOT)
 - [`AGENTS.md`](AGENTS.md) — agent rails
