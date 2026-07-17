@@ -3,8 +3,8 @@
 **Date:** 2026-07-17  
 **Repo:** `alphaguard`  
 **Work item:** Guide 06 — Yahoo RSS → normalize → Kafka produce (operator path) on top of Guide 04  
-**Stage that authored this:** Write-dev-guide (pass 104)  
-**Status:** **Ready for Implement** (no code in this stage)
+**Stage that authored this:** Write-dev-guide (pass 104); Ready-check (pass 106)  
+**Status:** **READY for Implement** (pass 106 Ready-check **8.8/10** — wait for human authorize; no code yet)
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_guide06_live_rss_reliability_context_summary.md`  
 **Prerequisite:** Guides 01–05b shippable. Guide 04 Kafka thin integration **done** (producer/consumer/`/trigger`/UUID5/DLQ). Default smoke remains fixture / Kafka-down.
@@ -264,8 +264,9 @@ ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live -q
 
 ## Honest readiness
 
-- **Write-dev-guide DoD:** met when this file exists with steps, soft pins, DoD, blast radius, edge cases.  
-- **Next stage:** Ready-check before code (or Implement if hub authorizes directly).  
+- **Write-dev-guide DoD:** met (pass 104).  
+- **Ready-check (pass 106):** **READY** — Implement readiness **8.8 / 10** (see `docs/2026-07-17_guide06_ready_check_before_implement.md`).  
+- **Next stage:** Implement **only after** human `Authorize Implement Guide 06`.  
 - **Not started:** any application code for RSS.
 
 ## QUALITY self-check (§5)

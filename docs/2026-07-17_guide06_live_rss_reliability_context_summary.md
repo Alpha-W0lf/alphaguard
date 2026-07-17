@@ -2,10 +2,11 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Context accepted — Write-dev-guide authored (pass 104); ready for Ready-check / Implement  
-**Mode last used:** spoke (pass 104 Write-dev-guide)  
-**Stage:** Write-dev-guide complete (Gather was pass 101)  
+**Status:** Ready-check **READY** (pass 106; Implement **8.8/10**) — wait for human Authorize Implement  
+**Mode last used:** spoke (pass 106 Ready-check)  
+**Stage:** Ready-check complete (Write pass 104; Gather pass 101)  
 **Dev guide:** `docs/dev_guides/2026-07-17_dev_guide_06_live_rss_reliability.md`  
+**Ready-check:** `docs/2026-07-17_guide06_ready_check_before_implement.md`  
 **Role lens:** Data engineer (primary) + backend operator path; interview honesty on reliability claims  
 **Handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide06_gather_pass101_handoff.md`
 
@@ -236,8 +237,9 @@ All four Gather decisions are **locked** (see Soft pins + Guide 06). Historical 
 
 ## Honest readiness
 
-- **Write-dev-guide:** **Done** (pass 104) — `docs/dev_guides/2026-07-17_dev_guide_06_live_rss_reliability.md`.
-- **Ready for Ready-check / Implement?** Yes after hub authorizes — locks applied; DoD executable.
+- **Write-dev-guide:** **Done** (pass 104).
+- **Ready-check (pass 106):** **READY** — Implement readiness **8.8 / 10**.
+- **Implement?** Only after human `Authorize Implement Guide 06`.
 - **Will not move** VISION MV walkthrough / daily-prep checkboxes from this work alone (human rehearsal).
 
 ## Learning notes (portable — interview)
