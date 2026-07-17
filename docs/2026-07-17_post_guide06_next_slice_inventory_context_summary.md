@@ -2,9 +2,9 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Ready-check Met (pass 123/124) — Guide 07 READY **9.0/10**; await Authorize Implement  
-**Mode last used:** spoke (pass 123 Ready-check)  
-**Stage:** Ready-check before code (complete) → Implement (gated)  
+**Status:** Implement Met (pass 125) — Guide 07 code+docs landed; Review next  
+**Mode last used:** spoke (pass 125 Implement)  
+**Stage:** Implement (complete) → Review (gated)  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
 **Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
 **Write handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide07_write_pass123_handoff.md`  
@@ -128,11 +128,13 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**. Do
 
 ## Honest readiness
 
-- **Write-dev-guide:** **Done** — `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`.  
-- **Ready-check:** **Met** — `docs/2026-07-17_guide07_ready_check_before_implement.md` → **READY 9.0/10**.  
-- **Ready for Implement?** **Yes** after hub/human `Authorize Implement Guide 07`.  
+- **Write-dev-guide:** **Done**.  
+- **Ready-check:** **Met** — READY 9.0/10.  
+- **Implement:** **Met** — LangSmith real fail-open spans; Phoenix stub; fixture smoke `skipped`.  
+- **Ready for Review?** **Yes** (hub authorize).  
 - **Will not** tick MV walkthrough / daily-prep from any agent stage.  
-- Soft-pin next: **Authorize Implement → Implement Guide 07**.
+- Soft-pin next: **Review implementation Guide 07**.  
+- Residual: optional live LangSmith D3 probe.
 
 ## QUALITY self-check (§5)
 

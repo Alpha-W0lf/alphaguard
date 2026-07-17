@@ -5,12 +5,12 @@ Local-envelope evidence for the replay-first vertical slice. **Not** LangSmith/P
 | File | What it shows |
 |------|----------------|
 | [`smoke_terminal.png`](./smoke_terminal.png) | `make smoke` excerpt (Kafka down): success, proposal, gate decision, envelope path hint |
-| [`run_envelope_curated.png`](./run_envelope_curated.png) | Curated run JSON: `status=success`, `rag_mode=fixture`, `resource_mode=replay_fixture`, honest `obs.langsmith` / `obs.phoenix` stubs |
+| [`run_envelope_curated.png`](./run_envelope_curated.png) | Curated run JSON: `status=success`, `rag_mode=fixture`, `resource_mode=replay_fixture`, honest `obs.langsmith` / `obs.phoenix` as `skipped` (default env) |
 
 ## Captions (binding honesty)
 
 1. **Local run summary** under `artifacts/runs/` is the **mandatory** LLMOps baseline.
-2. Envelope `obs.langsmith` / `obs.phoenix` are **status stubs** (here: `skipped`) — not real SDK spans. Do not invent LangSmith/Phoenix UI screenshots.
+2. Default smoke: `obs.langsmith=skipped` (no key). Guide 07 emits real LangSmith Client runs only when tracing+key are set. Phoenix remains a **status stub** — do not invent LangSmith/Phoenix UI screenshots.
 3. Agent 1 proposal may vary (`BUY` vs `HOLD`/`PASS`) across smokes; the **gate policy is deterministic** given fixed `(action, score[, vol])`.
 4. Absolute home paths (`/Users/...`) are **redacted** in committed images; prefer `artifacts/runs/<id>.json`.
 

@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS operator path — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); default smoke still Kafka-down **fixture**.
+**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS + Guide **07** LangSmith real fail-open spans — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured (Phoenix still stub); default smoke still Kafka-down **fixture** (never requires LangSmith key).
 
-**Last Updated:** July 17, 2026 (Guide 06 thin Yahoo RSS poll Align; guides 01–06 status; MV walkthrough still human)
+**Last Updated:** July 17, 2026 (Guide 07 LangSmith fail-open spans Implement; MV walkthrough still human)
 
 **Owner:** Tom
 
@@ -132,7 +132,7 @@ README / AGENTS must keep saying **vertical slice**, not “v1 complete,” unti
 - [x] `docker compose up` runs Kafka + Qdrant locally *(operator path documented in README; smoke still Kafka-down)*
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
-- [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(LangSmith/Phoenix = envelope status stubs today; real spans later)*
+- [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07: LangSmith = real fail-open spans when tracing+key; Phoenix = status stub; default smoke has LangSmith `skipped`)*
 - [x] Public GitHub polish with architecture diagram, stack table, and limitations section *(README mermaid + Stack + Limitations + `docs/assets/`; Guide 02)*
 - [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
 - [ ] Tom can give 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — human rehearsal still required)*

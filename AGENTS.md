@@ -1,6 +1,6 @@
 # Agent guidance — AlphaGuard
 
-**Vertical slice only** (guides 01–04 + **05a** dataset builder + **05b** Option B XGBoost train + **06** thin live RSS poll). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`). Guide **05a** training-row builder + Guide **05b** `bundle_kind=option_b` train CLI landed — **default smoke still fixture**. Guide **06** Yahoo RSS → produce (`alphaguard rss poll`) — thin operator path; Yahoo may flake; **not** agent-on-consume / **not** 24/7 reliability.
+**Vertical slice only** (guides 01–04 + **05a** dataset builder + **05b** Option B XGBoost train + **06** thin live RSS poll + **07** LangSmith real fail-open spans). Not “v1 complete.” Guide 02 interview packaging landed (`INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/`). Guide 03 eval harness landed — ≥21 executable goldens (not live-Ollama rates). Guide 04 Kafka + Qdrant thin integration landed (producer/consumer/`/trigger`/UUID5; default smoke still Kafka-down `replay_fixture`). Guide **05a** training-row builder + Guide **05b** `bundle_kind=option_b` train CLI landed — **default smoke still fixture**. Guide **06** Yahoo RSS → produce (`alphaguard rss poll`) — thin operator path; Yahoo may flake; **not** agent-on-consume / **not** 24/7 reliability. Guide **07** LangSmith Client emit when tracing+key — Phoenix **stub stays**; smoke never requires LangSmith key.
 
 ## Locked stack (do not reopen)
 
@@ -8,7 +8,7 @@
 - **`gemma4:e2b`:** default generator; needs a current Ollama (`pull` can 412 on older builds). If primary tag missing, preflight may use `qwen3.5:4b` (documented D1 fallback). Do not claim gemma works without a successful pull / smoke.
 - Compose Kafka + Qdrant (smoke does **not** require Kafka; default smoke = `ALPHAGUARD_RAG_MODE=fixture`)
 - Agent 2 = XGBoost **downside-risk scorer** + deterministic policy
-- LLMOps: local run summary **mandatory**; LangSmith/Phoenix best-effort fail-open
+- LLMOps: local run summary **mandatory**; LangSmith real fail-open spans when configured; Phoenix status stub; fail-open relative to gate
 - FinBERT = offline batch only (never during smoke)
 
 ## AG1–AG3 (one-liners)

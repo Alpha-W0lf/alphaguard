@@ -17,7 +17,7 @@ Use this as a prompt card. Practice **aloud without opening the repo**. Check th
 3. RAG returns as-of-filtered hits (`available_at <= published_at`).  
 4. Agent 1 proposes action; identity stamped from event.  
 5. Agent 2 scores `proba_high_risk`; deterministic policy approve/reject.  
-6. Always write local envelope; LangSmith/Phoenix = status stubs today.
+6. Always write local envelope; LangSmith = real fail-open spans when tracing+key (Guide 07); Phoenix = status stub; default smoke → LangSmith `skipped`.
 
 ## Minute 3–5 — AG1 / AG2 / AG3 (say these)
 

@@ -48,7 +48,8 @@ flowchart LR
   HITS --> A1[Agent 1 LangGraph + Ollama]
   A1 --> A2[Agent 2 XGBoost gate]
   A2 --> LOCAL[Local run summary]
-  LOCAL -.-> LS[LS / Phoenix status stubs]
+  LOCAL -.-> LS[LangSmith real spans when configured]
+  LOCAL -.-> PX[Phoenix status stub]
   QDR[Qdrant optional] -.-> HITS
   KFK[Kafka news.raw] -.-> CONS[Consumer ingest_event]
   CONS -.-> QDR
@@ -64,17 +65,17 @@ flowchart LR
 | Agent 2 | XGBoost downside-risk scorer + deterministic approve/reject policy |
 | RAG (smoke default) | Fixture `RetrievalHit`s (`ALPHAGUARD_RAG_MODE=fixture`) |
 | Infra | Compose Kafka + Qdrant — **optional for smoke** |
-| LLMOps | **Local run envelope mandatory**; LangSmith / Phoenix best-effort **status stubs** today |
+| LLMOps | **Local run envelope mandatory**; LangSmith real fail-open spans when configured (Guide 07); Phoenix **status stub** |
 
 Locked stack detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2 · product framing: [`docs/VISION.md`](docs/VISION.md).
 
 ## Evidence screenshots
 
-Local envelope fulfills packaging until H2 is reversed — **not** fabricated LangSmith UI.
+Local envelope fulfills packaging — **not** fabricated LangSmith UI. With default env, `obs.langsmith=skipped`.
 
 ![Terminal smoke (Kafka down; paths redacted)](docs/assets/smoke_terminal.png)
 
-![Curated run envelope — LS/Phoenix stubs; Agent 1 may vary, gate is deterministic](docs/assets/run_envelope_curated.png)
+![Curated run envelope — local LLMOps baseline; Agent 1 may vary, gate is deterministic](docs/assets/run_envelope_curated.png)
 
 Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
@@ -98,5 +99,5 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
   `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b make smoke`
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
 - Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
-- LangSmith/Phoenix on the run envelope are **status stubs** today (no SDK spans yet); local `artifacts/runs/` envelope is the real LLMOps baseline
+- LangSmith (Guide 07): real fail-open Client spans when `LANGSMITH_TRACING` + key; Phoenix remains a **status stub**; default smoke never requires a LangSmith key (`skipped`)
 - Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete

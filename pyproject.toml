@@ -25,6 +25,7 @@ dependencies = [
   "yfinance>=0.2",
   "exchange-calendars>=4.5",
   "transformers>=4.40",
+  "langsmith>=0.10.2",
 ]
 
 [project.optional-dependencies]
@@ -58,8 +59,9 @@ pythonpath = ["src"]
 markers = [
   "kafka_integration: requires docker compose Kafka+Qdrant (excluded by default)",
   "rss_live: optional live Yahoo RSS probe (excluded by default; set ALPHAGUARD_RUN_RSS_LIVE=1)",
+  "langsmith_live: optional live LangSmith emit (excluded by default; set ALPHAGUARD_RUN_LANGSMITH_LIVE=1)",
 ]
-addopts = "-m 'not kafka_integration and not rss_live'"
+addopts = "-m 'not kafka_integration and not rss_live and not langsmith_live'"
 
 [tool.ruff]
 line-length = 100

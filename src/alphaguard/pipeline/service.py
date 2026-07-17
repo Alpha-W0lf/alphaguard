@@ -103,6 +103,31 @@ class PipelineService:
             error = RunError(code=code, message=msg, retriable=False)
 
         finished = datetime.now(timezone.utc)
+        outputs: dict[str, object] = {}
+        if proposal is not None:
+            outputs["action"] = proposal.action
+        if decision is not None:
+            outputs["decision"] = decision.decision
+
+        obs, langsmith_run_id = build_obs_status(
+            self.settings,
+            self.settings.artifacts_dir / "runs" / f"{run_id}.json",
+            run_id=run_id,
+            event_id=event.event_id,
+            ticker=event.ticker,
+            mode=self.settings.alphaguard_mode,
+            rag_mode=self.settings.alphaguard_rag_mode,
+            status=status,
+            outputs=outputs,
+        )
+        extras: dict[str, object] = {}
+        if langsmith_run_id:
+            extras["langsmith_run_id"] = langsmith_run_id
+
+        # Degraded if adapters failed but pipeline succeeded.
+        if status == "success" and (obs.langsmith == "failed" or obs.phoenix == "failed"):
+            status = "degraded"
+
         # Write placeholder obs path first, then rewrite with final envelope.
         temp_envelope = PipelineRunEnvelope(
             run_id=run_id,
@@ -115,17 +140,12 @@ class PipelineService:
             proposal=proposal,
             decision=decision,
             retrieval_hit_count=hit_count,
-            obs=build_obs_status(self.settings, self.settings.artifacts_dir / "runs" / f"{run_id}.json"),
+            obs=obs,
             error=error,
             started_at=started,
             finished_at=finished,
+            extras=extras,
         )
-        # Degraded if adapters failed but pipeline succeeded.
-        langsmith = temp_envelope.obs.langsmith
-        phoenix = temp_envelope.obs.phoenix
-        if status == "success" and (langsmith == "failed" or phoenix == "failed"):
-            status = "degraded"
-            temp_envelope = temp_envelope.model_copy(update={"status": status})
 
         path = write_local_envelope(temp_envelope, self.settings.artifacts_dir)
         final = temp_envelope.model_copy(

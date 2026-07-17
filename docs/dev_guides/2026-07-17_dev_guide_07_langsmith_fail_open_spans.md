@@ -3,8 +3,8 @@
 **Date:** 2026-07-17  
 **Repo:** `alphaguard`  
 **Work item:** Guide 07 — replace LangSmith envelope status theater with real fail-open span emit  
-**Stage that authored this:** Write-dev-guide (pass 123)  
-**Status:** Ready-check Met — **READY 9.0/10** (`docs/2026-07-17_guide07_ready_check_before_implement.md`); await Authorize Implement (no code yet)
+**Stage that authored this:** Write-dev-guide (pass 123); Ready-check (pass 123/124); Implement (pass 125)  
+**Status:** **Implement Met** (pass 125) — Ready-check was READY 9.0/10; Review next (do not self-start)
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_post_guide06_next_slice_inventory_context_summary.md`  
 **Hub lock:** `second_brain/docs/2026-07-17_hub_fanin_ag_gather_authorize_write_pass123.md`  
@@ -102,51 +102,51 @@ Close the LLMOps honesty gap: today `best_effort_adapters` sets `obs.langsmith=o
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] `best_effort_adapters` / LangSmith path emits real Client run/span when configured — not key-presence theater  
-- [ ] Tracing off / no key → `skipped`; default smoke green without LangSmith  
-- [ ] SDK/network failure → `failed`; pipeline decision unchanged; may `degraded` if already success  
-- [ ] `extras["langsmith_run_id"]` set when `ok`  
-- [ ] Unit tests with mocks (success / failure / skipped) — default CI never hits LangSmith  
-- [ ] Phoenix remains stub (no real Phoenix spans); docs say so  
-- [ ] Same-delivery VISION / ARCHITECTURE §13 / README / GETTING_STARTED / INTERVIEW / AGENTS honesty  
-- [ ] No MV walkthrough / daily-prep checkbox invent  
-- [ ] No secrets committed  
+- [x] `best_effort_adapters` / LangSmith path emits real Client run/span when configured — not key-presence theater  
+- [x] Tracing off / no key → `skipped`; default smoke green without LangSmith  
+- [x] SDK/network failure → `failed`; pipeline decision unchanged; may `degraded` if already success  
+- [x] `extras["langsmith_run_id"]` set when `ok`  
+- [x] Unit tests with mocks (success / failure / skipped) — default CI never hits LangSmith  
+- [x] Phoenix remains stub (no real Phoenix spans); docs say so  
+- [x] Same-delivery VISION / ARCHITECTURE §13 / README / GETTING_STARTED / INTERVIEW / AGENTS honesty  
+- [x] No MV walkthrough / daily-prep checkbox invent  
+- [x] No secrets committed  
 
 ---
 
 ## Ordered step checklist
 
-All boxes start unchecked. Implement checks them with evidence. **Do not check boxes in Write / Ready-check.**
+Implement evidence: `tests/test_langsmith_obs.py`; `uv run pytest -q` → 98 passed, 5 deselected; `make smoke` → `obs.langsmith=skipped`. Soft Adjust: `create_run(name, inputs, run_type, id=..., project_name=..., start_time=...)` then `update_run` (langsmith>=0.10).
 
 ### Phase A — Adapter module + injectability
 
-- [ ] **A1.** Add `langsmith` dependency; `uv sync`.  
-- [ ] **A2.** Create `src/alphaguard/obs/langsmith_adapter.py`: `emit_pipeline_run(...)` → `(AdapterStatus, run_id | None)` using Client create/update soft pins; catch-all fail-open.  
-- [ ] **A3.** Refactor `best_effort_adapters` / `build_obs_status` to accept run context (`run_id`, `event_id`, `ticker`, `mode`, `rag_mode`, `status`, optional proposal/decision summaries) and call the adapter.  
-- [ ] **A4.** Update `PipelineService.run` to pass context into `build_obs_status` (after pipeline outcome known). Preserve degraded-on-`failed` behavior.  
-- [ ] **A5.** On `ok`, set `extras["langsmith_run_id"]` before final envelope write.
+- [x] **A1.** Add `langsmith` dependency; `uv sync`.  
+- [x] **A2.** Create `src/alphaguard/obs/langsmith_adapter.py`: `emit_pipeline_run(...)` → `(AdapterStatus, run_id | None)` using Client create/update soft pins; catch-all fail-open.  
+- [x] **A3.** Refactor `best_effort_adapters` / `build_obs_status` to accept run context (`run_id`, `event_id`, `ticker`, `mode`, `rag_mode`, `status`, optional proposal/decision summaries) and call the adapter.  
+- [x] **A4.** Update `PipelineService.run` to pass context into `build_obs_status` (after pipeline outcome known). Preserve degraded-on-`failed` behavior.  
+- [x] **A5.** On `ok`, set `extras["langsmith_run_id"]` before final envelope write.
 
 ### Phase B — Tests
 
-- [ ] **B1.** Unit: tracing off → `skipped`, no client call.  
-- [ ] **B2.** Unit: mock client success → `ok` + `langsmith_run_id` present.  
-- [ ] **B3.** Unit: mock client raises → `failed`; helper used by pipeline does not raise.  
-- [ ] **B4.** Optional: register `langsmith_live` marker; exclude in `addopts`; one skip-by-default live test.  
-- [ ] **B5.** Confirm default `uv run pytest -q` never needs LangSmith network/key.
+- [x] **B1.** Unit: tracing off → `skipped`, no client call.  
+- [x] **B2.** Unit: mock client success → `ok` + `langsmith_run_id` present.  
+- [x] **B3.** Unit: mock client raises → `failed`; helper used by pipeline does not raise.  
+- [x] **B4.** Optional: register `langsmith_live` marker; exclude in `addopts`; one skip-by-default live test.  
+- [x] **B5.** Confirm default `uv run pytest -q` never needs LangSmith network/key.
 
 ### Phase C — Docs honesty + stop
 
-- [ ] **C1.** ARCHITECTURE §13: LangSmith = real spans when configured; Phoenix still stub; local envelope mandatory. Fix stale “screenshots not present” if Guide 02 assets exist (honesty Align-in-guide).  
-- [ ] **C2.** VISION: note Guide 07 thin LangSmith spans; keep “stubs” language only where still true (Phoenix); **do not** check MV walkthrough/daily-prep.  
-- [ ] **C3.** README / GETTING_STARTED / INTERVIEW / AGENTS: reverse “status stubs only” for LangSmith; keep smoke-without-key; no fabricated UI shots.  
-- [ ] **C4.** `.env.example` comment: tracing+key enables real emit; empty = skipped.  
-- [ ] **C5.** Grep stale “key presence” / “stubs only” contradictions for LangSmith; fix.  
-- [ ] **C6.** Stop. No Phoenix real spans, agent-on-consume, Optuna, MV ticks, smoke flip.
+- [x] **C1.** ARCHITECTURE §13: LangSmith = real spans when configured; Phoenix still stub; local envelope mandatory. Fix stale “screenshots not present” if Guide 02 assets exist (honesty Align-in-guide).  
+- [x] **C2.** VISION: note Guide 07 thin LangSmith spans; keep “stubs” language only where still true (Phoenix); **do not** check MV walkthrough/daily-prep.  
+- [x] **C3.** README / GETTING_STARTED / INTERVIEW / AGENTS: reverse “status stubs only” for LangSmith; keep smoke-without-key; no fabricated UI shots.  
+- [x] **C4.** `.env.example` comment: tracing+key enables real emit; empty = skipped.  
+- [x] **C5.** Grep stale “key presence” / “stubs only” contradictions for LangSmith; fix.  
+- [x] **C6.** Stop. No Phoenix real spans, agent-on-consume, Optuna, MV ticks, smoke flip.
 
 ### Phase D — Verification
 
-- [ ] **D1.** `uv run pytest -q` green (incl. new obs unit tests).  
-- [ ] **D2.** `make smoke` green with default env (LangSmith skipped).  
+- [x] **D1.** `uv run pytest -q` green (incl. new obs unit tests).  
+- [x] **D2.** `make smoke` green with default env (LangSmith skipped).  
 - [ ] **D3.** Optional operator: with real key, one smoke/replay shows `obs.langsmith=ok` + `langsmith_run_id` — residual if unavailable; not DoD blocker if mocks green.
 
 ---
@@ -227,14 +227,7 @@ make smoke
 
 ## Honest readiness
 
-- **Write-dev-guide DoD:** Met.  
-- **Ready-check:** Met — **READY 9.0/10** — see `docs/2026-07-17_guide07_ready_check_before_implement.md`.  
-- **Next stage:** Implement after hub/human authorize — **not started** (no LangSmith SDK wiring yet).
-
-## QUALITY self-check (§5)
-
-- [x] Executable steps + DoD + verification commands  
-- [x] Edge cases + blast radius explicit  
-- [x] Locks mirrored (LangSmith only; Phoenix stub; fixture smoke; MV human-only)  
-- [x] No implementation in this stage  
-- [x] Docs honesty + fail-open called out  
+- **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
+- **Implement DoD:** **Met** — mocked emit proven; default smoke `obs.langsmith=skipped`; fail-open degraded path tested; docs honesty same delivery; Phoenix stub; MV boxes untouched.  
+- **Residual (non-blocking):** D3 live LangSmith operator probe (no key this pass).  
+- **Next stage:** Review implementation (hub) — **do not self-start**. 

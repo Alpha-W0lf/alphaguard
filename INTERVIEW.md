@@ -57,7 +57,7 @@ Default `OLLAMA_MODEL=gemma4:e2b` needs a current Ollama (Gemma 4 can **412** on
 
 ## 11. Are LangSmith/Phoenix “wired,” and what is the real LLMOps baseline?
 
-Local run summary under `artifacts/runs/*.json` is **mandatory and real**. Envelope `obs.langsmith` / `obs.phoenix` are **status stubs** (`skipped`/`failed`/`ok` when configured) — not proof of SDK spans. Until H2 is reversed + an obs guide, **local-envelope screenshots fulfill packaging** — do not invent LangSmith UI.
+Local run summary under `artifacts/runs/*.json` is **mandatory and real**. **Guide 07:** when tracing + API key are configured, LangSmith emits a real Client run (`ok` only after emit; `extras.langsmith_run_id` on success). Default smoke has tracing off → `skipped` (no key required). Phoenix remains a **status stub** (`ok|skipped|failed` from config) — not real Phoenix spans. Local-envelope screenshots fulfill packaging; do not invent LangSmith UI.
 
 ## 12. Why can the same event show `BUY` or `HOLD` across smokes?
 

@@ -136,7 +136,7 @@ flowchart LR
 | `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **05a builder + 05b train landed** (`train_option_b_gate.py` → `model_bundle_option_b/`); fixture bundle remains default smoke | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
-| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LS/Phoenix = **status stubs** (no SDK spans yet) | Host |
+| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **status stub** (no real spans yet) | Host |
 | `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
 | `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Builder + train paths ready** (`data/derived/`); committed parquet/bundle **not** required | Local / CI |
@@ -470,9 +470,10 @@ CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 ## 13. Observability
 
 - **Mandatory baseline:** local run summary / error envelope (§7.7) — **implemented** (`obs/summary.py` → `artifacts/runs/`).  
-- **Best-effort adapters (honesty):** LangSmith / Phoenix fields on the envelope are **status stubs** today (`ok|skipped|failed` from config flags). They do **not** yet emit real SDK spans. Treat “LLMOps adapters wired” as **contract-shaped**, not “tracing proven.”  
-- Telemetry failure **must not** change a valid approve/reject outcome.  
-- Required portfolio artifacts: checked-in screenshots under `docs/assets/` (or similar) from a successful replay — **not present yet** (debt before portfolio claim).  
+- **LangSmith (Guide 07):** when `LANGSMITH_TRACING=true` and a non-empty `LANGSMITH_API_KEY` are set, `obs/langsmith_adapter.py` emits a real Client run (`create_run` / `update_run`). `obs.langsmith=ok` **only after** emit succeeds; otherwise `skipped` (off/empty key) or `failed` (SDK/network). Successful emit stores `extras.langsmith_run_id`. Default smoke/CI never requires a key (`skipped`).  
+- **Phoenix:** remains a **status stub** (`ok|skipped|failed` from `PHOENIX_ENABLED`) — **no** real Phoenix spans yet. Docs must not claim dual-backend trace maturity.  
+- Telemetry failure **must not** change a valid approve/reject outcome (fail-open; success + adapter `failed` → envelope `degraded`).  
+- Required portfolio artifacts: checked-in **local-envelope** screenshots under `docs/assets/` (Guide 02) — **present**. LangSmith UI screenshots are optional and **not** required for Guide 07 DoD.  
 - No Loom. No required hosted demo URL.
 
 ---
