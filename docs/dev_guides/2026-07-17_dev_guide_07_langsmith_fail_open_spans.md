@@ -3,8 +3,8 @@
 **Date:** 2026-07-17  
 **Repo:** `alphaguard`  
 **Work item:** Guide 07 — replace LangSmith envelope status theater with real fail-open span emit  
-**Stage that authored this:** Write-dev-guide (pass 123); Ready-check (pass 123/124); Implement (pass 125)  
-**Status:** **Implement Met** (pass 125) — Ready-check was READY 9.0/10; Review next (do not self-start)
+**Stage that authored this:** Write-dev-guide (pass 123); Ready-check (pass 123/124); Implement (pass 125); Review (pass 126)  
+**Status:** **Review shippable** (pass 126) — Implement Met `287a82a`; no must-fix; Align next (hub)
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_post_guide06_next_slice_inventory_context_summary.md`  
 **Hub lock:** `second_brain/docs/2026-07-17_hub_fanin_ag_gather_authorize_write_pass123.md`  
@@ -228,6 +228,7 @@ make smoke
 ## Honest readiness
 
 - **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
-- **Implement DoD:** **Met** — mocked emit proven; default smoke `obs.langsmith=skipped`; fail-open degraded path tested; docs honesty same delivery; Phoenix stub; MV boxes untouched.  
-- **Residual (non-blocking):** D3 live LangSmith operator probe (no key this pass).  
-- **Next stage:** Review implementation (hub) — **do not self-start**. 
+- **Implement DoD:** **Met** (`287a82a`).  
+- **Review:** **Shippable as-is** — see `docs/2026-07-17_guide07_langsmith_fail_open_review.md`; no must-fix.  
+- **Residual (non-blocking):** D3 live probe; optional update_run-failure unit; inventory Gather prose Align.  
+- **Next stage:** Align-docs (hub) — **do not self-start**. 

@@ -2,9 +2,9 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Implement Met (pass 125) — Guide 07 code+docs landed; Review next  
-**Mode last used:** spoke (pass 125 Implement)  
-**Stage:** Implement (complete) → Review (gated)  
+**Status:** Review shippable (pass 126) — Guide 07 no must-fix; Align next  
+**Mode last used:** spoke (pass 126 Review)  
+**Stage:** Review implementation (complete) → Align-docs (gated)  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
 **Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
 **Write handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide07_write_pass123_handoff.md`  
@@ -128,13 +128,12 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**. Do
 
 ## Honest readiness
 
-- **Write-dev-guide:** **Done**.  
-- **Ready-check:** **Met** — READY 9.0/10.  
-- **Implement:** **Met** — LangSmith real fail-open spans; Phoenix stub; fixture smoke `skipped`.  
-- **Ready for Review?** **Yes** (hub authorize).  
+- **Write-dev-guide / Ready-check / Implement:** Met.  
+- **Review:** **Shippable as-is** (`docs/2026-07-17_guide07_langsmith_fail_open_review.md`).  
+- **Ready for Align-docs?** **Yes** after hub authorize.  
 - **Will not** tick MV walkthrough / daily-prep from any agent stage.  
-- Soft-pin next: **Review implementation Guide 07**.  
-- Residual: optional live LangSmith D3 probe.
+- Soft-pin next: **Align-docs Guide 07**.  
+- Residual: optional live LangSmith D3 probe; Gather prose supersede in Align.
 
 ## QUALITY self-check (§5)
 
