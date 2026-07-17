@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Guide 07 — replace LangSmith envelope status theater with real fail-open span emit  
 **Stage that authored this:** Write-dev-guide (pass 123)  
-**Status:** **Ready for Ready-check / Implement** (no code in this Write stage)
+**Status:** Ready-check Met — **READY 9.0/10** (`docs/2026-07-17_guide07_ready_check_before_implement.md`); await Authorize Implement (no code yet)
 
 **Context SSOT:** `alphaguard/docs/2026-07-17_post_guide06_next_slice_inventory_context_summary.md`  
 **Hub lock:** `second_brain/docs/2026-07-17_hub_fanin_ag_gather_authorize_write_pass123.md`  
@@ -227,9 +227,9 @@ make smoke
 
 ## Honest readiness
 
-- **Write-dev-guide DoD:** met when this file exists with steps, soft pins, DoD, blast radius, edge cases.  
-- **Next stage:** Ready-check before code (hub pre-authorized per pass 123).  
-- **Not started:** any LangSmith SDK wiring code.
+- **Write-dev-guide DoD:** Met.  
+- **Ready-check:** Met — **READY 9.0/10** — see `docs/2026-07-17_guide07_ready_check_before_implement.md`.  
+- **Next stage:** Implement after hub/human authorize — **not started** (no LangSmith SDK wiring yet).
 
 ## QUALITY self-check (§5)
 

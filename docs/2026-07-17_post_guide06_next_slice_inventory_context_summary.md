@@ -2,9 +2,9 @@
 
 **Date:** 2026-07-17  
 **Repos:** `alphaguard`  
-**Status:** Write-dev-guide authored (pass 123) — Guide 07 locks locked; Ready-check next  
-**Mode last used:** spoke (pass 123 Write-dev-guide)  
-**Stage:** Write-dev-guide (complete) → Ready-check before code  
+**Status:** Ready-check Met (pass 123/124) — Guide 07 READY **9.0/10**; await Authorize Implement  
+**Mode last used:** spoke (pass 123 Ready-check)  
+**Stage:** Ready-check before code (complete) → Implement (gated)  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
 **Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
 **Write handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide07_write_pass123_handoff.md`  
@@ -129,10 +129,10 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**. Do
 ## Honest readiness
 
 - **Write-dev-guide:** **Done** — `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`.  
-- **Ready for Ready-check before code?** **Yes** (hub pre-authorized).  
-- **Not ready for Implement** until Ready-check Met.  
+- **Ready-check:** **Met** — `docs/2026-07-17_guide07_ready_check_before_implement.md` → **READY 9.0/10**.  
+- **Ready for Implement?** **Yes** after hub/human `Authorize Implement Guide 07`.  
 - **Will not** tick MV walkthrough / daily-prep from any agent stage.  
-- Soft-pin next: **Ready-check → Implement Guide 07**.
+- Soft-pin next: **Authorize Implement → Implement Guide 07**.
 
 ## QUALITY self-check (§5)
 
