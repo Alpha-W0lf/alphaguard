@@ -52,7 +52,7 @@ Checks replay-mode readiness (Ollama reachability / model tags per config). If t
 
 ### Where the envelope lands
 
-Successful smoke writes a local run summary under **`artifacts/runs/<run_id>.json`** (gitignored). That file is the **mandatory LLMOps baseline**. With default env, `obs.langsmith=skipped` (smoke never needs a LangSmith key). When `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` are set, Guide 07 emits a real LangSmith Client run and may set `extras.langsmith_run_id`. Phoenix remains a **status stub** (no real Phoenix spans yet). Do not invent LangSmith UI screenshots.
+Successful smoke writes a local run summary under **`artifacts/runs/<run_id>.json`** (gitignored). That file is the **mandatory LLMOps baseline**. With default env, `obs.langsmith=skipped` and `obs.phoenix=skipped` (smoke never needs a LangSmith key or Phoenix collector). When `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` are set, Guide 07 emits a real LangSmith Client run and may set `extras.langsmith_run_id`. When `PHOENIX_ENABLED=true`, Guide 08 emits a real Phoenix/OTEL chain span and may set `extras.phoenix_span_id`. Do not invent LangSmith/Phoenix UI screenshots.
 
 ### macOS `libomp`
 

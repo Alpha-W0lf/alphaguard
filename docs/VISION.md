@@ -2,7 +2,7 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice **build** path landed (guides 01–07): Option B **lab train**, thin live RSS, LangSmith real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured (Phoenix still stub); default smoke still Kafka-down **fixture** (never requires LangSmith key).
+**Status:** Vertical slice **build** path landed (guides 01–08): Option B **lab train**, thin live RSS, LangSmith + Phoenix real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector).
 
 **Last Updated:** July 18, 2026 (Align pass 136: walkthrough + daily hand-coding → **Interview prep**, not build MV)
 
@@ -121,7 +121,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model / not v1 Done |
 | Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume / not v1 Done |
-| Portfolio-ready interview lab | **Build MV Met; interview prep separate** | Guides 01–07 built; walkthrough / daily hand-coding = **Interview prep** below — not build % |
+| Portfolio-ready interview lab | **Build MV Met; interview prep separate** | Guides 01–08 built; walkthrough / daily hand-coding = **Interview prep** below — not build % |
 
 README / AGENTS keep saying **vertical slice** / **not a production risk model** — build MV Met does **not** mean eval-complete or interview fluency proven.
 
@@ -134,7 +134,7 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 - [x] `docker compose up` runs Kafka + Qdrant locally *(operator path documented in README; smoke still Kafka-down)*
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
-- [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07: LangSmith = real fail-open spans when tracing+key; Phoenix = status stub; default smoke has LangSmith `skipped`)*
+- [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07–08: LangSmith = real fail-open spans when tracing+key; Phoenix = real fail-open spans when `PHOENIX_ENABLED`; default smoke has both `skipped`)*
 - [x] Public GitHub polish with architecture diagram, stack table, and limitations section *(README mermaid + Stack + Limitations + `docs/assets/`; Guide 02)*
 - [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
 

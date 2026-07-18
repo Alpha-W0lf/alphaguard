@@ -3,15 +3,13 @@
 from __future__ import annotations
 
 import json
-import logging
 from pathlib import Path
 from typing import Any
 
 from alphaguard.config import Settings
 from alphaguard.contracts.envelope import AdapterStatus, ObsStatus, PipelineRunEnvelope
 from alphaguard.obs.langsmith_adapter import ClientFactory, emit_pipeline_run
-
-logger = logging.getLogger(__name__)
+from alphaguard.obs.phoenix_adapter import TracerFactory, emit_pipeline_span
 
 
 def write_local_envelope(envelope: PipelineRunEnvelope, artifacts_dir: Path) -> Path:
@@ -36,8 +34,9 @@ def best_effort_adapters(
     status: str,
     outputs: dict[str, Any] | None = None,
     client_factory: ClientFactory | None = None,
-) -> tuple[AdapterStatus, AdapterStatus, str | None]:
-    """LangSmith real emit when configured; Phoenix remains a status stub."""
+    tracer_factory: TracerFactory | None = None,
+) -> tuple[AdapterStatus, AdapterStatus, str | None, str | None]:
+    """LangSmith + Phoenix real emit when configured; else skipped/failed fail-open."""
     langsmith, langsmith_run_id = emit_pipeline_run(
         settings,
         run_id=run_id,
@@ -49,19 +48,18 @@ def best_effort_adapters(
         outputs=outputs,
         client_factory=client_factory,
     )
-
-    phoenix: AdapterStatus = "skipped"
-    if settings.phoenix_enabled:
-        try:
-            # Stub: no real Phoenix spans in Guide 07 — status only.
-            phoenix = "ok"
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("phoenix adapter failed open: %s", exc)
-            phoenix = "failed"
-    else:
-        phoenix = "skipped"
-
-    return langsmith, phoenix, langsmith_run_id
+    phoenix, phoenix_span_id = emit_pipeline_span(
+        settings,
+        run_id=run_id,
+        event_id=event_id,
+        ticker=ticker,
+        mode=mode,
+        rag_mode=rag_mode,
+        status=status,
+        outputs=outputs,
+        tracer_factory=tracer_factory,
+    )
+    return langsmith, phoenix, langsmith_run_id, phoenix_span_id
 
 
 def build_obs_status(
@@ -76,8 +74,9 @@ def build_obs_status(
     status: str,
     outputs: dict[str, Any] | None = None,
     client_factory: ClientFactory | None = None,
-) -> tuple[ObsStatus, str | None]:
-    langsmith, phoenix, langsmith_run_id = best_effort_adapters(
+    tracer_factory: TracerFactory | None = None,
+) -> tuple[ObsStatus, str | None, str | None]:
+    langsmith, phoenix, langsmith_run_id, phoenix_span_id = best_effort_adapters(
         settings,
         run_id=run_id,
         event_id=event_id,
@@ -87,6 +86,7 @@ def build_obs_status(
         status=status,
         outputs=outputs,
         client_factory=client_factory,
+        tracer_factory=tracer_factory,
     )
     return (
         ObsStatus(
@@ -95,4 +95,5 @@ def build_obs_status(
             phoenix=phoenix,
         ),
         langsmith_run_id,
+        phoenix_span_id,
     )

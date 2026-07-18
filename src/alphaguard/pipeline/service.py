@@ -109,7 +109,7 @@ class PipelineService:
         if decision is not None:
             outputs["decision"] = decision.decision
 
-        obs, langsmith_run_id = build_obs_status(
+        obs, langsmith_run_id, phoenix_span_id = build_obs_status(
             self.settings,
             self.settings.artifacts_dir / "runs" / f"{run_id}.json",
             run_id=run_id,
@@ -123,6 +123,8 @@ class PipelineService:
         extras: dict[str, object] = {}
         if langsmith_run_id:
             extras["langsmith_run_id"] = langsmith_run_id
+        if phoenix_span_id:
+            extras["phoenix_span_id"] = phoenix_span_id
 
         # Degraded if adapters failed but pipeline succeeded.
         if status == "success" and (obs.langsmith == "failed" or obs.phoenix == "failed"):

@@ -107,7 +107,7 @@ def test_emit_failed_when_client_raises() -> None:
 def test_build_obs_status_sets_run_id_on_ok() -> None:
     client = MagicMock()
     factory = MagicMock(return_value=client)
-    obs, ls_id = build_obs_status(
+    obs, ls_id, _phoenix_id = build_obs_status(
         _settings(langsmith_tracing=True, langsmith_api_key="fake-key"),
         ROOT / "artifacts" / "runs" / "run-test-001.json",
         client_factory=factory,

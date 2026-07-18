@@ -49,7 +49,7 @@ flowchart LR
   A1 --> A2[Agent 2 XGBoost gate]
   A2 --> LOCAL[Local run summary]
   LOCAL -.-> LS[LangSmith real spans when configured]
-  LOCAL -.-> PX[Phoenix status stub]
+  LOCAL -.-> PX[Phoenix real spans when enabled]
   QDR[Qdrant optional] -.-> HITS
   KFK[Kafka news.raw] -.-> CONS[Consumer ingest_event]
   CONS -.-> QDR
@@ -65,13 +65,13 @@ flowchart LR
 | Agent 2 | XGBoost downside-risk scorer + deterministic approve/reject policy |
 | RAG (smoke default) | Fixture `RetrievalHit`s (`ALPHAGUARD_RAG_MODE=fixture`) |
 | Infra | Compose Kafka + Qdrant — **optional for smoke** |
-| LLMOps | **Local run envelope mandatory**; LangSmith real fail-open spans when configured (Guide 07); Phoenix **status stub** |
+| LLMOps | **Local run envelope mandatory**; LangSmith real fail-open spans when configured (Guide 07); Phoenix real fail-open spans when `PHOENIX_ENABLED` (Guide 08) |
 
 Locked stack detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2 · product framing: [`docs/VISION.md`](docs/VISION.md).
 
 ## Evidence screenshots
 
-Local envelope fulfills packaging — **not** fabricated LangSmith UI. With default env, `obs.langsmith=skipped`.
+Local envelope fulfills packaging — **not** fabricated LangSmith/Phoenix UI. With default env, `obs.langsmith=skipped` and `obs.phoenix=skipped`.
 
 ![Terminal smoke (Kafka down; paths redacted)](docs/assets/smoke_terminal.png)
 
@@ -99,5 +99,5 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
   `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b make smoke`
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
 - Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
-- LangSmith (Guide 07): real fail-open Client spans when `LANGSMITH_TRACING` + key; Phoenix remains a **status stub**; default smoke never requires a LangSmith key (`skipped`)
+- LangSmith (Guide 07): real fail-open Client spans when `LANGSMITH_TRACING` + key; Phoenix (Guide 08): real fail-open OTEL chain spans when `PHOENIX_ENABLED`; default smoke never requires LangSmith key or Phoenix collector (`skipped`)
 - Still a **vertical slice** / **not** a production risk model — build MV Met ≠ eval-complete or interview fluency proven

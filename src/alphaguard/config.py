@@ -32,6 +32,9 @@ class Settings(BaseSettings):
     langsmith_api_key: str | None = None
     langsmith_project: str = "alphaguard"
     phoenix_enabled: bool = False
+    # Optional overrides (attempt gate remains phoenix_enabled alone — Guide 08 lock A)
+    phoenix_collector_endpoint: str | None = None
+    phoenix_project_name: str = "alphaguard"
 
     fixtures_dir: Path = Field(default=RepoRoot / "data" / "fixtures")
     artifacts_dir: Path = Field(default=RepoRoot / "artifacts")

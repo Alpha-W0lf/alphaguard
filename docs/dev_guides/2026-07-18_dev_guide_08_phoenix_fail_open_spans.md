@@ -3,8 +3,8 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Guide 08 — replace Phoenix envelope status theater with real fail-open OTEL span emit  
-**Stage that authored this:** Write-dev-guide (pass 152)  
-**Status:** **Draft / Write Met** — ready for Refine-dev-guide or Ready-check; **no Implement yet**
+**Stage that authored this:** Write-dev-guide (pass 152); Ready-check (9.0); Implement (pass 152)  
+**Status:** **Implement Met** — ready for Review; Soft Adjust: keyword-only `register`, `set_global_tracer_provider=False`, `force_flush` before `ok`
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_guide08_phoenix_fail_open_spans_context_summary.md`  
 **Hub:** `second_brain/docs/2026-07-18_prioritize_hub_pass152.md`  
@@ -120,55 +120,55 @@ For live probe / optional operator path, document default HTTP traces endpoint:
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] `best_effort_adapters` / Phoenix path emits a real OTEL/OpenInference chain span when `PHOENIX_ENABLED=true` — not flag-presence theater  
-- [ ] Phoenix off → `skipped`; default smoke green without Phoenix collector  
-- [ ] SDK/network/collector/flush failure → `failed`; pipeline decision unchanged; may `degraded` if already success  
-- [ ] `extras["phoenix_span_id"]` set when `ok`  
-- [ ] Unit tests with mocks (success / failure / skipped) — default CI never hits Phoenix  
-- [ ] Optional `phoenix_live` marker excluded by default  
-- [ ] LangSmith Guide 07 behavior unchanged  
-- [ ] Same-delivery VISION / ARCHITECTURE §13 / README / GETTING_STARTED / INTERVIEW / AGENTS / `.env.example` honesty (reverse Phoenix “status stub” where no longer true)  
-- [ ] No Interview-prep VISION checkbox invent  
-- [ ] No secrets committed  
+- [x] `best_effort_adapters` / Phoenix path emits a real OTEL/OpenInference chain span when `PHOENIX_ENABLED=true` — not flag-presence theater  
+- [x] Phoenix off → `skipped`; default smoke green without Phoenix collector  
+- [x] SDK/network/collector/flush failure → `failed`; pipeline decision unchanged; may `degraded` if already success  
+- [x] `extras["phoenix_span_id"]` set when `ok`  
+- [x] Unit tests with mocks (success / failure / skipped) — default CI never hits Phoenix  
+- [x] Optional `phoenix_live` marker excluded by default  
+- [x] LangSmith Guide 07 behavior unchanged  
+- [x] Same-delivery VISION / ARCHITECTURE §13 / README / GETTING_STARTED / INTERVIEW / AGENTS / `.env.example` honesty (reverse Phoenix “status stub” where no longer true)  
+- [x] No Interview-prep VISION checkbox invent  
+- [x] No secrets committed  
 
 ---
 
 ## Ordered step checklist
 
-Implement fills evidence after Ready-check. Soft Adjust allowed only within locked emit surface.
+Implement evidence: `tests/test_phoenix_obs.py`; Soft Adjust (`arize-phoenix-otel==0.16.1`): keyword-only `register(..., set_global_tracer_provider=False, verbose=False)`; `openinference_span_kind="chain"`; `force_flush` before `ok`. `uv run pytest -q` → 105 passed, 6 deselected; `make smoke` → `obs.phoenix=skipped`.
 
 ### Phase A — Adapter module + injectability
 
-- [ ] **A1.** Add `arize-phoenix-otel` dependency; `uv sync`.  
-- [ ] **A2.** Create `src/alphaguard/obs/phoenix_adapter.py`: `emit_pipeline_span(...)` → `(AdapterStatus, span_id | None)` using register + one chain span + `force_flush`; catch-all fail-open.  
-- [ ] **A3.** Extend Settings if needed: optional `phoenix_collector_endpoint`, `phoenix_project_name` (defaults documented); keep `phoenix_enabled` as sole attempt gate.  
-- [ ] **A4.** Refactor `best_effort_adapters` / `build_obs_status` to call Phoenix adapter (pass same run context as LangSmith). Return phoenix status + span id alongside LangSmith.  
-- [ ] **A5.** Update `PipelineService.run` to set `extras["phoenix_span_id"]` when `ok`. Preserve degraded-on-`failed` for either adapter.  
-- [ ] **A6.** Prefer ≤300 lines/file; do not grow `summary.py` into a second orchestrator.
+- [x] **A1.** Add `arize-phoenix-otel` dependency; `uv sync`.  
+- [x] **A2.** Create `src/alphaguard/obs/phoenix_adapter.py`: `emit_pipeline_span(...)` → `(AdapterStatus, span_id | None)` using register + one chain span + `force_flush`; catch-all fail-open.  
+- [x] **A3.** Extend Settings if needed: optional `phoenix_collector_endpoint`, `phoenix_project_name` (defaults documented); keep `phoenix_enabled` as sole attempt gate.  
+- [x] **A4.** Refactor `best_effort_adapters` / `build_obs_status` to call Phoenix adapter (pass same run context as LangSmith). Return phoenix status + span id alongside LangSmith.  
+- [x] **A5.** Update `PipelineService.run` to set `extras["phoenix_span_id"]` when `ok`. Preserve degraded-on-`failed` for either adapter.  
+- [x] **A6.** Prefer ≤300 lines/file; do not grow `summary.py` into a second orchestrator.
 
 ### Phase B — Tests
 
-- [ ] **B1.** Unit: `phoenix_enabled=False` → `skipped`, no register/tracer call.  
-- [ ] **B2.** Unit: mock tracer/provider success → `ok` + `phoenix_span_id` present.  
-- [ ] **B3.** Unit: mock raises / flush fails → `failed`; pipeline helper does not raise.  
-- [ ] **B4.** Pipeline integration-style (mirror LangSmith): success + phoenix failed → `degraded`, decision unchanged.  
-- [ ] **B5.** Register `phoenix_live` marker; exclude in `addopts`; one skip-by-default live test.  
-- [ ] **B6.** Confirm default `uv run pytest -q` never needs Phoenix network/collector.  
-- [ ] **B7.** Confirm existing LangSmith unit tests still green (no regress).
+- [x] **B1.** Unit: `phoenix_enabled=False` → `skipped`, no register/tracer call.  
+- [x] **B2.** Unit: mock tracer/provider success → `ok` + `phoenix_span_id` present.  
+- [x] **B3.** Unit: mock raises / flush fails → `failed`; pipeline helper does not raise.  
+- [x] **B4.** Pipeline integration-style (mirror LangSmith): success + phoenix failed → `degraded`, decision unchanged.  
+- [x] **B5.** Register `phoenix_live` marker; exclude in `addopts`; one skip-by-default live test.  
+- [x] **B6.** Confirm default `uv run pytest -q` never needs Phoenix network/collector.  
+- [x] **B7.** Confirm existing LangSmith unit tests still green (no regress).
 
 ### Phase C — Docs honesty + stop
 
-- [ ] **C1.** ARCHITECTURE §7.8 / §13: Phoenix = real fail-open spans when enabled; local envelope mandatory; LangSmith unchanged.  
-- [ ] **C2.** VISION: note Guide 08 thin Phoenix spans; remove “Phoenix still stub” where false; **do not** check Interview-prep boxes.  
-- [ ] **C3.** README / GETTING_STARTED / INTERVIEW / AGENTS: reverse Phoenix “status stub”; keep smoke-without-Phoenix; no fabricated UI shots.  
-- [ ] **C4.** `.env.example`: `PHOENIX_ENABLED=true` enables real emit; optional collector/project; default smoke false.  
-- [ ] **C5.** Grep stale “Phoenix stub” / “status stub” / “no real Phoenix spans” contradictions; fix.  
-- [ ] **C6.** Stop. No auto-instrument, agent-on-consume, Optuna, Interview-prep ticks, smoke flip.
+- [x] **C1.** ARCHITECTURE §7.8 / §13: Phoenix = real fail-open spans when enabled; local envelope mandatory; LangSmith unchanged.  
+- [x] **C2.** VISION: note Guide 08 thin Phoenix spans; remove “Phoenix still stub” where false; **do not** check Interview-prep boxes.  
+- [x] **C3.** README / GETTING_STARTED / INTERVIEW / AGENTS: reverse Phoenix “status stub”; keep smoke-without-Phoenix; no fabricated UI shots.  
+- [x] **C4.** `.env.example`: `PHOENIX_ENABLED=true` enables real emit; optional collector/project; default smoke false.  
+- [x] **C5.** Grep stale “Phoenix stub” / “status stub” / “no real Phoenix spans” contradictions; fix.  
+- [x] **C6.** Stop. No auto-instrument, agent-on-consume, Optuna, Interview-prep ticks, smoke flip.
 
 ### Phase D — Verification
 
-- [ ] **D1.** `uv run pytest -q` green (incl. new Phoenix obs unit tests; LangSmith tests still pass).  
-- [ ] **D2.** `make smoke` green with default env (Phoenix skipped).  
+- [x] **D1.** `uv run pytest -q` green (incl. new Phoenix obs unit tests; LangSmith tests still pass).  
+- [x] **D2.** `make smoke` green with default env (Phoenix skipped).  
 - [ ] **D3.** Optional operator: Phoenix UI/collector up + `PHOENIX_ENABLED=true` → one smoke/replay shows `obs.phoenix=ok` + `phoenix_span_id` — residual if unavailable; not DoD blocker if mocks green.
 
 ---
@@ -261,10 +261,9 @@ make smoke
 
 ## Honest readiness
 
-- **Write-dev-guide:** Met this pass — executable guide with Tom locks A/A/A frozen as soft pins.  
-- **Ready for Refine-dev-guide?** Optional — pins are locked; Refine only if human wants prose/DoD polish.  
-- **Ready for Ready-check before code?** Yes — after this Write (or short Refine).  
-- **Not ready for Implement** until Ready-check says go.  
+- **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
+- **Implement DoD:** **Met** this pass — mocks + smoke; D3 live probe residual.  
+- **Next:** Review implementation → Align-docs.  
 - **Will not** tick Interview-prep VISION boxes from any agent stage.
 
 ## QUALITY self-check (§5)

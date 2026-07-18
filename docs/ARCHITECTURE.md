@@ -34,7 +34,7 @@ It is **not** a trading system, brokerage connector, Lowd Capital surrogate, or 
 | Orchestration | LangGraph |
 | Local LLM | Host **Ollama**; default `gemma4:e2b`; fallback `qwen3.5:4b` via `OLLAMA_MODEL` |
 | Embeddings | Local `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) — separate from agent LLM |
-| LLMOps | **LangSmith free default** (Guide 07: real fail-open spans when configured) + **Phoenix local fallback (status stub today)**; **local run summary always required** |
+| LLMOps | **LangSmith free default** (Guide 07: real fail-open spans when configured) + **Phoenix local fallback** (Guide 08: real fail-open OTEL chain span when `PHOENIX_ENABLED`); **local run summary always required** |
 | API | FastAPI (thin trigger / replay) |
 | Agent 2 | **XGBoost** downside-risk scorer + scikit-learn; deterministic approve/reject policy |
 | Sentiment features | **FinBERT batch offline only** (not concurrent with Kafka+Qdrant+Ollama on 16GB) |
@@ -114,7 +114,7 @@ flowchart LR
   LS -.-> PX
 ```
 
-**Critical path for v1 credibility:** `Replay runner` → `PipelineService` → embed/upsert (or fixture `RetrievalHit`s) → Agent 1 → Agent 2 policy → local run summary (+ LangSmith real spans when configured; Phoenix status stub).  
+**Critical path for v1 credibility:** `Replay runner` → `PipelineService` → embed/upsert (or fixture `RetrievalHit`s) → Agent 1 → Agent 2 policy → local run summary (+ LangSmith/Phoenix real spans when configured).  
 **Kafka is mandatory in the architecture and Compose file; it is optional for smoke.**
 
 ---
@@ -136,7 +136,7 @@ flowchart LR
 | `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **05a builder + 05b train landed** (`train_option_b_gate.py` → `model_bundle_option_b/`); fixture bundle remains default smoke | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
-| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **status stub** (no real spans yet) | Host |
+| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **real fail-open spans** when `PHOENIX_ENABLED` (Guide 08) | Host |
 | `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
 | `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Builder + train paths ready** (`data/derived/`); committed parquet/bundle **not** required | Local / CI |
@@ -157,7 +157,7 @@ flowchart LR
 6. **Application** stamps `event_id` and `ticker` from the input event onto the proposal (LLM values for those fields are ignored or rejected if present and mismatched — see §7.2).  
 7. Build as-of features per §8; smoke prefers fixture feature columns.  
 8. Agent 2: XGBoost → `downside_risk_score` (`proba_high_risk`) → deterministic policy → `approve` / `reject`.  
-9. Persist **local run summary** (success or structured error). Emit LangSmith Client runs when configured (Guide 07); Phoenix remains status-stub; tracer failure must not flip a valid pipeline result.  
+9. Persist **local run summary** (success or structured error). Emit LangSmith Client runs when configured (Guide 07); emit Phoenix OTEL chain spans when `PHOENIX_ENABLED` (Guide 08); tracer failure must not flip a valid pipeline result.  
 10. Exit non-zero on contract failure.
 
 **Smoke must succeed with Kafka containers stopped** when `ALPHAGUARD_MODE=replay`. Qdrant may be required for the “real RAG” variant; if Qdrant is down, documented `ALPHAGUARD_RAG_MODE=fixture` still proves Agent 1→2 + local summary.
@@ -372,7 +372,7 @@ Every `PipelineService.run` writes a local artifact under `artifacts/runs/` (git
 
 Every Agent 1/2 invocation records: `run_id`, `event_id`, model/bundle tags, latency, token usage when available, validation outcome, `downside_risk_score`, gate decision, `feature_as_of`.  
 **Baseline:** local run summary (mandatory).  
-**Adapters:** LangSmith emits real Client runs when tracing+key configured (Guide 07); Phoenix remains a **status stub** until a later guide. Failures recorded in envelope; do not rewrite a valid decision.
+**Adapters:** LangSmith emits real Client runs when tracing+key configured (Guide 07); Phoenix emits a real OpenInference chain span when `PHOENIX_ENABLED` (Guide 08). Failures recorded in envelope; do not rewrite a valid decision.
 
 ---
 
@@ -471,9 +471,9 @@ CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 
 - **Mandatory baseline:** local run summary / error envelope (§7.7) — **implemented** (`obs/summary.py` → `artifacts/runs/`).  
 - **LangSmith (Guide 07):** when `LANGSMITH_TRACING=true` and a non-empty `LANGSMITH_API_KEY` are set, `obs/langsmith_adapter.py` emits a real Client run (`create_run` / `update_run`). `obs.langsmith=ok` **only after** emit succeeds; otherwise `skipped` (off/empty key) or `failed` (SDK/network). Successful emit stores `extras.langsmith_run_id`. Default smoke/CI never requires a key (`skipped`).  
-- **Phoenix:** remains a **status stub** (`ok|skipped|failed` from `PHOENIX_ENABLED`) — **no** real Phoenix spans yet. Docs must not claim dual-backend trace maturity.  
+- **Phoenix (Guide 08):** when `PHOENIX_ENABLED=true`, `obs/phoenix_adapter.py` emits one OpenInference **chain** span via `arize-phoenix-otel` (`phoenix.otel.register` + manual span + `force_flush`). `obs.phoenix=ok` **only after** emit+flush succeeds; otherwise `skipped` (off) or `failed` (SDK/network/flush). Successful emit stores `extras.phoenix_span_id`. Default smoke/CI never requires a Phoenix collector (`skipped`). Thin one-span path — not full auto-instrument / dual-backend maturity theater.  
 - Telemetry failure **must not** change a valid approve/reject outcome (fail-open; success + adapter `failed` → envelope `degraded`).  
-- Required portfolio artifacts: checked-in **local-envelope** screenshots under `docs/assets/` (Guide 02) — **present**. LangSmith UI screenshots are optional and **not** required for Guide 07 DoD.  
+- Required portfolio artifacts: checked-in **local-envelope** screenshots under `docs/assets/` (Guide 02) — **present**. LangSmith/Phoenix UI screenshots are optional and **not** required for Guide 07/08 DoD.  
 - No Loom. No required hosted demo URL.
 
 ---

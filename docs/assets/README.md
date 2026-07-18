@@ -10,7 +10,7 @@ Local-envelope evidence for the replay-first vertical slice. **Not** LangSmith/P
 ## Captions (binding honesty)
 
 1. **Local run summary** under `artifacts/runs/` is the **mandatory** LLMOps baseline.
-2. Default smoke: `obs.langsmith=skipped` (no key). Guide 07 emits real LangSmith Client runs only when tracing+key are set. Phoenix remains a **status stub** — do not invent LangSmith/Phoenix UI screenshots.
+2. Default smoke: `obs.langsmith=skipped` and `obs.phoenix=skipped`. Guide 07 emits real LangSmith Client runs only when tracing+key are set. Guide 08 emits a real Phoenix/OTEL chain span only when `PHOENIX_ENABLED=true`. Do not invent LangSmith/Phoenix UI screenshots.
 3. Agent 1 proposal may vary (`BUY` vs `HOLD`/`PASS`) across smokes; the **gate policy is deterministic** given fixed `(action, score[, vol])`.
 4. Absolute home paths (`/Users/...`) are **redacted** in committed images; prefer `artifacts/runs/<id>.json`.
 
