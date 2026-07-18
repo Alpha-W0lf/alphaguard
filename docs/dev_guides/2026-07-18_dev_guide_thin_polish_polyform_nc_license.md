@@ -4,7 +4,7 @@
 **Repo:** `alphaguard`  
 **Work item:** Thin polish — root **PolyForm Noncommercial License 1.0.0** `LICENSE` + honesty surfaces  
 **Stage that authored this:** Write-dev-guide (pass 155)  
-**Status:** **Write Met** — ready for Ready-check; **no Implement in this stage**  
+**Status:** **Ready-check Met (READY 9.2/10)** — await Implement authorize; **no Implement in Ready**  
 **Justify thin guide:** One root legal file + five honesty surfaces; Mechanic Guide 10a prior art complete; hub A/A/A locks already closed Gather open decisions.
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_thin_polish_polyform_nc_license_context_summary.md`  
@@ -227,8 +227,8 @@ Delete `LICENSE`; revert honesty doc commits.
 
 ## Honest readiness
 
-- **Write-dev-guide DoD:** **Met** this pass.  
-- **Next:** Ready-check before code (hub authorize).  
+- **Write-dev-guide DoD:** Met. **Ready-check:** **READY 9.2/10** — see `docs/2026-07-18_thin_polish_polyform_nc_ready_check.md`.  
+- **Next:** Implement stage / authorize (not this stage).  
 - **Will not** Implement LICENSE in Write/Ready.  
 - **Will not** invent agent-on-consume or feature Guide 09.
 
