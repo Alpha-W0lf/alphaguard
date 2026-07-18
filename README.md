@@ -73,6 +73,8 @@ Locked stack detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2 · produ
 
 Local envelope fulfills packaging — **not** fabricated LangSmith/Phoenix UI. With default env, `obs.langsmith=skipped` and `obs.phoenix=skipped`.
 
+GitHub Actions runs default `uv run pytest -q` on push to `main` and PRs (live markers excluded; no Ollama/smoke in CI).
+
 ![Terminal smoke (Kafka down; paths redacted)](docs/assets/smoke_terminal.png)
 
 ![Curated run envelope — local LLMOps baseline; Agent 1 may vary, gate is deterministic](docs/assets/run_envelope_curated.png)

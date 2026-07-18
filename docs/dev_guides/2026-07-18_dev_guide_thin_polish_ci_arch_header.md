@@ -3,8 +3,8 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Thin polish — ARCHITECTURE header stamp + minimal GitHub Actions `pytest`  
-**Stage that authored this:** Write-dev-guide (pass 155)  
-**Status:** **Draft / Write Met** — ready for Ready-check; **no Implement yet**  
+**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.0); Implement (pass 155)  
+**Status:** **Implement Met** — ready for Review; Soft Adjust: none required for local verify (`libgomp1` parked until first ubuntu Actions failure)
 **Justify thin guide:** Two touch surfaces (header stamp + one workflow file); no product contract changes; Gather already locked soft pins.
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_header_context_summary.md`  
@@ -117,38 +117,40 @@ jobs:
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] `ARCHITECTURE.md` Status + Last Updated reflect guides 01–08 / Guide 08 honesty (not Guide 06-only)  
-- [ ] `.github/workflows/ci.yml` present with locks A/A (uv 3.12 frozen + pytest -q; push main + PRs)  
-- [ ] Workflow does not run smoke / does not enable live markers  
-- [ ] Local `uv run pytest -q` still green after changes  
-- [ ] Optional README CI one-liner  
-- [ ] No Interview-prep VISION ticks; no Guide 09 invent; no agent-on-consume  
+- [x] `ARCHITECTURE.md` Status + Last Updated reflect guides 01–08 / Guide 08 honesty (not Guide 06-only)  
+- [x] `.github/workflows/ci.yml` present with locks A/A (uv 3.12 frozen + pytest -q; push main + PRs)  
+- [x] Workflow does not run smoke / does not enable live markers  
+- [x] Local `uv run pytest -q` still green after changes  
+- [x] Optional README CI one-liner  
+- [x] No Interview-prep VISION ticks; no Guide 09 invent; no agent-on-consume  
 
 ---
 
 ## Ordered step checklist
 
+Implement evidence: header stamp + `.github/workflows/ci.yml`; README CI line; `uv run pytest -q` green locally. Soft Adjust `libgomp1` **not** applied preemptively (only if first ubuntu CI fails).
+
 ### Phase A — ARCHITECTURE header
 
-- [ ] **A1.** Edit only header **Status** + **Last Updated** (soft wording above).  
-- [ ] **A2.** Grep header for “Guide 06” / stale Last Updated; confirm body §2/§13 unchanged unless already correct.
+- [x] **A1.** Edit only header **Status** + **Last Updated** (soft wording above).  
+- [x] **A2.** Grep header for “Guide 06” / stale Last Updated; confirm body §2/§13 unchanged unless already correct.
 
 ### Phase B — GitHub Actions
 
-- [ ] **B1.** Create `.github/workflows/ci.yml` per soft pins.  
-- [ ] **B2.** Do not add secrets, matrix, smoke, or `ALPHAGUARD_RUN_*`.  
-- [ ] **B3.** Soft Adjust only if needed: `libgomp1` apt before pytest.
+- [x] **B1.** Create `.github/workflows/ci.yml` per soft pins.  
+- [x] **B2.** Do not add secrets, matrix, smoke, or `ALPHAGUARD_RUN_*`.  
+- [ ] **B3.** Soft Adjust only if needed: `libgomp1` apt before pytest. *(parked — not needed for local verify)*
 
 ### Phase C — Docs honesty + stop
 
-- [ ] **C1.** Optional README one-liner for CI.  
-- [ ] **C2.** Grep claim “no CI” if any live operator docs say that; fix thinly.  
-- [ ] **C3.** Stop. No feature work.
+- [x] **C1.** Optional README one-liner for CI.  
+- [x] **C2.** Grep claim “no CI” if any live operator docs say that; fix thinly. *(none found)*  
+- [x] **C3.** Stop. No feature work.
 
 ### Phase D — Verification
 
-- [ ] **D1.** `uv run pytest -q` green locally.  
-- [ ] **D2.** Confirm workflow file parses (YAML present; triggers correct).  
+- [x] **D1.** `uv run pytest -q` green locally.  
+- [x] **D2.** Confirm workflow file parses (YAML present; triggers correct).  
 - [ ] **D3.** Optional: after push, confirm Actions run appears (operator residual if minutes lag — not DoD blocker if file correct).
 
 ---
@@ -219,9 +221,9 @@ uv run pytest -q
 
 ## Honest readiness
 
-- **Write-dev-guide:** Met — thin executable guide; Tom locks A/A/A frozen.  
-- **Ready for Ready-check before code?** Yes.  
-- **Not ready for Implement** until Ready-check / authorize.  
+- **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
+- **Implement DoD:** **Met** this pass — header + CI workflow + README; local pytest green; D3 Actions run residual.  
+- **Next:** Review implementation (hub authorize).  
 - **Will not** invent Guide 09 or agent-on-consume.
 
 ## QUALITY self-check (§5)

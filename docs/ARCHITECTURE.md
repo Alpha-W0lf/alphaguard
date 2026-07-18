@@ -1,8 +1,8 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guides 01–04 **implemented**; Guide **05a** dataset builder + Guide **05b** Option B **XGBoost train** landed; Guide **06** thin Yahoo RSS poll landed; default smoke still `bundle_kind=fixture`  
+**Status:** Binding contracts SSOT — guides 01–08 landed (05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-07-17 (Align Guide 06: RSS poll modules + §6.2 honesty; default smoke still fixture)  
+**Last Updated:** 2026-07-18 (CI polish + Guide 08 header stamp; default smoke still fixture)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 
