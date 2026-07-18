@@ -1,9 +1,10 @@
 # Ready check before code — AlphaGuard thin polish CI + ARCH header (pass 155)
 
-**Status:** Ready-check complete → **READY 9.0/10** — **stop; no Implement in this stage**  
+**Status:** Ready-check complete → **READY 9.0/10** — later stages: Implement Met (`9a1e48f`) · Review shippable (`9bf0c19`) · **Align Met / slice closed** (pass 155)  
 **Guide:** `alphaguard/docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md`  
 **Context:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_header_context_summary.md`  
-**Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_ready_ci_arch_polish_pass155_handoff.md`  
+**Align:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_align_docs.md`  
+**Handoff (historical Ready):** `second_brain/docs/2026-07-18_spoke_alphaguard_ready_ci_arch_polish_pass155_handoff.md`  
 **Locks:** CI **A** (uv 3.12 frozen + pytest -q) · Triggers **A** (main + PRs)  
 **Persistent spoke:** `0a88890e-8c9d-4101-b019-8754f212607d`
 

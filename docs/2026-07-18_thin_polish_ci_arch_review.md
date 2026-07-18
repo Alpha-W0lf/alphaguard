@@ -69,11 +69,19 @@ HEAD includes Implement `9a1e48f` (Review docs commit separate).
 
 ## Shippable call
 
-**Shippable as-is.** No must-fix. Soft residuals → optional first Actions confirm + Align stamp when hub authorizes. **Do not Align in this stage.**
+**Shippable as-is.** No must-fix. Soft residuals closed in Align pass 155 (first Actions green; no `libgomp1`).
+
+## Align follow-up (pass 155)
+
+| Soft finding | Align disposition |
+|--------------|-------------------|
+| First Actions confirm (D3) | **Closed** — run `29664229465` success on `9a1e48f` |
+| Guide status pending Align stamp | **Closed** — guide/context/Ready/Review/inventory/VISION/AGENTS stamped |
+| Soft Adjust `libgomp1` if red | **Not applied** — ubuntu CI green without apt |
 
 ## QUALITY §5
 
 - [x] Findings tied to guide / locks  
 - [x] Smallest fix set = none (shippable)  
 - [x] Honest shippable call  
-- [x] No unrelated refactors / no Align self-start  
+- [x] Align Soft findings closed (separate Align stage)  

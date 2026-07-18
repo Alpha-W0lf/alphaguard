@@ -1,16 +1,26 @@
 # Context: Post–Guide 06 agent-movable next-slice inventory
 
-**Date:** 2026-07-17 · **Updated:** 2026-07-18 (Align Guide 08 pass 152)  
+**Date:** 2026-07-17 · **Updated:** 2026-07-18 (Align thin polish CI + ARCH header pass 155)  
 **Repos:** `alphaguard`  
-**Status:** **Guide 08 Align Met (pass 152)** — LLMOps spans closed (LangSmith + Phoenix); docs match shipped reality  
-**Mode last used:** spoke (pass 152 Align-docs Guide 08)  
-**Stage:** Align-docs (complete) — Guide 08 closed; hub Prioritize for any next slice  
+**Status:** **Guides 01–08 Align Met** + **thin polish Align Met (pass 155)** — LLMOps spans closed; ARCHITECTURE header + minimal GHA pytest CI Met  
+**Mode last used:** spoke (pass 155 Align-docs thin polish)  
+**Stage:** Align-docs (complete) — polish closed; hub Prioritize for any next slice  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
 **Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
 **Guide 08 path:** `docs/dev_guides/2026-07-18_dev_guide_08_phoenix_fail_open_spans.md`  
+**Thin polish:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md` (Align Met)  
 **Review Guide 08:** `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
 **Implement Guide 08:** `e5aad97` · Review docs: `a60a417`  
+**Thin polish Implement:** `9a1e48f` · Review: `9bf0c19`  
 **Guide 06 closed:** Align Met pass 118 (`d795005`)
+
+## Outcome (Align pass 155 — thin polish)
+
+| Item | Reality after thin polish |
+|------|---------------------------|
+| ARCHITECTURE header | Guides **01–08**; Last Updated **2026-07-18** — Met |
+| Minimal GHA CI | `.github/workflows/ci.yml` pytest on main/PRs — Met; first run `29664229465` green (`9a1e48f`); no `libgomp1` |
+| Guide 09 / agent-on-consume | **Not** invented |
 
 ## Outcome (Align pass 152 — supersedes Guide 07 “Phoenix stub” row)
 
@@ -54,6 +64,7 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**.
 | D | Agent-on-consume | Open (large) | Needs new Prioritize / handoff |
 | E | Live-Ollama eval schema-pass rates | Open | Separate from LLMOps spans |
 | F | ARCHITECTURE screenshots drift | **Closed** in Guide 07 Implement/Align | |
+| G | ARCHITECTURE header lag + missing GHA CI | **Done** (thin polish Align Met pass 155) | `9a1e48f`; Actions `29664229465` green |
 
 ## Locked decisions
 
@@ -69,9 +80,11 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**.
 
 ## Honest readiness
 
-- **Guide 07:** Align Met. **Guide 08:** Align Met.  
+- **Guide 07:** Align Met. **Guide 08:** Align Met. **Thin polish (CI + ARCH header):** Align Met.  
 - **LLMOps honesty gap (status theater) closed** for both LangSmith and Phoenix.  
+- **Portfolio CI gap closed** (minimal pytest GHA).  
 - **Will not** tick Interview-prep boxes from any agent stage.  
+- **Will not** invent Guide 09 / agent-on-consume without hub Prioritize.  
 
 ## QUALITY self-check (§5)
 

@@ -1,23 +1,33 @@
 # Context: Thin polish — ARCHITECTURE header stamp + minimal GHA pytest CI
 
-**Date:** 2026-07-18  
+**Date:** 2026-07-18 · **Updated:** 2026-07-18 (Align thin polish pass 155)  
 **Repos:** `alphaguard`  
-**Status:** Draft (Gather Met) — ready for thin Write-dev-guide  
-**Mode last used:** spoke (Gather pass 155)  
-**Stage:** Gather context  
+**Status:** **Align Met / slice closed** — ARCHITECTURE header + minimal GHA pytest CI Met  
+**Mode last used:** spoke (Align pass 155)  
+**Stage:** Align-docs (complete)  
 **Role lens:** Senior DE / portfolio ops (CI signal) + docs honesty  
-**Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_gather_ci_arch_polish_pass155_handoff.md`  
+**Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_align_ci_arch_polish_pass155_handoff.md`  
 **Hub:** `second_brain/docs/2026-07-18_prioritize_hub_pass155.md`  
-**Quality:** `second_brain/docs/2026-07-18_portfolio_quality_assessment_pass155.md` (AG DE/ops 7/10 — **no CI workflows**; ARCHITECTURE header date lag)
+**Implement:** `9a1e48f` · Review: `9bf0c19` · Align: this pass  
+**Quality (historical Gather):** pass 155 flagged no CI + header lag — **both closed**
 
-## Problem
+## Outcome (Align pass 155 — supersedes Gather gap prose)
 
-AlphaGuard **build MV is Met** (guides 01–08 closed; Guide 08 Align `ecefe29`). Two thin honesty/portfolio gaps remain:
+| Item | Reality after thin polish |
+|------|---------------------------|
+| ARCHITECTURE header | Status guides **01–08**; Last Updated **2026-07-18** (CI polish + Guide 08 stamp) — Met |
+| GitHub Actions | `.github/workflows/ci.yml` — setup-uv 3.12 + `uv sync --frozen` + `uv run pytest -q`; push `main` + PRs — Met |
+| First ubuntu Actions | Run `29664229465` on `9a1e48f` — **success**; Soft Adjust `libgomp1` **not needed** |
+| Guide 09 / agent-on-consume | **Not** invented |
 
-1. **`docs/ARCHITECTURE.md` header lag** — body already documents Guide 07/08 LLMOps, but header still says Status through Guide **06** and **Last Updated: 2026-07-17 (Align Guide 06)**. Clone reviewers / interviewers who skim the header get a stale “how far did we ship?” signal.  
-2. **No GitHub Actions workflows** — `Glob **/.github/**/*` → **0 files**. Default `uv run pytest -q` already excludes live markers (`kafka_integration`, `rss_live`, `langsmith_live`, `phoenix_live`) and collects **105/111** tests without Ollama/Kafka/Yahoo. Pass 155 quality audit flags missing CI as the biggest DE/ops portfolio gap.
+## Problem (historical Gather — pass 155)
 
-This is **polish**, not a feature Guide 09.
+AlphaGuard **build MV is Met** (guides 01–08 closed; Guide 08 Align `ecefe29`). Two thin honesty/portfolio gaps **were**:
+
+1. **`docs/ARCHITECTURE.md` header lag** — closed at Implement `9a1e48f`.  
+2. **No GitHub Actions workflows** — closed at Implement `9a1e48f`; first Actions confirm Align pass 155.
+
+This was **polish**, not a feature Guide 09.
 
 ## Acceptance criteria
 
@@ -147,9 +157,7 @@ This is **polish**, not a feature Guide 09.
 
 ## Honest readiness
 
-- **Gather DoD:** Met.  
-- **Ready for Write-dev-guide?** **Yes** — thin guide justified (header stamp + one workflow file).  
-- **Not ready for Implement** until Write (+ Ready-check / standing authorize).  
+- **Gather → Align:** **Met** — slice closed.  
 - **Will not** invent agent-on-consume or Guide 09 features.
 
 ## QUALITY self-check (§5)

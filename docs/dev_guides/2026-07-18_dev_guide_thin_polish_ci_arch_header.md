@@ -3,8 +3,8 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Thin polish — ARCHITECTURE header stamp + minimal GitHub Actions `pytest`  
-**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.0); Implement (pass 155)  
-**Status:** **Implement Met** — ready for Review; Soft Adjust: none required for local verify (`libgomp1` parked until first ubuntu Actions failure)
+**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.0); Implement (`9a1e48f`); Review shippable (`9bf0c19`); Align (pass 155)  
+**Status:** **Aligned / slice closed** — ARCHITECTURE header through guides 01–08 Met; minimal GHA pytest CI Met (first ubuntu Actions green — Soft Adjust `libgomp1` **not applied**)
 **Justify thin guide:** Two touch surfaces (header stamp + one workflow file); no product contract changes; Gather already locked soft pins.
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_header_context_summary.md`  
@@ -221,9 +221,8 @@ uv run pytest -q
 
 ## Honest readiness
 
-- **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
-- **Implement DoD:** **Met** this pass — header + CI workflow + README; local pytest green; D3 Actions run residual.  
-- **Next:** Review implementation (hub authorize).  
+- **Write-dev-guide / Ready-check / Implement / Review / Align:** **Met** — slice closed.  
+- **D3 Actions:** Confirmed green — run `29664229465` on `9a1e48f` (no `libgomp1`).  
 - **Will not** invent Guide 09 or agent-on-consume.
 
 ## QUALITY self-check (§5)
