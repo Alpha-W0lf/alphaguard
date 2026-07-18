@@ -2,9 +2,10 @@
 
 **Date:** 2026-07-18  
 **Repos:** `alphaguard`  
-**Status:** Draft (Gather Met) — ready for thin Write-dev-guide  
-**Mode last used:** spoke (Gather pass 155)  
-**Stage:** Gather context  
+**Status:** Gather Met → **Write Met** (guide authored; Ready-check next)  
+**Mode last used:** spoke (Write pass 155)  
+**Stage:** Write-dev-guide (complete) — Ready-check next; no Implement yet  
+**Write guide:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`  
 **Role lens:** Portfolio packaging / legal honesty (source-available) — not product features  
 **Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_gather_polyform_nc_pass155_handoff.md`  
 **Prior slice:** CI + ARCH polish Align Met (`6e65e9b`)  
@@ -160,9 +161,9 @@ Delete `LICENSE`; revert honesty doc commits.
 
 ## Honest readiness
 
-- **Gather DoD:** Met.  
-- **Ready for Write-dev-guide?** **Yes** — thin guide justified (LICENSE + honesty; Mechanic prior art complete).  
-- **Not ready for Implement** until Write (+ Ready-check / authorize).  
+- **Gather DoD:** Met. **Write DoD:** Met — `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`.  
+- **Hub locks A/A/A:** PolyForm-NC · Tom Chacko 2026 · honesty set B · no PUBLIC_FLIP · Write then Ready.  
+- **Next:** Ready-check before code. **Not ready for Implement** until Ready + authorize.  
 - **Will not** invent agent-on-consume or feature Guide 09.
 
 ## QUALITY self-check (§5)
