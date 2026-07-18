@@ -3,8 +3,8 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Thin polish — root **PolyForm Noncommercial License 1.0.0** `LICENSE` + honesty surfaces  
-**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.2); Implement (pass 155)  
-**Status:** **Implement Met** — ready for Review; LICENSE + honesty surfaces landed; **do not Align in Implement**  
+**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.2); Implement (`c7c2e00`); Review shippable (`a4f488d`); Align (pass 155)  
+**Status:** **Aligned / slice closed** — root PolyForm-NC LICENSE Met; honesty surfaces Met; Soft commercial-contact Align polish applied; no PUBLIC_FLIP invent  
 **Justify thin guide:** One root legal file + five honesty surfaces; Mechanic Guide 10a prior art complete; hub A/A/A locks already closed Gather open decisions.
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_thin_polish_polyform_nc_license_context_summary.md`  
@@ -227,10 +227,10 @@ Delete `LICENSE`; revert honesty doc commits.
 
 ## Honest readiness
 
-- **Write / Ready / Implement DoD:** **Met** this pass.  
-- **Next:** Review implementation (hub authorize) — **do not Align here**.  
+- **Write / Ready / Implement / Review / Align:** **Met** — slice closed.  
 - **LICENSE:** Root PolyForm-NC present (byte-match Mechanic + Required Notice Tom Chacko).  
-- **Will not** invent agent-on-consume or feature Guide 09.
+- **Soft Align:** Commercial-contact one-liners on INTERVIEW / AGENTS / VISION.  
+- **Will not** invent agent-on-consume, feature Guide 09, or PUBLIC_FLIP checklist.
 
 ## QUALITY self-check (§5)
 

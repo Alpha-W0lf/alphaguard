@@ -1,22 +1,33 @@
 # Context: Thin polish — root PolyForm Noncommercial 1.0.0 LICENSE
 
-**Date:** 2026-07-18  
+**Date:** 2026-07-18 · **Updated:** 2026-07-18 (Align PolyForm-NC LICENSE pass 155)  
 **Repos:** `alphaguard`  
-**Status:** Gather Met → **Write Met** (guide authored; Ready-check next)  
-**Mode last used:** spoke (Write pass 155)  
-**Stage:** Write-dev-guide (complete) — Ready-check next; no Implement yet  
-**Write guide:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`  
+**Status:** **Align Met / slice closed** — root PolyForm-NC LICENSE + honesty Met  
+**Mode last used:** spoke (Align pass 155)  
+**Stage:** Align-docs (complete)  
+**Write guide:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md` (Aligned)  
+**Implement:** `c7c2e00` · Review: `a4f488d` · Align: this pass  
 **Role lens:** Portfolio packaging / legal honesty (source-available) — not product features  
-**Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_gather_polyform_nc_pass155_handoff.md`  
+**Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_align_polyform_nc_pass155_handoff.md`  
 **Prior slice:** CI + ARCH polish Align Met (`6e65e9b`)  
-**Hub lean:** Prefer **PolyForm Noncommercial 1.0.0** (match Mechanic Guide 10a)  
+**Hub lean:** Prefer **PolyForm Noncommercial 1.0.0** (match Mechanic Guide 10a) — **locked and shipped**  
 **Decision note:** `second_brain/docs/2026-07-18_license_polyform_nc_decision_note.md`
 
-## Problem
+## Outcome (Align pass 155 — supersedes Gather “LICENSE absent” prose)
 
-AlphaGuard **build MV is Met** (guides 01–08 + CI/ARCH polish). Root **`LICENSE` is absent** (`test ! -f LICENSE` → OK / absent). README / GETTING_STARTED / INTERVIEW / VISION / AGENTS have **no** repo-license honesty line. Guide 02 explicitly deferred LICENSE as follow-on polish.
+| Item | Reality after thin polish |
+|------|---------------------------|
+| Root `LICENSE` | PolyForm Noncommercial 1.0.0 + Required Notice Tom Chacko — Met (`c7c2e00`; byte-match Mechanic) |
+| Honesty surfaces | README + VISION + GETTING_STARTED + INTERVIEW + AGENTS — source-available / non-commercial; commercial contact Soft Align |
+| PUBLIC_FLIP checklist | **Not** invented |
+| Interview-prep VISION boxes | Still **unchecked** |
+| Guide 09 / agent-on-consume | **Not** invented |
 
-Hub quality (pass 155) and Mechanic prior art already chose **PolyForm-NC** over MIT/ARR for portfolio labs: public clone + non-commercial learning OK; commercial rights reserved; **not** OSI “open source.” Mechanic Guide 10a Align Met with verbatim root `LICENSE` + honesty surfaces.
+## Problem (historical Gather — pass 155)
+
+AlphaGuard **build MV is Met** (guides 01–08 + CI/ARCH polish). Root **`LICENSE` was absent**. Closed by Implement `c7c2e00` / Align pass 155.
+
+This was **thin packaging polish**, not a feature Guide 09.
 
 Without a root LICENSE, clone reviewers / future public flip cannot tell reuse rights; default GitHub `license: null` on the (currently **private**) AlphaGuard remote reinforces the gap.
 
@@ -161,10 +172,9 @@ Delete `LICENSE`; revert honesty doc commits.
 
 ## Honest readiness
 
-- **Gather DoD:** Met. **Write DoD:** Met — `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`.  
-- **Hub locks A/A/A:** PolyForm-NC · Tom Chacko 2026 · honesty set B · no PUBLIC_FLIP · Write then Ready.  
-- **Next:** Ready-check before code. **Not ready for Implement** until Ready + authorize.  
-- **Will not** invent agent-on-consume or feature Guide 09.
+- **Gather → Align:** **Met** — slice closed.  
+- **Will not** invent agent-on-consume or feature Guide 09.  
+- **Will not** invent PUBLIC_FLIP checklist.
 
 ## QUALITY self-check (§5)
 

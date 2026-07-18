@@ -1,17 +1,19 @@
 # Context: Post–Guide 06 agent-movable next-slice inventory
 
-**Date:** 2026-07-17 · **Updated:** 2026-07-18 (Align thin polish CI + ARCH header pass 155)  
+**Date:** 2026-07-17 · **Updated:** 2026-07-18 (Align thin polish PolyForm-NC LICENSE pass 155)  
 **Repos:** `alphaguard`  
-**Status:** **Guides 01–08 Align Met** + **thin polish Align Met (pass 155)** — LLMOps spans closed; ARCHITECTURE header + minimal GHA pytest CI Met  
-**Mode last used:** spoke (pass 155 Align-docs thin polish)  
-**Stage:** Align-docs (complete) — polish closed; hub Prioritize for any next slice  
+**Status:** **Guides 01–08 Align Met** + **CI/ARCH polish Align Met** + **PolyForm-NC LICENSE Align Met (pass 155)** — LLMOps + portfolio packaging honesty closed for shipped polish  
+**Mode last used:** spoke (pass 155 Align-docs PolyForm-NC LICENSE)  
+**Stage:** Align-docs (complete) — LICENSE polish closed; hub Prioritize for any next slice  
 **Role lens:** Senior AI eng (LLMOps / interview honesty) + light DE  
 **Guide 07 path:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
 **Guide 08 path:** `docs/dev_guides/2026-07-18_dev_guide_08_phoenix_fail_open_spans.md`  
-**Thin polish:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md` (Align Met)  
+**Thin polish (CI+ARCH):** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md` (Align Met)  
+**Thin polish (LICENSE):** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md` (Align Met)  
 **Review Guide 08:** `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
 **Implement Guide 08:** `e5aad97` · Review docs: `a60a417`  
-**Thin polish Implement:** `9a1e48f` · Review: `9bf0c19`  
+**Thin polish CI Implement:** `9a1e48f` · Review: `9bf0c19`  
+**PolyForm-NC Implement:** `c7c2e00` · Review: `a4f488d`  
 **Guide 06 closed:** Align Met pass 118 (`d795005`)
 
 ## Outcome (Align pass 155 — thin polish)
@@ -65,6 +67,7 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**.
 | E | Live-Ollama eval schema-pass rates | Open | Separate from LLMOps spans |
 | F | ARCHITECTURE screenshots drift | **Closed** in Guide 07 Implement/Align | |
 | G | ARCHITECTURE header lag + missing GHA CI | **Done** (thin polish Align Met pass 155) | `9a1e48f`; Actions `29664229465` green |
+| H | Root PolyForm-NC LICENSE + honesty | **Done** (thin polish Align Met pass 155) | `c7c2e00`; Review `a4f488d`; no PUBLIC_FLIP invent |
 
 ## Locked decisions
 
@@ -80,11 +83,12 @@ Fixture smoke (`replay_fixture` / `bundle_kind=fixture`) remains **default**.
 
 ## Honest readiness
 
-- **Guide 07:** Align Met. **Guide 08:** Align Met. **Thin polish (CI + ARCH header):** Align Met.  
+- **Guide 07:** Align Met. **Guide 08:** Align Met. **Thin polish (CI + ARCH header):** Align Met. **Thin polish (PolyForm-NC LICENSE):** Align Met.  
 - **LLMOps honesty gap (status theater) closed** for both LangSmith and Phoenix.  
 - **Portfolio CI gap closed** (minimal pytest GHA).  
+- **Root LICENSE gap closed** (PolyForm-NC source-available / non-commercial).  
 - **Will not** tick Interview-prep boxes from any agent stage.  
-- **Will not** invent Guide 09 / agent-on-consume without hub Prioritize.  
+- **Will not** invent Guide 09 / agent-on-consume / PUBLIC_FLIP checklist without hub Prioritize.  
 
 ## QUALITY self-check (§5)
 

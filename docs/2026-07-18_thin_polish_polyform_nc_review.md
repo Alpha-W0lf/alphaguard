@@ -75,11 +75,19 @@ HEAD is Implement `c7c2e00` (Review docs commit separate).
 
 ## Shippable call
 
-**Shippable as-is.** No must-fix. Soft residuals → optional commercial-contact Align polish + Align stamp when hub authorizes. **Do not Align in this stage.**
+**Shippable as-is.** No must-fix. Soft residuals closed in Align pass 155 (commercial-contact + Status stamp). ARCHITECTURE header license one-liner remains parked (optional / not hub-locked).
+
+## Align follow-up (pass 155)
+
+| Soft finding | Align disposition |
+|--------------|-------------------|
+| Commercial-contact on INTERVIEW / AGENTS / VISION | **Closed** — one-liners added |
+| Guide status pending Align stamp | **Closed** — guide/context/Ready/Review/inventory/VISION stamped |
+| ARCHITECTURE header license one-liner | **Parked** — optional Soft Adjust; hub lock did not require |
 
 ## QUALITY §5
 
 - [x] Findings tied to guide / locks  
 - [x] Smallest fix set = none (shippable)  
 - [x] Honest shippable call  
-- [x] No unrelated refactors / no Align self-start  
+- [x] Align Soft findings closed (separate Align stage)  

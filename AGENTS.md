@@ -28,4 +28,4 @@
 
 - Product / why → [`docs/VISION.md`](docs/VISION.md)
 - Contracts / how → [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- License → [`LICENSE`](LICENSE) (PolyForm-NC 1.0.0 — source-available / non-commercial; not OSI open source / not MIT)
+- License → [`LICENSE`](LICENSE) (PolyForm-NC 1.0.0 — source-available / non-commercial; not OSI open source / not MIT; commercial use → contact copyright holder)
