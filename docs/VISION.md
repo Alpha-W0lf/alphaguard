@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice + Option B **lab train path** (guides 01–05b) + Guide **06** thin live RSS + Guide **07** LangSmith real fail-open spans — **not** “v1 complete” / **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured (Phoenix still stub); default smoke still Kafka-down **fixture** (never requires LangSmith key).
+**Status:** Vertical slice **build** path landed (guides 01–07): Option B **lab train**, thin live RSS, LangSmith real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured (Phoenix still stub); default smoke still Kafka-down **fixture** (never requires LangSmith key).
 
-**Last Updated:** July 17, 2026 (Guide 07 LangSmith fail-open spans **Align Met**; MV walkthrough still human)
+**Last Updated:** July 18, 2026 (Align pass 136: walkthrough + daily hand-coding → **Interview prep**, not build MV)
 
 **Owner:** Tom
 
@@ -49,7 +49,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 ### How I'll Use It
 
 1. **Build** the pipeline locally on M2 Pro (16GB) with Docker Compose.
-2. **Study** each component daily: hand-write core pieces without AI after implementing with AI.
+2. **Interview prep (optional, separate):** spoken walkthrough / explain drills using packaging docs — **not** a build gate; Tom does not treat daily hand-coding as a project requirement.
 3. **Share** public GitHub repo + README/GETTING_STARTED + LangSmith (or local) trace screenshots in `docs/` — no Loom or required live demo.
 4. **Defend** architecture, tradeoffs, leakage controls, and failure modes in system design interviews.
 
@@ -84,7 +84,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 **Rationale:** The repo gets the interview; **fluency** passes the interview.
 
-**In Practice:** After each build day, 30–45 minutes without AI: explain one component aloud, hand-write a minimal version next morning. `INTERVIEW.md` documents tradeoffs and gotcha questions.
+**In Practice:** Build with AI-native discipline (specs, tests, review). Interview fluency is a **separate initiative** — optional spoken walkthrough / hand-coding drills using `INTERVIEW.md` and `docs/WALKTHROUGH_10MIN.md`. Those drills are **not** build blockers and are **not** scored as portfolio build %.
 
 ### 3. Hybrid AI + ML (Not LLM-Only)
 
@@ -121,13 +121,15 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model / not v1 Done |
 | Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume / not v1 Done |
-| Portfolio-ready interview lab | **Not yet** | Vertical slice ≠ v1 Done below |
+| Portfolio-ready interview lab | **Build MV Met; interview prep separate** | Guides 01–07 built; walkthrough / daily hand-coding = **Interview prep** below — not build % |
 
-README / AGENTS must keep saying **vertical slice**, not “v1 complete,” until Minimum Viable boxes below are honestly checked.
+README / AGENTS keep saying **vertical slice** / **not a production risk model** — build MV Met does **not** mean eval-complete or interview fluency proven.
 
 ## Success Criteria
 
-### Minimum Viable (v1 Done)
+### Minimum Viable (v1 build Done)
+
+Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 
 - [x] `docker compose up` runs Kafka + Qdrant locally *(operator path documented in README; smoke still Kafka-down)*
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
@@ -135,8 +137,13 @@ README / AGENTS must keep saying **vertical slice**, not “v1 complete,” unti
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07: LangSmith = real fail-open spans when tracing+key; Phoenix = status stub; default smoke has LangSmith `skipped`)*
 - [x] Public GitHub polish with architecture diagram, stack table, and limitations section *(README mermaid + Stack + Limitations + `docs/assets/`; Guide 02)*
 - [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
-- [ ] Tom can give 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — human rehearsal still required)*
-- [ ] Parallel interview prep: 15–30 min/day hand-coding (separate from build) while project runs *(human habit — not an agent deliverable)*
+
+### Interview prep (separate initiative)
+
+**Not** build blockers. **Not** scored in portfolio build %. Do **not** invent ticks that imply Tom finished rehearsal.
+
+- [ ] 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — optional rehearsal; Tom has not marked complete)*
+- [ ] 15–30 min/day hand-coding habit *(deferred — Tom does not run this as a project gate)*
 
 ### Signs It's Working
 
@@ -274,7 +281,7 @@ No Loom. No required live hosted demo. No full cloud deploy required for v1.
 | **Look-ahead leakage** | Features accidentally use future prices | Architecture doc defines strict `as-of` timestamp rules |
 | **Agent 1 JSON failures** | Local LLMs emit malformed output | Ollama JSON schema + Pydantic validation + retry once |
 | **Scope creep** | Project never ships | Non-goals list is binding; v1 finish line in Success Criteria |
-| **Build without learn** | Repo exists but interviews still fail | Success criteria include hand-write + explain drills, not just green CI |
+| **Build without interview fluency** | Repo exists but interviews still fail | Keep build MV honest; optional Interview-prep drills stay separate (not a build gate) |
 | **Kafka ops complexity** | Weekend lost to infra debugging | Docker Compose with pinned images; replay mode bypassing live ingest for demos |
 
 Detailed mitigations belong in the architecture doc and dev guides.

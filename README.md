@@ -83,7 +83,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — clean-clone operator path
 - [`INTERVIEW.md`](INTERVIEW.md) — staff FAQ / gotchas (≥15 themes)
-- [`docs/WALKTHROUGH_10MIN.md`](docs/WALKTHROUGH_10MIN.md) — spoken 10-minute architecture outline (rehearse aloud)
+- [`docs/WALKTHROUGH_10MIN.md`](docs/WALKTHROUGH_10MIN.md) — optional 10-min spoken outline (**interview prep**, not a build gate)
 - [`docs/VISION.md`](docs/VISION.md) — product / why
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how (SSOT)
 - [`AGENTS.md`](AGENTS.md) — agent rails
@@ -100,4 +100,4 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
 - Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
 - LangSmith (Guide 07): real fail-open Client spans when `LANGSMITH_TRACING` + key; Phoenix remains a **status stub**; default smoke never requires a LangSmith key (`skipped`)
-- Still a **vertical slice** — packaging docs/assets do **not** mean v1 complete
+- Still a **vertical slice** / **not** a production risk model — build MV Met ≠ eval-complete or interview fluency proven

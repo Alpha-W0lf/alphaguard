@@ -1,9 +1,9 @@
 # AlphaGuard — 10-minute architecture walkthrough (outline)
 
-**Purpose:** Spoken rehearsal script for the VISION MV walkthrough box.  
-**Not v1 Done.** Default smoke = fixture; Option B = lab train path only.
+**Purpose:** Optional spoken rehearsal for **Interview prep** (separate initiative in `docs/VISION.md`).  
+**Not a build blocker.** Does **not** gate v1 build Done. Default smoke = fixture; Option B = lab train path only.
 
-Use this as a prompt card. Practice **aloud without opening the repo**. Check the VISION box only when you can do it cold.
+Use this as a prompt card. Practice **aloud without opening the repo** if you want interview fluency. Do **not** treat an unchecked rehearsal as unfinished build work.
 
 ## Minute 0–1 — What it is
 
@@ -44,4 +44,4 @@ Use this as a prompt card. Practice **aloud without opening the repo**. Check th
 
 ## Self-check
 
-Can you explain AG2 without looking? Can you say why fixture F1=1.0 is theater? If yes, rehearse twice more, then tick the VISION walkthrough box yourself.
+Can you explain AG2 without looking? Can you say why fixture F1=1.0 is theater? If yes, rehearse twice more. Mark the VISION **Interview prep** walkthrough box yourself only when cold — never invent that tick from an agent.
