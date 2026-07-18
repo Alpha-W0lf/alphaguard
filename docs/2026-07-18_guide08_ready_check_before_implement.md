@@ -1,6 +1,6 @@
 # Ready check before code — AlphaGuard Guide 08 (pass 152)
 
-**Status:** Ready-check complete → **READY 9.0/10** — **stop; no Implement in this stage**  
+**Status:** Ready-check complete → **READY 9.0/10** — Implement authorized and **Met** (`e5aad97`); Review shippable (`a60a417`); **Align Met** (pass 152) — slice closed
 **Guide:** `alphaguard/docs/dev_guides/2026-07-18_dev_guide_08_phoenix_fail_open_spans.md`  
 **Context:** `alphaguard/docs/2026-07-18_guide08_phoenix_fail_open_spans_context_summary.md`  
 **Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_ready_guide08_phoenix_pass152_handoff.md`  

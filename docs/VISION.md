@@ -4,7 +4,7 @@
 
 **Status:** Vertical slice **build** path landed (guides 01–08): Option B **lab train**, thin live RSS, LangSmith + Phoenix real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector).
 
-**Last Updated:** July 18, 2026 (Align pass 136: walkthrough + daily hand-coding → **Interview prep**, not build MV)
+**Last Updated:** July 18, 2026 (Align Guide 08 pass 152: Phoenix real fail-open spans Met; Interview-prep boxes still separate / unchecked)
 
 **Owner:** Tom
 

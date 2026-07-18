@@ -3,13 +3,13 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Guide 08 — replace Phoenix envelope status theater with real fail-open OTEL span emit  
-**Stage that authored this:** Write-dev-guide (pass 152); Ready-check (9.0); Implement (pass 152)  
-**Status:** **Implement Met** — ready for Review; Soft Adjust: keyword-only `register`, `set_global_tracer_provider=False`, `force_flush` before `ok`
+**Stage that authored this:** Write-dev-guide (pass 152); Ready-check (9.0); Implement (`e5aad97`); Review (`a60a417`); Align-docs (pass 152)  
+**Status:** **Aligned / slice closed** (pass 152) — Review shippable; docs match shipped reality; Phoenix real fail-open; fixture smoke default; Interview-prep boxes untouched
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_guide08_phoenix_fail_open_spans_context_summary.md`  
 **Hub:** `second_brain/docs/2026-07-18_prioritize_hub_pass152.md`  
 **Write handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_write_guide08_phoenix_pass152_handoff.md`  
-**Prerequisite:** Guides 01–07 shippable (Guide 07 LangSmith real fail-open). Local run envelope real (`obs/summary.py`). Default smoke remains fixture / Kafka-down. Phoenix today is **status stub**.
+**Prerequisite:** Guides 01–07 shippable (Guide 07 LangSmith real fail-open). Local run envelope real (`obs/summary.py`). Default smoke remains fixture / Kafka-down. **Guide 08 shipped:** Phoenix = real fail-open OTEL chain spans when `PHOENIX_ENABLED` (not stub).
 
 **Human locks (pass 152 — do not reopen):**
 
@@ -262,8 +262,11 @@ make smoke
 ## Honest readiness
 
 - **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
-- **Implement DoD:** **Met** this pass — mocks + smoke; D3 live probe residual.  
-- **Next:** Review implementation → Align-docs.  
+- **Implement DoD:** **Met** (`e5aad97`).  
+- **Review:** **Shippable as-is** — `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (`a60a417`).  
+- **Align-docs:** **Met** (pass 152) — status honesty stamped; Interview-prep boxes untouched.  
+- **Residual (non-blocking):** D3 live Phoenix collector probe; OTEL `force_flush` True-on-dead-collector quirk.  
+- **Slice closed.** Hub Prioritize for any next AlphaGuard work — **do not self-start**.  
 - **Will not** tick Interview-prep VISION boxes from any agent stage.
 
 ## QUALITY self-check (§5)

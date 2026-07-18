@@ -28,9 +28,9 @@ Guide DoD vs `e5aad97`: real Phoenix/OTEL chain span when `PHOENIX_ENABLED`; `ok
 | Severity | Finding | Tied to | Action |
 |----------|---------|---------|--------|
 | Soft | Optional D3 live Phoenix collector probe not run | Guide D3 residual / DoD explicit non-blocker | Park — mocks prove emit contract |
-| Soft | OTEL `force_flush` may return `True` even when HTTP export to a dead collector logs failures | Soft Adjust honesty / Ready residual | Park — document in Align if desired; mocks assert `False` → `failed` |
-| Soft | Historical docs (Guide 02/07, post–06 inventory, Guide 08 Gather context, Guide 08 prerequisite prose) still say “Phoenix stub” | Align-docs honesty stamp | **Align** — supersede Gather/inventory; leave Guide 07 historical locks as-of Guide 07 |
-| Soft | Guide 08 header still says “Phoenix today is **status stub**” under Prerequisite | Guide status drift after Implement | **Align** — one-line status fix |
+| Soft | OTEL `force_flush` may return `True` even when HTTP export to a dead collector logs failures | Soft Adjust honesty / Ready residual | Park — Align notes; mocks assert `False` → `failed` |
+| Soft | Historical docs (Guide 02/07, post–06 inventory, Guide 08 Gather context, Guide 08 prerequisite prose) still say “Phoenix stub” | Align-docs honesty stamp | **Closed Align pass 152** — inventory/context/Guide 08 status superseded; Guide 02/07 remain historical as-of their ship dates |
+| Soft | Guide 08 header still says “Phoenix today is **status stub**” under Prerequisite | Guide status drift after Implement | **Closed Align pass 152** |
 
 **Must-fix:** none.
 
@@ -68,7 +68,7 @@ HEAD still at Implement commit: `e5aad97`.
 
 ## Shippable call
 
-**Shippable as-is.** No must-fix. Soft residuals → **Align-docs** (historical stub prose + Guide 08 status line) and optional D3 live probe.
+**Shippable as-is.** No must-fix. Soft Align residuals **closed pass 152**; D3 live probe + OTEL flush quirk remain parked.
 
 ## QUALITY §5
 
