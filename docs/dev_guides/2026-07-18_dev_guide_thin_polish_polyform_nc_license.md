@@ -3,8 +3,8 @@
 **Date:** 2026-07-18  
 **Repo:** `alphaguard`  
 **Work item:** Thin polish — root **PolyForm Noncommercial License 1.0.0** `LICENSE` + honesty surfaces  
-**Stage that authored this:** Write-dev-guide (pass 155)  
-**Status:** **Ready-check Met (READY 9.2/10)** — await Implement authorize; **no Implement in Ready**  
+**Stage that authored this:** Write-dev-guide (pass 155); Ready-check (9.2); Implement (pass 155)  
+**Status:** **Implement Met** — ready for Review; LICENSE + honesty surfaces landed; **do not Align in Implement**  
 **Justify thin guide:** One root legal file + five honesty surfaces; Mechanic Guide 10a prior art complete; hub A/A/A locks already closed Gather open decisions.
 
 **Context SSOT:** `alphaguard/docs/2026-07-18_thin_polish_polyform_nc_license_context_summary.md`  
@@ -114,12 +114,12 @@ LICENSE: PolyForm-NC 1.0.0 (source-available / non-commercial); Interview-prep b
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] Root `LICENSE` exists with **verbatim** PolyForm Noncommercial 1.0.0 text + pinned Required Notice  
-- [ ] README / VISION / GETTING_STARTED / INTERVIEW / AGENTS: LICENSE present; **source-available / non-commercial** honesty; commercial contact; no MIT/OSI-open-source mislabel  
-- [ ] No `docs/PUBLIC_FLIP_CHECKLIST.md` created  
-- [ ] Interview-prep VISION boxes still unchecked  
-- [ ] No pipeline/code/CI changes; no agent-on-consume  
-- [ ] Verification commands pass  
+- [x] Root `LICENSE` exists with **verbatim** PolyForm Noncommercial 1.0.0 text + pinned Required Notice  
+- [x] README / VISION / GETTING_STARTED / INTERVIEW / AGENTS: LICENSE present; **source-available / non-commercial** honesty; commercial contact; no MIT/OSI-open-source mislabel  
+- [x] No `docs/PUBLIC_FLIP_CHECKLIST.md` created  
+- [x] Interview-prep VISION boxes still unchecked  
+- [x] No pipeline/code/CI changes; no agent-on-consume  
+- [x] Verification commands pass  
 
 ---
 
@@ -127,29 +127,29 @@ LICENSE: PolyForm-NC 1.0.0 (source-available / non-commercial); Interview-prep b
 
 ### Phase A — Anchor
 
-- [ ] **A1.** Confirm `test ! -f LICENSE` (or stop if unexpected LICENSE exists — escalate Tom).  
-- [ ] **A2.** Confirm hub locks: PolyForm-NC + Tom Chacko 2026 + honesty set B + no PUBLIC_FLIP invent.  
-- [ ] **A3.** Confirm VISION Interview-prep boxes are `[ ]` before edits.  
-- [ ] **A4.** Fetch/spot-check body: `mechanic_rag/LICENSE` vs official PolyForm-NC 1.0.0 (title + Required Notice line). Prefer copy Mechanic LICENSE if match.
+- [x] **A1.** Confirm `test ! -f LICENSE` (or stop if unexpected LICENSE exists — escalate Tom).  
+- [x] **A2.** Confirm hub locks: PolyForm-NC + Tom Chacko 2026 + honesty set B + no PUBLIC_FLIP invent.  
+- [x] **A3.** Confirm VISION Interview-prep boxes are `[ ]` before edits.  
+- [x] **A4.** Fetch/spot-check body: `mechanic_rag/LICENSE` vs official PolyForm-NC 1.0.0 (title + Required Notice line). Prefer copy Mechanic LICENSE if match.
 
 ### Phase B — Add PolyForm-NC LICENSE
 
-- [ ] **B1.** Create root `LICENSE` with **verbatim** PolyForm-NC 1.0.0 body; include `Required Notice: Copyright (c) 2026 Tom Chacko`.  
-- [ ] **B2.** `test -f LICENSE` and `head -n 5 LICENSE` — expect PolyForm Noncommercial License 1.0.0 (not MIT).
+- [x] **B1.** Create root `LICENSE` with **verbatim** PolyForm-NC 1.0.0 body; include `Required Notice: Copyright (c) 2026 Tom Chacko`.  
+- [x] **B2.** `test -f LICENSE` and `head -n 5 LICENSE` — expect PolyForm Noncommercial License 1.0.0 (not MIT).
 
 ### Phase C — Honesty surfaces (locked set)
 
-- [ ] **C1.** README — License line + Docs link to `LICENSE`; source-available / non-commercial; commercial contact.  
-- [ ] **C2.** VISION — Status and/or Last Updated honesty; Interview-prep boxes **unchanged** `[ ]`.  
-- [ ] **C3.** GETTING_STARTED — thin intro License one-liner.  
-- [ ] **C4.** INTERVIEW — thin intro License one-liner.  
-- [ ] **C5.** AGENTS — one honesty sentence (lead or Docs SSOT).  
-- [ ] **C6.** Grep honesty (below): must find PolyForm / source-available; must **not** find MIT-as-current-license or OSI-open-source-as-license claims; must **not** create PUBLIC_FLIP checklist.
+- [x] **C1.** README — License line + Docs link to `LICENSE`; source-available / non-commercial; commercial contact.  
+- [x] **C2.** VISION — Status and/or Last Updated honesty; Interview-prep boxes **unchanged** `[ ]`.  
+- [x] **C3.** GETTING_STARTED — thin intro License one-liner.  
+- [x] **C4.** INTERVIEW — thin intro License one-liner.  
+- [x] **C5.** AGENTS — one honesty sentence (lead or Docs SSOT).  
+- [x] **C6.** Grep honesty (below): must find PolyForm / source-available; must **not** find MIT-as-current-license or OSI-open-source-as-license claims; must **not** create PUBLIC_FLIP checklist.
 
 ### Phase D — Stop
 
-- [ ] **D1.** No code/CI/train/eval changes; no agent-on-consume; no PUBLIC_FLIP invent.  
-- [ ] **D2.** Stop for Review (after Ready-check → Implement authorize). **Do not Align in Implement.**
+- [x] **D1.** No code/CI/train/eval changes; no agent-on-consume; no PUBLIC_FLIP invent.  
+- [x] **D2.** Stop for Review (after Ready-check → Implement authorize). **Do not Align in Implement.**
 
 ---
 
@@ -227,9 +227,9 @@ Delete `LICENSE`; revert honesty doc commits.
 
 ## Honest readiness
 
-- **Write-dev-guide DoD:** Met. **Ready-check:** **READY 9.2/10** — see `docs/2026-07-18_thin_polish_polyform_nc_ready_check.md`.  
-- **Next:** Implement stage / authorize (not this stage).  
-- **Will not** Implement LICENSE in Write/Ready.  
+- **Write / Ready / Implement DoD:** **Met** this pass.  
+- **Next:** Review implementation (hub authorize) — **do not Align here**.  
+- **LICENSE:** Root PolyForm-NC present (byte-match Mechanic + Required Notice Tom Chacko).  
 - **Will not** invent agent-on-consume or feature Guide 09.
 
 ## QUALITY self-check (§5)

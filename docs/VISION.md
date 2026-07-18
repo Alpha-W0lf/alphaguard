@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice **build** path landed (guides 01–08): Option B **lab train**, thin live RSS, LangSmith + Phoenix real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector).
+**Status:** Vertical slice **build** path landed (guides 01–08): Option B **lab train**, thin live RSS, LangSmith + Phoenix real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT).
 
-**Last Updated:** July 18, 2026 (Align thin polish pass 155: ARCHITECTURE header + minimal GHA pytest CI Met; Interview-prep boxes still separate / unchecked)
+**Last Updated:** July 18, 2026 (Implement thin polish PolyForm-NC LICENSE; Interview-prep boxes still separate / unchecked)
 
 **Owner:** Tom
 

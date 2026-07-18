@@ -4,6 +4,8 @@ Bounded public **interview lab**: one financial headline flows through replay in
 
 This repo currently ships a **replay-first vertical slice**, not “v1 complete.” Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only. Guide **05a** builds `training_events.parquet`; Guide **05b** trains `bundle_kind=option_b` locally (see `docs/TRAINING_DATA.md`). **Default smoke still uses the fixture bundle.**
 
+**License:** PolyForm Noncommercial 1.0.0 — **source-available / non-commercial** (not OSI open source; not MIT). Commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
+
 ## Quick Start (replay smoke)
 
 See **[`GETTING_STARTED.md`](GETTING_STARTED.md)** for the full clean-clone path. Short version:
@@ -83,6 +85,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 
 ## Docs
 
+- [`LICENSE`](LICENSE) — PolyForm Noncommercial 1.0.0 (source-available / non-commercial; not OSI open source; not MIT)
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — clean-clone operator path
 - [`INTERVIEW.md`](INTERVIEW.md) — staff FAQ / gotchas (≥15 themes)
 - [`docs/WALKTHROUGH_10MIN.md`](docs/WALKTHROUGH_10MIN.md) — optional 10-min spoken outline (**interview prep**, not a build gate)
