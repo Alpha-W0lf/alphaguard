@@ -4,9 +4,9 @@
 **Repo:** `alphaguard`  
 **Work item:** Graceful FB→META archive alias for Option B training ingest (post-MV hygiene / senior-demo rigor)  
 **Stage that authored this:** Write-dev-guide (pass 164n spoke)  
-**Status:** **Write complete — not Implemented** (no code in this stage)
+**Status:** **Soft Adjust (2026-07-21 hub)** — Tom authorized Implement: alias **registry** `FB→META` + `GOOG→GOOGL` **including parquet + Option B rebuild**. Prior Write locks that said GOOG-out / builder-only are **superseded** by that authorize phrase.
 
-**Justify thin guide:** TRAINING_DATA already drafts the alias pricing rule; ingest already reports `alias_candidates_oou["FB"]`; this soft-pins **one** explicit remap with provenance — not a new Guide 09 product surface.
+**Justify thin guide:** TRAINING_DATA already drafts the alias pricing rule; ingest already reports `alias_candidates_oou`; Soft Adjust expands to a small versioned registry (not a new Guide 09 product surface).
 
 **Context / hub:**  
 - `second_brain/docs/2026-07-21_spoke_alphaguard_fb_meta_write_dev_guide_pass164n_handoff.md`  
@@ -24,7 +24,8 @@
 | Price fetch | **`META` only** — never Yahoo `FB` (wrong instrument today) |
 | Missing META series | **Fail closed** for required window / rows that need prices |
 | Provenance | Record alias applied (counts + rule version); not silent |
-| GOOG→GOOGL | **Out of this slice** (leave GOOG as OOU watch only) |
+| GOOG→GOOGL | **In** — `goog_googl_v1` (hub Soft Adjust 2026-07-21; Tom wants rename registry) |
+| Rebuild | **In** — regenerate `training_events.parquet` + Option B train; update honesty metrics |
 | Character | No brokerage, no PnL claims, no Guide 09 invent as required MV |
 | Build DoD | Remains declared MV Met — this is **post-MV** train hygiene |
 
@@ -70,7 +71,7 @@ Soft-pin and implement a **documented, fail-closed, provenance-backed** training
 2. **Training ingest only** — Alias applies in `dataset_ingest` (Kaggle CSV path), not in `NewsEvent` validation, RSS normalize, or fixture loaders.  
 3. **Price identity** — After remap, `compute_features_and_label` / yfinance must receive `META`. Add an explicit guard so `FB` never reaches `default_yfinance_closes` / cached fetcher for this builder path.  
 4. **AG2 / AG3 unchanged** — Label remains forward downside only; as-of join still uses XNYS; non-sessions drop as today — probe must not invent closes.  
-5. **GOOG stays OOU** — Continue reporting `alias_candidates_oou["GOOG"]`; do **not** map to `GOOGL` in this slice.  
+5. **GOOG→GOOGL Soft Adjust (2026-07-21)** — Apply `goog_googl_v1` the same way as FB→META (before universe filter; provenance; `source_row_hash` on raw `GOOG`). Prices fetch as **`GOOGL` only**.  
 6. **No MSFT/SPY invention** — Absent tickers remain honesty gaps.  
 7. Prefer ≤300 lines/file (hard max 400); smallest correct change.  
 8. Same-delivery docs honesty after Implement — TRAINING_DATA + FINANCE_HONESTY (and thin ARCHITECTURE note if needed) must match coded behavior.
