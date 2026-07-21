@@ -135,7 +135,7 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | `bundle_kind` | `option_b` |
 | Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py`) |
 
-**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model.
+**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Example local manifest (2026-07-17): train F1 ≈0.73, **test F1 = 0.0** (n_positive_test=2) — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
 
 ## Builder layout
 
@@ -158,4 +158,4 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 - Dataset builder ≠ production risk model.
 - Option B bundle proves **lab train path** (HPO audit + metrics) — default smoke still fixture.
 - Smoke / default pytest must not load FinBERT weights.
-- Do not claim v1 complete from 05a/05b alone.
+- Bounded MV build complete ≠ production hardening / deeper live eval complete — do not claim those from 05a/05b alone. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).

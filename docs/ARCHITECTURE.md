@@ -1,13 +1,14 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — guides 01–08 landed (05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); default smoke still `bundle_kind=fixture`  
+**Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-07-18 (CI polish + Guide 08 header stamp; default smoke still fixture)  
+**Last Updated:** 2026-07-21 (Align finish-line wording + finance honesty cross-link; default smoke still fixture)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 
 **Product / why SSOT:** [`VISION.md`](./VISION.md) (must stay aligned with AG1–AG3)  
 **Contracts / how SSOT:** this file  
+**Finance claims:** [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md)  
 **Program locks:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md` (**AG1–AG3**)  
 **Pass-3 review:** `second_brain/docs/2026-07-12_alphaguard_architecture_pass3_review.md`  
 **First executable guide:** [`dev_guides/2026-07-12_dev_guide_01_replay_first_vertical_slice.md`](./dev_guides/2026-07-12_dev_guide_01_replay_first_vertical_slice.md) — **Implement complete / Review shippable**
@@ -461,7 +462,7 @@ Package root (implemented): `src/alphaguard/`.
 | Eval | ≥21 **executed** goldens: structural schema ok/reject; identity preservation; as-of/retrieval invariants; gate determinism + tmp-manifest vol-veto; OOU (NewsEvent + fixture-path). Numeric LLM schema-pass rate deferred until live-Ollama eval. Do **not** inflate fixture-bundle gate metrics into Option B claims |
 | Arch tests | After package layout exists: 1–2 import-boundary rules; pipeline is sole orchestrator and sole retrieval owner for the run path |
 
-**Honesty rule:** A fixture `bundle_kind=fixture` proving smoke plumbing is **not** evidence that the Option B downside model generalizes. Option B metrics live in a locally trained `bundle_kind=option_b` manifest (lab-scale; noisy). README/status language must say “vertical slice,” not “v1 complete,” until MV Done boxes are honestly checked.
+**Honesty rule:** A fixture `bundle_kind=fixture` proving smoke plumbing is **not** evidence that the Option B downside model generalizes. Option B metrics live in a locally trained `bundle_kind=option_b` manifest (lab-scale; noisy — weak/zero test F1 is allowed and must not be hidden). Status language: **bounded MV build complete; production hardening and deeper live evaluation incomplete** — not “production risk model” / not interview fluency. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
 
 CI should prefer replay/fixture + mocked LLM where runners lack Ollama/GPU RAM.
 

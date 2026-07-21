@@ -1,8 +1,8 @@
 # AlphaGuard — Interview FAQ
 
-Staff-interview gotchas for the **replay-first vertical slice**. Contracts SSOT: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Product / why: [`docs/VISION.md`](docs/VISION.md).
+Staff-interview gotchas for the **replay-first** interview lab. Contracts SSOT: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Product / why: [`docs/VISION.md`](docs/VISION.md). Finance claims: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md).
 
-This is packaging around a green smoke path — **not** “v1 Done.” Default smoke is still **fixture**. Guide **05b** lands a local `bundle_kind=option_b` train path (lab metrics; noisy test F1) — do not market it as a production risk model. Guide **06** adds a thin Yahoo RSS poll CLI (`alphaguard rss poll`) — Yahoo may flake; **not** 24/7 reliability / **not** agent-on-consume. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
+**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete** (finish line = local + CI). Packaging around a green smoke path — **not** a production risk model / **not** interview fluency. Default smoke is still **fixture**. Guide **05b** lands a local `bundle_kind=option_b` train path (lab metrics; noisy/weak test F1 — honest zeros allowed) — do not market it as a production risk model. Guide **06** adds a thin Yahoo RSS poll CLI (`alphaguard rss poll`) — Yahoo may flake; **not** 24/7 reliability / **not** agent-on-consume. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
 
 **Why packaging now (vs ARCHITECTURE §15):** program pass-12 soft-overrides the architecture sequencing sketch for interview ROI — packaging needs only the shippable vertical slice. Contracts (AG1–AG3) are unchanged.
 

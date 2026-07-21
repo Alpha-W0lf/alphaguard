@@ -2,7 +2,7 @@
 
 Bounded public **interview lab**: one financial headline flows through replay ingest → RAG context → LangGraph Agent 1 (`BUY|HOLD|PASS`) → XGBoost downside-risk gate → local run summary.
 
-This repo currently ships a **replay-first vertical slice**, not “v1 complete.” Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only. Guide **05a** builds `training_events.parquet`; Guide **05b** trains `bundle_kind=option_b` locally (see `docs/TRAINING_DATA.md`). **Default smoke still uses the fixture bundle.**
+**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Still **not** a production risk model / **not** interview-fluency proven. Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only. Guide **05a** builds `training_events.parquet`; Guide **05b** trains `bundle_kind=option_b` locally (see `docs/TRAINING_DATA.md`). **Default smoke still uses the fixture bundle.**
 
 **License:** PolyForm Noncommercial 1.0.0 — **source-available / non-commercial** (not OSI open source; not MIT). Commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
 
@@ -91,18 +91,21 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 - [`docs/WALKTHROUGH_10MIN.md`](docs/WALKTHROUGH_10MIN.md) — optional 10-min spoken outline (**interview prep**, not a build gate)
 - [`docs/VISION.md`](docs/VISION.md) — product / why
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how (SSOT)
+- [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md) — gate ≠ alpha; lab metrics; no costs/PnL claims
 - [`AGENTS.md`](AGENTS.md) — agent rails
 - [`docs/assets/`](docs/assets/) — packaging screenshots
 
 ## Limitations
 
-- No brokerage APIs; no live trading
+- **Finish line:** bounded MV build complete (local + CI); production hardening and deeper live evaluation incomplete — see [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md)
+- No brokerage APIs; no live trading; **no costs/slippage/PnL claims** (veto gate lab, not an execution strategy)
+- Gate ≠ alpha: Agent 2 approve/reject is a downside-risk veto, not a profitability signal
 - FinBERT not loaded during smoke (precomputed fixture column)
 - Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates
 - Option B dataset (05a): `uv run python scripts/build_training_events.py` — see `docs/TRAINING_DATA.md`
-- Option B train (05b): `uv run python scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Lab-scale metrics only; **default smoke stays fixture**. Optional demo:
+- Option B train (05b): `uv run python scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Lab-scale metrics only (local manifest example: train F1 ≈0.73, **test F1 = 0.0** on n_test=100 / 2 positives — noisy/weak, not hidden); **default smoke stays fixture**. Optional demo:
   `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b make smoke`
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
 - Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
 - LangSmith (Guide 07): real fail-open Client spans when `LANGSMITH_TRACING` + key; Phoenix (Guide 08): real fail-open OTEL chain spans when `PHOENIX_ENABLED`; default smoke never requires LangSmith key or Phoenix collector (`skipped`)
-- Still a **vertical slice** / **not** a production risk model — build MV Met ≠ eval-complete or interview fluency proven
+- Still **not** a production risk model — bounded MV Met ≠ eval-complete or interview fluency proven

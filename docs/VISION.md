@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
 
-**Status:** Vertical slice **build** path landed (guides 01–08): Option B **lab train**, thin live RSS, LangSmith + Phoenix real fail-open spans. Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
+**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
 
-**Last Updated:** July 18, 2026 (Align thin polish PolyForm-NC LICENSE Met; Interview-prep boxes still separate / unchecked)
+**Last Updated:** July 21, 2026 (Align finish-line wording + finance honesty; Interview-prep boxes still separate / unchecked)
 
 **Owner:** Tom
 
@@ -119,11 +119,11 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
 | Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
-| Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model / not v1 Done |
-| Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume / not v1 Done |
-| Portfolio-ready interview lab | **Build MV Met; interview prep separate** | Guides 01–08 built; walkthrough / daily hand-coding = **Interview prep** below — not build % |
+| Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model; lab test F1 may be weak/noisy — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) |
+| Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume |
+| Portfolio-ready interview lab | **Bounded MV build complete; interview prep separate** | Guides 01–08 built (local + CI); production hardening / deeper live eval incomplete; walkthrough / daily hand-coding = **Interview prep** below — not build % |
 
-README / AGENTS keep saying **vertical slice** / **not a production risk model** — build MV Met does **not** mean eval-complete or interview fluency proven.
+README / AGENTS / [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md): **bounded MV complete** ≠ production risk model ≠ eval-complete ≠ interview fluency proven.
 
 ## Success Criteria
 
