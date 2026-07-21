@@ -22,6 +22,19 @@ from alphaguard.ml.dataset_ingest import (
     load_filter_dedup_sample,
 )
 
+
+def _alias_fail_closed_message(stats: Any) -> str:
+    applied = getattr(stats, "alias_applied_counts", {}) or {}
+    version = getattr(stats, "alias_rule_version", "off")
+    if applied:
+        detail = ", ".join(f"{k}={v}" for k, v in sorted(applied.items()))
+        return (
+            "all sampled rows dropped during as-of/label join "
+            f"(documented aliases {version}: {detail}; "
+            "target tickers META/GOOGL — never Yahoo FB/GOOG)"
+        )
+    return "all sampled rows dropped during as-of/label join"
+
 REQUIRED_COLUMNS = [
     "event_id",
     "headline",
@@ -102,14 +115,24 @@ def build_training_events(
         f"oou_dropped={stats.oou_dropped} missing_dropped={stats.missing_fields_dropped}"
     )
     print(f"csv_discovered={csv_path}")
+    if stats.alias_rule_version == "off":
+        print("NOTE: archive aliases off (honesty / test path)")
+    elif stats.alias_applied_counts:
+        print(
+            f"documented aliases applied ({stats.alias_rule_version}): "
+            f"{stats.alias_applied_counts}"
+        )
+    else:
+        print(f"documented aliases on ({stats.alias_rule_version}): none matched CSV")
     if stats.universe_tickers_absent:
         print(
             "WARNING: universe tickers with 0 rows after filter "
-            f"(no silent remap): {list(stats.universe_tickers_absent)}"
+            f"(absent in archive / after documented aliases): "
+            f"{list(stats.universe_tickers_absent)}"
         )
     if stats.alias_candidates_oou:
         print(
-            "NOTE: OOU rename candidates seen in CSV (soft pin forbids remap unless locked): "
+            "NOTE: unapplied OOU rename candidates (aliases off or not in registry): "
             f"{stats.alias_candidates_oou}"
         )
 
@@ -143,7 +166,7 @@ def build_training_events(
         )
 
     if not rows:
-        raise RuntimeError("all sampled rows dropped during as-of/label join")
+        raise RuntimeError(_alias_fail_closed_message(stats))
 
     df = pd.DataFrame(rows)
     if skip_finbert:

@@ -20,14 +20,14 @@
 
 ## Option B lab metrics (local manifest — regenerate may differ)
 
-Quoted from a local `data/derived/model_bundle_option_b/manifest.json` (`bundle_kind=option_b`, created `2026-07-17`). **Not committed**; retrain locally via `scripts/train_option_b_gate.py`. Honest zeros are allowed and expected at this scale.
+Quoted from a local `data/derived/model_bundle_option_b/manifest.json` (`bundle_kind=option_b`, created `2026-07-21T20:50:31Z` after archive-alias rebuild). **Not committed**; retrain locally via `scripts/train_option_b_gate.py`. Honest zeros / weak holdout are allowed and expected at this scale.
 
 | Split | n | F1 | Precision | Recall | Confusion (TP/FP/TN/FN) |
 |-------|---|----|-----------|--------|-------------------------|
-| Train | 400 | ≈0.731 | 0.75 | 0.7125 | 57 / 19 / 301 / 23 |
-| Test | 100 | **0.0** | 0.0 | 0.0 | 0 / 1 / 97 / 2 |
+| Train | 400 | ≈0.693 | ≈0.590 | ≈0.838 | 62 / 43 / 283 / 12 |
+| Test | 100 | **≈0.087** | 0.05 | ≈0.333 | 1 / 19 / 78 / 2 |
 
-Notes: `n_positive_test=2` — test F1 collapse is **noisy / weak**, not hidden. Fixture `bundle_kind=fixture` F1 must never be marketed as model quality. See [`TRAINING_DATA.md`](./TRAINING_DATA.md).
+Notes: `n_positive_test=3` — test F1 remains **noisy / weak**, not hidden. Prior pre-alias manifest (2026-07-17) had test F1 = 0.0 on 2 positives; drift after META/GOOGL enter the sample is expected. Fixture `bundle_kind=fixture` F1 must never be marketed as model quality. See [`TRAINING_DATA.md`](./TRAINING_DATA.md).
 
 ## Pointers
 

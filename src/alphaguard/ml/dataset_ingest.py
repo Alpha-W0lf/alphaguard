@@ -15,9 +15,33 @@ import pandas as pd
 from alphaguard.contracts.events import TICKER_UNIVERSE
 
 SOURCE_DATASET_ID = "miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests"
-BUILDER_VERSION = "0.1.0"
+BUILDER_VERSION = "0.1.1"
 _WS = re.compile(r"\s+")
 ET = ZoneInfo("America/New_York")
+
+
+@dataclass(frozen=True)
+class ArchiveAliasRule:
+    """Documented archive→universe rename (training ingest only)."""
+
+    rule_id: str
+    archive_symbol: str
+    universe_ticker: str
+
+
+# Extensible registry — add rows; do not silent-remap outside this table.
+ARCHIVE_ALIAS_REGISTRY: tuple[ArchiveAliasRule, ...] = (
+    ArchiveAliasRule("fb_meta_v1", "FB", "META"),
+    ArchiveAliasRule("goog_googl_v1", "GOOG", "GOOGL"),
+)
+ARCHIVE_ALIAS_BY_SOURCE: dict[str, ArchiveAliasRule] = {
+    r.archive_symbol: r for r in ARCHIVE_ALIAS_REGISTRY
+}
+# Yahoo must never be called with these archive sources on the builder path.
+FORBIDDEN_PRICE_FETCH_TICKERS: frozenset[str] = frozenset(
+    r.archive_symbol for r in ARCHIVE_ALIAS_REGISTRY
+)
+ALIAS_RULE_VERSION_ON = "+".join(r.rule_id for r in ARCHIVE_ALIAS_REGISTRY)
 
 
 @dataclass(frozen=True)
@@ -30,6 +54,8 @@ class IngestStats:
     missing_fields_dropped: int
     universe_tickers_absent: tuple[str, ...]
     alias_candidates_oou: dict[str, int]
+    alias_rule_version: str
+    alias_applied_counts: dict[str, int]
 
 
 def normalize_headline(text: str) -> str:
@@ -135,11 +161,34 @@ def event_id_for(ticker: str, calendar_date: date, normalized_headline: str) -> 
     )
 
 
+def _apply_archive_aliases(
+    tickers: pd.Series, *, apply_archive_aliases: bool
+) -> tuple[pd.Series, dict[str, int], dict[str, int], str]:
+    """Map registry sources → universe tickers; provenance + honesty candidates."""
+    applied: dict[str, int] = {}
+    candidates: dict[str, int] = {}
+    out = tickers.copy()
+    for rule in ARCHIVE_ALIAS_REGISTRY:
+        mask = tickers == rule.archive_symbol
+        n = int(mask.sum())
+        if n == 0:
+            continue
+        key = f"{rule.archive_symbol}→{rule.universe_ticker}"
+        if apply_archive_aliases:
+            out = out.where(~mask, rule.universe_ticker)
+            applied[key] = n
+        else:
+            candidates[rule.archive_symbol] = n
+    version = ALIAS_RULE_VERSION_ON if apply_archive_aliases else "off"
+    return out, applied, candidates, version
+
+
 def load_filter_dedup_sample(
     csv_path: Path,
     *,
     target_rows: int = 500,
     random_seed: int = 42,
+    apply_archive_aliases: bool = True,
 ) -> tuple[pd.DataFrame, IngestStats]:
     raw = pd.read_csv(csv_path)
     rows_raw = len(raw)
@@ -150,14 +199,9 @@ def load_filter_dedup_sample(
     df = df.loc[~missing].copy()
 
     df["ticker"] = df["stock"].astype(str).str.strip().str.upper()
-    # Known rename symbols that appear in this archive but are OOU under soft pin
-    # (no silent remap — counts are for operator honesty / future soft-pin decisions).
-    alias_watch = ("FB", "GOOG")
-    alias_candidates_oou: dict[str, int] = {}
-    for sym in alias_watch:
-        n = int((df["ticker"] == sym).sum())
-        if n:
-            alias_candidates_oou[sym] = n
+    df["ticker"], alias_applied_counts, alias_candidates_oou, alias_rule_version = (
+        _apply_archive_aliases(df["ticker"], apply_archive_aliases=apply_archive_aliases)
+    )
     in_u = df["ticker"].isin(TICKER_UNIVERSE)
     oou_dropped = int((~in_u).sum())
     df = df.loc[in_u].copy()
@@ -234,6 +278,8 @@ def load_filter_dedup_sample(
         missing_fields_dropped=missing_fields_dropped,
         universe_tickers_absent=universe_tickers_absent,
         alias_candidates_oou=alias_candidates_oou,
+        alias_rule_version=alias_rule_version,
+        alias_applied_counts=alias_applied_counts,
     )
     return sampled, stats
 

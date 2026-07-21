@@ -202,6 +202,7 @@ Do **not** block smoke on live RSS. Full Kafka delivery contract is specified in
 
 Rules:
 - `ticker` ∈ locked universe `{AAPL, MSFT, NVDA, GOOGL, AMZN, META, SPY, QQQ}` for v1 training/demo. **Reject out-of-universe tickers** in training builders and fixtures (do not silently remap).
+- **Documented training-ingest archive aliases** (not silent remap; not live ingress): `fb_meta_v1` (`FB`→`META`), `goog_googl_v1` (`GOOG`→`GOOGL`) in `ml/dataset_ingest.py` — provenance + fail-closed price identity (fetch universe ticker only). Fixtures / RSS / `NewsEvent` still reject raw `FB`/`GOOG`.
 - `published_at` is UTC and is the **event clock** for as-of and retrieval filtering (AG3).
 
 ### 7.2 Agent 1 proposal (LLM → gate)

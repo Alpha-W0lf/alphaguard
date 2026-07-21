@@ -10,16 +10,21 @@ import pandas as pd
 import pytest
 
 from alphaguard.ml.dataset_asof import (
+    default_yfinance_closes,
     feature_as_of_session,
     label_high_risk_from_fwd,
+    make_cached_close_fetcher,
     published_at_from_calendar_date,
 )
+from alphaguard.ml.dataset_build import build_training_events
 from alphaguard.ml.dataset_finbert import sentiment_from_probs
 from alphaguard.ml.dataset_ingest import (
+    BUILDER_VERSION,
     event_id_for,
     load_filter_dedup_sample,
     normalize_headline,
     reject_oou_tickers,
+    source_row_hash,
 )
 
 ET = ZoneInfo("America/New_York")
@@ -79,7 +84,7 @@ def test_empty_csv_fail_closed(tmp_path: Path) -> None:
         load_filter_dedup_sample(csv, target_rows=10)
 
 
-def test_ingest_reports_absent_universe_and_fb_alias_candidate(tmp_path: Path) -> None:
+def test_ingest_alias_on_fb_meta_and_goog_googl(tmp_path: Path) -> None:
     csv = tmp_path / "news.csv"
     csv.write_text(
         "date,stock,headline\n"
@@ -88,12 +93,124 @@ def test_ingest_reports_absent_universe_and_fb_alias_candidate(tmp_path: Path) -
         "2020-03-03,GOOG,Alphabet class C\n",
         encoding="utf-8",
     )
-    _df, stats = load_filter_dedup_sample(csv, target_rows=10, random_seed=42)
-    assert stats.rows_universe == 1  # only AAPL in universe
+    df, stats = load_filter_dedup_sample(csv, target_rows=10, random_seed=42)
+    assert stats.alias_rule_version == "fb_meta_v1+goog_googl_v1"
+    assert stats.alias_applied_counts.get("FB→META") == 1
+    assert stats.alias_applied_counts.get("GOOG→GOOGL") == 1
+    assert stats.alias_candidates_oou == {}
+    assert set(df["ticker"]) == {"AAPL", "META", "GOOGL"}
+    assert "FB" not in set(df["ticker"])
+    assert "GOOG" not in set(df["ticker"])
+    assert "META" not in stats.universe_tickers_absent
+    assert BUILDER_VERSION == "0.1.1"
+    assert all(df["builder_version"] == "0.1.1")
+    fb_row = df.loc[df["ticker"] == "META"].iloc[0]
+    assert fb_row["source_row_hash"] == source_row_hash(
+        "2020-03-02", "FB", "Facebook news"
+    )
+    assert fb_row["event_id"] == event_id_for(
+        "META", date(2020, 3, 2), normalize_headline("Facebook news")
+    )
+
+
+def test_ingest_alias_off_honesty(tmp_path: Path) -> None:
+    csv = tmp_path / "news.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-01,AAPL,Apple news\n"
+        "2020-03-02,FB,Facebook news\n"
+        "2020-03-03,GOOG,Alphabet class C\n",
+        encoding="utf-8",
+    )
+    df, stats = load_filter_dedup_sample(
+        csv, target_rows=10, random_seed=42, apply_archive_aliases=False
+    )
+    assert stats.rows_universe == 1
+    assert set(df["ticker"]) == {"AAPL"}
     assert "META" in stats.universe_tickers_absent
-    assert "MSFT" in stats.universe_tickers_absent
+    assert stats.alias_rule_version == "off"
+    assert stats.alias_applied_counts == {}
     assert stats.alias_candidates_oou.get("FB") == 1
     assert stats.alias_candidates_oou.get("GOOG") == 1
+
+
+def test_price_fetcher_rejects_fb_and_goog() -> None:
+    with pytest.raises(ValueError, match="fb_meta_v1"):
+        default_yfinance_closes("FB", date(2020, 1, 1), date(2020, 6, 1))
+    with pytest.raises(ValueError, match="goog_googl_v1"):
+        default_yfinance_closes("GOOG", date(2020, 1, 1), date(2020, 6, 1))
+    closer = make_cached_close_fetcher()
+    with pytest.raises(ValueError, match="fb_meta_v1"):
+        closer("FB", date(2020, 1, 1), date(2020, 2, 1))
+    with pytest.raises(ValueError, match="goog_googl_v1"):
+        closer("GOOG", date(2020, 1, 1), date(2020, 2, 1))
+
+
+def test_build_alias_on_never_fetches_archive_sources(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    csv = raw / "analyst_ratings_processed.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-02 10:00:00,FB,Facebook news\n"
+        "2020-03-03 10:00:00,AAPL,Apple news\n"
+        "2020-03-04 10:00:00,GOOG,Alphabet class C\n",
+        encoding="utf-8",
+    )
+    fetched: list[str] = []
+    sessions = pd.bdate_range("2019-12-02", "2020-04-30").date.tolist()
+
+    def fetch(ticker: str, start: date, end: date) -> pd.Series:
+        fetched.append(ticker)
+        assert ticker not in {"FB", "GOOG"}
+        idx = [d for d in sessions if start <= d <= end]
+        base = 200.0 if ticker == "SPY" else 100.0
+        return pd.Series({d: base + i * 0.01 for i, d in enumerate(idx)})
+
+    out = tmp_path / "dev_nofinbert.parquet"
+    df = build_training_events(
+        raw_dir=raw,
+        out_path=out,
+        target_rows=10,
+        random_seed=42,
+        allow_shortfall=True,
+        skip_download=True,
+        skip_finbert=True,
+        fetch_closes=fetch,
+    )
+    assert "FB" not in fetched
+    assert "GOOG" not in fetched
+    assert "META" in set(df["ticker"])
+    assert "GOOGL" in set(df["ticker"])
+    assert set(df["ticker"]).isdisjoint({"FB", "GOOG"})
+
+
+def test_build_empty_meta_series_fail_closed(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    csv = raw / "analyst_ratings_processed.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-02 10:00:00,FB,Facebook only\n",
+        encoding="utf-8",
+    )
+
+    def fetch_empty(ticker: str, start: date, end: date) -> pd.Series:
+        assert ticker != "FB"
+        return pd.Series(dtype=float)
+
+    out = tmp_path / "dev_nofinbert.parquet"
+    with pytest.raises(RuntimeError, match="fb_meta_v1|META"):
+        build_training_events(
+            raw_dir=raw,
+            out_path=out,
+            target_rows=10,
+            random_seed=42,
+            allow_shortfall=True,
+            skip_download=True,
+            skip_finbert=True,
+            fetch_closes=fetch_empty,
+        )
 
 
 def test_event_id_stable() -> None:

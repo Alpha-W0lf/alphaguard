@@ -78,9 +78,27 @@ def session_offset(sessions: list[date], start: date, n: int) -> date | None:
 CloseFetcher = Callable[[str, date, date], pd.Series]
 
 
+def _reject_forbidden_price_ticker(ticker: str) -> None:
+    """Fail closed: never fetch Yahoo archive sources that collide or skew identity."""
+    from alphaguard.ml.dataset_ingest import (
+        ARCHIVE_ALIAS_BY_SOURCE,
+        FORBIDDEN_PRICE_FETCH_TICKERS,
+    )
+
+    sym = ticker.strip().upper()
+    if sym not in FORBIDDEN_PRICE_FETCH_TICKERS:
+        return
+    rule = ARCHIVE_ALIAS_BY_SOURCE[sym]
+    raise ValueError(
+        f"Yahoo {sym!r} is forbidden on the builder price path "
+        f"({rule.rule_id}) — fetch {rule.universe_ticker!r} only"
+    )
+
+
 def default_yfinance_closes(ticker: str, start: date, end: date) -> pd.Series:
     import yfinance as yf
 
+    _reject_forbidden_price_ticker(ticker)
     # yfinance end is exclusive-ish; pad one day.
     hist = yf.download(
         ticker,
@@ -107,6 +125,7 @@ def make_cached_close_fetcher(
     cache: dict[str, pd.Series] = {}
 
     def fetch(ticker: str, start: date, end: date) -> pd.Series:
+        _reject_forbidden_price_ticker(ticker)
         if ticker not in cache:
             print(f"yfinance cache miss: downloading {ticker} …")
             cache[ticker] = default_yfinance_closes(ticker, history_start, history_end)

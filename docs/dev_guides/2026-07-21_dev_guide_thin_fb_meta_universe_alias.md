@@ -35,7 +35,7 @@
 
 Soft-pin and implement a **documented, fail-closed, provenance-backed** training-ingest alias so Facebook-era archive rows (`stock=FB`) become locked-universe `ticker=META` rows, with closes fetched as **META only**.
 
-**Success signal:** With alias on, preferred CSV yields META training rows (not zero); unit tests prove alias on/off + “never fetch FB”; one-line join probe documented in DoD; TRAINING_DATA / honesty surfaces updated; GOOG still OOU (watch counts only). Smoke / fixture path unchanged.
+**Success signal:** With aliases on, preferred CSV yields META + GOOGL training rows from archive `FB`/`GOOG`; unit tests prove registry on/off + “never fetch FB/GOOG”; one-line join probe documented in DoD; TRAINING_DATA / honesty surfaces updated after parquet + Option B rebuild. Smoke / fixture path unchanged.
 
 ---
 
@@ -82,31 +82,31 @@ Soft-pin and implement a **documented, fail-closed, provenance-backed** training
 
 | Pin | Locked default |
 |-----|----------------|
-| Alias rule id | `fb_meta_v1` |
-| Map | archive `stock`/`ticker` **`FB` → `META`** only |
-| Default | Alias **on** for canonical builder (`load_filter_dedup_sample` default / production CLI path) |
-| Toggle for honesty tests | Keyword `apply_fb_meta_alias: bool = True`; tests must exercise `False` |
+| Registry | Versioned table: `fb_meta_v1` (`FB`→`META`), `goog_googl_v1` (`GOOG`→`GOOGL`); extensible pattern |
+| Default | Aliases **on** for canonical builder (`load_filter_dedup_sample` default / production CLI path) |
+| Toggle for honesty tests | Keyword `apply_archive_aliases: bool = True`; tests must exercise `False` |
 | When applied | After normalize/upper `stock`→`ticker`, **before** `isin(TICKER_UNIVERSE)` filter |
-| `source_row_hash` | Still hash **raw** `date|stock|headline` (stock remains `FB` in hash input) |
-| `event_id` | Use **post-alias** `ticker=META` (universe identity) |
-| `builder_version` | Bump patch (e.g. `0.1.0` → `0.1.1`) when alias lands — document in TRAINING_DATA |
-| Stats / provenance | `IngestStats` (or equivalent) must expose: `alias_rule_version`, `alias_applied_counts` (at least `{"FB→META": N}`), keep `alias_candidates_oou` for **unapplied** watches (`GOOG`; and `FB` when alias off) |
-| Operator log | Print one clear line: rule version + FB→META count (and “alias off” when disabled) |
-| Price fetch | Never call yfinance with `FB` on builder path; Soft Adjust: raise `ValueError` / `RuntimeError` if fetcher is invoked with `FB` |
-| Fail closed | If alias on and META closes empty for the window needed by as-of/label join → row drops as today; if **all** aliased META rows drop for empty series (or cache miss empty for META when FB rows existed), fail closed with explicit error (do not write parquet claiming META coverage) |
-| Join probe (DoD) | Documented one-liner (see Verification) — must run or be runnable; reports META close coverage for FB headline calendar days; **does not invent** closes |
-| Stratified sample | After alias, META participates like other universe tickers |
-| Canonical rebuild | **Open decision** (see below) — guide supports both; Implement must follow Tom lock |
+| `source_row_hash` | Still hash **raw** `date|stock|headline` (archive symbol, e.g. `FB` / `GOOG`, in hash input) |
+| `event_id` | Use **post-alias** universe ticker (`META` / `GOOGL`) |
+| `builder_version` | Bump patch (e.g. `0.1.0` → `0.1.1`) when registry lands — document in TRAINING_DATA |
+| Stats / provenance | `IngestStats`: `alias_rule_version` (e.g. `fb_meta_v1+goog_googl_v1` when on), `alias_applied_counts` (`{"FB→META": N, "GOOG→GOOGL": M}`), `alias_candidates_oou` for **unapplied** registry sources only |
+| Operator log | Print rule version + applied counts (and “alias off” when disabled) |
+| Price fetch | Never call yfinance with archive sources `FB` or `GOOG` on builder path; raise if fetcher invoked with them — fetch **`META` / `GOOGL` only** |
+| Fail closed | Empty target series → row drops; if **all** sampled rows drop after as-of/label join, RuntimeError must mention active alias rules / target tickers |
+| Join probe (DoD) | Documented one-liner / `scripts/probe_fb_meta_join.py` — META close coverage for FB headline days; **does not invent** closes; never downloads `FB` |
+| Stratified sample | After alias, META / GOOGL participate like other universe tickers |
+| Canonical rebuild | **In** — regenerate parquet + Option B train + honesty metrics (Tom authorize 2026-07-21) |
 
 ### Suggested ingest shape (Implement fills exact names; meaning locked)
 
 ```text
-# Pseudocode — not to paste blindly
+# Pseudocode — registry table, not ad-hoc ifs forever
+REGISTRY = [("fb_meta_v1","FB","META"), ("goog_googl_v1","GOOG","GOOGL")]
 ticker = stock.strip().upper()
-# watch counts for honesty (GOOG always; FB when alias off)
-if apply_fb_meta_alias and ticker == "FB":
-    ticker = "META"
-    alias_applied_counts["FB→META"] += 1
+if apply_archive_aliases and ticker in registry_sources:
+    apply map; count "SRC→DST"; provenance rule ids
+else if ticker in registry_sources:
+    alias_candidates_oou[ticker] += 1  # honesty when off
 # then universe filter as today
 ```
 
@@ -114,69 +114,67 @@ if apply_fb_meta_alias and ticker == "FB":
 
 ```text
 # In default_yfinance_closes or make_cached_close_fetcher (builder path):
-if ticker == "FB":
-    raise ValueError("Yahoo FB is not Meta — fetch META only (fb_meta_v1)")
+if ticker in {"FB", "GOOG"}:  # archive sources — fetch META / GOOGL only
+    raise ValueError("...")
 ```
-
 ---
 
 ## Acceptance criteria (Implement must meet)
 
-- [ ] Alias **on**: CSV rows with `stock=FB` become `ticker=META` and survive universe filter; `META` no longer listed in `universe_tickers_absent` solely because FB was dropped  
-- [ ] Alias **off**: FB remains OOU; `alias_candidates_oou["FB"]` counted; META absent if no native META rows (honesty path)  
-- [ ] GOOG never remapped; still counted in `alias_candidates_oou` when present  
-- [ ] No yfinance/`fetch_closes` call with ticker `FB` on builder path (unit-tested with fake fetcher or guard)  
-- [ ] Provenance: rule version + applied count visible in stats and/or build log; `builder_version` bumped  
-- [ ] Fail-closed behavior documented + tested for empty META series when FB rows required prices  
-- [ ] One-line join probe in DoD / TRAINING_DATA (coverage honesty; no invented closes)  
-- [ ] Unit tests updated/added; `uv run pytest -q` green  
-- [ ] Docs: TRAINING_DATA alias rule marked **soft-pinned / coded**; FINANCE_HONESTY thin honesty if Option B metrics change; thin §7.1 note that **documented training aliases** ≠ silent remap  
-- [ ] No GOOG→GOOGL; no MSFT/SPY invention; no brokerage/PnL; no Guide 09 invent; smoke still fixture  
+- [x] Aliases **on**: `stock=FB` → `ticker=META`; `stock=GOOG` → `ticker=GOOGL`; both survive universe filter; META/GOOGL not absent solely because archive symbols were dropped  
+- [x] Aliases **off**: FB/GOOG remain OOU; `alias_candidates_oou` counts both; META absent if no native META (honesty path)  
+- [x] No yfinance/`fetch_closes` call with `FB` or `GOOG` on builder path (unit-tested with guard and/or fake fetcher)  
+- [x] Provenance: rule version + applied counts in stats/log; `builder_version` bumped  
+- [x] Fail-closed behavior documented + tested for empty META series when FB-origin rows required prices  
+- [x] One-line join probe in DoD / TRAINING_DATA (coverage honesty; no invented closes)  
+- [x] Unit tests updated/added; `uv run pytest -q` green  
+- [x] Docs: TRAINING_DATA alias registry **soft-pinned / coded**; FINANCE_HONESTY updated after rebuild; thin §7.1 note that **documented training aliases** ≠ silent remap  
+- [x] Parquet + Option B regenerated; honest metrics recorded; no MSFT/SPY invention; no brokerage/PnL; no Guide 09 invent; smoke still fixture  
 
 ---
 
 ## Ordered step checklist
 
-### Phase A — Ingest alias + provenance
+### Phase A — Ingest alias registry + provenance
 
-- [ ] **A1.** Add locked constants: `ALIAS_RULE_VERSION = "fb_meta_v1"` (module-level in `dataset_ingest.py` or tiny helper).  
-- [ ] **A2.** Extend `load_filter_dedup_sample(..., apply_fb_meta_alias: bool = True)`. Apply FB→META **before** universe filter; count applied; keep GOOG watch-only.  
-- [ ] **A3.** Extend `IngestStats` with `alias_rule_version: str` and `alias_applied_counts: dict[str, int]` (empty dict when none / alias off). Preserve `alias_candidates_oou` semantics: unapplied OOU rename candidates only.  
-- [ ] **A4.** Bump `BUILDER_VERSION` patch; keep `source_row_hash` on raw stock; `event_id` on post-alias ticker.  
-- [ ] **A5.** Update `dataset_build.py` operator prints: alias rule + counts; clarify WARNING text so “no silent remap” is not contradicted (say “documented alias fb_meta_v1 applied” when on).
+- [x] **A1.** Add versioned registry table: `fb_meta_v1` FB→META, `goog_googl_v1` GOOG→GOOGL (extensible).  
+- [x] **A2.** Extend `load_filter_dedup_sample(..., apply_archive_aliases: bool = True)`. Apply registry **before** universe filter; count applied.  
+- [x] **A3.** Extend `IngestStats` with `alias_rule_version: str` and `alias_applied_counts: dict[str, int]` (empty when none / alias off). `alias_candidates_oou` = unapplied registry sources only.  
+- [x] **A4.** Bump `BUILDER_VERSION` patch; keep `source_row_hash` on raw stock; `event_id` on post-alias ticker.  
+- [x] **A5.** Update `dataset_build.py` operator prints: documented aliases + counts; clarify WARNING so “no silent remap” is not contradicted.
 
 ### Phase B — Price identity fail-closed
 
-- [ ] **B1.** Guard yfinance/cached fetcher (or builder wrapper): reject ticker `FB`.  
-- [ ] **B2.** Confirm post-alias rows call `compute_features_and_label(ticker="META", ...)`.  
-- [ ] **B3.** Fail closed if META series empty when aliased FB rows cannot join (explicit error or documented all-drop RuntimeError already present — strengthen message to mention `fb_meta_v1` / META). Soft Adjust only — do not redesign as-of.
+- [x] **B1.** Guard yfinance/cached fetcher: reject archive sources `FB` and `GOOG`.  
+- [x] **B2.** Confirm post-alias rows call `compute_features_and_label` with `META` / `GOOGL`.  
+- [x] **B3.** Strengthen all-drop RuntimeError to mention active alias rules / target tickers. Soft Adjust only — do not redesign as-of.
 
 ### Phase C — Tests
 
-- [ ] **C1.** Update `test_ingest_reports_absent_universe_and_fb_alias_candidate`: with **default alias on**, expect META present / FB applied count; GOOG still candidate; optionally assert FB not in sampled tickers.  
-- [ ] **C2.** New test: `apply_fb_meta_alias=False` → FB OOU, META absent, `alias_candidates_oou["FB"]==1` (honesty / fail-closed-off path).  
-- [ ] **C3.** New test: alias on + fake `fetch_closes` — assert fetch tickers ⊆ universe and never `"FB"`; META requested for FB-origin rows.  
-- [ ] **C4.** New test: empty META series → fail closed / no silent success claiming META coverage (match B3).  
-- [ ] **C5.** Assert GOOG→GOOGL does **not** occur (GOOG dropped; GOOGL count unchanged by FB alias).
+- [x] **C1.** Default alias **on**: META present from FB; GOOGL from GOOG; applied counts; FB/GOOG not in sampled tickers.  
+- [x] **C2.** `apply_archive_aliases=False` → FB/GOOG OOU + candidate counts; META absent if no native META.  
+- [x] **C3.** Alias on + fake `fetch_closes` — never `"FB"`/`"GOOG"`; META/GOOGL requested for aliased rows.  
+- [x] **C4.** Empty META series → fail closed / no silent META coverage (match B3).  
+- [x] **C5.** Assert `goog_googl_v1` applies when on (GOOG→GOOGL); when off, GOOG stays candidate.
 
 ### Phase D — Docs + join probe
 
-- [ ] **D1.** Update `TRAINING_DATA.md`: mark alias pricing rule **soft-pinned coded** (`fb_meta_v1`); document default on; toggle for tests; builder_version bump; refresh universe table expectations after rebuild **or** note “coded; regenerate parquet to refresh live evidence.”  
-- [ ] **D2.** Add / keep **one-line join probe** in TRAINING_DATA DoD (see Verification).  
-- [ ] **D3.** Thin ARCHITECTURE §7.1 clarification: training ingest may apply **explicit documented archive aliases** (list `fb_meta_v1`); fixtures/live still no silent remap.  
-- [ ] **D4.** FINANCE_HONESTY: if Implement rebuilds Option B parquet+train, update lab metrics honesty; if builder-only, note META coverage may appear only after regenerate.  
-- [ ] **D5.** Optional one-liner in Guide 05a status or TRAINING_DATA cross-link — do not rewrite 05a history as if alias always existed.
+- [x] **D1.** Update `TRAINING_DATA.md`: registry **soft-pinned coded**; default on; toggle; builder_version; refresh live evidence after rebuild.  
+- [x] **D2.** Add / keep **one-line join probe** in TRAINING_DATA DoD.  
+- [x] **D3.** Thin ARCHITECTURE §7.1: training ingest may apply **explicit documented archive aliases** (`fb_meta_v1`, `goog_googl_v1`); fixtures/live still no silent remap.  
+- [x] **D4.** FINANCE_HONESTY: update lab metrics after parquet + Option B rebuild.  
+- [x] **D5.** Optional one-liner cross-link — do not rewrite 05a history as if alias always existed.
 
-### Phase E — Optional canonical rebuild (Tom gate)
+### Phase E — Canonical rebuild (locked in)
 
-- [ ] **E1.** If Tom locks **rebuild in same delivery:** regenerate `training_events.parquet` via `./scripts/run_direct_network.sh` + FinBERT path; re-run Option B train; update TRAINING_DATA live evidence + FINANCE_HONESTY metrics.  
-- [ ] **E2.** If Tom locks **builder+docs+tests first:** stop after D; leave regenerate as explicit follow-up. Do not claim live parquet already contains META.
+- [x] **E1.** Regenerate `training_events.parquet` via `./scripts/run_direct_network.sh` + FinBERT; re-run Option B train; update TRAINING_DATA + FINANCE_HONESTY.  
+- [x] **E2.** ~~Builder-only~~ — superseded by Tom authorize including rebuild.
 
 ### Phase F — Verification + stop
 
-- [ ] **F1.** `uv run pytest -q` green.  
-- [ ] **F2.** Run or dry-run join probe command from Verification (network may require `run_direct_network.sh`).  
-- [ ] **F3.** Stop. No Guide 09 / agent-on-consume / GOOG remap / brokerage.
+- [x] **F1.** `uv run pytest -q` green.  
+- [x] **F2.** Run join probe (network may require `run_direct_network.sh`).  
+- [x] **F3.** Stop for Review. No Guide 09 / agent-on-consume / brokerage / MSFT-SPY invention.
 
 ---
 
@@ -184,20 +182,20 @@ if ticker == "FB":
 
 **Done when all are true:**
 
-1. Documented `fb_meta_v1` alias coded with default **on**; toggleable **off** for honesty tests.  
-2. Prices for aliased rows use **META only**; `FB` fetch guarded/fail-closed.  
+1. Documented registry `fb_meta_v1` + `goog_googl_v1` coded with default **on**; toggleable **off** for honesty tests.  
+2. Prices for aliased rows use **META** / **GOOGL** only; `FB`/`GOOG` fetch guarded/fail-closed.  
 3. Provenance: rule version + applied counts in stats/log; `builder_version` bumped.  
-4. Unit tests cover alias on, alias off, no FB fetch, no GOOG→GOOGL.  
+4. Unit tests cover aliases on, aliases off, no FB/GOOG fetch, GOOG→GOOGL when on.  
 5. Join probe documented (and runnable) for META close coverage vs FB headline days — **no invented closes**.  
-6. Docs match code (TRAINING_DATA + thin ARCHITECTURE note; FINANCE_HONESTY if metrics/rebuild).  
-7. Character preserved: post-MV hygiene only; smoke fixture; no PnL/brokerage/Guide 09 invent.
+6. Docs match code (TRAINING_DATA + thin ARCHITECTURE note + FINANCE_HONESTY after rebuild).  
+7. Parquet + Option B regenerated with honest metrics.  
+8. Character preserved: post-MV hygiene only; smoke fixture; no PnL/brokerage/Guide 09 invent.
 
-**Explicitly not required (unless Tom locks E1):**
+**Explicitly not required:**
 
 - Live Kaggle download in CI  
 - Changing default smoke to Option B  
 - MSFT/SPY backfill  
-- GOOG→GOOGL  
 - Hosted deploy / agent-on-consume  
 
 **Suggested verification commands:**
@@ -232,7 +230,7 @@ PY
 | Rebuild changes Option B metrics | Stale FINANCE_HONESTY | E1 same-delivery honesty update **or** E2 no metric claims |
 | Stratified sample shifts | Different 500-row draw | Document seed still 42; expect ticker mix change; unique `event_id` still required |
 | `event_id` identity change for FB-origin rows | Parquet not comparable row-for-row to pre-alias | Expected; bump builder_version; regenerate |
-| Over-broad alias helper | Accidental GOOG→GOOGL | Hard-code FB→META only; test GOOG untouched |
+| Over-broad alias helper | Accidental remap of unrelated symbols | Registry table only; unit tests per rule |
 | Live ingress accepts `FB` | Contract break | Alias **training ingest only** |
 | Join probe invents closes | False coverage | Probe reports intersection only; non-sessions OK to miss |
 
@@ -256,42 +254,29 @@ PY
 
 ## Out of scope (stop list)
 
-- Implement / train re-run in **this Write stage**  
-- GOOG→GOOGL (unless Tom re-locks with evidence)  
 - Inventing MSFT/SPY rows  
 - Brokerage APIs, PnL claims, Lowd Capital  
 - Guide 09 / agent-on-consume / hosted deploy  
-- Changing live `NewsEvent` / fixture loaders to accept `FB`  
+- Changing live `NewsEvent` / fixture loaders to accept `FB` / `GOOG`  
 - Optuna / neural reranker / second LLM auditor  
+- Review implementation stage (hub after Results)
 
 ---
 
 ## Open decisions (human — surface in chat; do not invent locks)
 
-### 1. GOOG→GOOGL in this guide?
+**None blocking.** Locked 2026-07-21 by Tom authorize phrase:  
+`Authorize Implement FB→META+GOOG→GOOGL alias registry including parquet+Option B rebuild`
 
-- **In plain terms:** Alphabet has archive `GOOG` (class C) and universe `GOOGL`. Include a second alias now, or FB→META only?  
-- **Options:** (A) FB→META only · (B) Also GOOG→GOOGL in same Soft Adjust  
-- **Recommendation:** **(A)** — hub default; GOOG/GOOGL are related but not the same rename story as FB→META; keep blast radius small.  
-- **Tradeoffs:** (A) leaves Alphabet split honesty; (B) more coverage, more review heat on “silent remap.”  
-- **Needs from you:** Confirm **A** (default) or lock **B**.
-
-### 2. Rebuild Option B parquet + train in the same Implement delivery?
-
-- **In plain terms:** After coding the alias, should Implement also regenerate the gitignored parquet and retrain Option B so live evidence shows META, or ship builder+tests+docs first?  
-- **Options:** (A) Builder + unit tests + docs only · (B) Same delivery: regenerate parquet + Option B train + honesty metric update  
-- **Recommendation:** **(A)** first if calendar is tight — proves fail-closed alias without FinBERT/network coupling; authorize **(B)** as immediate follow-up Implement or Soft Adjust Phase E when Tom wants demo evidence. Prefer **(B)** if the next demo must show META in parquet ticker mix.  
-- **Tradeoffs:** (A) faster, docs must say “regenerate to refresh evidence”; (B) fuller honesty, longer / flakier (FinBERT, Yahoo, proxy).  
-- **Needs from you:** `Authorize Implement builder+tests+docs only` or `Authorize Implement including parquet+Option B rebuild`.
+Soft residual: if rebuild env/network flakes, park rebuild with evidence and stop for hub — do not invent metrics.
 
 ---
 
 ## Honest readiness
 
-- **Write-dev-guide:** Met when this file + handoff Results filled.  
-- **Ready for:** Refine-dev-guide **or** Ready check before code (after Tom locks open decisions, or Ready-check proceeds with defaults A + A).  
-- **Not ready for:** Implement until Ready-check / human authorize (and decision 2 locked if delivery shape matters).  
-- **Will not:** Implement in this stage; expand to GOOG without lock; park FB→META.
+- **Implement:** In progress under locked authorize (registry + rebuild).  
+- **Ready for:** Review after Implement DoD Met + handoff Results filled.  
+- **Will not:** Expand to MSFT/SPY invention; accept live FB/GOOG ingress; start Review in this spoke unless DoD fully Met.
 
 ## QUALITY self-check (§5)
 
