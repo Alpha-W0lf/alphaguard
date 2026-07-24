@@ -50,7 +50,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 1. **Build** the pipeline locally on M2 Pro (16GB) with Docker Compose.
 2. **Interview prep (optional, separate):** spoken walkthrough / explain drills using packaging docs — **not** a build gate; Tom does not treat daily hand-coding as a project requirement.
-3. **Share** public GitHub repo + README/GETTING_STARTED + LangSmith (or local) trace screenshots in `docs/` — no Loom or required live demo.
+3. **Share** public GitHub repo + README/GETTING_STARTED + **local run summary** screenshots in `docs/` — no Loom or required live demo. Real LangSmith/Phoenix evidence only when a configured run is actually captured (not required for packaging).
 4. **Defend** architecture, tradeoffs, leakage controls, and failure modes in system design interviews.
 
 ### Key Capabilities
@@ -58,7 +58,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 1. **Event-driven ingestion:** Financial headlines flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). Replay fixtures bypass live Kafka for demos.
 2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
 3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
-4. **LLMOps observability:** Local run summary always; LangSmith default + Phoenix fallback (fail-open).
+4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured.
 5. **Interview artifacts:** README architecture diagram, `INTERVIEW.md` FAQ, optional replay demo of cached end-to-end runs.
 
 ### Workflow Integration
@@ -78,7 +78,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 **Rationale:** Scope creep kills weekend/week projects and delays interview prep.
 
-**In Practice:** v1 is done when one headline flows end-to-end with LangSmith trace + ML gate + public README. No cloud Kafka deploy, no fine-tuning, no hybrid search, no second LLM agent.
+**In Practice:** v1 is done when one headline flows end-to-end with **local run summary** + ML gate + public README. LangSmith/Phoenix spans are optional when configured. No cloud Kafka deploy, no fine-tuning, no hybrid search, no second LLM agent.
 
 ### 2. Learn by Building, Prove by Explaining
 
@@ -264,7 +264,7 @@ Each item adds days of work without improving the core outcome: **technical inte
 |----------|---------|
 | Public GitHub (pinned) | Primary proof |
 | README + GETTING_STARTED | Skim + clone-and-run path |
-| LangSmith (or Phoenix) trace screenshots in `docs/` | LLMOps proof without video |
+| Local run-summary screenshots in `docs/` (mandatory baseline) | LLMOps proof without video; optional LangSmith/Phoenix only from a real configured run |
 | Replay/fixture smoke output | Proof the path runs without live feeds |
 | `INTERVIEW.md` | Deep-dive prep + send before technical round |
 
@@ -308,7 +308,7 @@ Detailed mitigations belong in the architecture doc and dev guides.
 | Tickers | 8 names (see above); reject out-of-universe in v1 training/fixtures |
 | Historical news | Kaggle/CSV batch + RSS for live demo |
 | Local LLM | **Default `gemma4:e2b`**; fallback `qwen3.5:4b`; config `OLLAMA_MODEL` |
-| Observability | **Local run summary mandatory**; LangSmith free default; Phoenix local fallback; screenshots required |
+| Observability | **Local run summary mandatory**; LangSmith + Phoenix optional fail-open when configured; **local-envelope screenshots** required for packaging (not fabricated cloud-trace UI) |
 | FinBERT concurrency | **Batch offline** — do not require FinBERT resident with Kafka+Qdrant+Ollama on 16GB |
 | Sharing | Public GitHub + docs; **no Loom**; no required live hosted demo |
 

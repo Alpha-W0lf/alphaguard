@@ -4,6 +4,12 @@ Bounded public **interview lab**: one financial headline flows through replay in
 
 **Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Still **not** a production risk model / **not** interview-fluency proven. Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only. Guide **05a** builds `training_events.parquet`; Guide **05b** trains `bundle_kind=option_b` locally (see `docs/TRAINING_DATA.md`). **Default smoke still uses the fixture bundle.**
 
+### Evidence and limits (first-minute)
+
+- **Proven by default smoke / CI:** fixture replay plumbing through Agent 1 → downside-risk gate → **local run summary** (mandatory LLMOps baseline). LangSmith / Phoenix are **optional fail-open** when configured — default smoke shows both `skipped`.
+- **Option B** is a **local lab model** only: weak/noisy holdout metrics are expected and published honestly. Gate ≠ alpha / PnL / production risk model.
+- Canonical lab numbers + confusion matrix: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Training path: [`docs/TRAINING_DATA.md`](docs/TRAINING_DATA.md).
+
 **License:** PolyForm Noncommercial 1.0.0 — **source-available / non-commercial** (not OSI open source; not MIT). Commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
 
 ## Quick Start (replay smoke)
@@ -77,6 +83,8 @@ Local envelope fulfills packaging — **not** fabricated LangSmith/Phoenix UI. W
 
 GitHub Actions runs default `uv run pytest -q` on push to `main` and PRs (live markers excluded; no Ollama/smoke in CI).
 
+[![CI](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml)
+
 ![Terminal smoke (Kafka down; paths redacted)](docs/assets/smoke_terminal.png)
 
 ![Curated run envelope — local LLMOps baseline; Agent 1 may vary, gate is deterministic](docs/assets/run_envelope_curated.png)
@@ -103,7 +111,7 @@ Captions and redaction notes: [`docs/assets/README.md`](docs/assets/README.md).
 - FinBERT not loaded during smoke (precomputed fixture column)
 - Eval harness: ≥21 **executed** goldens (schema/identity/as-of/gate/OOU + tmp-manifest vol-veto + fixture-path OOU); still **not** live-Ollama numeric schema-pass rates
 - Option B dataset (05a): `uv run python scripts/build_training_events.py` — see `docs/TRAINING_DATA.md`
-- Option B train (05b): `uv run python scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Lab-scale metrics only (local manifest example: train F1 ≈0.73, **test F1 = 0.0** on n_test=100 / 2 positives — noisy/weak, not hidden); **default smoke stays fixture**. Optional demo:
+- Option B train (05b): `uv run python scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Lab-scale metrics only (local manifest after 2026-07-21 alias rebuild: train F1 ≈0.693, **test F1 ≈0.087** on n_test=100 / **3 positives** — noisy/weak, not hidden; prior pre-alias test F1 0.0 / 2 positives is historical only — see [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md)); **default smoke stays fixture**. Optional demo:
   `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b ALPHAGUARD_REQUIRE_BUNDLE_KIND=option_b make smoke`
 - Kafka+Qdrant thin integration (Guide 04): producer/consumer, `/trigger`, UUID5 upsert
 - Live RSS (Guide 06): thin `alphaguard rss poll` operator path (Yahoo may flake; offline XML fixtures = CI truth) — **not** 24/7 reliability / **not** agent-on-consume
