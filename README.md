@@ -1,14 +1,22 @@
 # AlphaGuard
 
-Bounded public **interview lab**: one financial headline flows through replay ingest → RAG context → LangGraph Agent 1 (`BUY|HOLD|PASS`) → XGBoost downside-risk gate → local run summary.
+Public **interview lab** for senior AI/data-engineering skills: one financial headline → RAG context → LangGraph analyst (`BUY|HOLD|PASS`) → XGBoost **downside-risk** gate → **local run summary**.
 
-**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Still **not** a production risk model / **not** interview-fluency proven. Default demo path is **fixture replay** — not live Kafka streaming. The fixture model bundle (`bundle_kind=fixture`) proves plumbing only. Guide **05a** builds `training_events.parquet`; Guide **05b** trains `bundle_kind=option_b` locally (see `docs/TRAINING_DATA.md`). **Default smoke still uses the fixture bundle.**
+| Start here | Link |
+|------------|------|
+| Clone + smoke | [`GETTING_STARTED.md`](GETTING_STARTED.md) |
+| Interview FAQ | [`INTERVIEW.md`](INTERVIEW.md) |
+| Docs map | [`docs/README.md`](docs/README.md) |
+| Contracts | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| Why / finish line | [`docs/VISION.md`](docs/VISION.md) |
 
-### Evidence and limits (first-minute)
+### Evidence and limits (first minute)
 
-- **Proven by default smoke / CI:** fixture replay plumbing through Agent 1 → downside-risk gate → **local run summary** (mandatory LLMOps baseline). LangSmith / Phoenix are **optional fail-open** when configured — default smoke shows both `skipped`.
+- **Default demo = fixture replay** (`make smoke`) — not live Kafka streaming. Kafka/Qdrant are available for the integration path.
+- **Proven by smoke / CI:** Agent 1 → downside-risk gate → **local run summary** (mandatory). LangSmith / Phoenix are **optional fail-open** when configured; default smoke shows both `skipped`.
 - **Option B** is a **local lab model** only: weak/noisy holdout metrics are expected and published honestly. Gate ≠ alpha / PnL / production risk model.
-- Canonical lab numbers + confusion matrix: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Training path: [`docs/TRAINING_DATA.md`](docs/TRAINING_DATA.md).
+- Canonical lab numbers: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Training path: [`docs/TRAINING_DATA.md`](docs/TRAINING_DATA.md).
+- **Not** a hosted service · **not** a production risk model · **not** interview-fluency proven.
 
 **License:** PolyForm Noncommercial 1.0.0 — **source-available / non-commercial** (not OSI open source; not MIT). Commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
 
