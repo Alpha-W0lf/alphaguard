@@ -1,7 +1,7 @@
 [project]
 name = "alphaguard"
 version = "0.1.0"
-description = "AlphaGuard — replay-first interview lab (vertical slice)"
+description = "AlphaGuard — multi-agent financial research lab (RAG + risk gate + local LLMOps)"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 dependencies = [

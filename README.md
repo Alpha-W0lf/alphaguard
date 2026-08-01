@@ -1,6 +1,8 @@
 # AlphaGuard
 
-Public **interview lab** for senior AI/data-engineering skills: one financial headline → RAG context → LangGraph analyst (`BUY|HOLD|PASS`) → XGBoost **downside-risk** gate → **local run summary**.
+Multi-agent **financial research** pipeline: market news → RAG context → LangGraph analyst (`BUY|HOLD|PASS`) → XGBoost **downside-risk** gate → **local run summary**.
+
+Built to explore how AI trade ideas and risk controls should work together — local + CI lab, **not** a brokerage / PnL product.
 
 | Start here | Link |
 |------------|------|
