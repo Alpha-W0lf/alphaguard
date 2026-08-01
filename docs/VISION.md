@@ -135,7 +135,7 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07–08: LangSmith = real fail-open spans when tracing+key; Phoenix = real fail-open spans when `PHOENIX_ENABLED`; default smoke has both `skipped`)*
-- [x] Public GitHub polish with architecture diagram, stack table, and limitations section *(README mermaid + Stack + Limitations + `docs/assets/`; Guide 02)*
+- [x] Public GitHub polish with architecture diagram, stack table, and claim hygiene *(README mermaid + Stack + Deeper docs / FINANCE_HONESTY + sales-first proof card in `docs/assets/`; Guide 02 + 2026-07-31 README sales-first pass)*
 - [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
 
 ### Interview prep (separate initiative)

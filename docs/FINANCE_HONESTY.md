@@ -34,4 +34,4 @@ Notes: `n_positive_test=3` — test F1 remains **noisy / weak**, not hidden. Pri
 - Product status / MV boxes → [`VISION.md`](./VISION.md)
 - Contracts / as-of / gate policy → [`ARCHITECTURE.md`](./ARCHITECTURE.md)
 - Operator clone path → [`../GETTING_STARTED.md`](../GETTING_STARTED.md)
-- Skim + Limitations → [`../README.md`](../README.md)
+- Skim storefront + category framing → [`../README.md`](../README.md) (claim depth lives here and in Deeper docs — README no longer has a Limitations section)
