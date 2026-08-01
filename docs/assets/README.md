@@ -1,19 +1,17 @@
-# Packaging screenshots (guide 02)
-
-Local-envelope evidence for the replay-first vertical slice. **Not** LangSmith/Phoenix UI.
+# Packaging visuals (AlphaGuard)
 
 | File | What it shows |
 |------|----------------|
-| [`smoke_terminal.png`](./smoke_terminal.png) | `make smoke` excerpt (Kafka down): success, proposal, gate decision, envelope path hint |
-| [`run_envelope_curated.png`](./run_envelope_curated.png) | Curated run JSON: `status=success`, `rag_mode=fixture`, `resource_mode=replay_fixture`, honest `obs.langsmith` / `obs.phoenix` as `skipped` (default env) |
+| [`pipeline_overview.png`](./pipeline_overview.png) | Storefront proof card — News → Context → Trade idea → Risk check (designed; no fake scores) |
+| [`smoke_terminal.png`](./smoke_terminal.png) | Optional eng evidence: `make smoke` excerpt (Kafka down; paths redacted) |
+| [`run_envelope_curated.png`](./run_envelope_curated.png) | Optional eng evidence: curated local run JSON baseline |
 
-## Captions (binding honesty)
+## Captions (binding)
 
-1. **Local run summary** under `artifacts/runs/` is the **mandatory** LLMOps baseline.
-2. Default smoke: `obs.langsmith=skipped` and `obs.phoenix=skipped`. Guide 07 emits real LangSmith Client runs only when tracing+key are set. Guide 08 emits a real Phoenix/OTEL chain span only when `PHOENIX_ENABLED=true`. Do not invent LangSmith/Phoenix UI screenshots.
-3. Agent 1 proposal may vary (`BUY` vs `HOLD`/`PASS`) across smokes; the **gate policy is deterministic** given fixed `(action, score[, vol])`.
-4. Absolute home paths (`/Users/...`) are **redacted** in committed images; prefer `artifacts/runs/<id>.json`.
+1. **pipeline_overview.png** is the README proof strip — capability framing, not a live trading UI.
+2. Local run summary under `artifacts/runs/` remains the mandatory LLMOps baseline when you run smoke.
+3. Default smoke: `obs.langsmith=skipped` and `obs.phoenix=skipped` unless configured.
+4. Absolute home paths are **redacted** in committed terminal/envelope images.
+5. Do not invent LangSmith/Phoenix UI screenshots or PnL claims.
 
-Source run for these assets: `dc894871-2059-4b76-bd96-6779968b32e5` (**2026-07-30** soft refresh #88; prior packaging source `e411e604-…` 2026-07-13). Raw `artifacts/` stays gitignored.
-
-**Provenance honesty:** these images prove **fixture replay / local-envelope** packaging from a **current** default `make smoke`. They are **not** proof of Option B train metrics, RSS poll, or configured LangSmith/Phoenix runs. Do not invent cloud-observability screenshots.
+Source for smoke/envelope refresh notes: prior packaging runs under gitignored `artifacts/`. Pipeline card added 2026-07-31 (sales-first README pass).
