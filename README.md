@@ -23,7 +23,7 @@ flowchart LR
 1. Ingest a financial headline (replay fixtures by default; live paths optional).
 2. Retrieve supporting context (fixture RAG for smoke; Qdrant when configured).
 3. An LLM analyst proposes **BUY**, **HOLD**, or **PASS** with rationale.
-4. An XGBoost downside-risk gate can **veto** before anything is treated as investable.
+4. An XGBoost downside-risk gate can **veto** before a proposal is allowed to proceed.
 5. Every run writes a **local run summary** (mandatory LLMOps baseline).
 
 ### Key engineering decisions
@@ -50,7 +50,7 @@ Full clean-clone path, Ollama footguns, and optional Kafka/RSS: [`GETTING_STARTE
 
 | Concern | Choice |
 |---------|--------|
-| Language | Python 3.12 via `uv` |
+| Language | Python 3.11+ via `uv` (repo pin 3.12) |
 | Orchestration | LangGraph + host Ollama |
 | Risk gate | XGBoost downside-risk scorer + deterministic policy |
 | RAG (smoke) | Fixture retrieval hits |
