@@ -1,16 +1,16 @@
 # AlphaGuard: Vision Document
 
-**Purpose:** Build a bounded, public reference pipeline that teaches and demonstrates senior AI/data-engineering skills so Tom can pass technical interview rounds—not just recruiter screens.
+**Purpose:** Build a bounded, public **reference pipeline** that demonstrates senior AI/data-engineering craft: news → RAG → structured trade ideas → downside-risk gate — runnable locally with honest limits.
 
-**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built** — **not** interview rehearsal. Still **not** eval-complete / **not** a production risk model / **not** “interview fluency proven.” Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
+**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
 
-**Last Updated:** July 21, 2026 (Align finish-line wording + finance honesty; Interview-prep boxes still separate / unchecked)
+**Last Updated:** 2026-08-02 (R1 public-facing soften — product-why first; personal compensation / job-hunt lead removed)
 
 **Owner:** Tom
 
-**Guide:** Structured per [`second_brain/docs/guides/meta_creating_vision_docs.md`](../../second_brain/docs/guides/meta_creating_vision_docs.md). This file is the **product / why** decision framework. Binding contracts, as-of rules, and gate policy live in [`ARCHITECTURE.md`](./ARCHITECTURE.md). Program locks **AG1–AG3:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`.
+**Guide:** This file is the **product / why** decision framework. Binding contracts, as-of rules, and gate policy live in [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
-**Related project:** [Lowd Capital](../lowd_capital/docs/VISION.md) — private, real trading factory. AlphaGuard is intentionally separate; no proprietary alpha logic lives here.
+**Related:** A separate private trading project is intentionally out of scope and not linked here. AlphaGuard holds no proprietary trading alpha.
 
 ---
 
@@ -18,23 +18,23 @@
 
 ### The Friction
 
-Tom is a Senior AI Engineer (data engineering background) between contracts, targeting fully remote roles in the $180k–$240k base range. Recruiter screens are not the bottleneck. The bottleneck is **late-stage technical interviews**: live hand-coding, tool-specific deep dives, and system design under pressure—often without AI assistants.
+Financial news arrives as an unstructured firehose. Teams still need a **credible, explainable path** from headline → retrieved context → a structured proposal → a risk-style gate — without pretending to be a brokerage or a PnL engine.
 
-Daily work is AI-native (Cursor, Copilot, Codex). That produces shippable systems quickly, but interview loops still test **manual fluency**: Python without autocomplete, Kafka consumer semantics, LangGraph state, RAG tradeoffs, and ML pipeline basics.
+Many portfolio demos stop at a notebook chat wrapper. Staff reviewers expect **streaming, retrieval as-of discipline, agent contracts, local LLMOps, and tabular ML honesty** in one coherent system they can clone and interrogate.
 
 ### Current Workarounds
 
-- Personal projects exist but are not packaged as a **coherent, explainable, interview-ready artifact** aligned to 2026 hiring demand (agentic AI, streaming, vector DBs, LLMOps).
-- Studying docs in isolation does not force the integration muscle memory that interviews probe.
-- A serious trading platform ([Lowd Capital](../lowd_capital/docs/VISION.md)) must stay private; it cannot serve as a public portfolio piece.
+- Isolated tutorials (Kafka alone, RAG alone, XGBoost alone) do not force integration tradeoffs.
+- Private trading research cannot be the public proof surface.
+- Fixture-free “demo apps” hide leakage, label, and observability failure modes.
 
-### Why This Matters to Me
+### Why This Matters
 
-A W-2 remote offer unlocks a home purchase timeline ($250k–$300k) and stable income. Passing technical rounds requires **genuine familiarity** with the stack, not just a README that claims it. AlphaGuard is a **learning lab with a finish line**, not an open-ended portfolio.
+AlphaGuard is a **learning-and-proof lab with a finish line**: ship a bounded vertical slice that is honest about fixture vs lab model, local vs hosted, and what the gate is (and is not).
 
 ### Frequency
 
-Intensive build over **6–7 days max**. Interview prep (explain-without-AI drills) continues for weeks after ship.
+Intensive build over **6–7 days max** for the bounded MV. Optional spoken walkthrough / explain drills continue separately and do **not** gate build %.
 
 ---
 
@@ -46,12 +46,12 @@ Intensive build over **6–7 days max**. Interview prep (explain-without-AI dril
 
 It simulates institutional “analyst + risk” separation using tools employers recognize in mid-2026: **Kafka, Qdrant, LangGraph, Ollama, LangSmith, FastAPI, XGBoost**.
 
-### How I'll Use It
+### How it's used
 
-1. **Build** the pipeline locally on M2 Pro (16GB) with Docker Compose.
-2. **Interview prep (optional, separate):** spoken walkthrough / explain drills using packaging docs — **not** a build gate; Tom does not treat daily hand-coding as a project requirement.
-3. **Share** public GitHub repo + README/GETTING_STARTED + **local run summary** screenshots in `docs/` — no Loom or required live demo. Real LangSmith/Phoenix evidence only when a configured run is actually captured (not required for packaging).
-4. **Defend** architecture, tradeoffs, leakage controls, and failure modes in system design interviews.
+1. **Build** the pipeline locally (e.g. M2 Pro 16GB) with Docker Compose.
+2. **Clone-and-run** via [`GETTING_STARTED.md`](../GETTING_STARTED.md) — default smoke is Kafka-down fixtures.
+3. **Share** public GitHub + README + **local run summary** screenshots in `docs/` — no required live hosted demo. Real LangSmith/Phoenix evidence only when a configured run is actually captured.
+4. **Defend** architecture, tradeoffs, leakage controls, and failure modes in technical reviews (see [`FAQ.md`](../FAQ.md)).
 
 ### Key Capabilities
 
@@ -59,14 +59,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
 3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
 4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured.
-5. **Interview artifacts:** README architecture diagram, `FAQ.md` FAQ, optional replay demo of cached end-to-end runs.
-
-### Workflow Integration
-
-```
-Study job posting → Map skills gap → Build/rehearse AlphaGuard component →
-Point interviewers at public repo + docs artifacts → Whiteboard same architecture live
-```
+5. **Diligence artifacts:** README architecture diagram, [`FAQ.md`](../FAQ.md) Technical FAQ, optional replay demo of cached end-to-end runs.
 
 AlphaGuard does **not** run in production, manage capital, or connect to live brokerage APIs.
 
@@ -76,15 +69,15 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 ### 1. Finish Line Over Feature Count
 
-**Rationale:** Scope creep kills weekend/week projects and delays interview prep.
+**Rationale:** Scope creep kills weekend/week projects.
 
 **In Practice:** v1 is done when one headline flows end-to-end with **local run summary** + ML gate + public README. LangSmith/Phoenix spans are optional when configured. No cloud Kafka deploy, no fine-tuning, no hybrid search, no second LLM agent.
 
 ### 2. Learn by Building, Prove by Explaining
 
-**Rationale:** The repo gets the interview; **fluency** passes the interview.
+**Rationale:** The repo must stand alone as an explainable system — not a slide deck.
 
-**In Practice:** Build with AI-native discipline (specs, tests, review). Interview fluency is a **separate initiative** — optional spoken walkthrough / hand-coding drills using `FAQ.md` and `docs/WALKTHROUGH_10MIN.md`. Those drills are **not** build blockers and are **not** scored as portfolio build %.
+**In Practice:** Build with AI-native discipline (specs, tests, review). Optional spoken walkthrough / hand-coding drills using `FAQ.md` and `docs/WALKTHROUGH_10MIN.md` are **separate** from build % and are **not** blockers.
 
 ### 3. Hybrid AI + ML (Not LLM-Only)
 
@@ -94,19 +87,19 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 ### 4. Honest Data Science
 
-**Rationale:** Interviewers will probe leakage, labels, and train/test methodology.
+**Rationale:** Reviewers will probe leakage, labels, and train/test methodology.
 
 **In Practice:** ~500 events, time-based split **before** any threshold fit, features computed only from completed sessions at/before headline time (`feature_as_of`), labels from **forward downside return only** (AG2). Volatility is a predictor and/or deterministic BUY veto — never a learned-label branch. Document limitations openly.
 
 ### 5. Public Shell, No Secret Sauce
 
-**Rationale:** Protect [Lowd Capital](../lowd_capital/docs/VISION.md) proprietary logic.
+**Rationale:** Keep proprietary trading research out of this public repo.
 
-**In Practice:** Public repo. No live keys in git. No strategies that overlap with private trading research.
+**In Practice:** Public repo. No live keys in git. No strategies that overlap with private trading research. A separate private trading project is intentionally out of scope and not linked here.
 
 ### 6. AI-Native Build, Human-Validated Ship
 
-**Rationale:** Tom builds with AI agents; quality comes from specs, tests, and review—not typing every line.
+**Rationale:** Quality comes from specs, tests, and review—not typing every line.
 
 **In Practice:** Spec-first and test-first for ML gate JSON schema and feature pipeline. Repo-level agent guidance (`AGENTS.md`) enforces simplicity and file size limits.
 
@@ -117,13 +110,13 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Milestone | Status | Evidence |
 |-----------|--------|----------|
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
-| Guide 02 — interview packaging | **Done** | `FAQ.md`, `GETTING_STARTED.md`, `docs/assets/` |
+| Guide 02 — packaging (FAQ + GETTING_STARTED) | **Done** | `FAQ.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model; lab test F1 may be weak/noisy — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) |
 | Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume |
-| Portfolio-ready interview lab | **Bounded MV build complete; interview prep separate** | Guides 01–08 built (local + CI); production hardening / deeper live eval incomplete; walkthrough / daily hand-coding = **Interview prep** below — not build % |
+| Portfolio reference MV | **Bounded MV build complete; optional walkthrough separate** | Guides 01–08 built (local + CI); production hardening / deeper live eval incomplete; spoken walkthrough = optional below — not build % |
 
-README / AGENTS / [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md): **bounded MV complete** ≠ production risk model ≠ eval-complete ≠ interview fluency proven.
+README / AGENTS / [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md): **bounded MV complete** ≠ production risk model ≠ eval-complete.
 
 ## Success Criteria
 
@@ -135,20 +128,20 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 - [x] 500 headline events dataset **builder** landed (`scripts/build_training_events.py` → `data/derived/training_events.parquet`; Guide 05a) — regenerate locally; raw dump not in git
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07–08: LangSmith = real fail-open spans when tracing+key; Phoenix = real fail-open spans when `PHOENIX_ENABLED`; default smoke has both `skipped`)*
-- [x] Public GitHub polish with architecture diagram, stack table, and claim hygiene *(README mermaid + Stack + Deeper docs / FINANCE_HONESTY + sales-first proof card in `docs/assets/`; Guide 02 + 2026-07-31 README sales-first pass)*
+- [x] Public GitHub polish with architecture diagram, stack table, and claim hygiene *(README mermaid + Stack + Deeper docs / FINANCE_HONESTY + sales-first proof card in `docs/assets/`)*
 - [x] `FAQ.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
 
-### Interview prep (separate initiative)
+### Spoken walkthrough (optional)
 
-**Not** build blockers. **Not** scored in portfolio build %. Do **not** invent ticks that imply Tom finished rehearsal.
+**Not** build blockers. **Not** scored in portfolio build %.
 
-- [ ] 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — optional rehearsal; Tom has not marked complete)*
-- [ ] 15–30 min/day hand-coding habit *(deferred — Tom does not run this as a project gate)*
+- [ ] 10-minute unprompted architecture walkthrough without opening code *(outline: `docs/WALKTHROUGH_10MIN.md` — optional rehearsal)*
+- [ ] 15–30 min/day hand-coding habit *(deferred — not a project gate)*
 
 ### Signs It's Working
 
-- Technical interviewers engage on system design instead of doubting AI-only coding
-- Tom can answer tool-deep questions (consumer groups, state schema, leakage) without reading docs
+- Technical reviewers engage on system design and as-of / label honesty
+- The clone path stays green without requiring hosted infra
 - Project ships in ≤7 days; no “one more feature” spiral
 
 ### Future Enhancements (Post-v1, Optional)
@@ -164,7 +157,7 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 ### Out of Scope for v1
 
 - Live trading, paper brokerage, or real capital at risk
-- Proprietary alpha research (belongs in Lowd Capital)
+- Proprietary alpha research (belongs in a separate private trading project — not linked here)
 - Model fine-tuning or full MLOps platform (MLflow registry, K8s, Terraform)
 - Cloud deployment of full Kafka stack
 - Second adversarial LLM agent (Agent 2 is ML, not LLM)
@@ -172,12 +165,11 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 - Volatility as a learned-label branch (AG2 — predictor / optional policy veto only)
 - Neural reranker / hybrid RRF ranking showcase for Agent 1 RAG
 - Cybersecurity / SOC log analysis theme
-- Beating recruiter screens (already not the bottleneck)
 - Training Agent 2 on historical Agent 1 outputs (Option C — deferred)
 
 ### Why These Are Non-Goals
 
-Each item adds days of work without improving the core outcome: **technical interview fluency** on a credible, bounded system. Lowd Capital owns long-horizon trading ambition.
+Each item adds days of work without improving the core outcome: a **credible, bounded, locally runnable** reference system with honest limits.
 
 ---
 
@@ -187,15 +179,15 @@ Each item adds days of work without improving the core outcome: **technical inte
 
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
-| Language | Python 3.11+ | DE/AI ecosystem, interview familiarity |
-| Streaming | Apache Kafka (Docker) | Enterprise data eng signal; interview topics |
+| Language | Python 3.11+ | DE/AI ecosystem |
+| Streaming | Apache Kafka (Docker) | Enterprise data eng signal |
 | Vector DB | Qdrant | In-demand vs Chroma; payload filtering |
 | Orchestration | LangGraph | Stateful multi-agent standard in 2026 |
 | Local LLM | Ollama + config-driven model (**default `gemma4:e2b`**) | Modern edge model; swappable |
 | Embeddings | `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) | Local, fast; separate from agent LLM |
 | LLMOps | LangSmith (default) + Phoenix local fallback | Market leader for traces; offline/no-signup path |
 | API | FastAPI | Thin trigger/replay endpoint |
-| ML Gate | XGBoost downside scorer + scikit-learn + deterministic policy | Fast local training; DE interview staple; AG1 |
+| ML Gate | XGBoost downside scorer + scikit-learn + deterministic policy | Fast local training; DE staple; AG1 |
 | Sentiment features | FinBERT inference (HF) | Financial domain signal without training |
 | Prices | yfinance | Free OHLCV for features and labels |
 | Packaging | Docker Compose | One-command local infra |
@@ -244,7 +236,7 @@ Each item adds days of work without improving the core outcome: **technical inte
 
 **RAM operating rule:** Prefer **not** holding Kafka + Qdrant + Ollama + FinBERT all resident. Replay demos may stop unused containers; training/feature jobs run FinBERT offline in batch.
 
-**Interview story:** *"Default is `gemma4:e2b` for a current open edge model. Config allows `qwen3.5:4b` when reviewers need maximum concurrent headroom. We do not chase Qwen 3.6/3.7 large-only locals on 16GB."*
+**Reviewer story:** *"Default is `gemma4:e2b` for a current open edge model. Config allows `qwen3.5:4b` when reviewers need maximum concurrent headroom. We do not chase Qwen 3.6/3.7 large-only locals on 16GB."*
 
 ### Key Patterns
 
@@ -266,7 +258,7 @@ Each item adds days of work without improving the core outcome: **technical inte
 | README + GETTING_STARTED | Skim + clone-and-run path |
 | Local run-summary screenshots in `docs/` (mandatory baseline) | LLMOps proof without video; optional LangSmith/Phoenix only from a real configured run |
 | Replay/fixture smoke output | Proof the path runs without live feeds |
-| `FAQ.md` | Deep-dive prep + send before technical round |
+| `FAQ.md` | Technical FAQ for diligence deep-dives |
 
 No Loom. No required live hosted demo. No full cloud deploy required for v1.
 
@@ -277,20 +269,20 @@ No Loom. No required live hosted demo. No full cloud deploy required for v1.
 | Risk | Why it matters | Mitigation |
 |------|----------------|------------|
 | **16GB RAM contention** | Kafka + Qdrant + Ollama + FinBERT together can swap-thrash | Run services sequentially during dev; limit concurrent containers; pick smallest viable LLM quant |
-| **500-event dataset quality** | Bad alignment → weak ML gate → embarrassing interview story | Document schema; manual spot-check 20 rows; time-based split only |
+| **500-event dataset quality** | Bad alignment → weak ML gate → weak diligence story | Document schema; manual spot-check 20 rows; time-based split only |
 | **Look-ahead leakage** | Features accidentally use future prices | Architecture doc defines strict `as-of` timestamp rules |
 | **Agent 1 JSON failures** | Local LLMs emit malformed output | Ollama JSON schema + Pydantic validation + retry once |
 | **Scope creep** | Project never ships | Non-goals list is binding; v1 finish line in Success Criteria |
-| **Build without interview fluency** | Repo exists but interviews still fail | Keep build MV honest; optional Interview-prep drills stay separate (not a build gate) |
+| **Build without explainability** | Repo exists but cannot be defended end-to-end | Keep build MV honest; optional spoken walkthrough stays separate (not a build gate) |
 | **Kafka ops complexity** | Weekend lost to infra debugging | Docker Compose with pinned images; replay mode bypassing live ingest for demos |
 
-Detailed mitigations belong in the architecture doc and dev guides.
+Detailed mitigations belong in the architecture doc.
 
 ---
 
 ## Research Foundation
 
-- `docs/2026-06-21_ai_engineering_in_demand_skills_and_financial_weekend_project_gemini_ai_brainstorming_conversation.md`
+- Internal brainstorm notes (private hub) informed the 2026 skills shortlist — not linked from this public surface.
 
 ---
 
@@ -312,16 +304,15 @@ Detailed mitigations belong in the architecture doc and dev guides.
 | FinBERT concurrency | **Batch offline** — do not require FinBERT resident with Kafka+Qdrant+Ollama on 16GB |
 | Sharing | Public GitHub + docs; **no Loom**; no required live hosted demo |
 
-**Program SSOT (AG1–AG3):** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md`  
-**Contracts SSOT:** [`ARCHITECTURE.md`](./ARCHITECTURE.md) — do not reintroduce superseded label/action text here.
+**Contracts SSOT:** [`ARCHITECTURE.md`](./ARCHITECTURE.md) — do not reintroduce superseded label/action text here. Program locks AG1–AG3 live with the architecture contracts.
 
 ---
 
 ## When to Update This Doc
 
-- Primary goal shifts (e.g., becomes a product not interview lab)
-- Merge with Lowd Capital (explicitly rejected unless reconsidered)
+- Primary goal shifts (e.g., becomes a product, not a portfolio reference)
+- Scope change regarding private trading research (explicitly rejected unless reconsidered)
 - v1 ships — add “Maintenance” status and lessons learned
 - Major stack swap (e.g., drop Kafka)
 
-Do **not** update for implementation details — use architecture doc and dev guides.
+Do **not** update for implementation details — use the architecture doc.

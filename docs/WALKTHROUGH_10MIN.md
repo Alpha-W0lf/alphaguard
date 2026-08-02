@@ -1,14 +1,14 @@
-# AlphaGuard — 10-minute architecture walkthrough (outline)
+# AlphaGuard — Spoken walkthrough (optional)
 
-**Purpose:** Optional spoken rehearsal for **Interview prep** (separate initiative in `docs/VISION.md`).  
+**Purpose:** Optional spoken rehearsal outline (see optional walkthrough boxes in `docs/VISION.md`).  
 **Not a build blocker.** Does **not** gate v1 build Done. Default smoke = fixture; Option B = lab train path only.
 
-Use this as a prompt card. Practice **aloud without opening the repo** if you want interview fluency. Do **not** treat an unchecked rehearsal as unfinished build work.
+Use this as a prompt card. Practice **aloud without opening the repo** if you want fluency drills. Do **not** treat an unchecked rehearsal as unfinished build work.
 
 ## Minute 0–1 — What it is
 
-- Public **interview lab**: one headline → replay ingest → RAG hits → LangGraph Agent 1 (`BUY|HOLD|PASS`) → XGBoost downside gate → **local** run summary.
-- Vertical slice, **not** a trading system / not Lowd Capital.
+- Public **portfolio reference**: one headline → replay ingest → RAG hits → LangGraph Agent 1 (`BUY|HOLD|PASS`) → XGBoost downside gate → **local** run summary.
+- Vertical slice, **not** a trading system / not a private trading-factory surrogate.
 
 ## Minute 1–3 — Critical path
 
@@ -44,4 +44,4 @@ Use this as a prompt card. Practice **aloud without opening the repo** if you wa
 
 ## Self-check
 
-Can you explain AG2 without looking? Can you say why fixture F1=1.0 is theater? If yes, rehearse twice more. Mark the VISION **Interview prep** walkthrough box yourself only when cold — never invent that tick from an agent.
+Can you explain AG2 without looking? Can you say why fixture F1=1.0 is theater? If yes, rehearse twice more. Mark the VISION **Spoken walkthrough (optional)** box yourself only when cold — never invent that tick from an agent.

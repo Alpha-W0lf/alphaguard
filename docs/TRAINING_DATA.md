@@ -2,7 +2,9 @@
 
 **Status:** **Review shippable (2026-07-17)** — parquet (05a) + Option B train (05b) verified and Review-complete. Soft pin FinBERT = **`ProsusAI/finbert`**. Preferred CSV `analyst_ratings_processed.csv`. Output `data/derived/training_events.parquet` (gitignored). Default smoke still **fixture**.  
 **Fixture gate ≠ Option B evidence** — use `MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b` for Option B demos.  
-**Archive aliases (2026-07-21):** coded Soft Adjust registry `fb_meta_v1` (`FB`→`META`) + `goog_googl_v1` (`GOOG`→`GOOGL`); `builder_version=0.1.1`; default **on** (`apply_archive_aliases=True`); prices fetch **META/GOOGL only** (never Yahoo `FB`/`GOOG`).
+**Archive aliases (2026-07-21):** coded alias registry `fb_meta_v1` (`FB`→`META`) + `goog_googl_v1` (`GOOG`→`GOOGL`); `builder_version=0.1.1`; default **on** (`apply_archive_aliases=True`); prices fetch **META/GOOGL only** (never Yahoo `FB`/`GOOG`).
+
+> **Note:** ML regenerate notes for Option B — **not** required for the stranger clone / `make smoke` path.
 
 ### Live e2e evidence (2026-07-21 alias rebuild)
 
