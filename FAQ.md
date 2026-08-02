@@ -23,7 +23,7 @@ Optional vol veto rejects **`BUY` only** and is policy, not part of the learned 
 
 ## 3. What is the learned label, and why never OR volatility into it?
 
-**AG2:** `label_high_risk = 1` iff forward 5-session return `< -0.03`. Volatility may be a **feature** and/or a **deterministic BUY veto**, but must never be OR’d into the training label. Mixing current vol into the target turns a downside-return model into a mushy risk composite that is hard to defend in interview.
+**AG2:** `label_high_risk = 1` iff forward 5-session return `< -0.03`. Volatility may be a **feature** and/or a **deterministic BUY veto**, but must never be OR’d into the training label. Mixing current vol into the target turns a downside-return model into a mushy risk composite that is hard to defend in diligence review.
 
 ## 4. How does unified as-of prevent look-ahead leakage in RAG hits?
 
@@ -69,7 +69,7 @@ Compose proves pinned images + operator path. Guide 04 ships producer/consumer, 
 
 Universe is locked (`AAPL`, `MSFT`, …). Out-of-universe tickers are **rejected** in builders/fixtures — no silent remap. Invalid proposals (`SELL`, malformed JSON): schema reject / one repair retry, then fail closed — no fake approve. See §7.1–7.2 and failure-mode table.
 
-## 15. Where do unit tests vs executable goldens carry the interview invariants today?
+## 15. Where do unit tests vs executable goldens carry the diligence invariants today?
 
 **Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, `test_train_option_b.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`, train-only HPO/threshold. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not production Option B.
 
@@ -79,7 +79,7 @@ No. FinBERT is offline batch only. Smoke uses a precomputed fixture sentiment co
 
 ## 17. (Bonus) Does Agent 1 `confidence` change the gate?
 
-No. Confidence is validated for schema completeness, then **ignored by policy** — trace / interview signal only (§7.4).
+No. Confidence is validated for schema completeness, then **ignored by policy** — trace / review signal only (§7.4).
 
 ---
 
