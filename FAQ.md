@@ -2,9 +2,7 @@
 
 Staff-facing Q&A for the **replay-first** local demo. Contracts SSOT: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Product / why: [`docs/VISION.md`](docs/VISION.md). Finance claims: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md).
 
-**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete** (finish line = local + CI). Packaging around a green smoke path — **not** a production risk model. Default smoke is still **fixture**. A local `bundle_kind=option_b` train path exists for lab metrics (noisy/weak test F1 — honest zeros allowed) — do not market it as a production risk model. Thin Yahoo RSS poll CLI (`alphaguard rss poll`) — Yahoo may flake; **not** 24/7 reliability / **not** agent-on-consume. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
-
-**Why packaging now (vs ARCHITECTURE §15):** program pass-12 soft-overrides the architecture sequencing sketch for interview ROI — packaging needs only the shippable vertical slice. Contracts (AG1–AG3) are unchanged.
+**Status:** Bounded local demo is runnable; production hardening and deeper live evaluation are incomplete (finish line = local + CI). Default smoke is still **fixture** — **not** a production risk model. Optional Option B train path is lab metrics only. Yahoo RSS poll may flake. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT). See [`LICENSE`](LICENSE).
 
 ---
 
