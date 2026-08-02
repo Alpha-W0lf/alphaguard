@@ -63,7 +63,7 @@ Full clean-clone path, Ollama footguns, and optional Kafka/RSS: [`GETTING_STARTE
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how  
 - [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md) — gate ≠ alpha; lab metrics; no PnL claims  
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — operator path  
-- [`INTERVIEW.md`](INTERVIEW.md) — staff FAQ  
+- [`FAQ.md`](FAQ.md) — Technical FAQ  
 - [`docs/assets/`](docs/assets/) — packaging visuals  
 - [`LICENSE`](LICENSE) — PolyForm Noncommercial 1.0.0 (source-available / non-commercial)
 

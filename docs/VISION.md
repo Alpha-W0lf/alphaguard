@@ -59,7 +59,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
 3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
 4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured.
-5. **Interview artifacts:** README architecture diagram, `INTERVIEW.md` FAQ, optional replay demo of cached end-to-end runs.
+5. **Interview artifacts:** README architecture diagram, `FAQ.md` FAQ, optional replay demo of cached end-to-end runs.
 
 ### Workflow Integration
 
@@ -84,7 +84,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 
 **Rationale:** The repo gets the interview; **fluency** passes the interview.
 
-**In Practice:** Build with AI-native discipline (specs, tests, review). Interview fluency is a **separate initiative** — optional spoken walkthrough / hand-coding drills using `INTERVIEW.md` and `docs/WALKTHROUGH_10MIN.md`. Those drills are **not** build blockers and are **not** scored as portfolio build %.
+**In Practice:** Build with AI-native discipline (specs, tests, review). Interview fluency is a **separate initiative** — optional spoken walkthrough / hand-coding drills using `FAQ.md` and `docs/WALKTHROUGH_10MIN.md`. Those drills are **not** build blockers and are **not** scored as portfolio build %.
 
 ### 3. Hybrid AI + ML (Not LLM-Only)
 
@@ -117,7 +117,7 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Milestone | Status | Evidence |
 |-----------|--------|----------|
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
-| Guide 02 — interview packaging | **Done** | `INTERVIEW.md`, `GETTING_STARTED.md`, `docs/assets/` |
+| Guide 02 — interview packaging | **Done** | `FAQ.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
 | Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model; lab test F1 may be weak/noisy — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) |
 | Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume |
@@ -136,7 +136,7 @@ Score portfolio **build** doneness on these boxes only (Tom lock 2026-07-18):
 - [x] XGBoost downside-risk scorer trained with time-based holdout + train-only threshold fit; metrics in bundle manifest + TRAINING_DATA *(default smoke still fixture; lab-scale test F1 is noisy — not production)* — **Guide 05b**
 - [x] One **replayed** fixture headline flows: ingest → RAG → Agent 1 → Agent 2 → local run summary *(Guide 07–08: LangSmith = real fail-open spans when tracing+key; Phoenix = real fail-open spans when `PHOENIX_ENABLED`; default smoke has both `skipped`)*
 - [x] Public GitHub polish with architecture diagram, stack table, and claim hygiene *(README mermaid + Stack + Deeper docs / FINANCE_HONESTY + sales-first proof card in `docs/assets/`; Guide 02 + 2026-07-31 README sales-first pass)*
-- [x] `INTERVIEW.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
+- [x] `FAQ.md` with 15+ gotcha Q&A *(17 themes as of 2026-07-17 Align)*
 
 ### Interview prep (separate initiative)
 
@@ -266,7 +266,7 @@ Each item adds days of work without improving the core outcome: **technical inte
 | README + GETTING_STARTED | Skim + clone-and-run path |
 | Local run-summary screenshots in `docs/` (mandatory baseline) | LLMOps proof without video; optional LangSmith/Phoenix only from a real configured run |
 | Replay/fixture smoke output | Proof the path runs without live feeds |
-| `INTERVIEW.md` | Deep-dive prep + send before technical round |
+| `FAQ.md` | Deep-dive prep + send before technical round |
 
 No Loom. No required live hosted demo. No full cloud deploy required for v1.
 
