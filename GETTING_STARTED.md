@@ -1,10 +1,13 @@
 # Getting started — AlphaGuard (clean clone)
 
-Clone-depth operator path for the **replay-first** smoke demo. For contracts see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); for interview gotchas see [`INTERVIEW.md`](INTERVIEW.md); skim + diagram in [`README.md`](README.md); finance claims → [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md).
+Replay-first smoke path for the news → RAG → BUY/HOLD/PASS → downside-risk gate demo.
 
-**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not hosted). Option B training is out of scope for this clone path; Kafka thin integration (Guide 04) and Yahoo RSS poll (Guide 06) are optional for smoke — default smoke stays Kafka-down fixture. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
+- Skim + diagram: [`README.md`](README.md)
+- Contracts: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Finance claims: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md)
+- Technical FAQ: [`INTERVIEW.md`](INTERVIEW.md)
 
-**Why packaging before Kafka (ARCHITECTURE §15 soft override):** interview ROI prioritizes a defendable FAQ + clone path + local-envelope evidence around the green vertical slice. Contracts unchanged.
+**Status:** Bounded local demo is runnable; production hardening and deeper live evaluation are incomplete. Finish line = **local + CI** (not hosted). Default smoke stays Kafka-down with fixtures. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).
 
 ---
 
@@ -52,7 +55,7 @@ Checks replay-mode readiness (Ollama reachability / model tags per config). If t
 
 ### Where the envelope lands
 
-Successful smoke writes a local run summary under **`artifacts/runs/<run_id>.json`** (gitignored). That file is the **mandatory LLMOps baseline**. With default env, `obs.langsmith=skipped` and `obs.phoenix=skipped` (smoke never needs a LangSmith key or Phoenix collector). When `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` are set, Guide 07 emits a real LangSmith Client run and may set `extras.langsmith_run_id`. When `PHOENIX_ENABLED=true`, Guide 08 emits a real Phoenix/OTEL chain span and may set `extras.phoenix_span_id`. Do not invent LangSmith/Phoenix UI screenshots.
+Successful smoke writes a local run summary under **`artifacts/runs/<run_id>.json`** (gitignored). That file is the **mandatory LLMOps baseline**. With default env, `obs.langsmith=skipped` and `obs.phoenix=skipped` (smoke never needs a LangSmith key or Phoenix collector). When `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` are set, a real LangSmith Client run may appear and `extras.langsmith_run_id` may be set. When `PHOENIX_ENABLED=true`, a real Phoenix/OTEL chain span may appear and `extras.phoenix_span_id` may be set. Do not invent LangSmith/Phoenix UI screenshots.
 
 ### macOS `libomp`
 
@@ -73,7 +76,7 @@ brew install libomp
 | `bundle_kind=fixture` | Plumbing only — do not cite synthetic F1 as model quality |
 | Primary model missing | Preflight may use fallback; document which model actually ran |
 
-## Optional: Kafka + Qdrant integration (Guide 04)
+## Optional: Kafka + Qdrant integration
 
 ```bash
 docker compose up -d
@@ -85,7 +88,7 @@ uv run alphaguard kafka produce --event-id evt-aapl-001
 # or: curl -X POST localhost:8000/trigger -H 'Content-Type: application/json' -d '...'
 ```
 
-### Optional: Yahoo RSS poll (Guide 06)
+### Optional: Yahoo RSS poll
 
 Requires Compose Kafka + a running consumer (same as above). **Not** required for smoke.
 
@@ -97,4 +100,4 @@ uv run alphaguard rss poll --ticker AAPL --max-items 10
 
 Yahoo may flake or block; offline fixtures under `data/fixtures/rss/` are CI truth. Default smoke path remains Kafka-down (`make smoke`). Integration tests: `ALPHAGUARD_RUN_KAFKA_TESTS=1 uv run pytest -m kafka_integration`. Optional live RSS probe: `ALPHAGUARD_RUN_RSS_LIVE=1 uv run pytest -m rss_live`.
 
-Do **not** tick VISION MV packaging boxes from this file — Align-docs owns checkbox updates after Review evidence.
+More: Technical FAQ ([`INTERVIEW.md`](INTERVIEW.md)) · Architecture · Finance honesty.
