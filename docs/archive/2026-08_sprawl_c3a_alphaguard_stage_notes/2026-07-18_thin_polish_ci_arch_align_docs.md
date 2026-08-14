@@ -1,10 +1,15 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Align-docs — AlphaGuard thin polish CI + ARCHITECTURE header (pass 155)
 
 **Date:** 2026-07-18  
 **Mode:** spoke  
 **Stage:** Align docs  
 **Guide:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md`  
-**Review:** `docs/2026-07-18_thin_polish_ci_arch_review.md` (shippable as-is, `9bf0c19`)  
+**Review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_thin_polish_ci_arch_review.md` (shippable as-is, `9bf0c19`)  
 **Implement:** `9a1e48f`  
 **Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_align_ci_arch_polish_pass155_handoff.md`
 

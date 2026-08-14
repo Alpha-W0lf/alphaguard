@@ -60,7 +60,7 @@ This was **polish**, not a feature Guide 09.
 |------|-----|
 | `docs/ARCHITECTURE.md` L1–7 | Stale Status/Last Updated vs Guide 08 body |
 | `docs/ARCHITECTURE.md` §2 / §13 | Already honest on Guide 07/08 LLMOps |
-| `docs/2026-07-18_guide08_align_docs.md` | Guide 08 slice closed evidence |
+| `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_guide08_align_docs.md` | Guide 08 slice closed evidence |
 | `pyproject.toml` `[tool.pytest.ini_options]` | Default `addopts` exclude live markers |
 | `.python-version` | `3.12` |
 | Quality pass 155 | AG: stamp ARCH + minimal GHA pytest |

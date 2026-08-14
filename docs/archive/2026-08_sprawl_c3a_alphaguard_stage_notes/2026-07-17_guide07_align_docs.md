@@ -1,10 +1,15 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Align-docs — AlphaGuard Guide 07 LangSmith fail-open spans (pass 127)
 
 **Date:** 2026-07-17  
 **Mode:** spoke  
 **Stage:** Align docs  
 **Guide:** `docs/dev_guides/2026-07-17_dev_guide_07_langsmith_fail_open_spans.md`  
-**Review:** `docs/2026-07-17_guide07_langsmith_fail_open_review.md` (shippable as-is)  
+**Review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-17_guide07_langsmith_fail_open_review.md` (shippable as-is)  
 **Implement:** `287a82a`  
 **Handoff:** `second_brain/docs/2026-07-17_spoke_alphaguard_guide07_align_pass127_handoff.md`
 

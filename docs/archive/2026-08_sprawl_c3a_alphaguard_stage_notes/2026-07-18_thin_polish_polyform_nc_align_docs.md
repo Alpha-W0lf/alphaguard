@@ -1,10 +1,15 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Align-docs — AlphaGuard thin polish PolyForm-NC LICENSE (pass 155)
 
 **Date:** 2026-07-18  
 **Mode:** spoke  
 **Stage:** Align docs  
 **Guide:** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`  
-**Review:** `docs/2026-07-18_thin_polish_polyform_nc_review.md` (shippable as-is, `a4f488d`)  
+**Review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_thin_polish_polyform_nc_review.md` (shippable as-is, `a4f488d`)  
 **Implement:** `c7c2e00`  
 **Handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_align_polyform_nc_pass155_handoff.md`
 

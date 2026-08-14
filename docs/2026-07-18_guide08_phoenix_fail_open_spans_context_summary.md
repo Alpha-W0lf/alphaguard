@@ -7,7 +7,7 @@
 **Stage:** Align-docs (complete) — Guide 08 closed; hub Prioritize for next work  
 **Role lens:** Senior AI eng (LLMOps honesty / fail-open telemetry)  
 **Guide path:** `docs/dev_guides/2026-07-18_dev_guide_08_phoenix_fail_open_spans.md`  
-**Review:** `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
+**Review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
 **Implement:** `e5aad97` · Review docs: `a60a417`  
 **Align handoff:** `second_brain/docs/2026-07-18_spoke_alphaguard_align_guide08_phoenix_pass152_handoff.md`
 

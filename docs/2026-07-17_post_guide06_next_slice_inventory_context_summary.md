@@ -10,7 +10,7 @@
 **Guide 08 path:** `docs/dev_guides/2026-07-18_dev_guide_08_phoenix_fail_open_spans.md`  
 **Thin polish (CI+ARCH):** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md` (Align Met)  
 **Thin polish (LICENSE):** `docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md` (Align Met)  
-**Review Guide 08:** `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
+**Review Guide 08:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_guide08_phoenix_fail_open_review.md` (shippable as-is)  
 **Implement Guide 08:** `e5aad97` · Review docs: `a60a417`  
 **Thin polish CI Implement:** `9a1e48f` · Review: `9bf0c19`  
 **PolyForm-NC Implement:** `c7c2e00` · Review: `a4f488d`  

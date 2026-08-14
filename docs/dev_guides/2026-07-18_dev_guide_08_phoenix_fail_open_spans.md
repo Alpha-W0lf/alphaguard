@@ -263,7 +263,7 @@ make smoke
 
 - **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
 - **Implement DoD:** **Met** (`e5aad97`).  
-- **Review:** **Shippable as-is** — `docs/2026-07-18_guide08_phoenix_fail_open_review.md` (`a60a417`).  
+- **Review:** **Shippable as-is** — `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_guide08_phoenix_fail_open_review.md` (`a60a417`).  
 - **Align-docs:** **Met** (pass 152) — status honesty stamped; Interview-prep boxes untouched.  
 - **Residual (non-blocking):** D3 live Phoenix collector probe; OTEL `force_flush` True-on-dead-collector quirk.  
 - **Slice closed.** Hub Prioritize for any next AlphaGuard work — **do not self-start**.  

@@ -1,9 +1,14 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Align docs — AlphaGuard portfolio packaging (pass 164n)
 
 **Date:** 2026-07-23  
 **Mode / stage:** hub · Align docs (docs-only)  
 **Locks:** `second_brain/docs/2026-07-23_hub_locks_align_and_write_pass164n.md`  
-**Critical review:** `docs/2026-07-23_critical_review_portfolio_packaging_readme_pass164n.md`
+**Critical review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-23_critical_review_portfolio_packaging_readme_pass164n.md`
 
 ## Done this pass
 

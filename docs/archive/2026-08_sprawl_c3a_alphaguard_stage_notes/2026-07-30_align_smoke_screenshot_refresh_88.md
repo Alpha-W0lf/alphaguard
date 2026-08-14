@@ -1,3 +1,8 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Align — AlphaGuard smoke screenshot refresh (#88 soft residual)
 
 **Date:** 2026-07-30  

@@ -1,9 +1,14 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Ready check before code — AlphaGuard thin polish CI + ARCH header (pass 155)
 
 **Status:** Ready-check complete → **READY 9.0/10** — later stages: Implement Met (`9a1e48f`) · Review shippable (`9bf0c19`) · **Align Met / slice closed** (pass 155)  
 **Guide:** `alphaguard/docs/dev_guides/2026-07-18_dev_guide_thin_polish_ci_arch_header.md`  
 **Context:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_header_context_summary.md`  
-**Align:** `alphaguard/docs/2026-07-18_thin_polish_ci_arch_align_docs.md`  
+**Align:** `alphaguard/docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_thin_polish_ci_arch_align_docs.md`  
 **Handoff (historical Ready):** `second_brain/docs/2026-07-18_spoke_alphaguard_ready_ci_arch_polish_pass155_handoff.md`  
 **Locks:** CI **A** (uv 3.12 frozen + pytest -q) · Triggers **A** (main + PRs)  
 **Persistent spoke:** `0a88890e-8c9d-4101-b019-8754f212607d`

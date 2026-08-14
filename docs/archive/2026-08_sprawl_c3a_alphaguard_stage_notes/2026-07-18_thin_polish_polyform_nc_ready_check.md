@@ -1,9 +1,14 @@
+> **ARCHIVED** — moved under Workflow OS documentation sprawl reform.
+> Do not treat this file as living SSOT.
+> Living successor: `docs/VISION.md` · `docs/ARCHITECTURE.md` · `docs/FINANCE_HONESTY.md` · `docs/LIVING_DOCS_INDEX.md` · matching living guide under `docs/dev_guides/`
+> Batch: `2026-08_sprawl_c3a_alphaguard_stage_notes`
+> Date: 2026-08-14
 # Ready check before code — AlphaGuard thin polish PolyForm-NC LICENSE (pass 155)
 
 **Status:** Ready-check complete → **READY 9.2/10** — later stages: Implement Met (`c7c2e00`) · Review shippable (`a4f488d`) · **Align Met / slice closed** (pass 155)  
 **Guide:** `alphaguard/docs/dev_guides/2026-07-18_dev_guide_thin_polish_polyform_nc_license.md`  
 **Context:** `alphaguard/docs/2026-07-18_thin_polish_polyform_nc_license_context_summary.md`  
-**Align:** `alphaguard/docs/2026-07-18_thin_polish_polyform_nc_align_docs.md`  
+**Align:** `alphaguard/docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_thin_polish_polyform_nc_align_docs.md`  
 **Handoff (historical Ready):** `second_brain/docs/2026-07-18_spoke_alphaguard_ready_polyform_nc_pass155_handoff.md`  
 **Write:** Met (`65109ea`) — pre-Implement LICENSE absent was correct  
 **Locks:** PolyForm-NC 1.0.0 · `Copyright (c) 2026 Tom Chacko` · honesty README/VISION/GETTING_STARTED/INTERVIEW/AGENTS · no PUBLIC_FLIP invent  

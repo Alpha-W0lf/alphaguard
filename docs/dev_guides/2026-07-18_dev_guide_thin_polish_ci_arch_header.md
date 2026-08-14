@@ -48,7 +48,7 @@ Close two portfolio honesty gaps after Guide 08:
 
 - `alphaguard/docs/2026-07-18_thin_polish_ci_arch_header_context_summary.md`
 - `alphaguard/docs/ARCHITECTURE.md` (header L1–7; do not reopen § contracts)
-- `alphaguard/docs/2026-07-18_guide08_align_docs.md`
+- `alphaguard/docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-18_guide08_align_docs.md`
 - `alphaguard/pyproject.toml` (`addopts` live-marker exclusions)
 - `alphaguard/.python-version` (`3.12`)
 - `alphaguard/uv.lock`

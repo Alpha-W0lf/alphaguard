@@ -8,8 +8,8 @@
 **Mode last used:** spoke (pass 116 Align-docs)  
 **Stage:** Align-docs complete  
 **Dev guide:** `docs/dev_guides/2026-07-17_dev_guide_06_live_rss_reliability.md`  
-**Ready-check:** `docs/2026-07-17_guide06_ready_check_before_implement.md`  
-**Review:** `docs/2026-07-17_guide06_live_rss_review.md`  
+**Ready-check:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-17_guide06_ready_check_before_implement.md`  
+**Review:** `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-17_guide06_live_rss_review.md`  
 **Role lens:** Data engineer (primary) + backend operator path; interview honesty on reliability claims  
 
 ## Outcome (shipped — Align truth)

@@ -229,7 +229,7 @@ make smoke
 
 - **Write-dev-guide / Ready-check:** Met (READY 9.0/10).  
 - **Implement DoD:** **Met** (`287a82a`).  
-- **Review:** **Shippable as-is** — `docs/2026-07-17_guide07_langsmith_fail_open_review.md`.  
+- **Review:** **Shippable as-is** — `docs/archive/2026-08_sprawl_c3a_alphaguard_stage_notes/2026-07-17_guide07_langsmith_fail_open_review.md`.  
 - **Align-docs:** **Met** (pass 127) — inventory/VISION/ARCHITECTURE honesty stamped; MV boxes untouched.  
 - **Residual (non-blocking):** D3 live probe; optional update_run-failure unit.  
 - **Next:** hub Prioritize for any Guide 08 — **do not self-start**. 
