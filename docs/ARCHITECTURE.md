@@ -9,9 +9,7 @@
 **Product / why SSOT:** [`VISION.md`](./VISION.md) (must stay aligned with AG1–AG3)  
 **Contracts / how SSOT:** this file  
 **Finance claims:** [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md)  
-**Program locks:** `second_brain/docs/2026-07-12_portfolio_vision_workspace_and_decisions.md` (**AG1–AG3**)  
-**Pass-3 review:** `second_brain/docs/2026-07-12_alphaguard_architecture_pass3_review.md`  
-**First executable guide:** [`dev_guides/2026-07-12_dev_guide_01_replay_first_vertical_slice.md`](./dev_guides/2026-07-12_dev_guide_01_replay_first_vertical_slice.md) — **Implement complete / Review shippable**
+
 
 This document defines components, data flow, contracts, failure modes, and layer boundaries. It does **not** authorize scope beyond VISION non-goals. **Do not read the component table as “all code exists”** — see §5 existence column.
 
