@@ -44,6 +44,10 @@ make smoke               # Kafka down; fixture RAG
 
 Full clean-clone path, Ollama footguns, and optional Kafka/RSS: [`GETTING_STARTED.md`](GETTING_STARTED.md).
 
+Example `make smoke` run — the analyst proposes BUY on an Apple headline; the downside-risk gate **vetoes** it:
+
+![Smoke run: analyst BUY vetoed by the downside-risk gate](docs/assets/smoke_run_output.png)
+
 [![CI](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml)
 
 ### Stack
