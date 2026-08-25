@@ -17,7 +17,7 @@ Use this as a prompt card. Practice **aloud without opening the repo** if you wa
 3. RAG returns as-of-filtered hits (`available_at <= published_at`).  
 4. Agent 1 proposes action; identity stamped from event.  
 5. Agent 2 scores `proba_high_risk`; deterministic policy approve/reject.  
-6. Always write local envelope; LangSmith = real fail-open spans when tracing+key (Guide 07); Phoenix = real fail-open spans when `PHOENIX_ENABLED` (Guide 08); default smoke → both `skipped`.
+6. Always write local envelope; LangSmith = real fail-open spans when tracing+key; Phoenix = real fail-open spans when `PHOENIX_ENABLED`; default smoke → both `skipped`.
 
 ## Minute 3–5 — AG1 / AG2 / AG3 (say these)
 
@@ -33,7 +33,7 @@ Use this as a prompt card. Practice **aloud without opening the repo** if you wa
 
 ## Minute 7–9 — Ops / failure modes
 
-- Replay-first; Compose Kafka+Qdrant for thin E2E; Guide 06 thin `rss poll` (Yahoo may flake) — not 24/7 SRE.  
+- Replay-first; Compose Kafka+Qdrant for thin E2E; optional thin `rss poll` (Yahoo may flake) — not 24/7 SRE.  
 - Ollama default `gemma4:e2b`, fallback `qwen3.5:4b` on old builds.  
 - Eval: ≥21 goldens structural — not live-Ollama schema-pass rates.
 

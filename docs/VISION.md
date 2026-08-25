@@ -2,13 +2,15 @@
 
 **Purpose:** Build a bounded, public **reference pipeline** that demonstrates senior AI/data-engineering craft: news → RAG → structured trade ideas → downside-risk gate — runnable locally with honest limits.
 
-**Status:** **Bounded minimum viable build complete** (guides 01–08); **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Guide 04 = Kafka+Qdrant thin integration; Guide 06 = Yahoo RSS poll CLI (Yahoo may flake); Guide 07 = LangSmith Client emit when configured; Guide 08 = Phoenix OTEL chain span when `PHOENIX_ENABLED`; default smoke still Kafka-down **fixture** (never requires LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
+**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Capabilities beyond the default smoke: a Kafka+Qdrant thin integration, a Yahoo RSS poll CLI (Yahoo may flake), LangSmith run emission when configured, and a Phoenix OTEL chain span when `PHOENIX_ENABLED` — the default smoke stays Kafka-down **fixture** (never requires a LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
 
 **Last Updated:** 2026-08-02 (R1 public-facing soften — product-why first; personal compensation / job-hunt lead removed)
 
 **Owner:** Tom
 
-**Guide:** This file is the **product / why** decision framework. Binding contracts, as-of rules, and gate policy live in [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+**Role:** This file is the **product / why** decision framework. Binding contracts, as-of rules, and gate policy live in [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+> **Terminology:** `Guide NN` tags mark numbered internal build milestones — historical provenance for when a capability landed. Read them as labels; current truth is what this document states.
 
 **Related:** A separate private trading project is intentionally out of scope and not linked here. AlphaGuard holds no proprietary trading alpha.
 

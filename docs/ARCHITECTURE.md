@@ -13,6 +13,8 @@
 
 This document defines components, data flow, contracts, failure modes, and layer boundaries. It does **not** authorize scope beyond VISION non-goals. **Do not read the component table as “all code exists”** — see §5 existence column.
 
+> **Terminology:** `Guide NN` tags mark numbered internal build milestones — historical provenance for when a capability landed. Read them as labels; current truth is what this document states.
+
 ---
 
 ## 1. Purpose
