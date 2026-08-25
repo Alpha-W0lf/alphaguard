@@ -39,7 +39,7 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 ## 7. What does replay-first prove vs what Kafka E2E still needs to prove?
 
-Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. Guide 04 adds produce/consume + idempotent Qdrant upsert + `/trigger` when Compose is up. Guide 06 adds optional Yahoo RSS → produce (`rss poll`); still **not** production SRE / agent-on-consume.
+Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. With Docker Compose up, the stack adds produce/consume + idempotent Qdrant upsert + `/trigger`; an optional Yahoo RSS producer (`rss poll`) rounds it out — still **not** production SRE / agent-on-consume.
 
 ## 8. What is `replay_fixture` vs `kafka_integration`?
 
@@ -55,7 +55,7 @@ Default `OLLAMA_MODEL=gemma4:e2b` needs a current Ollama (Gemma 4 can **412** on
 
 ## 11. Are LangSmith/Phoenix “wired,” and what is the real LLMOps baseline?
 
-Local run summary under `artifacts/runs/*.json` is **mandatory and real**. **Guide 07:** when tracing + API key are configured, LangSmith emits a real Client run (`ok` only after emit; `extras.langsmith_run_id` on success). **Guide 08:** when `PHOENIX_ENABLED=true`, Phoenix emits a real OpenInference chain span (`ok` only after emit+flush; `extras.phoenix_span_id` on success). Default smoke has both off → `skipped` (no LangSmith key or Phoenix collector required). Local-envelope screenshots fulfill packaging; do not invent LangSmith/Phoenix UI.
+Local run summary under `artifacts/runs/*.json` is **mandatory and real**. When tracing + an API key are configured, LangSmith emits a real Client run (`ok` only after emit; `extras.langsmith_run_id` on success). When `PHOENIX_ENABLED=true`, Phoenix emits a real OpenInference chain span (`ok` only after emit+flush; `extras.phoenix_span_id` on success). Default smoke has both off → `skipped` (no LangSmith key or Phoenix collector required). Local-envelope screenshots fulfill packaging; do not invent LangSmith/Phoenix UI.
 
 ## 12. Why can the same event show `BUY` or `HOLD` across smokes?
 
@@ -63,7 +63,7 @@ Agent 1 is LLM-sampled (stochastic). Agent 2’s **policy table is deterministic
 
 ## 13. Does `docker-compose.yml` prove Kafka delivery contracts?
 
-Compose proves pinned images + operator path. Guide 04 ships producer/consumer, DLQ, UUID5 upsert, and `/trigger`. Guide 06 ships thin `rss poll` (Yahoo may flake; fixture XML for CI). Smoke must still succeed with Kafka **stopped** (`Makefile` comment).
+Compose proves pinned images + operator path: producer/consumer, DLQ, UUID5 upsert, and `/trigger`; plus a thin `rss poll` (Yahoo may flake; fixture XML for CI). Smoke must still succeed with Kafka **stopped** (`Makefile` comment).
 
 ## 14. What happens to an out-of-universe ticker or invalid proposal?
 
