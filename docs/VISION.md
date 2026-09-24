@@ -4,7 +4,7 @@
 
 **Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Capabilities beyond the default smoke: a Kafka+Qdrant thin integration, a Yahoo RSS poll CLI (Yahoo may flake), LangSmith run emission when configured, and a Phoenix OTEL chain span when `PHOENIX_ENABLED` — the default smoke stays Kafka-down **fixture** (never requires a LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
 
-**Last Updated:** 2026-08-02 (R1 public-facing soften — product-why first; personal compensation / job-hunt lead removed)
+**Last Updated:** 2026-09-24 (JH-63.1-docs: optional-stack labels; local envelope always)
 
 **Owner:** Tom
 
@@ -44,9 +44,9 @@ Intensive build over **6–7 days max** for the bounded MV. Optional spoken walk
 
 ### What It Does
 
-**AlphaGuard** is a stateful multi-agent financial research pipeline that ingests news, retrieves context via RAG, proposes structured trade ideas (Agent 1), and gates them through a supervised ML **downside-risk scorer + deterministic policy** (Agent 2)—with LangSmith/Phoenix best-effort tracing and a mandatory local run summary.
+**AlphaGuard** is a stateful multi-agent financial research pipeline that ingests news, retrieves context via RAG, proposes structured trade ideas (Agent 1), and gates them through a supervised ML **downside-risk scorer + deterministic policy** (Agent 2). **Local run envelope always**; LangSmith / Phoenix emit when configured.
 
-It simulates institutional “analyst + risk” separation using tools employers recognize in mid-2026: **Kafka, Qdrant, LangGraph, Ollama, LangSmith, FastAPI, XGBoost**.
+It simulates institutional “analyst + risk” separation using tools employers recognize in mid-2026: **Kafka** (Compose, optional), **Qdrant** (when configured), **LangGraph**, **Ollama**, **LangSmith** (when configured), **FastAPI**, **XGBoost**.
 
 ### How it's used
 
@@ -57,7 +57,7 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 ### Key Capabilities
 
-1. **Event-driven ingestion:** Financial headlines flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). Replay fixtures bypass live Kafka for demos.
+1. **Event-driven ingestion (optional Compose path):** Financial headlines can flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). Default `/replay` decision path uses fixtures and does **not** require Kafka.
 2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
 3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
 4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured.
@@ -187,7 +187,7 @@ Each item adds days of work without improving the core outcome: a **credible, bo
 | Orchestration | LangGraph | Stateful multi-agent standard in 2026 |
 | Local LLM | Ollama + config-driven model (**default `gemma4:e2b`**) | Modern edge model; swappable |
 | Embeddings | `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) | Local, fast; separate from agent LLM |
-| LLMOps | LangSmith (default) + Phoenix local fallback | Market leader for traces; offline/no-signup path |
+| LLMOps | Local run envelope **always**; LangSmith + Phoenix **when configured** | Market leader for traces; offline/no-signup path; smoke never requires a key or collector |
 | API | FastAPI | Thin trigger/replay endpoint |
 | ML Gate | XGBoost downside scorer + scikit-learn + deterministic policy | Fast local training; DE staple; AG1 |
 | Sentiment features | FinBERT inference (HF) | Financial domain signal without training |

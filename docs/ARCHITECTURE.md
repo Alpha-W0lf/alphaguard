@@ -2,7 +2,7 @@
 
 **Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-07-21 (Align finish-line wording + finance honesty cross-link; default smoke still fixture)  
+**Last Updated:** 2026-09-24 (JH-63.1-docs: mermaid caption splits ingest vs /replay; LLMOps when configured)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 
@@ -35,7 +35,7 @@ It is **not** a trading system, brokerage connector, Lowd Capital surrogate, or 
 | Orchestration | LangGraph |
 | Local LLM | Host **Ollama**; default `gemma4:e2b`; fallback `qwen3.5:4b` via `OLLAMA_MODEL` |
 | Embeddings | Local `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) — separate from agent LLM |
-| LLMOps | **LangSmith free default** (Guide 07: real fail-open spans when configured) + **Phoenix local fallback** (Guide 08: real fail-open OTEL chain span when `PHOENIX_ENABLED`); **local run summary always required** |
+| LLMOps | **Local run summary always**; LangSmith real fail-open spans **when configured** (Guide 07: tracing+key); Phoenix real fail-open OTEL chain span **when `PHOENIX_ENABLED`** (Guide 08). Smoke never requires a LangSmith key or Phoenix collector. |
 | API | FastAPI (thin trigger / replay) |
 | Agent 2 | **XGBoost** downside-risk scorer + scikit-learn; deterministic approve/reject policy |
 | Sentiment features | **FinBERT batch offline only** (not concurrent with Kafka+Qdrant+Ollama on 16GB) |
@@ -115,8 +115,9 @@ flowchart LR
   LS -.-> PX
 ```
 
-**Critical path for v1 credibility:** `Replay runner` → `PipelineService` → embed/upsert (or fixture `RetrievalHit`s) → Agent 1 → Agent 2 policy → local run summary (+ LangSmith/Phoenix real spans when configured).  
-**Kafka is mandatory in the architecture and Compose file; it is optional for smoke.**
+**Ingest (optional, when Compose is up):** RSS/CSV → producer → Kafka `news.raw` → embed + Qdrant upsert. Not on the default `/replay` decision path; not agent-on-consume.  
+**Decision (`/replay`, default smoke):** Replay fixtures → `PipelineService` → Agent 1 → Agent 2 policy → **local run summary**. LangSmith/Phoenix emit only when configured.  
+**Kafka** stays in the architecture and Compose file — optional for smoke and for the agent decision path. Do not strip it.
 
 ---
 
