@@ -2,9 +2,9 @@
 
 **Purpose:** Build a bounded, public **reference pipeline** that demonstrates senior AI/data-engineering craft: news → RAG → structured trade ideas → downside-risk gate — runnable locally with honest limits.
 
-**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Capabilities beyond the default smoke: a Kafka+Qdrant thin integration, a Yahoo RSS poll CLI (Yahoo may flake), LangSmith run emission when configured, and a Phoenix OTEL chain span when `PHOENIX_ENABLED` — the default smoke stays Kafka-down **fixture** (never requires a LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
+**Status:** **Bounded minimum viable build complete**; **production hardening and deeper live evaluation incomplete.** Finish line = **local + CI** (not a hosted service). Score doneness on **what is built**. Still **not** eval-complete / **not** a production risk model. Capabilities beyond the default smoke: a Kafka+Qdrant thin integration, a Yahoo RSS poll CLI (Yahoo may flake), parallel MLOps study harness + run registry (JH-63.2), LangSmith run emission when configured, and a Phoenix OTEL chain span when `PHOENIX_ENABLED` — the default smoke stays Kafka-down **fixture** (never requires a LangSmith key or Phoenix collector). Finance claims surface: [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md). **LICENSE:** PolyForm-NC 1.0.0 (source-available / non-commercial — not OSI open source / not MIT; commercial use → contact copyright holder).
 
-**Last Updated:** 2026-09-24 (JH-63.1-docs: optional-stack labels; local envelope always)
+**Last Updated:** 2026-09-24 (JH-63.4: docs voice pass — empirical mastery without overclaiming)
 
 **Owner:** Tom
 
@@ -114,9 +114,9 @@ AlphaGuard does **not** run in production, manage capital, or connect to live br
 | Guide 01 — replay-first vertical slice | **Done** (Implement pass-8; Review pass-9 shippable) | `make smoke` + fixture RAG + `gemma4:e2b`; local envelope; fixture `bundle_kind=fixture` |
 | Guide 02 — packaging (FAQ + GETTING_STARTED) | **Done** | `FAQ.md`, `GETTING_STARTED.md`, `docs/assets/` |
 | Guide 03 — eval harness ≥21 goldens | **Done** (Implement pass-38) | `eval/golden_cases.jsonl` + `src/alphaguard/eval/` parametrized façades; fixture-path OOU + tmp vol-veto; **not** live-Ollama rates |
-| Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO). Default smoke still **fixture**. Not production risk model; lab test F1 may be weak/noisy — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) |
+| Option B ~500-event train + real metrics | **Train CLI landed (Guide 05b); lab metrics only** | `scripts/train_option_b_gate.py` → `data/derived/model_bundle_option_b/` (`bundle_kind=option_b`, nested time-HPO; CLI default aligned to `train_f1_max`). Default smoke still **fixture**. Not production risk model; lab test F1 may be weak/noisy — see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) |
 | Live RSS → Kafka E2E | **Thin operator path landed** (Guide 06) | `alphaguard rss poll` (Yahoo RSS → produce); Guide 04 Kafka path reused; **not** 24/7 reliability / not agent-on-consume |
-| Portfolio reference MV | **Bounded MV build complete; optional walkthrough separate** | Guides 01–08 built (local + CI); production hardening / deeper live eval incomplete; spoken walkthrough = optional below — not build % |
+| Portfolio reference MV | **Bounded MV build complete; optional walkthrough separate** | Guides 01–08 built (local + CI); parallel experiment harness + run registry landed (JH-63.2); production hardening / deeper live eval incomplete; spoken walkthrough = optional below — not build % |
 
 README / AGENTS / [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md): **bounded MV complete** ≠ production risk model ≠ eval-complete.
 
@@ -209,7 +209,7 @@ Each item adds days of work without improving the core outcome: a **credible, bo
 - `fwd_return_5d` = return from the **first completed session close at or after** the event’s calendar session to the close **5 trading sessions later** (labels may use post-event closes; features must not)
 - `volatility_20d` is **never** a branch of the learned label; it may remain a feature and/or an optional **deterministic BUY veto** outside the learned target
 
-**Split / thresholds:** Time-ordered 80/20 (no random shuffle). **Split first**, then fit `score_threshold` on **train only** by maximizing train F1 (`train_f1_max`, shipped default). Optional A/B: precision-weighted Fβ (β=0.5) on the last 20% of train by time (`--threshold-fitting train_val_fbeta_0.5`). Mac locked-test of that method failed, so it is not the default. Optional `vol_veto_threshold` is also train-only. Freeze into the model bundle manifest. Held-out test is not used to pick `t`.
+**Split / thresholds:** Time-ordered 80/20 (no random shuffle). **Split first**, then fit `score_threshold` on **train only** by maximizing train F1 (`train_f1_max`, shipped default; CLI default in `scripts/train_option_b_gate.py` aligned to `train_f1_max`). Optional A/B: precision-weighted Fβ (β=0.5) on the last 20% of train by time (`--threshold-fitting train_val_fbeta_0.5`). Mac locked-test of that method failed, so it is not the default. Optional `vol_veto_threshold` is also train-only. Freeze into the model bundle manifest. Held-out test is not used to pick `t`.
 
 **Inference (AG1):** Agent 1 JSON (`BUY|HOLD|PASS`) + as-of features → XGBoost `downside_risk_score` (`proba_high_risk`) → deterministic policy → `approve` / `reject`. Application stamps `event_id`/`ticker`. Local run summary always; LangSmith/Phoenix best-effort.
 

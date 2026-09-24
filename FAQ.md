@@ -37,47 +37,51 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 `bundle_kind=fixture` is synthetic plumbing (`n_rows=64`). Perfect fixture F1 proves the load/score/policy path — **not** Option B generalization. Quote Option B only from a local `bundle_kind=option_b` manifest (`scripts/train_option_b_gate.py`); lab-scale test F1 can be near zero / noisy — still not production proof.
 
-## 7. What does replay-first prove vs what Kafka E2E still needs to prove?
+## 7. How does AlphaGuard handle negative experiment results like JH-63.1?
+
+**Fail stays Fail.** In JH-63.1, precision-weighted thresholding (`train_val_fbeta_0.5`) resulted in test F1=0.0 on the held-out test split, worse than baseline. Rather than cherry-picking seeds or softening the result, we published the locked test failure directly in [`FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Isolating and documenting negative results under strict leakage guards is core engineering rigor. Shipped defaults remain `train_f1_max` (aligned across API and `scripts/train_option_b_gate.py`). While the JH-63.3 expanded freeze provides statistical support ($n_{\text{positive, test}} = 233$, test F1≈0.2108), Model Quality Go is not claimed.
+
+## 8. What does replay-first prove vs what Kafka E2E still needs to prove?
 
 Replay proves: fixtures → `PipelineService` → retrieval hits → Agent 1 → gate → **local run summary**, with Kafka **down**. With Docker Compose up, the stack adds produce/consume + idempotent Qdrant upsert + `/trigger`; an optional Yahoo RSS producer (`rss poll`) rounds it out — still **not** production SRE / agent-on-consume.
 
-## 8. What is `replay_fixture` vs `kafka_integration`?
+## 9. What is `replay_fixture` vs `kafka_integration`?
 
 ARCHITECTURE §16 resource modes. Smoke defaults to `resource_mode=replay_fixture` (`ALPHAGUARD_RAG_MODE=fixture`, Kafka optional/down). `kafka_integration` = `ALPHAGUARD_MODE=live` + `ALPHAGUARD_RAG_MODE=qdrant`; `/health` probes Kafka (2s). Do not claim Kafka maturity from fixture smoke alone.
 
-## 9. What happens on old Ollama 412, and what is the documented fallback?
+## 10. What happens on old Ollama 412, and what is the documented fallback?
 
 Default `OLLAMA_MODEL=gemma4:e2b` needs a current Ollama (Gemma 4 can **412** on old builds). Upgrade Ollama, or set `OLLAMA_MODEL=qwen3.5:4b` / use `OLLAMA_FALLBACK_MODEL`. Do not claim gemma works without a successful pull/smoke; do not invent a “qwen-only DoD.”
 
-## 10. Who owns `event_id`/`ticker` if the LLM returns different values?
+## 11. Who owns `event_id`/`ticker` if the LLM returns different values?
 
 **Application owns identity.** `PipelineService` overwrites `event_id` and `ticker` from the input `NewsEvent` before scoring. LLM mismatches are logged (`identity_mismatch`); we never score the wrong event’s features. See §7.2.
 
-## 11. Are LangSmith/Phoenix “wired,” and what is the real LLMOps baseline?
+## 12. Are LangSmith/Phoenix “wired,” and what is the real LLMOps baseline?
 
 Local run summary under `artifacts/runs/*.json` is **mandatory and real**. When tracing + an API key are configured, LangSmith emits a real Client run (`ok` only after emit; `extras.langsmith_run_id` on success). When `PHOENIX_ENABLED=true`, Phoenix emits a real OpenInference chain span (`ok` only after emit+flush; `extras.phoenix_span_id` on success). Default smoke has both off → `skipped` (no LangSmith key or Phoenix collector required). Local-envelope screenshots fulfill packaging; do not invent LangSmith/Phoenix UI.
 
-## 12. Why can the same event show `BUY` or `HOLD` across smokes?
+## 13. Why can the same event show `BUY` or `HOLD` across smokes?
 
 Agent 1 is LLM-sampled (stochastic). Agent 2’s **policy table is deterministic** given fixed `(action, score[, vol])`. Variance in proposals is expected; do not chase a golden proposal screenshot. Caption screenshots accordingly.
 
-## 13. Does `docker-compose.yml` prove Kafka delivery contracts?
+## 14. Does `docker-compose.yml` prove Kafka delivery contracts?
 
 Compose proves pinned images + operator path: producer/consumer, DLQ, UUID5 upsert, and `/trigger`; plus a thin `rss poll` (Yahoo may flake; fixture XML for CI). Smoke must still succeed with Kafka **stopped** (`Makefile` comment).
 
-## 14. What happens to an out-of-universe ticker or invalid proposal?
+## 15. What happens to an out-of-universe ticker or invalid proposal?
 
 Universe is locked (`AAPL`, `MSFT`, …). Out-of-universe tickers are **rejected** in builders/fixtures — no silent remap. Invalid proposals (`SELL`, malformed JSON): schema reject / one repair retry, then fail closed — no fake approve. See §7.1–7.2 and failure-mode table.
 
-## 15. Where do unit tests vs executable goldens carry the diligence invariants today?
+## 16. Where do unit tests vs executable goldens carry the diligence invariants today?
 
 **Unit tests** (`tests/test_gate.py`, `test_asof.py`, `test_contracts.py`, `test_train_option_b.py`, …) carry hard invariants: gate table, as-of filter, identity overwrite, no `SELL`, train-only HPO/threshold. **Executable goldens** (`eval/golden_cases.jsonl`, ≥21 rows) are parametrized against real façades via `alphaguard.eval` (schema/identity/as-of/gate/OOU, including fixture-path OOU + tmp-manifest vol-veto). Structural schema ok/reject counts are **not** live-Ollama numeric schema-pass rates — those stay deferred. Still not eval-complete / not production Option B.
 
-## 16. (Bonus) Is FinBERT in the smoke path?
+## 17. (Bonus) Is FinBERT in the smoke path?
 
 No. FinBERT is offline batch only. Smoke uses a precomputed fixture sentiment column so 16GB machines are not co-scheduling FinBERT + Compose + Ollama.
 
-## 17. (Bonus) Does Agent 1 `confidence` change the gate?
+## 18. (Bonus) Does Agent 1 `confidence` change the gate?
 
 No. Confidence is validated for schema completeness, then **ignored by policy** — trace / review signal only (§7.4).
 

@@ -1,8 +1,8 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
+**Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans; JH-63.2 study harness); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-09-24 (JH-63.1-docs: mermaid caption splits ingest vs /replay; LLMOps when configured)  
+**Last Updated:** 2026-09-24 (JH-63.4: docs voice pass — empirical mastery without overclaiming)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 
@@ -135,7 +135,7 @@ flowchart LR
 | `agents/analyst` | LangGraph: **consume** preloaded `RetrievalHit[]` from graph state → prompt → structured JSON → validate/retry. Must **not** open a second retrieve path unless it calls the same `rag/` API with the same event clock | **Present** | Host + Ollama |
 | `contracts/` | Top-level Pydantic schemas (events, proposals, hits, decisions, run envelope, model manifest) | **Present** | Host |
 | `ml/features` | Unified as-of feature builders; emit `feature_as_of` | **Present** (fixture path; not full yfinance builder) | Host (batch / smoke fixtures) |
-| `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest**; parallel experiment matrix + run registry (`alphaguard study`, JH-63.2) | **05a builder + 05b train + JH-63.2 harness landed** (`train_option_b_gate.py` → `model_bundle_option_b/`, `scripts/run_study.py`); fixture bundle remains default smoke | Host (batch; FinBERT offline) |
+| `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest**; parallel experiment matrix + run registry (`alphaguard study`, JH-63.2) | **05a builder + 05b train + JH-63.2 harness landed** (`train_option_b_gate.py` → `model_bundle_option_b/` with CLI default aligned to `train_f1_max`, `scripts/run_study.py`); fixture bundle remains default smoke | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
 | `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters (when configured; default skipped) | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **real fail-open spans** when `PHOENIX_ENABLED` (Guide 08) | Host |
