@@ -1,0 +1,46 @@
+study_id: jh93_promotion_demo
+description: Multi-seed promotion gate demonstration with locked floors (JH-AG-93.1)
+dataset_path: data/derived/training_events.parquet
+
+seeds:
+  - 42
+
+threshold_methods:
+  - train_f1_max
+  - train_val_fbeta_0.5
+
+betas:
+  - 0.5
+
+calibration_methods:
+  - none
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 20
+
+scale_pos_weights:
+  - null
+
+split_policy: nested_time_aware_v1
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns
+
+promotion:
+  enabled: true
+  shortlist_top_k: 3
+  extra_seeds:
+    - 7
+    - 123
+  floors:
+    f1: 0.30
+    precision: 0.25
+    auprc: 0.18
+  sort_by: test_f1

@@ -64,6 +64,16 @@ The parallel experiment harness (`scripts/run_study.py`, `alphaguard study run/c
 - **Leakage Guards:** Hyperparameter optimization, threshold fitting, and probability calibration operate strictly on train/val splits; locked held-out test splits are evaluated exactly once at study completion.
 - See [`EXPERIMENTS.md`](./EXPERIMENTS.md).
 
+## JH-AG-93.1 auto multi-seed promotion gate
+
+An automated multi-seed gate in the harness (`study_promotion.py`) tests shortlisted configurations against extra seeds (`[7, 123]`) and evaluates locked floors ($F_1 \ge 0.30$, $P \ge 0.25$, $\text{AUPRC} \ge 0.18$).
+
+- **Harness Candidate ≠ Model Quality Go:** The automated harness output (`promotion_decision: candidate`) only indicates that variance across required seeds cleared minimum statistical floors. It proposes a candidate; only a human review can claim **Model Quality Go**.
+- **Model Quality Go Remains UNCLAIMED:** Historical multi-seed evaluations failed precision floors ($P = 0.1711$ on seed 7, $P = 0.2263$ on seed 123). Fail remains published.
+- **Shipped Default Remains `train_f1_max`:** No threshold method change is made without human approval and full documentation.
+- **No PnL / Market Claims:** AlphaGuard is a downside-risk veto lab, not an execution or trading strategy.
+- See [`PROMOTION_POLICY.md`](./PROMOTION_POLICY.md).
+
 ## JH-63.3 full-pool re-baseline (`train_f1_max` — 2026-09-24)
 
 **New freeze**, not a retrofit of the JH-63.1 Fail. Canonical parquet expanded to the full local dedup pool (8,907 deduped events across `AAPL, AMZN, GOOGL, META, NVDA, QQQ`); label unchanged `fwd_return_5d < -0.03`. JH-63.1 Fail on the tiny freeze (`a8bdd0fb…`, n_positive_test=3, test F1≈0.087) **remains published**.

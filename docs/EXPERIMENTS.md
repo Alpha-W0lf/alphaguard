@@ -127,6 +127,62 @@ The resulting `compare.md` sorts candidate configurations by held-out test perfo
 
 1. **Outer Split:** Held-out test split is strictly locked and scored **once** per run after the booster, calibration, and threshold are frozen. Test rows are never passed to HPO, calibrators, or threshold fitters.
 2. **Inner Split:** Threshold fitting and probability calibration execute strictly on train or train-internal validation splits.
-3. **Promotion Policy:**
-   - A configuration is promoted to `candidate` only if locked-test criteria are met on a validated dataset with sufficient statistical power ($\ge 30$ locked-test positives via JH-63.3).
-   - Under regimes with rare positives ($n_{\text{positive, test}} \le 10$), results are treated as noisy and labeled `rejected` or `none` rather than claiming non-existent alpha.
+3. **Promotion Policy & Three Gates (JH-AG-93.1 / JH-AG-93.2):**
+   - See dedicated [`docs/PROMOTION_POLICY.md`](./PROMOTION_POLICY.md).
+   - **Three Gates:** (1) Harness Go (Engineering), (2) Model Quality Go (Human Review / Tom Chacko), (3) Economic Claim (Future / Not Claimed).
+   - **Automated Multi-Seed Gate:** The study runner automatically extracts top-$k$ distinct hyperparameter candidates (`shortlist_top_k = 3`), schedules evaluation runs on extra seeds (`[7, 123]`), and checks locked floors:
+     - **Test F1 ≥ 0.30**
+     - **Test Precision ≥ 0.25**
+     - **Test AUPRC ≥ 0.18**
+   - **Zero Soft Misses:** If any seed fails any floor, `promotion_decision` is marked `rejected`. Only if all extra seeds clear all floors does the harness propose `candidate`.
+   - **Propose ≠ Claim:** An automated `candidate` decision is a proposal for human audit. Model Quality Go is currently **UNCLAIMED**; shipped default remains `train_f1_max`.
+
+---
+
+## 6. Multi-Seed Study Configuration Example
+
+```yaml
+study_id: jh93_promotion_demo
+description: Multi-seed promotion gate evaluation on locked test
+dataset_path: data/derived/training_events.parquet
+
+seeds:
+  - 42
+
+threshold_methods:
+  - train_f1_max
+  - train_val_fbeta_0.5
+
+betas:
+  - 0.5
+
+calibration_methods:
+  - none
+  - isotonic
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - null
+
+promotion:
+  enabled: true
+  shortlist_top_k: 3
+  extra_seeds:
+    - 7
+    - 123
+  floors:
+    f1: 0.30
+    precision: 0.25
+    auprc: 0.18
+  sort_by: test_f1
+```
+
+Executing this configuration runs primary discovery, automatically evaluates shortlisted configurations across seeds 7 and 123, updates `study.json` with multi-seed rollups, and appends a "Promotion Gate" report to `compare.md`.

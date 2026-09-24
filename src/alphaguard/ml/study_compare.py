@@ -57,6 +57,7 @@ def generate_compare_data(
             "confusion_tp_fp_tn_fn": confusion_str,
             "n_pos_test": r.n_positive_test,
             "wall_time_s": r.wall_time_s,
+            "stage": r.stage,
             "aborted": r.aborted,
             "abort_reason": r.abort_reason or "",
         }
@@ -129,6 +130,83 @@ def format_markdown_table(
             status,
         ]
         buf.write("| " + " | ".join(line) + " |\n")
+
+    # Render Promotion Gate section if promotion rollup or decision exists
+    buf.write("\n## Promotion Gate (JH-AG-93.1)\n\n")
+    if study.promotion_rollup:
+        p_info = study.promotion_rollup
+        floors = p_info.get("floors", {})
+        f1_floor = floors.get("f1", 0.30)
+        p_floor = floors.get("precision", 0.25)
+        auprc_floor = floors.get("auprc", 0.18)
+        extra_seeds = p_info.get("extra_seeds", [])
+
+        buf.write(
+            f"- **Gate Decision:** `{study.promotion_decision}` "
+            f"(Harness proposal only; Model Quality Go requires human review)\n"
+            f"- **Target Floors:** F1 ≥ {f1_floor:.2f}, Precision ≥ {p_floor:.2f}, "
+            f"AUPRC ≥ {auprc_floor:.2f} (All must clear)\n"
+            f"- **Required Extra Seeds:** `{extra_seeds}`\n"
+            f"- **Seeds Cleared:** `{study.seeds_cleared}`\n"
+            f"- **Seeds Failed:** `{study.seeds_failed}`\n\n"
+        )
+
+        candidates = p_info.get("candidates", [])
+        if candidates:
+            buf.write("### Shortlisted Candidates & Multi-Seed Rollup\n\n")
+            c_headers = [
+                "Rank",
+                "Primary Run",
+                "Config",
+                "Seed",
+                "Test F1",
+                "Test P",
+                "AUPRC",
+                "Confusion (TP/FP/TN/FN)",
+                "N+ Test",
+                "Floor Status",
+            ]
+            buf.write("| " + " | ".join(c_headers) + " |\n")
+            buf.write("| " + " | ".join(["---"] * len(c_headers)) + " |\n")
+
+            for c in candidates:
+                seed_evals = c.get("seed_evaluations", {})
+                for _seed_key, se in seed_evals.items():
+                    fails = ", ".join(se.get("failed_floors", []))
+                    pass_str = "PASS" if se.get("passed") else f"FAIL ({fails})"
+                    conf = se.get("confusion")
+                    conf_str = (
+                        f"{conf['tp']}/{conf['fp']}/{conf['tn']}/{conf['fn']}"
+                        if conf
+                        else "n/a"
+                    )
+                    c_line = [
+                        str(c.get("candidate_rank", 1)),
+                        f"`{se.get('run_id', 'n/a')}`",
+                        f"`{c.get('config_hash', 'n/a')[:8]}`",
+                        str(se.get("seed")),
+                        f"{se.get('test_f1', 0.0):.4f}" if "test_f1" in se else "n/a",
+                        f"{se.get('test_precision', 0.0):.4f}" if "test_precision" in se else "n/a",
+                        f"{se.get('test_auprc', 0.0):.4f}" if "test_auprc" in se else "n/a",
+                        conf_str,
+                        str(se.get("n_pos_test", "n/a")),
+                        pass_str,
+                    ]
+                    buf.write("| " + " | ".join(c_line) + " |\n")
+            buf.write("\n")
+        if study.notes:
+            buf.write(f"**Gate Notes:** {study.notes}\n\n")
+    else:
+        buf.write(
+            f"- **Promotion Decision:** `{study.promotion_decision}`\n"
+            "- **Status:** No promotion gate configured for this study.\n\n"
+        )
+
+    buf.write(
+        "> **Notice:** Harness proposal (`candidate` / `rejected` / `none`) is an automated\n"
+        "> multi-seed stability check. It does NOT constitute a `Model Quality Go` or an\n"
+        "> economic trading claim.\n"
+    )
 
     return buf.getvalue()
 

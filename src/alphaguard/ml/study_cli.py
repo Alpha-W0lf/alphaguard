@@ -55,6 +55,12 @@ def run_study_cli(argv: list[str] | None = None) -> int:
         default=None,
         help="Override expected dataset hash in config",
     )
+    parser.add_argument(
+        "--promote-from",
+        type=Path,
+        default=None,
+        help="Run multi-seed promotion gate on an existing study directory",
+    )
     args = parser.parse_args(argv)
 
     if not args.study.exists():
@@ -72,6 +78,21 @@ def run_study_cli(argv: list[str] | None = None) -> int:
     if args.dataset_hash:
         matrix.dataset_hash = args.dataset_hash
 
+    study_dir = args.artifacts / "studies" / matrix.study_id
+
+    # If --promote-from is specified, load existing runs from that study directory
+    if args.promote_from:
+        promote_dir = args.promote_from
+        if not promote_dir.exists():
+            print(f"ERROR: promote directory not found: {promote_dir}", file=sys.stderr)
+            return 1
+        print(f"Promoting shortlist from existing study dir: {promote_dir}")
+        # When promoting from existing study, run_study loads existing runs
+        # and schedules extra seeds according to matrix.promotion
+        if matrix.promotion is None:
+            from alphaguard.ml.study_schema import PromotionConfig
+            matrix.promotion = PromotionConfig()
+
     print(
         f"Starting study '{matrix.study_id}' with {args.workers} workers "
         f"across registry '{args.artifacts}'..."
@@ -81,6 +102,7 @@ def run_study_cli(argv: list[str] | None = None) -> int:
         registry_root=args.artifacts,
         max_workers=args.workers,
         matrix_source_path=str(args.study),
+        existing_study_dir=args.promote_from,
     )
 
     study_dir = args.artifacts / "studies" / matrix.study_id
@@ -88,7 +110,8 @@ def run_study_cli(argv: list[str] | None = None) -> int:
 
     print(
         f"Completed study '{matrix.study_id}': total={parent.total_runs}, "
-        f"completed={parent.completed_runs}, aborted={parent.aborted_runs}"
+        f"completed={parent.completed_runs}, aborted={parent.aborted_runs}, "
+        f"promotion_decision='{parent.promotion_decision}'"
     )
     print(f"Compare table generated at:\n  {md_path}\n  {csv_path}")
 

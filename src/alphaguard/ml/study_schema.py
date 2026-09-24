@@ -14,6 +14,24 @@ from alphaguard.ml.study_calibration import CalibrationMethod
 PromotionStatus = Literal["none", "candidate", "rejected"]
 
 
+class PromotionFloors(BaseModel):
+    """Locked floor criteria for candidate promotion (JH-AG-93.1)."""
+
+    f1: float = 0.30
+    precision: float = 0.25
+    auprc: float = 0.18
+
+
+class PromotionConfig(BaseModel):
+    """Configuration for automatic multi-seed promotion gate (JH-AG-93.1)."""
+
+    enabled: bool = True
+    shortlist_top_k: int = 3
+    extra_seeds: list[int] = Field(default_factory=lambda: [7, 123])
+    floors: PromotionFloors = Field(default_factory=PromotionFloors)
+    sort_by: str = "test_f1"  # primary sort key; ties broken by test_p, test_auprc, run_id
+
+
 class ModelHyperparams(BaseModel):
     max_depth: int = 2
     eta: float = 0.1
@@ -98,6 +116,7 @@ class RunRecord(BaseModel):
     split_policy: str = "nested_time_aware_v1"
     score_threshold: float
     wall_time_s: float
+    stage: str = "primary"  # "primary" or "extra_seed"
     aborted: bool = False
     abort_reason: str | None = None
     bundle_dir: str
@@ -127,6 +146,10 @@ class ParentStudyRecord(BaseModel):
     child_run_ids: list[str] = Field(default_factory=list)
     promotion_decision: PromotionStatus = "none"
     notes: str = ""
+    seeds_cleared: list[int] = Field(default_factory=list)
+    seeds_failed: list[int] = Field(default_factory=list)
+    seed_metrics_summary: dict[str, Any] = Field(default_factory=dict)
+    promotion_rollup: dict[str, Any] | None = None
 
 
 class StudyMatrixConfig(BaseModel):
@@ -149,3 +172,4 @@ class StudyMatrixConfig(BaseModel):
     val_frac: float = 0.2
     enable_mlflow: bool = False
     mlflow_tracking_uri: str = "artifacts/mlruns"
+    promotion: PromotionConfig | None = None
