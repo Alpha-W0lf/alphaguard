@@ -36,12 +36,27 @@ flowchart LR
 
 ### Try it
 
+**1. Stranger verification & tests (no host Ollama required — 0 MB model download):**
+
 ```bash
-uv sync --all-extras
-cp -n .env.example .env
-ollama pull gemma4:e2b   # or set OLLAMA_MODEL=qwen3.5:4b
-make bundle
-make smoke               # Kafka down; fixture RAG
+uv sync --all-extras             # or: make sync
+[ -f .env ] || cp .env.example .env
+make bundle                      # builds local fixture risk bundle
+make test                        # unit, golden, import boundary, and API tests
+make smoke-fixture               # proves news -> context -> BUY -> risk veto -> envelope
+```
+
+**2. Live Ollama smoke (local LLM generator):**
+
+```bash
+ollama pull gemma4:e2b          # or set OLLAMA_MODEL=qwen3.5:4b
+make smoke                      # Kafka down; fixture RAG
+```
+
+**3. Run FastAPI server:**
+
+```bash
+make serve                      # uvicorn alphaguard.api.app:app on http://127.0.0.1:8000
 ```
 
 Full clean-clone path, Ollama footguns, and optional Kafka/RSS: [`GETTING_STARTED.md`](GETTING_STARTED.md).

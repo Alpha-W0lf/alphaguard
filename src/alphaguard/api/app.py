@@ -19,6 +19,7 @@ from alphaguard.pipeline.service import PipelineService
 class ReplayRequest(BaseModel):
     event_id: str | None = None
     event: dict[str, Any] | None = None
+    fixture_analyst: bool = False
 
 
 class TriggerRequest(BaseModel):
@@ -58,11 +59,20 @@ def create_app() -> FastAPI:
             )
 
         # Ollama
-        try:
-            model = preflight_ollama(settings)
-            deps.append(HealthDependency(name="ollama", status="ok", detail=model))
-        except PreflightError as exc:
-            deps.append(HealthDependency(name="ollama", status="error", detail=str(exc)))
+        if settings.alphaguard_analyst_mode == "fixture":
+            deps.append(
+                HealthDependency(
+                    name="ollama",
+                    status="skipped",
+                    detail="ALPHAGUARD_ANALYST_MODE=fixture",
+                )
+            )
+        else:
+            try:
+                model = preflight_ollama(settings)
+                deps.append(HealthDependency(name="ollama", status="ok", detail=model))
+            except PreflightError as exc:
+                deps.append(HealthDependency(name="ollama", status="error", detail=str(exc)))
 
         # Qdrant
         if settings.alphaguard_rag_mode == "fixture":
@@ -114,6 +124,13 @@ def create_app() -> FastAPI:
         except Exception as exc:  # noqa: BLE001
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+        status, detail = probe_kafka(settings.kafka_bootstrap_servers)
+        if status != "ok":
+            raise HTTPException(
+                status_code=503,
+                detail=f"kafka unavailable: {detail}",
+            )
+
         producer = create_producer(settings.kafka_bootstrap_servers)
         try:
             return produce_event(producer, event)
@@ -137,12 +154,22 @@ def create_app() -> FastAPI:
         except Exception as exc:  # noqa: BLE001
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-        try:
-            model = preflight_ollama(settings)
-        except PreflightError as exc:
-            raise HTTPException(status_code=503, detail=str(exc)) from exc
+        use_fixture_analyst = (
+            body.fixture_analyst or settings.alphaguard_analyst_mode == "fixture"
+        )
+        if use_fixture_analyst:
+            model = "fixture"
+        else:
+            try:
+                model = preflight_ollama(settings)
+            except PreflightError as exc:
+                raise HTTPException(status_code=503, detail=str(exc)) from exc
 
-        service = PipelineService(settings=settings, resolved_model=model)
+        service = PipelineService(
+            settings=settings,
+            resolved_model=model,
+            skip_ollama_preflight=use_fixture_analyst,
+        )
         envelope = service.run(event)
         if envelope.status == "error" and envelope.error and "unknown event" in (
             envelope.error.message or ""

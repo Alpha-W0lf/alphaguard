@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Iterable, Sequence
+from typing import Sequence
 
 # Soft pin (human-locked 2026-07-16): Hub ID is ProsusAI/finbert — ProsusAI/finbert-tone does not exist.
 FINBERT_MODEL_ID = "ProsusAI/finbert"

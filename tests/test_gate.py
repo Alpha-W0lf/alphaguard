@@ -62,13 +62,6 @@ def test_identity_overwrite() -> None:
 
 
 def test_hold_always_approve(gate: DownsideRiskGate) -> None:
-    proposal = Agent1Proposal(
-        action="HOLD",
-        confidence=0.4,
-        rationale="wait",
-        event_id="evt-aapl-001",
-        ticker="AAPL",
-    )
     decision, reason = gate.apply_policy("HOLD", downside_risk_score=0.99, volatility_20d=0.9)
     assert decision == "approve"
     assert "HOLD" in reason

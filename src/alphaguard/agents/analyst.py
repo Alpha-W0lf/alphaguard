@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+from pathlib import Path
 from typing import Any, TypedDict
 
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -149,3 +150,24 @@ class Agent1Analyst:
         if result.get("error"):
             raise ValueError(result["error"])
         return Agent1Proposal.model_validate(result["proposal"])
+
+
+class FixtureAgent1Analyst:
+    """Deterministic fixture analyst for stranger smoke and CI (no host Ollama required)."""
+
+    def __init__(self, fixtures_path: Path | None = None) -> None:
+        self.fixtures_path = fixtures_path
+
+    def run(self, event: NewsEvent, hits: list[RetrievalHit]) -> Agent1Proposal:
+        if self.fixtures_path and self.fixtures_path.exists():
+            data = json.loads(self.fixtures_path.read_text(encoding="utf-8"))
+            if event.event_id in data:
+                return Agent1Proposal.model_validate(data[event.event_id])
+        return Agent1Proposal(
+            action="HOLD",
+            confidence=0.5,
+            rationale=f"Fixture analyst proposal for {event.event_id}",
+            event_id=event.event_id,
+            ticker=event.ticker,
+        )
+

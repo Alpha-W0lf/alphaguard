@@ -18,7 +18,12 @@ from alphaguard.config import get_settings
 from alphaguard.contracts.events import OutOfUniverseTickerError
 from alphaguard.infra.preflight import PreflightError, preflight_ollama
 from alphaguard.ingest.consumer import NewsRawConsumer
-from alphaguard.ingest.producer import KafkaProduceError, create_producer, produce_event
+from alphaguard.ingest.producer import (
+    KafkaProduceError,
+    create_producer,
+    probe_kafka,
+    produce_event,
+)
 from alphaguard.ingest.replay import FixtureLoadError, get_event_by_id, run_replay
 from alphaguard.ingest.rss_poll import (
     DEFAULT_INTERVAL_SEC,
@@ -34,20 +39,33 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(messag
 logger = logging.getLogger("alphaguard")
 
 
-def cmd_smoke(event_id: str | None) -> int:
+def cmd_smoke(event_id: str | None, *, fixture_analyst: bool = False) -> int:
     settings = get_settings()
     settings.alphaguard_mode = "replay"
     # Prefer fixture RAG for default smoke (16GB-safe).
     if not settings.alphaguard_rag_mode:
         settings.alphaguard_rag_mode = "fixture"
 
-    try:
-        model = preflight_ollama(settings)
-    except PreflightError as exc:
-        print(str(exc), file=sys.stderr)
-        return 2
+    use_fixture_analyst = fixture_analyst or settings.alphaguard_analyst_mode == "fixture"
+    if use_fixture_analyst:
+        model = "fixture"
+    else:
+        try:
+            model = preflight_ollama(settings)
+        except PreflightError as exc:
+            print(str(exc), file=sys.stderr)
+            print(
+                "\nHint: For stranger smoke without Ollama, run with --fixture-analyst "
+                "(e.g. `uv run alphaguard smoke --fixture-analyst` or `make smoke-fixture`).",
+                file=sys.stderr,
+            )
+            return 2
 
-    service = PipelineService(settings=settings, resolved_model=model)
+    service = PipelineService(
+        settings=settings,
+        resolved_model=model,
+        skip_ollama_preflight=use_fixture_analyst,
+    )
     fixtures = settings.fixtures_dir / "replay_events.jsonl"
     try:
         envelope = run_replay(service, fixtures, event_id=event_id)
@@ -75,8 +93,8 @@ def cmd_smoke(event_id: str | None) -> int:
     return 0
 
 
-def cmd_replay(event_id: str | None) -> int:
-    return cmd_smoke(event_id)
+def cmd_replay(event_id: str | None, *, fixture_analyst: bool = False) -> int:
+    return cmd_smoke(event_id, fixture_analyst=fixture_analyst)
 
 
 def cmd_kafka_consume() -> int:
@@ -93,6 +111,14 @@ def cmd_kafka_produce(event_id: str) -> int:
         event = get_event_by_id(fixtures, event_id)
     except FixtureLoadError as exc:
         print(f"fixture error: {exc}", file=sys.stderr)
+        return 2
+
+    status, detail = probe_kafka(settings.kafka_bootstrap_servers)
+    if status != "ok":
+        print(
+            f"kafka probe failed on {settings.kafka_bootstrap_servers}: {detail}",
+            file=sys.stderr,
+        )
         return 2
 
     producer = create_producer(settings.kafka_bootstrap_servers)
@@ -132,6 +158,14 @@ def cmd_rss_poll(
         return 2
 
     settings = get_settings()
+    status, detail = probe_kafka(settings.kafka_bootstrap_servers)
+    if status != "ok":
+        print(
+            f"kafka probe failed on {settings.kafka_bootstrap_servers}: {detail}",
+            file=sys.stderr,
+        )
+        return 2
+
     producer = create_producer(settings.kafka_bootstrap_servers)
     try:
         if loop:
@@ -155,9 +189,19 @@ def main(argv: list[str] | None = None) -> None:
 
     smoke = sub.add_parser("smoke", help="Replay-first smoke (Kafka not required)")
     smoke.add_argument("--event-id", default=None)
+    smoke.add_argument(
+        "--fixture-analyst",
+        action="store_true",
+        help="Use deterministic fixture analyst (no Ollama required)",
+    )
 
     replay = sub.add_parser("replay", help="Replay one fixture event via PipelineService")
     replay.add_argument("--event-id", default=None)
+    replay.add_argument(
+        "--fixture-analyst",
+        action="store_true",
+        help="Use deterministic fixture analyst (no Ollama required)",
+    )
 
     pre = sub.add_parser("preflight", help="Check Ollama reachability + model tag")
     pre.add_argument("--json", action="store_true")
@@ -244,7 +288,8 @@ def main(argv: list[str] | None = None) -> None:
             sys.exit(compare_study_cli(cmp_args))
 
     event_id = getattr(args, "event_id", None)
-    code = cmd_smoke(event_id)
+    fixture_analyst = getattr(args, "fixture_analyst", False)
+    code = cmd_smoke(event_id, fixture_analyst=fixture_analyst)
     sys.exit(code)
 
 
