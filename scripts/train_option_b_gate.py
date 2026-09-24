@@ -6,6 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from alphaguard.ml.train_eval import METHOD_TRAIN_VAL_FBETA, THRESHOLD_METHODS
 from alphaguard.ml.train_option_b import (
     DEFAULT_BUNDLE,
     DEFAULT_PARQUET,
@@ -35,12 +36,19 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_RUNS,
         help="Directory for run summary JSON",
     )
+    parser.add_argument(
+        "--threshold-fitting",
+        default=METHOD_TRAIN_VAL_FBETA,
+        choices=list(THRESHOLD_METHODS),
+        help="train_val_fbeta_0.5 (default) or train_f1_max for A/B. Never fit on test.",
+    )
     args = parser.parse_args(argv)
     try:
         manifest = train_option_b(
             parquet=args.parquet,
             bundle_dir=args.bundle_dir,
             runs_dir=args.runs_dir,
+            threshold_fitting=args.threshold_fitting,
         )
     except TrainError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
@@ -48,6 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     metrics = manifest.metrics
     print(
         f"ok bundle_kind={manifest.bundle_kind} "
+        f"threshold_fitting={manifest.threshold_fitting} "
         f"threshold={manifest.score_threshold:.4f} "
         f"test_f1={metrics.get('test_f1')} "
         f"winner={metrics.get('hpo', {}).get('winner')} "

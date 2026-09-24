@@ -29,6 +29,20 @@ Quoted from a local `data/derived/model_bundle_option_b/manifest.json` (`bundle_
 
 Notes: `n_positive_test=3` — test F1 remains **noisy / weak**, not hidden. Prior pre-alias manifest (2026-07-17) had test F1 = 0.0 on 2 positives; drift after META/GOOGL enter the sample is expected. Fixture `bundle_kind=fixture` F1 must never be marketed as model quality. See [`TRAINING_DATA.md`](./TRAINING_DATA.md).
 
+## JH-63.1 precision-weighted threshold (results pending)
+
+Code default is `threshold_fitting=train_val_fbeta_0.5`: last 20% of the **train** partition by time, binary positive-class Fβ with β=0.5, tie-break higher precision then lower `t`. The table above is the published `train_f1_max` baseline (test precision 0.05, test F1 ≈ 0.087, confusion 1/19/78/2, `n_positive_test=3`).
+
+**TODO — Job Hunt Mac A/B.** This cloud VM did not contain `data/derived/training_events.parquet`. Kaggle/FinBERT were not regenerated. Run the A/B on the Mac where that parquet already exists:
+
+- Same frozen time-ordered 80/20. Run `--threshold-fitting train_f1_max` and `train_val_fbeta_0.5`. Do not pick `t` using the held-out test.
+- **Go:** held-out precision ≥ 0.15 and F1 ≥ 0.20, with `n_positive_test` disclosed.
+- **Soft:** FP ≤ 8 and F1 ≥ 0.12 but below 0.20 — threshold helped; still weak.
+- **Fail:** F1 ≤ the ≈0.087 baseline or precision still &lt; 0.08 — do not claim an improvement.
+- Paste threshold, precision, recall, F1, TP/FP/TN/FN, `n_positive_test`, and `dataset_hash` into this section after that run.
+
+No new held-out numbers are invented here. Until that table exists: this is not a production risk model, the gate is not alpha, and there is no PnL.
+
 ## Pointers
 
 - Product status / MV boxes → [`VISION.md`](./VISION.md)
