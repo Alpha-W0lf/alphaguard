@@ -25,10 +25,12 @@ Use this as a prompt card. Practice **aloud without opening the repo** if you wa
 - **AG2:** Label = forward downside return only — never OR volatility into the label.  
 - **AG3:** Unified as-of UTC; features carry `feature_as_of`; no future hits.
 
-## Minute 5–7 — Gate honesty
+## Minute 5–7 — Gate honesty & empirical rigor
 
 - Fixture bundle (`bundle_kind=fixture`) ≠ Option B proof.  
-- Option B: train CLI + `bundle_kind=option_b` locally; nested time-HPO; train-only threshold; lab test F1 can be noisy/near zero.  
+- Option B: train CLI + `bundle_kind=option_b` locally; nested time-HPO; train-only threshold; lab test F1 is noisy at $n=100$ ($n_{\text{positive, test}} = 3$).  
+- Fail stays Fail: JH-63.1 A/B threshold test failed ($F_1=0.0$) and is published honestly without excuses.  
+- Harness Go ≠ Model Quality Go: JH-63.2 delivers parallel runner and run registry; dataset scaling (JH-63.3, 8,907 events, $n_{\text{positive, test}}=233$) provides the sample power required for future promotion.  
 - Default smoke stays fixture unless `MODEL_BUNDLE_DIR` points at Option B.
 
 ## Minute 7–9 — Ops / failure modes

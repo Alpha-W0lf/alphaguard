@@ -5,6 +5,7 @@ Replay-first smoke path for the news → RAG → BUY/HOLD/PASS → downside-risk
 - Skim + diagram: [`README.md`](README.md)
 - Contracts: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Finance claims: [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md)
+- Parallel experiments: [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md)
 - Technical FAQ: [`FAQ.md`](FAQ.md)
 
 **Status:** Bounded local demo is runnable; production hardening and deeper live evaluation are incomplete. Finish line = **local + CI** (not hosted). Default smoke stays Kafka-down with fixtures. **License:** PolyForm Noncommercial 1.0.0 — source-available / non-commercial (not OSI open source; not MIT); commercial use → contact copyright holder. See [`LICENSE`](LICENSE).

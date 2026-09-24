@@ -1,8 +1,8 @@
 # AlphaGuard — Architecture (v1)
 
-**Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
+**Status:** Binding contracts SSOT — **bounded MV build complete** (guides 01–08; 05a/05b Option B lab; 06 thin RSS; 07 LangSmith + 08 Phoenix real fail-open spans; JH-63.2 study harness); production hardening / deeper live eval incomplete; finish line = local + CI; default smoke still `bundle_kind=fixture`  
 **Created:** 2026-07-12  
-**Last Updated:** 2026-09-24 (JH-63.1-docs: mermaid caption splits ingest vs /replay; LLMOps when configured)  
+**Last Updated:** 2026-09-24 (JH-63.4: docs voice pass — empirical mastery without overclaiming)  
 **Owner:** Tom  
 **Lenses:** Senior AI Engineer (primary); Data Engineer; ML Engineer; Quant (leakage / label honesty)
 

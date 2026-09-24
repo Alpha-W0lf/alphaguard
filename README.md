@@ -8,7 +8,7 @@ Local research lab for how AI trade ideas and risk controls should work together
 
 ### The problem
 
-Markets move on information faster than teams can manually process it. Language models can propose trade ideas quickly — but an unchecked proposal is not a risk decision. AlphaGuard separates **what the AI thinks** from **whether downside risk allows it to proceed**.
+Markets move on information faster than teams can manually process it. Language models can propose trade ideas quickly — but raw proposals cannot serve as risk decisions without verification. AlphaGuard separates **unconstrained idea generation** from a **strict, code-owned downside-risk veto**.
 
 ### How it works
 
@@ -20,17 +20,19 @@ flowchart LR
   G --> S[Local run summary]
 ```
 
-1. Ingest a financial headline (replay fixtures by default; live paths optional).
-2. Retrieve supporting context (fixture RAG for smoke; Qdrant when configured).
-3. An LLM analyst proposes **BUY**, **HOLD**, or **PASS** with rationale.
-4. An XGBoost downside-risk gate can **veto** before a proposal is allowed to proceed.
-5. Every run writes a **local run summary** (mandatory LLMOps baseline).
+1. Ingest a financial headline (replay fixtures by default; Kafka streaming path optional).
+2. Retrieve supporting context with strict point-in-time filtering (fixture RAG for smoke; Qdrant vector retrieval when configured).
+3. An LLM analyst proposes **BUY**, **HOLD**, or **PASS** with structured rationale.
+4. A calibrated XGBoost downside-risk gate applies an auditable **risk veto** before capital or execution can ever proceed.
+5. Every run writes an immutable **local run summary** envelope (mandatory LLMOps baseline).
 
 ### Key engineering decisions
 
-1. **Analyst LLM ≠ risk model** — proposal and downside veto are separate systems so risk policy stays deterministic and auditable.
-2. **Replay-first smoke** — `make smoke` proves the full chain with fixtures; Kafka/Qdrant are optional for integration, not required to demo.
-3. **Local run summary mandatory** — LangSmith / Phoenix are optional fail-open when configured (default skipped; smoke never requires cloud keys); the local envelope always exists.
+1. **Analyst LLM ≠ risk model** — idea generation and downside risk evaluation are decoupled by design. Risk policy remains deterministic, calibrated, and auditable rather than hidden in LLM token sampling.
+2. **Strict as-of temporal isolation** — features and retrieval contexts strictly enforce point-in-time constraints (`available_at <= published_at`), eliminating look-ahead bias across both inference and training.
+3. **Replay-first architecture** — `make smoke` executes the complete vertical slice locally using fixtures; Kafka and Qdrant provide scalable integration paths without creating single-point demo failures.
+4. **Local-first LLMOps telemetry** — comprehensive execution metadata is always written locally to `artifacts/runs/`; LangSmith and Phoenix spans fail-open when configured.
+5. **Empirical ML rigor** — parallel study matrices, leakage-free nested splits, and immutable run registries evaluate candidates on locked held-out test sets. We publish honest holdout metrics and never soften failed experiments or claim unverified alpha.
 
 ### Try it
 
@@ -65,7 +67,8 @@ Example `make smoke` run — the analyst proposes BUY on an Apple headline; the 
 
 - [`docs/VISION.md`](docs/VISION.md) — product / why  
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how  
-- [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md) — gate ≠ alpha; lab metrics; no PnL claims  
+- [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md) — gate ≠ alpha; empirical lab metrics; zero fabricated alpha  
+- [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md) — parallel experiment harness, run registry, and leakage guards (JH-63.2)  
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — operator path  
 - [`FAQ.md`](FAQ.md) — Technical FAQ  
 - [`docs/assets/`](docs/assets/) — packaging visuals  
