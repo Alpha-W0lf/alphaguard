@@ -57,10 +57,10 @@ It simulates institutional “analyst + risk” separation using tools employers
 
 ### Key Capabilities
 
-1. **Event-driven ingestion (optional Compose path):** Financial headlines can flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). Default `/replay` decision path uses fixtures and does **not** require Kafka.
-2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
+1. **Event-driven ingestion (optional Compose path):** Financial headlines can flow through Kafka; consumers embed and upsert into Qdrant (rolling context window). This is an optional background ingest path (not agent-on-consume). The default `/replay` decision path uses fixtures and does **not** require Kafka or Qdrant.
+2. **Agent 1 — LLM Analyst:** LangGraph + local Ollama (config-driven; see Technical Approach) consumes as-of-filtered RAG hits (fixture RAG by default; Qdrant when configured) and outputs structured JSON (`action` ∈ `BUY|HOLD|PASS`, `confidence`, `rationale`). Application owns `event_id`/`ticker` identity — LLM identity fields are overwritten. `SELL` is unsupported in v1.
 3. **Agent 2 — Downside-risk gate:** XGBoost emits a **downside risk score**; a **deterministic policy** maps `(action, score[, optional vol veto]) → approve|reject`. Trained on **~500 historical headline events** (Option B) with **forward-downside labels only** (AG2)—not Agent 1 backtest labels, and not volatility-as-label.
-4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured.
+4. **LLMOps observability:** Local run summary always (mandatory); LangSmith and Phoenix are optional fail-open adapters when configured (default skipped).
 5. **Diligence artifacts:** README architecture diagram, [`FAQ.md`](../FAQ.md) Technical FAQ, optional replay demo of cached end-to-end runs.
 
 AlphaGuard does **not** run in production, manage capital, or connect to live brokerage APIs.
@@ -182,12 +182,12 @@ Each item adds days of work without improving the core outcome: a **credible, bo
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
 | Language | Python 3.11+ | DE/AI ecosystem |
-| Streaming | Apache Kafka (Docker) | Enterprise data eng signal |
-| Vector DB | Qdrant | In-demand vs Chroma; payload filtering |
+| Ingress & Streaming (optional) | Apache Kafka via Docker (optional for smoke/replay) | Enterprise data eng signal; optional for decision path |
+| Vector DB (when configured) | Qdrant (Docker, optional) | In-demand vs Chroma; payload filtering; fixture RAG by default |
 | Orchestration | LangGraph | Stateful multi-agent standard in 2026 |
 | Local LLM | Ollama + config-driven model (**default `gemma4:e2b`**) | Modern edge model; swappable |
 | Embeddings | `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) | Local, fast; separate from agent LLM |
-| LLMOps | Local run envelope **always**; LangSmith + Phoenix **when configured** | Market leader for traces; offline/no-signup path; smoke never requires a key or collector |
+| LLMOps | Local run envelope **always**; LangSmith + Phoenix **when configured** (default skipped) | Market leader for traces; offline/no-signup path; smoke never requires a key or collector |
 | API | FastAPI | Thin trigger/replay endpoint |
 | ML Gate | XGBoost downside scorer + scikit-learn + deterministic policy | Fast local training; DE staple; AG1 |
 | Sentiment features | FinBERT inference (HF) | Financial domain signal without training |
@@ -302,7 +302,7 @@ Detailed mitigations belong in the architecture doc.
 | Tickers | 8 names (see above); reject out-of-universe in v1 training/fixtures |
 | Historical news | Kaggle/CSV batch + RSS for live demo |
 | Local LLM | **Default `gemma4:e2b`**; fallback `qwen3.5:4b`; config `OLLAMA_MODEL` |
-| Observability | **Local run summary mandatory**; LangSmith + Phoenix optional fail-open when configured; **local-envelope screenshots** required for packaging (not fabricated cloud-trace UI) |
+| Observability | **Local run summary mandatory (always written)**; LangSmith + Phoenix optional fail-open when configured (default skipped); **local-envelope screenshots** required for packaging (not fabricated cloud-trace UI) |
 | FinBERT concurrency | **Batch offline** — do not require FinBERT resident with Kafka+Qdrant+Ollama on 16GB |
 | Sharing | Public GitHub + docs; **no Loom**; no required live hosted demo |
 

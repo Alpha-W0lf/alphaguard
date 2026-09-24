@@ -30,12 +30,12 @@ It is **not** a trading system, brokerage connector, Lowd Capital surrogate, or 
 | Concern | Choice |
 |---------|--------|
 | Language | Python 3.11+ (`uv`) |
-| Streaming | Apache Kafka via Docker Compose |
-| Vector DB | Qdrant via Docker Compose |
+| Streaming | Apache Kafka via Docker Compose (optional; replay smoke bypasses Kafka) |
+| Vector DB | Qdrant via Docker Compose (when configured; fixture RAG by default) |
 | Orchestration | LangGraph |
 | Local LLM | Host **Ollama**; default `gemma4:e2b`; fallback `qwen3.5:4b` via `OLLAMA_MODEL` |
 | Embeddings | Local `sentence-transformers` (e.g. `all-MiniLM-L6-v2`) — separate from agent LLM |
-| LLMOps | **Local run summary always**; LangSmith real fail-open spans **when configured** (Guide 07: tracing+key); Phoenix real fail-open OTEL chain span **when `PHOENIX_ENABLED`** (Guide 08). Smoke never requires a LangSmith key or Phoenix collector. |
+| LLMOps | **Local run summary always**; LangSmith real fail-open spans **when configured** (Guide 07: tracing+key; default skipped); Phoenix real fail-open OTEL chain span **when `PHOENIX_ENABLED`** (Guide 08; default skipped). Smoke never requires a LangSmith key or Phoenix collector. |
 | API | FastAPI (thin trigger / replay) |
 | Agent 2 | **XGBoost** downside-risk scorer + scikit-learn; deterministic approve/reject policy |
 | Sentiment features | **FinBERT batch offline only** (not concurrent with Kafka+Qdrant+Ollama on 16GB) |
@@ -70,9 +70,9 @@ flowchart LR
     CSV[Historical CSV / Kaggle batch]
   end
 
-  subgraph ingress [Ingress]
-    PROD[Producer]
-    KFK[Kafka topic news.raw]
+  subgraph ingress [Ingress (optional)]
+    PROD[Producer (optional)]
+    KFK[Kafka topic news.raw (optional)]
     REPLAY[Replay runner]
   end
 
@@ -81,7 +81,7 @@ flowchart LR
   end
 
   subgraph store [Stores]
-    QDR[Qdrant rolling context]
+    QDR[Qdrant rolling context (when configured)]
     PQ[training_events.parquet]
     BUNDLE[model bundle + manifest]
   end
@@ -92,9 +92,9 @@ flowchart LR
   end
 
   subgraph obs [Observability]
-    LOCAL[Local run summary]
-    LS[LangSmith best-effort]
-    PX[Phoenix best-effort]
+    LOCAL[Local run summary (always)]
+    LS[LangSmith (when configured)]
+    PX[Phoenix (when configured)]
   end
 
   CSV --> PQ
@@ -115,9 +115,9 @@ flowchart LR
   LS -.-> PX
 ```
 
-**Ingest (optional, when Compose is up):** RSS/CSV → producer → Kafka `news.raw` → embed + Qdrant upsert. Not on the default `/replay` decision path; not agent-on-consume.  
-**Decision (`/replay`, default smoke):** Replay fixtures → `PipelineService` → Agent 1 → Agent 2 policy → **local run summary**. LangSmith/Phoenix emit only when configured.  
-**Kafka** stays in the architecture and Compose file — optional for smoke and for the agent decision path. Do not strip it.
+**Ingest path (optional, when Compose is up):** RSS/CSV → producer → Kafka `news.raw` → embed + Qdrant upsert. Separate from the decision path; not agent-on-consume.  
+**Decision path (`/replay`, default smoke):** Replay fixtures → `PipelineService` → Agent 1 → Agent 2 policy → **local run summary (always)**. In this mode, Kafka is down/bypassed, fixture RAG is used by default, and LangSmith/Phoenix emit only when configured (default skipped).  
+**Kafka & Qdrant** remain in the architecture and Compose file — optional for smoke and for the agent decision path. Do not strip them.
 
 ---
 
@@ -125,7 +125,7 @@ flowchart LR
 
 | Component | Responsibility | Existence (2026-07-13) | Runs where |
 |-----------|----------------|------------------------|------------|
-| `infra/compose` | Kafka + Qdrant (pinned images, healthchecks) | **Present** (`docker-compose.yml`) | Docker |
+| `infra/compose` | Kafka + Qdrant (pinned images, healthchecks; optional for smoke/replay) | **Present** (`docker-compose.yml`) | Docker |
 | `ingest/producer` | Publish normalized news events to Kafka | **Present** (`ingest/producer.py` → `news.raw`) | Host |
 | `ingest/consumer` | Consume → validate → embed → upsert Qdrant | **Present** (`ingest/consumer.py`; DLQ `news.raw.dlq`) | Host |
 | `ingest/rss_*` | Yahoo RSS fetch/normalize/poll → produce | **Present** (Guide 06; optional operator path; smoke does not require) | Host |
@@ -138,7 +138,7 @@ flowchart LR
 | `ml/train` | Option B dataset; train XGBoost **downside scorer**; write **model bundle + manifest** | **05a builder + 05b train landed** (`train_option_b_gate.py` → `model_bundle_option_b/`); fixture bundle remains default smoke | Host (batch; FinBERT offline) |
 | `ml/gate` | Load bundle; score downside risk; apply **deterministic policy** → approve/reject | **Present** | Host |
 | `api/` | FastAPI: `/health`, `/replay`, `/trigger` — thin wrappers over `PipelineService` | **Present** | Host |
-| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **real fail-open spans** when `PHOENIX_ENABLED` (Guide 08) | Host |
+| `obs/` | Always write local run summary; LangSmith/Phoenix as fail-open adapters (when configured; default skipped) | **Present** — local envelope real; LangSmith = **real fail-open spans** when tracing+key (Guide 07); Phoenix = **real fail-open spans** when `PHOENIX_ENABLED` (Guide 08) | Host |
 | `eval/` | Golden set (≥21 executed): schema, identity, as-of, gate (incl. tmp vol-veto), OOU (NewsEvent + fixture-path) | **Present** — `eval/golden_cases.jsonl` + `src/alphaguard/eval/` harness; unit tests remain | Host |
 | `data/fixtures/` | Redistributable replay events, retrieval sidecars, fixture model bundle | **Present** | Git |
 | `data/` derived | `training_events.parquet`, Option B model bundles — generated; large blobs not required in git | **Builder + train paths ready** (`data/derived/`); committed parquet/bundle **not** required | Local / CI |
