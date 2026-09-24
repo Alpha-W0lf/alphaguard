@@ -1,0 +1,36 @@
+study_id: jh63_2_smoke
+description: Smoke study matrix across seeds and threshold fitting methods
+dataset_path: data/derived/training_events.parquet
+dataset_hash: a8bdd0fbda9ce31bce28de41a66a9698baeafb3fb58b1ab8ebdc586e1b10af1c
+
+seeds:
+  - 42
+  - 101
+
+threshold_methods:
+  - train_f1_max
+  - train_val_fbeta_0.5
+
+betas:
+  - 0.5
+
+calibration_methods:
+  - none
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - null
+
+split_policy: nested_time_aware_v1
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns

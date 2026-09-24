@@ -257,3 +257,25 @@ def test_unknown_threshold_fitting_rejected(tmp_path: Path) -> None:
             parquet=tmp_path / "missing.parquet",
             threshold_fitting="test_f1_max",
         )
+
+
+def test_train_option_b_emits_study_registry_record(tmp_path: Path) -> None:
+    parquet = tmp_path / "events.parquet"
+    bundle = tmp_path / "bundle"
+    runs = tmp_path / "runs"
+    _synthetic_frame(120).to_parquet(parquet)
+
+    train_option_b(parquet=parquet, bundle_dir=bundle, runs_dir=runs)
+
+    # Verify both legacy flat run json and new study registry run json exist
+    legacy_runs = list(runs.glob("option_b_train_*.json"))
+    assert len(legacy_runs) == 1
+
+    registry_runs = list((runs / "studies" / "single_runs" / "runs").glob("*.json"))
+    assert len(registry_runs) == 1
+    raw = json.loads(registry_runs[0].read_text(encoding="utf-8"))
+    assert raw["study_id"] == "single_runs"
+    assert "metrics" in raw
+    assert "test" in raw["metrics"]
+    assert "train" in raw["metrics"]
+
