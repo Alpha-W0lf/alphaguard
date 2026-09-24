@@ -12,6 +12,8 @@ AlphaGuard enforces strict point-in-time discipline and leakage guards across bo
 The solution is not to hide the Fail or fabricate metrics; it is senior engineering discipline:
 1. **JH-63.2 (This Harness):** Build a portable, leak-free, parallel experiment matrix runner and run registry that systematically records parent studies and child runs with git SHAs, dataset hashes, configuration hashes, threshold methods, confusion matrices, and rare-event metrics ($P, R, F_1, F_\beta, \text{AUPRC}, \text{Brier}$).
 2. **JH-63.3 (Data Scaling):** Scale the sample to reach $\ge 30$ (stretch $\ge 50$) locked-test positives under the frozen $-3\%/5d$ downside label before making model promotion claims.
+3. **JH-63.3 (Data Scaling — executed):** Full-pool freeze n=8907, `dataset_hash=534a341a…`, `n_positive_test=233`. Re-baseline `train_f1_max` locked-test F1≈0.2108 (see [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md) § JH-63.3). JH-63.1 Fail stays published. **Model Quality Go not claimed.**
+
 3. **Acceptance Distinction:** Harness acceptance (running reproducible parallel sweeps without cross-talk or leakage) is decoupled from model quality acceptance.
 
 ---
