@@ -179,6 +179,19 @@ def main(argv: list[str] | None = None) -> None:
     poll.add_argument("--loop", action="store_true", help="Demo loop (not a production daemon)")
     poll.add_argument("--interval-sec", type=int, default=DEFAULT_INTERVAL_SEC)
 
+    study = sub.add_parser("study", help="MLOps experiment matrix helpers (JH-63.2)")
+    study_sub = study.add_subparsers(dest="study_command", required=True)
+    s_run = study_sub.add_parser("run", help="Run parallel study matrix from YAML")
+    s_run.add_argument("--study", type=Path, required=True, help="Path to study YAML config")
+    s_run.add_argument("--workers", type=int, default=4, help="Worker processes (default: 4)")
+    s_run.add_argument("--artifacts", type=Path, default=Path("artifacts/runs"))
+    s_run.add_argument("--dataset-path", type=Path, default=None)
+    s_run.add_argument("--dataset-hash", type=str, default=None)
+
+    s_cmp = study_sub.add_parser("compare", help="Generate compare table from study dir")
+    s_cmp.add_argument("--study-dir", type=Path, required=True)
+    s_cmp.add_argument("--sort-by", type=str, default="test_f1")
+
     args = parser.parse_args(argv)
     if args.command == "preflight":
         settings = get_settings()
@@ -205,6 +218,30 @@ def main(argv: list[str] | None = None) -> None:
                 interval_sec=args.interval_sec,
             )
         )
+
+    if args.command == "study":
+        if args.study_command == "run":
+            from alphaguard.ml.study_cli import run_study_cli
+
+            run_args = [
+                "--study",
+                str(args.study),
+                "--workers",
+                str(args.workers),
+                "--artifacts",
+                str(args.artifacts),
+            ]
+            if args.dataset_path:
+                run_args.extend(["--dataset-path", str(args.dataset_path)])
+            if args.dataset_hash:
+                run_args.extend(["--dataset-hash", args.dataset_hash])
+            sys.exit(run_study_cli(run_args))
+
+        if args.study_command == "compare":
+            from alphaguard.ml.study_cli import compare_study_cli
+
+            cmp_args = ["--study-dir", str(args.study_dir), "--sort-by", args.sort_by]
+            sys.exit(compare_study_cli(cmp_args))
 
     event_id = getattr(args, "event_id", None)
     code = cmd_smoke(event_id)

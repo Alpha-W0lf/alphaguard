@@ -27,6 +27,7 @@ dependencies = [
   "transformers>=4.40",
   "langsmith>=0.10.2",
   "arize-phoenix-otel>=0.16.0",
+  "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]

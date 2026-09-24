@@ -339,8 +339,9 @@ def train_option_b(
     )
     atomic_write_bundle(bundle_dir, booster, manifest)
     stamp = created.strftime("%Y%m%dT%H%M%SZ")
+    legacy_summary_path = runs_dir / f"option_b_train_{stamp}.json"
     write_run_summary(
-        runs_dir / f"option_b_train_{stamp}.json",
+        legacy_summary_path,
         {
             "created_at": created.isoformat(),
             "parquet": str(parquet),
@@ -356,6 +357,95 @@ def train_option_b(
             "dataset_hash": manifest.dataset_hash,
         },
     )
+
+    # JH-63.2: Also emit structured RunRecord to registry under artifacts/runs/studies/
+    try:
+        from alphaguard.ml.study_executor import get_git_sha
+        from alphaguard.ml.study_metrics import compute_metrics_suite
+        from alphaguard.ml.study_registry import StudyRegistry
+        from alphaguard.ml.study_schema import (
+            ConfusionMatrix,
+            ModelHyperparams,
+            RunConfig,
+            RunRecord,
+            SplitMetrics,
+        )
+
+        registry = StudyRegistry(runs_dir)
+        study_id = "single_runs"
+        run_id = f"option_b_{stamp}"
+        run_config = RunConfig(
+            study_id=study_id,
+            run_id=run_id,
+            seed=42,
+            dataset_path=str(parquet),
+            dataset_hash=manifest.dataset_hash,
+            threshold_method=threshold_fitting,
+            beta=FBETA_BETA,
+            calibration_method="none",
+            model_params=ModelHyperparams(
+                max_depth=winner["max_depth"],
+                eta=winner["eta"],
+                num_boost_round=winner["num_boost_round"],
+                scale_pos_weight=scale_pos_weight,
+            ),
+            split_policy="time_ordered_80_20",
+        )
+        train_full_m = compute_metrics_suite(split.y_train, train_probs, threshold=threshold)
+        test_full_m = compute_metrics_suite(split.y_test, test_probs, threshold=threshold)
+        run_record = RunRecord(
+            run_id=run_id,
+            study_id=study_id,
+            git_sha=get_git_sha(),
+            dataset_hash=manifest.dataset_hash,
+            config_hash=run_config.compute_config_hash(),
+            seed=42,
+            threshold_method=recorded_method,
+            calibration_method="none",
+            split_policy="time_ordered_80_20",
+            score_threshold=threshold,
+            wall_time_s=0.0,
+            aborted=thresh_meta["threshold_experiment_aborted"],
+            abort_reason=thresh_meta["threshold_abort_reason"],
+            bundle_dir=str(bundle_dir),
+            metrics={
+                "train": SplitMetrics(
+                    n_samples=train_full_m["n_samples"],
+                    n_positive=train_full_m["n_positive"],
+                    prevalence=train_full_m["prevalence"],
+                    threshold=threshold,
+                    beta=FBETA_BETA,
+                    precision=train_full_m["precision"],
+                    recall=train_full_m["recall"],
+                    f1=train_full_m["f1"],
+                    fbeta=train_full_m["fbeta"],
+                    auprc=train_full_m["auprc"],
+                    brier=train_full_m["brier"],
+                    confusion=ConfusionMatrix(**train_full_m["confusion"]),
+                ),
+                "test": SplitMetrics(
+                    n_samples=test_full_m["n_samples"],
+                    n_positive=test_full_m["n_positive"],
+                    prevalence=test_full_m["prevalence"],
+                    threshold=threshold,
+                    beta=FBETA_BETA,
+                    precision=test_full_m["precision"],
+                    recall=test_full_m["recall"],
+                    f1=test_full_m["f1"],
+                    fbeta=test_full_m["fbeta"],
+                    auprc=test_full_m["auprc"],
+                    brier=test_full_m["brier"],
+                    confusion=ConfusionMatrix(**test_full_m["confusion"]),
+                ),
+            },
+            confusion=ConfusionMatrix(**test_full_m["confusion"]),
+            n_positive_train=n_pos,
+            n_positive_test=int(split.y_test.sum()),
+            config=run_config,
+        )
+        registry.save_run(run_record)
+    except Exception as exc:
+        logger.debug("Failed saving study registry record: %s", exc)
     if thresh_meta["threshold_experiment_aborted"]:
         logger.warning(
             "threshold experiment aborted (%s); fell back to %s",

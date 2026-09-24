@@ -46,6 +46,15 @@ Same frozen parquet `data/derived/training_events.parquet`; `dataset_hash=a8bdd0
 - **Shipped default:** `train_f1_max`. Fβ remains available for A/B only (`--threshold-fitting train_val_fbeta_0.5`).
 - This is not a production risk model; the gate is not alpha; there is no PnL.
 
+## JH-63.2 MLOps experiment harness & run registry
+
+The parallel experiment harness (`scripts/run_study.py`, `alphaguard study run/compare`) introduces declarative config matrices and an immutable run registry under `artifacts/runs/studies/<study_id>/`.
+
+- **Harness Go ≠ Model Quality Go:** Passing harness tests proves that parallel execution, artifact isolation, and leakage guards function cleanly without cross-talk. It is not an assertion of trading edge or production readiness.
+- **Fail Stays Fail:** The JH-63.1 Fail remains published and documented as evidence of rigorous point-in-time discipline. Shipped defaults are not altered without statistical power ($\ge 30$ locked-test positives via JH-63.3).
+- **Leakage Guards:** HPO, threshold fitting, and calibration operate strictly on train/val splits; locked held-out test splits are evaluated once at the finish.
+- See [`EXPERIMENTS.md`](./EXPERIMENTS.md).
+
 ## Pointers
 
 - Product status / MV boxes → [`VISION.md`](./VISION.md)
