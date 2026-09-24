@@ -30,7 +30,7 @@ flowchart LR
 
 1. **Analyst LLM ≠ risk model** — proposal and downside veto are separate systems so risk policy stays deterministic and auditable.
 2. **Replay-first smoke** — `make smoke` proves the full chain with fixtures; Kafka/Qdrant are optional for integration, not required to demo.
-3. **Local run summary mandatory** — LangSmith / Phoenix are optional fail-open when configured; the local envelope always exists.
+3. **Local run summary mandatory** — LangSmith / Phoenix are optional fail-open when configured (default skipped; smoke never requires cloud keys); the local envelope always exists.
 
 ### Try it
 
@@ -59,7 +59,7 @@ Example `make smoke` run — the analyst proposes BUY on an Apple headline; the 
 | Risk gate | XGBoost downside-risk scorer + deterministic policy |
 | RAG (smoke) | Fixture retrieval hits |
 | Infra (optional) | Compose Kafka + Qdrant |
-| LLMOps | Local run envelope mandatory; LangSmith / Phoenix fail-open when enabled |
+| LLMOps | Local run envelope mandatory (always written); LangSmith / Phoenix fail-open when enabled (default skipped) |
 
 ### Deeper docs
 
