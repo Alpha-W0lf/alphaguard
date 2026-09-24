@@ -112,7 +112,8 @@ def test_fbeta_threshold_uses_val_only_prefers_precision() -> None:
     y = np.concatenate([y_fit, y_val])
     p = np.concatenate([p_fit, p_val])
     t_fb = fit_threshold_train_val_fbeta(y, p)
-    assert t_fb >= 0.65
+    # Val Fβ(0.5) max is t=0.45 (P=1.0, 3 TP) over t=0.70 (P=1.0, 2 TP).
+    assert t_fb == pytest.approx(0.45)
     y_test = np.ones(10, dtype=int)
     p_test = np.full(10, 0.20)
     t_leaked = fit_threshold_train_val_fbeta(
