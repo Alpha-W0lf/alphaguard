@@ -131,8 +131,12 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 ```bash
 # Requires data/derived/training_events.parquet (05a)
 uv run python scripts/train_option_b_gate.py
+# Optional A/B (same parquet / frozen test):
+# uv run python scripts/train_option_b_gate.py --threshold-fitting train_val_fbeta_0.5
+# uv run python scripts/compare_option_b_thresholds.py
 # → data/derived/model_bundle_option_b/ (gitignored)
 # → artifacts/runs/option_b_train_<utc>.json
+# → artifacts/runs/jh63_threshold_compare_<utc>.json
 
 # Optional Option B smoke (default smoke stays fixture):
 MODEL_BUNDLE_DIR=data/derived/model_bundle_option_b \
@@ -143,9 +147,9 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | Pin | Value |
 |-----|--------|
 | HPO | Train-only `TimeSeriesSplit(n_splits=3)` grid; select by mean val logloss |
-| Threshold | Train-F1 max on full-train probs |
+| Threshold | Default `train_f1_max` on full-train probs. JH-63.1 A/B: `train_val_fbeta_0.5` on last 20% of train by time (`--threshold-fitting`). Compare both on the same frozen test via `scripts/compare_option_b_thresholds.py`. |
 | `bundle_kind` | `option_b` |
-| Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py`) |
+| Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py` / `train_compare.py`) |
 
 **Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Local manifest after 2026-07-21 alias rebuild: train F1 ≈0.693, **test F1 ≈0.087** (n_positive_test=3) — weak/noisy holdout, not hidden. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
 
@@ -163,7 +167,9 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | `scripts/train_option_b_gate.py` | Training CLI |
 | `src/alphaguard/ml/train_option_b.py` | Option B train orchestration |
 | `src/alphaguard/ml/train_hpo.py` | Nested time-grid HPO |
-| `src/alphaguard/ml/train_eval.py` | Threshold + PRF1 helpers |
+| `src/alphaguard/ml/train_eval.py` | Threshold + PRF1 helpers (incl. train-val Fβ) |
+| `src/alphaguard/ml/train_compare.py` | JH-63.1 same-booster threshold A/B |
+| `scripts/compare_option_b_thresholds.py` | Threshold A/B CLI |
 
 ## Honesty
 

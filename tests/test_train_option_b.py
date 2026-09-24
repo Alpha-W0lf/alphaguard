@@ -11,7 +11,15 @@ import pytest
 
 from alphaguard.contracts.decisions import FEATURE_NAMES
 from alphaguard.ml.gate import DownsideRiskGate, GateLoadError
-from alphaguard.ml.train_eval import fit_threshold_train_f1
+from alphaguard.ml.train_compare import compare_threshold_fittings, jh63_verdict
+from alphaguard.ml.train_eval import (
+    THRESHOLD_TRAIN_F1,
+    THRESHOLD_TRAIN_VAL_FBETA,
+    fit_threshold_train_f1,
+    fit_threshold_train_val_fbeta,
+    resolve_threshold,
+    train_val_slices,
+)
 from alphaguard.ml.train_hpo import run_hpo
 from alphaguard.ml.train_option_b import (
     TrainError,
@@ -19,6 +27,7 @@ from alphaguard.ml.train_option_b import (
     time_ordered_split,
     train_option_b,
 )
+from alphaguard.ml import train_eval as train_eval_mod
 from alphaguard.ml.train_option_b_errors import TrainError as TrainErrorAlias
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -89,6 +98,46 @@ def test_threshold_train_only() -> None:
     assert 0.05 <= t <= 0.95
 
 
+def test_train_val_slices_are_last_20_percent() -> None:
+    fit, val = train_val_slices(100)
+    assert fit == slice(0, 80)
+    assert val == slice(80, 100)
+
+
+def test_fbeta_threshold_uses_val_only_prefers_precision() -> None:
+    y_fit = np.array([0, 1] * 20, dtype=int)
+    p_fit = np.array([0.1, 0.9] * 20)
+    y_val = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0], dtype=int)
+    p_val = np.array([0.85, 0.75, 0.45, 0.35, 0.40, 0.32, 0.10, 0.08, 0.05, 0.02])
+    y = np.concatenate([y_fit, y_val])
+    p = np.concatenate([p_fit, p_val])
+    t_fb = fit_threshold_train_val_fbeta(y, p)
+    assert t_fb >= 0.65
+    y_test = np.ones(10, dtype=int)
+    p_test = np.full(10, 0.20)
+    t_leaked = fit_threshold_train_val_fbeta(
+        np.concatenate([y, y_test]), np.concatenate([p, p_test])
+    )
+    assert t_fb != t_leaked
+
+
+def test_fbeta_val_single_class_raises() -> None:
+    y = np.array([0, 1] * 8 + [0] * 4, dtype=int)
+    p = np.array([0.1, 0.9] * 8 + [0.2] * 4)
+    with pytest.raises(TrainError, match="val labels have <2 classes"):
+        fit_threshold_train_val_fbeta(y, p)
+    t, method, reason = resolve_threshold(THRESHOLD_TRAIN_VAL_FBETA, y, p)
+    assert method == THRESHOLD_TRAIN_F1
+    assert reason
+    assert 0.05 <= t <= 0.95
+
+
+def test_jh63_verdict_bands() -> None:
+    assert jh63_verdict({"precision": 0.20, "f1": 0.25, "fp": 3}) == "PASS"
+    assert jh63_verdict({"precision": 0.12, "f1": 0.14, "fp": 6}) == "SOFT_PASS"
+    assert jh63_verdict({"precision": 0.05, "f1": 0.08, "fp": 19}) == "FAIL"
+
+
 def test_train_writes_option_b_bundle(tmp_path: Path) -> None:
     parquet = tmp_path / "events.parquet"
     bundle = tmp_path / "bundle"
@@ -102,9 +151,62 @@ def test_train_writes_option_b_bundle(tmp_path: Path) -> None:
     raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
     assert raw["metrics"]["hpo"]["method"] == "timeseries_split_grid"
     assert raw["metrics"]["hyperparam_search"] == "timeseries_split_grid_05b"
+    assert raw["threshold_fitting"] == THRESHOLD_TRAIN_F1
     assert list(runs.glob("option_b_train_*.json"))
     gate = DownsideRiskGate(bundle)
     assert gate.manifest.bundle_kind == "option_b"
+
+
+def test_fbeta_train_writes_manifest_field(tmp_path: Path) -> None:
+    parquet = tmp_path / "events.parquet"
+    bundle = tmp_path / "bundle"
+    runs = tmp_path / "runs"
+    _synthetic_frame(160).to_parquet(parquet)
+    manifest = train_option_b(
+        parquet=parquet,
+        bundle_dir=bundle,
+        runs_dir=runs,
+        threshold_fitting=THRESHOLD_TRAIN_VAL_FBETA,
+    )
+    assert manifest.threshold_fitting in {THRESHOLD_TRAIN_VAL_FBETA, THRESHOLD_TRAIN_F1}
+    raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
+    assert raw["threshold_fitting"] == manifest.threshold_fitting
+    assert "threshold_fitting" in raw["metrics"]
+
+
+def test_fbeta_fit_receives_train_rows_only(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seen: list[int] = []
+    real = train_eval_mod.fit_threshold_train_val_fbeta
+
+    def spy(y, p, **kwargs):  # type: ignore[no-untyped-def]
+        seen.append(len(y))
+        return real(y, p, **kwargs)
+
+    monkeypatch.setattr(train_eval_mod, "fit_threshold_train_val_fbeta", spy)
+    parquet = tmp_path / "events.parquet"
+    _synthetic_frame(160).to_parquet(parquet)
+    train_option_b(
+        parquet=parquet,
+        bundle_dir=tmp_path / "bundle",
+        runs_dir=tmp_path / "runs",
+        threshold_fitting=THRESHOLD_TRAIN_VAL_FBETA,
+    )
+    assert seen == [128]
+
+
+def test_compare_same_frozen_test(tmp_path: Path) -> None:
+    parquet = tmp_path / "events.parquet"
+    runs = tmp_path / "runs"
+    _synthetic_frame(160).to_parquet(parquet)
+    payload = compare_threshold_fittings(parquet=parquet, runs_dir=runs)
+    assert payload["n_train"] == 128
+    assert payload["n_test"] == 32
+    assert THRESHOLD_TRAIN_F1 in payload["same_run"]
+    assert THRESHOLD_TRAIN_VAL_FBETA in payload["same_run"]
+    assert payload["acceptance"]["verdict"] in {"PASS", "SOFT_PASS", "FAIL", "NO_GO"}
+    assert list(runs.glob("jh63_threshold_compare_*.json"))
 
 
 def test_require_bundle_kind_guard(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -21,7 +21,11 @@ import xgboost as xgb
 from alphaguard.contracts.decisions import FEATURE_NAMES
 from alphaguard.contracts.manifest import LabelWindow, ModelBundleManifest, TrainWindow
 from alphaguard.ml.gate import write_manifest
-from alphaguard.ml.train_eval import fit_threshold_train_f1, split_metrics
+from alphaguard.ml.train_eval import (
+    THRESHOLD_TRAIN_F1,
+    resolve_threshold,
+    split_metrics,
+)
 from alphaguard.ml.train_hpo import N_SPLITS, booster_params, run_hpo, train_booster
 from alphaguard.ml.train_option_b_errors import TrainError
 
@@ -37,7 +41,9 @@ __all__ = [
     "DEFAULT_BUNDLE",
     "DEFAULT_PARQUET",
     "DEFAULT_RUNS",
+    "PreparedTrain",
     "TrainError",
+    "prepare_trained_split",
     "train_option_b",
 ]
 
@@ -50,6 +56,21 @@ class SplitData:
     y_test: np.ndarray
     train_start: str
     train_end: str
+
+
+@dataclass(frozen=True)
+class PreparedTrain:
+    """Booster + frozen split/probs — threshold fitting is applied after this."""
+
+    df: pd.DataFrame
+    split: SplitData
+    booster: Any
+    train_probs: np.ndarray
+    test_probs: np.ndarray
+    hpo: dict[str, Any]
+    scale_pos_weight: float
+    n_pos: int
+    n_neg: int
 
 
 def load_training_frame(parquet: Path) -> pd.DataFrame:
@@ -107,7 +128,8 @@ def atomic_write_bundle(
         (tmp_path / "README.md").write_text(
             "# Option B model bundle\n\n"
             f"`bundle_kind=option_b` — trained downside-risk scorer (Guide 05b).\n"
-            f"score_threshold={manifest.score_threshold:.4f} (train F1 max).\n"
+            f"score_threshold={manifest.score_threshold:.4f} "
+            f"({manifest.threshold_fitting}).\n"
             f"hyperparam_search={manifest.metrics.get('hyperparam_search')}\n"
             "Not a production risk model; lab-scale metrics only.\n"
             "Default smoke still uses the fixture bundle unless MODEL_BUNDLE_DIR points here.\n",
@@ -123,11 +145,8 @@ def write_run_summary(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
 
 
-def train_option_b(
-    parquet: Path = DEFAULT_PARQUET,
-    bundle_dir: Path = DEFAULT_BUNDLE,
-    runs_dir: Path = DEFAULT_RUNS,
-) -> ModelBundleManifest:
+def prepare_trained_split(parquet: Path = DEFAULT_PARQUET) -> PreparedTrain:
+    """Train HPO + booster on time-ordered train only; do not fit a threshold."""
     df = load_training_frame(parquet)
     split = time_ordered_split(df)
     n_pos = int(split.y_train.sum())
@@ -148,11 +167,38 @@ def train_option_b(
     )
     dtrain = xgb.DMatrix(split.x_train, feature_names=list(FEATURE_NAMES))
     dtest = xgb.DMatrix(split.x_test, feature_names=list(FEATURE_NAMES))
-    train_probs = booster.predict(dtrain)
-    test_probs = booster.predict(dtest)
-    threshold = fit_threshold_train_f1(split.y_train, train_probs)
-    train_m = split_metrics(split.y_train, train_probs, threshold)
-    test_m = split_metrics(split.y_test, test_probs, threshold)
+    return PreparedTrain(
+        df=df,
+        split=split,
+        booster=booster,
+        train_probs=booster.predict(dtrain),
+        test_probs=booster.predict(dtest),
+        hpo=hpo,
+        scale_pos_weight=scale_pos_weight,
+        n_pos=n_pos,
+        n_neg=n_neg,
+    )
+
+
+def train_option_b(
+    parquet: Path = DEFAULT_PARQUET,
+    bundle_dir: Path = DEFAULT_BUNDLE,
+    runs_dir: Path = DEFAULT_RUNS,
+    threshold_fitting: str = THRESHOLD_TRAIN_F1,
+) -> ModelBundleManifest:
+    prepared = prepare_trained_split(parquet)
+    split = prepared.split
+    threshold, method_used, fallback = resolve_threshold(
+        threshold_fitting, split.y_train, prepared.train_probs
+    )
+    if fallback:
+        print(
+            f"WARNING: threshold_fitting={threshold_fitting} fell back to "
+            f"{method_used}: {fallback}",
+            file=sys.stderr,
+        )
+    train_m = split_metrics(split.y_train, prepared.train_probs, threshold)
+    test_m = split_metrics(split.y_test, prepared.test_probs, threshold)
     gap = abs(train_m["f1"] - test_m["f1"])
     if gap > F1_GAP_WARN:
         print(
@@ -160,17 +206,23 @@ def train_option_b(
             file=sys.stderr,
         )
 
-    x_all = df[list(FEATURE_NAMES)].to_numpy(dtype=float)
-    y_all = df["label_high_risk"].to_numpy(dtype=int)
-    xgb_params = booster_params(scale_pos_weight, winner["max_depth"], winner["eta"])
+    x_all = prepared.df[list(FEATURE_NAMES)].to_numpy(dtype=float)
+    y_all = prepared.df["label_high_risk"].to_numpy(dtype=int)
+    winner = prepared.hpo["winner"]
+    xgb_params = booster_params(
+        prepared.scale_pos_weight, winner["max_depth"], winner["eta"]
+    )
     xgb_params["num_boost_round"] = winner["num_boost_round"]
 
     metrics: dict[str, Any] = {
         "n_train": int(len(split.y_train)),
         "n_test": int(len(split.y_test)),
-        "n_positive_train": n_pos,
+        "n_positive_train": prepared.n_pos,
         "n_positive_test": int(split.y_test.sum()),
         "score_threshold": threshold,
+        "threshold_fitting": method_used,
+        "threshold_fitting_requested": threshold_fitting,
+        "threshold_fallback_reason": fallback,
         "train_precision": train_m["precision"],
         "train_recall": train_m["recall"],
         "train_f1": train_m["f1"],
@@ -187,8 +239,8 @@ def train_option_b(
         "test_fn": test_m["fn"],
         "train_test_f1_gap": gap,
         "xgb_params": xgb_params,
-        "scale_pos_weight": scale_pos_weight,
-        "hpo": hpo,
+        "scale_pos_weight": prepared.scale_pos_weight,
+        "hpo": prepared.hpo,
         "hyperparam_search": "timeseries_split_grid_05b",
     }
 
@@ -201,7 +253,7 @@ def train_option_b(
         feature_dtypes={name: "float" for name in FEATURE_NAMES},
         score_kind="proba_high_risk",
         score_threshold=threshold,
-        threshold_fitting="train_f1_max",
+        threshold_fitting=method_used,
         vol_veto_enabled=False,
         vol_veto_threshold=None,
         policy_version="v1",
@@ -223,7 +275,7 @@ def train_option_b(
         created_at=created,
         model_filename="model.json",
     )
-    atomic_write_bundle(bundle_dir, booster, manifest)
+    atomic_write_bundle(bundle_dir, prepared.booster, manifest)
     stamp = created.strftime("%Y%m%dT%H%M%SZ")
     write_run_summary(
         runs_dir / f"option_b_train_{stamp}.json",
@@ -233,6 +285,7 @@ def train_option_b(
             "bundle_dir": str(bundle_dir),
             "bundle_kind": "option_b",
             "score_threshold": threshold,
+            "threshold_fitting": method_used,
             "metrics": metrics,
             "winner": winner,
             "dataset_hash": manifest.dataset_hash,
