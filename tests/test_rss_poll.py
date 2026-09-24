@@ -10,7 +10,7 @@ import pytest
 from alphaguard.contracts.events import NewsEvent, OutOfUniverseTickerError
 from alphaguard.ingest.producer import KafkaProduceError
 from alphaguard.ingest.rss_fetch import RssFetchError
-from alphaguard.ingest.rss_normalize import NormalizeResult, normalize_rss_xml
+from alphaguard.ingest.rss_normalize import normalize_rss_xml
 from alphaguard.ingest.rss_poll import (
     exit_code_for_summary,
     poll_once,

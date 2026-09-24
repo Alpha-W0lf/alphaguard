@@ -20,5 +20,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
-      - name: Run unit tests
+      - name: Lint (ruff check)
+        run: uv run ruff check .
+
+      - name: Build fixture bundle
+        run: uv run python scripts/build_fixture_bundle.py
+
+      - name: Run unit and contract tests
         run: uv run pytest -q
+
+      - name: Stranger smoke (fixture analyst)
+        run: uv run alphaguard smoke --fixture-analyst
