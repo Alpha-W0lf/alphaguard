@@ -1,0 +1,107 @@
+{
+  "experiment": "jh63.1",
+  "created_at": "2026-09-24T16:10:01.965485+00:00",
+  "parquet": "data/derived/training_events.parquet",
+  "dataset_hash": "6e900d503663d0858b6d5075f3f53443a0d0ce3afa46c9b740a4e2268a99591f",
+  "n_train": 400,
+  "n_test": 100,
+  "n_positive_train": 74,
+  "n_positive_test": 3,
+  "published_baseline": {
+    "test_f1": 0.087,
+    "test_precision": 0.05,
+    "confusion": {
+      "tp": 1,
+      "fp": 19,
+      "tn": 78,
+      "fn": 2
+    },
+    "note": "docs/FINANCE_HONESTY.md 2026-07-21 alias-rebuild manifest"
+  },
+  "same_run": {
+    "train_f1_max": {
+      "threshold_fitting_requested": "train_f1_max",
+      "threshold_fitting": "train_f1_max",
+      "threshold_fallback_reason": null,
+      "score_threshold": 0.5499999999999999,
+      "train": {
+        "precision": 0.6582278481012658,
+        "recall": 0.7027027027027027,
+        "f1": 0.6797385620915033,
+        "tp": 52,
+        "fp": 27,
+        "tn": 299,
+        "fn": 22
+      },
+      "val": {
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6666666666666665,
+        "tp": 3,
+        "fp": 1,
+        "tn": 74,
+        "fn": 2
+      },
+      "test": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 1,
+        "tn": 96,
+        "fn": 3
+      },
+      "n_pos_test": 3,
+      "n_pos_val": 5
+    },
+    "train_val_fbeta_0.5": {
+      "threshold_fitting_requested": "train_val_fbeta_0.5",
+      "threshold_fitting": "train_val_fbeta_0.5",
+      "threshold_fallback_reason": null,
+      "score_threshold": 0.65,
+      "train": {
+        "precision": 0.8536585365853658,
+        "recall": 0.47297297297297297,
+        "f1": 0.6086956521739131,
+        "tp": 35,
+        "fp": 6,
+        "tn": 320,
+        "fn": 39
+      },
+      "val": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1": 0.7499999999999999,
+        "tp": 3,
+        "fp": 0,
+        "tn": 75,
+        "fn": 2
+      },
+      "test": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "tn": 97,
+        "fn": 3
+      },
+      "n_pos_test": 3,
+      "n_pos_val": 5
+    }
+  },
+  "acceptance": {
+    "rules": {
+      "PASS": "locked-test precision>=0.15 and F1>=0.20",
+      "SOFT_PASS": "FP<=8 and F1>=0.12 but below PASS",
+      "FAIL": "F1<=0.087 or precision<0.08"
+    },
+    "verdict": "FAIL",
+    "candidate_vs_same_run_baseline_f1": 0.0
+  },
+  "hpo_winner": {
+    "max_depth": 3,
+    "eta": 0.05,
+    "num_boost_round": 40
+  }
+}

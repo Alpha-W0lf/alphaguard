@@ -151,7 +151,7 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | `bundle_kind` | `option_b` |
 | Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py` / `train_compare.py`) |
 
-**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Local manifest after 2026-07-21 alias rebuild: train F1 ≈0.693, **test F1 ≈0.087** (n_positive_test=3) — weak/noisy holdout, not hidden. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
+**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Local manifest after 2026-07-21 alias rebuild: train F1 ≈0.693, **test F1 ≈0.087** (n_positive_test=3) — weak/noisy holdout, not hidden. JH-63.1 same-booster retrain (2026-09-24, same pins, `dataset_hash=6e900d50…591f`): same-run `train_f1_max` test F1 = 0.000 (0/1/96/3); `train_val_fbeta_0.5` test F1 = 0.000 (0/0/97/3) — **FAIL** vs acceptance (precision ≥ 0.15 and F1 ≥ 0.20). Default threshold method stays `train_f1_max`. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
 
 ## Builder layout
 
