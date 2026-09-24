@@ -143,7 +143,7 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | Pin | Value |
 |-----|--------|
 | HPO | Train-only `TimeSeriesSplit(n_splits=3)` grid; select by mean val logloss |
-| Threshold | Shipped default `train_f1_max` on full-train probs. Optional A/B: `train_val_fbeta_0.5` (`--threshold-fitting`); Mac locked-test Fail 2026-09-24, so it is not the default. |
+| Threshold | Shipped default `train_f1_max` on full-train probs (CLI default in `scripts/train_option_b_gate.py` aligned to `train_f1_max`). Optional A/B: `train_val_fbeta_0.5` (`--threshold-fitting`); Mac locked-test Fail 2026-09-24, so it is not the default. |
 | `bundle_kind` | `option_b` |
 | Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py`) |
 

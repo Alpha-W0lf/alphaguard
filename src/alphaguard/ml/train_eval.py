@@ -8,7 +8,7 @@ from alphaguard.ml.train_option_b_errors import TrainError
 
 METHOD_TRAIN_F1_MAX = "train_f1_max"
 METHOD_TRAIN_VAL_FBETA = "train_val_fbeta_0.5"
-THRESHOLD_METHODS = (METHOD_TRAIN_VAL_FBETA, METHOD_TRAIN_F1_MAX)
+THRESHOLD_METHODS = (METHOD_TRAIN_F1_MAX, METHOD_TRAIN_VAL_FBETA)
 FBETA_BETA = 0.5
 TRAIN_VAL_FRACTION = 0.2
 VAL_SINGLE_CLASS_REASON = "val labels have <2 classes"

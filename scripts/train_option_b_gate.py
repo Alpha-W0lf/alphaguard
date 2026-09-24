@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
         "--threshold-fitting",
         default=METHOD_TRAIN_F1_MAX,
         choices=list(THRESHOLD_METHODS),
-        help="train_f1_max (default) or train_val_fbeta_0.5 for A/B. Never fit on test.",
+        help="train_f1_max (default, matches shipped policy) or train_val_fbeta_0.5 for A/B. Never fit on test.",
     )
     args = parser.parse_args(argv)
     try:
