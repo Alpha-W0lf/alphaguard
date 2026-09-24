@@ -29,19 +29,22 @@ Quoted from a local `data/derived/model_bundle_option_b/manifest.json` (`bundle_
 
 Notes: `n_positive_test=3` — test F1 remains **noisy / weak**, not hidden. Prior pre-alias manifest (2026-07-17) had test F1 = 0.0 on 2 positives; drift after META/GOOGL enter the sample is expected. Fixture `bundle_kind=fixture` F1 must never be marketed as model quality. See [`TRAINING_DATA.md`](./TRAINING_DATA.md).
 
-## JH-63.1 precision-weighted threshold (results pending)
+## JH-63.1 precision-weighted threshold (Mac A/B — 2026-09-24)
 
-Code default is `threshold_fitting=train_val_fbeta_0.5`: last 20% of the **train** partition by time, binary positive-class Fβ with β=0.5, tie-break higher precision then lower `t`. The table above is the published `train_f1_max` baseline (test precision 0.05, test F1 ≈ 0.087, confusion 1/19/78/2, `n_positive_test=3`).
+Same frozen parquet `data/derived/training_events.parquet`; `dataset_hash=a8bdd0fbda9ce31bce28de41a66a9698baeafb3fb58b1ab8ebdc586e1b10af1c`. Kaggle/FinBERT were **not** regenerated. Threshold fitting never used the held-out test. Comparison artifact (local): `artifacts/runs/jh63_threshold_compare_20260924T182930Z.json`.
 
-**TODO — Job Hunt Mac A/B.** This cloud VM did not contain `data/derived/training_events.parquet`. Kaggle/FinBERT were not regenerated. Run the A/B on the Mac where that parquet already exists:
+| Method | t | Split | Precision | Recall | F1 | Confusion (TP/FP/TN/FN) | Notes |
+|--------|---|-------|-----------|--------|----|-------------------------|-------|
+| `train_f1_max` (A) | 0.50 | Train | 0.590 | 0.838 | 0.693 | 62 / 43 / 283 / 12 | |
+| `train_f1_max` (A) | 0.50 | Test | **0.05** | 0.333 | **0.087** | 1 / 19 / 78 / 2 | `n_positive_test=3` |
+| `train_val_fbeta_0.5` (B) | 0.65 | Train | 0.846 | 0.446 | 0.584 | 33 / 6 / 320 / 41 | |
+| `train_val_fbeta_0.5` (B) | 0.65 | Val (fit) | 0.167 | 0.400 | F1=0.235 / Fβ=0.189 | 2 / 10 / 65 / 3 | last 20% of train; not test |
+| `train_val_fbeta_0.5` (B) | 0.65 | Test | **0.0** | 0.0 | **0.0** | 0 / 0 / 97 / 3 | `n_positive_test=3`; zero positives predicted |
 
-- Same frozen time-ordered 80/20. Run `--threshold-fitting train_f1_max` and `train_val_fbeta_0.5`. Do not pick `t` using the held-out test.
-- **Go:** held-out precision ≥ 0.15 and F1 ≥ 0.20, with `n_positive_test` disclosed.
-- **Soft:** FP ≤ 8 and F1 ≥ 0.12 but below 0.20 — threshold helped; still weak.
-- **Fail:** F1 ≤ the ≈0.087 baseline or precision still &lt; 0.08 — do not claim an improvement.
-- Paste threshold, precision, recall, F1, TP/FP/TN/FN, `n_positive_test`, and `dataset_hash` into this section after that run.
-
-No new held-out numbers are invented here. Until that table exists: this is not a production risk model, the gate is not alpha, and there is no PnL.
+- `threshold_experiment_aborted`: false (both).
+- **Verdict (locked TEST for Fβ method B): Fail.** Test F1=0.0 ≤ ≈0.087 baseline; test precision=0.0 < 0.08. Soft not met. Do not claim an improvement. Higher t=0.65 wiped all test positives (and FPs). With n_positive_test=3 the holdout remains noisy/weak.
+- **Shipped default:** `train_f1_max`. Fβ remains available for A/B only (`--threshold-fitting train_val_fbeta_0.5`).
+- This is not a production risk model; the gate is not alpha; there is no PnL.
 
 ## Pointers
 

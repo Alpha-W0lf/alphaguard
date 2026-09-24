@@ -1,7 +1,9 @@
 """Option B XGBoost train — nested time-aware HPO + train-only threshold (Guide 05b).
 
-Default threshold (JH-63.1) is binary Fβ (β=0.5) on the last 20% of train by time.
-`train_f1_max` remains available for A/B. The held-out test partition is never used to pick t.
+Shipped default is `train_f1_max` on full-train probabilities. Optional A/B
+`train_val_fbeta_0.5` (binary Fβ, β=0.5, last 20% of train by time) stays
+selectable; the 2026-09-24 Mac locked-test of that method failed, so it is
+not the default. The held-out test partition is never used to pick t.
 """
 
 from __future__ import annotations
@@ -208,7 +210,7 @@ def train_option_b(
     parquet: Path = DEFAULT_PARQUET,
     bundle_dir: Path = DEFAULT_BUNDLE,
     runs_dir: Path = DEFAULT_RUNS,
-    threshold_fitting: str = METHOD_TRAIN_VAL_FBETA,
+    threshold_fitting: str = METHOD_TRAIN_F1_MAX,
 ) -> ModelBundleManifest:
     if threshold_fitting not in THRESHOLD_METHODS:
         raise TrainError(
@@ -236,7 +238,8 @@ def train_option_b(
     dtest = xgb.DMatrix(split.x_test, feature_names=list(FEATURE_NAMES))
     train_probs = booster.predict(dtrain)
     test_probs = booster.predict(dtest)
-    # Frozen t comes from train-internal val (or full-train F1). test_probs are scored after.
+    # Frozen t is train-only (default: full-train F1; optional: train-internal val Fβ).
+    # test_probs are scored after t is chosen.
     threshold, recorded_method, thresh_meta = _choose_threshold(
         split,
         train_probs,

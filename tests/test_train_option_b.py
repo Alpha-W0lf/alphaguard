@@ -108,7 +108,8 @@ def test_train_writes_option_b_bundle(tmp_path: Path) -> None:
     raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
     assert raw["metrics"]["hpo"]["method"] == "timeseries_split_grid"
     assert raw["metrics"]["hyperparam_search"] == "timeseries_split_grid_05b"
-    assert raw["threshold_fitting"] == "train_val_fbeta_0.5"
+    assert raw["threshold_fitting"] == "train_f1_max"
+    assert raw["metrics"]["threshold_fitting_requested"] == "train_f1_max"
     assert raw["metrics"]["threshold_experiment_aborted"] is False
     assert list(runs.glob("option_b_train_*.json"))
     gate = DownsideRiskGate(bundle)
@@ -176,7 +177,12 @@ def test_val_threshold_never_sees_test_indices(
     parquet = tmp_path / "events.parquet"
     bundle = tmp_path / "bundle"
     df.to_parquet(parquet)
-    manifest = train_option_b(parquet=parquet, bundle_dir=bundle, runs_dir=tmp_path / "runs")
+    manifest = train_option_b(
+        parquet=parquet,
+        bundle_dir=bundle,
+        runs_dir=tmp_path / "runs",
+        threshold_fitting="train_val_fbeta_0.5",
+    )
 
     assert manifest.threshold_fitting == "train_val_fbeta_0.5"
     raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
@@ -237,6 +243,7 @@ def test_single_class_val_aborts_to_train_f1(
         parquet=parquet,
         bundle_dir=tmp_path / "bundle",
         runs_dir=tmp_path / "runs",
+        threshold_fitting="train_val_fbeta_0.5",
     )
     assert manifest.threshold_fitting == "train_f1_max"
     assert manifest.metrics["threshold_fitting_requested"] == "train_val_fbeta_0.5"

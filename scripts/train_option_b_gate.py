@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from alphaguard.ml.train_eval import METHOD_TRAIN_VAL_FBETA, THRESHOLD_METHODS
+from alphaguard.ml.train_eval import METHOD_TRAIN_F1_MAX, THRESHOLD_METHODS
 from alphaguard.ml.train_option_b import (
     DEFAULT_BUNDLE,
     DEFAULT_PARQUET,
@@ -38,9 +38,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--threshold-fitting",
-        default=METHOD_TRAIN_VAL_FBETA,
+        default=METHOD_TRAIN_F1_MAX,
         choices=list(THRESHOLD_METHODS),
-        help="train_val_fbeta_0.5 (default) or train_f1_max for A/B. Never fit on test.",
+        help="train_f1_max (default) or train_val_fbeta_0.5 for A/B. Never fit on test.",
     )
     args = parser.parse_args(argv)
     try:

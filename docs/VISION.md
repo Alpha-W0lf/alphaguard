@@ -209,7 +209,7 @@ Each item adds days of work without improving the core outcome: a **credible, bo
 - `fwd_return_5d` = return from the **first completed session close at or after** the event’s calendar session to the close **5 trading sessions later** (labels may use post-event closes; features must not)
 - `volatility_20d` is **never** a branch of the learned label; it may remain a feature and/or an optional **deterministic BUY veto** outside the learned target
 
-**Split / thresholds:** Time-ordered 80/20 (no random shuffle). **Split first**, then fit `score_threshold` on **train only** — default is precision-weighted Fβ (β=0.5) on the last 20% of train by time; `train_f1_max` remains for A/B (optional `vol_veto_threshold` also train-only). Freeze into the model bundle manifest. Held-out test is not used to pick `t`.
+**Split / thresholds:** Time-ordered 80/20 (no random shuffle). **Split first**, then fit `score_threshold` on **train only** by maximizing train F1 (`train_f1_max`, shipped default). Optional A/B: precision-weighted Fβ (β=0.5) on the last 20% of train by time (`--threshold-fitting train_val_fbeta_0.5`). Mac locked-test of that method failed, so it is not the default. Optional `vol_veto_threshold` is also train-only. Freeze into the model bundle manifest. Held-out test is not used to pick `t`.
 
 **Inference (AG1):** Agent 1 JSON (`BUY|HOLD|PASS`) + as-of features → XGBoost `downside_risk_score` (`proba_high_risk`) → deterministic policy → `approve` / `reject`. Application stamps `event_id`/`ticker`. Local run summary always; LangSmith/Phoenix best-effort.
 

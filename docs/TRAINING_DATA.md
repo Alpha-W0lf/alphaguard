@@ -143,11 +143,11 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | Pin | Value |
 |-----|--------|
 | HPO | Train-only `TimeSeriesSplit(n_splits=3)` grid; select by mean val logloss |
-| Threshold | Default `train_val_fbeta_0.5` on the last 20% of train; `train_f1_max` kept for A/B (`--threshold-fitting`) |
+| Threshold | Shipped default `train_f1_max` on full-train probs. Optional A/B: `train_val_fbeta_0.5` (`--threshold-fitting`); Mac locked-test Fail 2026-09-24, so it is not the default. |
 | `bundle_kind` | `option_b` |
 | Library | `src/alphaguard/ml/train_option_b.py` (+ `train_hpo.py` / `train_eval.py`) |
 
-**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Local manifest after 2026-07-21 alias rebuild: train F1 ≈0.693, **test F1 ≈0.087** (n_positive_test=3) — weak/noisy holdout, not hidden. JH-63.1 wires a train-val Fβ threshold; locked-test A/B numbers are not filled in until a Mac run on the existing parquet. See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
+**Honesty:** Lab-scale test F1 on n_test≈100 is noisy; large train/test F1 gap emits a warning. Not a production risk model. Shipped default remains `train_f1_max`: train F1 0.693, **test F1 0.087** (n_positive_test=3). JH-63.1 Mac A/B of optional `train_val_fbeta_0.5` **failed** (locked test F1 0.0, precision 0.0). See [`FINANCE_HONESTY.md`](./FINANCE_HONESTY.md).
 
 ## Builder layout
 
