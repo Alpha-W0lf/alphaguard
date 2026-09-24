@@ -35,6 +35,12 @@ def _synthetic_frame(n: int = 120, seed: int = 0) -> pd.DataFrame:
     # Ensure both classes present in early and late windows
     y[:20] = [0, 1] * 10
     y[-20:] = [1, 0] * 10
+    # Both classes in the train-internal val tail (last 20% of the train prefix).
+    n_train = int(n * 0.8)
+    n_fit = int(n_train * 0.8)
+    if n_fit + 1 < n_train:
+        y[n_fit] = 0
+        y[n_fit + 1] = 1
     data = {name: x[:, i] for i, name in enumerate(FEATURE_NAMES)}
     data["label_high_risk"] = y
     data["published_at"] = times
@@ -102,6 +108,9 @@ def test_train_writes_option_b_bundle(tmp_path: Path) -> None:
     raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
     assert raw["metrics"]["hpo"]["method"] == "timeseries_split_grid"
     assert raw["metrics"]["hyperparam_search"] == "timeseries_split_grid_05b"
+    assert raw["threshold_fitting"] == "train_f1_max"
+    assert raw["metrics"]["threshold_fitting_requested"] == "train_f1_max"
+    assert raw["metrics"]["threshold_experiment_aborted"] is False
     assert list(runs.glob("option_b_train_*.json"))
     gate = DownsideRiskGate(bundle)
     assert gate.manifest.bundle_kind == "option_b"
@@ -121,3 +130,130 @@ def test_require_bundle_kind_guard(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_train_error_alias_exported() -> None:
     assert TrainError is TrainErrorAlias
+
+
+def _fake_hpo(x_train: np.ndarray, y_train: np.ndarray, scale_pos_weight: float) -> dict:
+    assert len(x_train) == len(y_train)
+    return {
+        "method": "timeseries_split_grid",
+        "winner": {"max_depth": 2, "eta": 0.1, "num_boost_round": 5},
+        "fold_logloss": [0.2, 0.2, 0.2],
+    }
+
+
+def test_val_threshold_never_sees_test_indices(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import alphaguard.ml.train_option_b as tob
+
+    n = 160
+    df = _synthetic_frame(n)
+    y = df["label_high_risk"].to_numpy()
+    n_train = int(n * 0.8)
+    n_fit, n_val = int(n_train * 0.8), n_train - int(n_train * 0.8)
+    y_train, y_test = y[:n_train], y[n_train:]
+    y_fit, y_val = y_train[:n_fit], y_train[n_fit:]
+    assert len(y_val) == n_val
+    assert len(np.unique(y_val)) == 2
+
+    booster_labels: list[np.ndarray] = []
+    real_booster = tob.train_booster
+
+    def spy_booster(x, y_rows, **kwargs):
+        booster_labels.append(np.asarray(y_rows).copy())
+        return real_booster(x, y_rows, **kwargs)
+
+    fbeta_labels: list[np.ndarray] = []
+    real_fbeta = tob.fit_threshold_train_val_fbeta
+
+    def spy_fbeta(y_rows, probs, **kwargs):
+        fbeta_labels.append(np.asarray(y_rows).copy())
+        return real_fbeta(y_rows, probs, **kwargs)
+
+    monkeypatch.setattr(tob, "run_hpo", _fake_hpo)
+    monkeypatch.setattr(tob, "train_booster", spy_booster)
+    monkeypatch.setattr(tob, "fit_threshold_train_val_fbeta", spy_fbeta)
+
+    parquet = tmp_path / "events.parquet"
+    bundle = tmp_path / "bundle"
+    df.to_parquet(parquet)
+    manifest = train_option_b(
+        parquet=parquet,
+        bundle_dir=bundle,
+        runs_dir=tmp_path / "runs",
+        threshold_fitting="train_val_fbeta_0.5",
+    )
+
+    assert manifest.threshold_fitting == "train_val_fbeta_0.5"
+    raw = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
+    assert raw["threshold_fitting"] == "train_val_fbeta_0.5"
+    assert raw["metrics"]["threshold_n_val"] == n_val
+    assert raw["metrics"]["threshold_n_fit"] == n_fit
+    assert len(fbeta_labels) == 1
+    assert np.array_equal(fbeta_labels[0], y_val)
+    assert len(fbeta_labels[0]) != len(y_test)
+    assert not np.array_equal(fbeta_labels[0], y_test)
+    assert any(np.array_equal(rows, y_fit) for rows in booster_labels)
+    assert any(np.array_equal(rows, y_train) for rows in booster_labels)
+    assert all(not np.array_equal(rows, y_test) for rows in booster_labels)
+    assert all(len(rows) != len(y_test) for rows in booster_labels)
+
+
+def test_train_f1_max_flag_skips_val_fitter(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import alphaguard.ml.train_option_b as tob
+
+    def boom(*_args, **_kwargs):
+        raise AssertionError("val Fβ fitter must not run for train_f1_max")
+
+    monkeypatch.setattr(tob, "run_hpo", _fake_hpo)
+    monkeypatch.setattr(tob, "fit_threshold_train_val_fbeta", boom)
+    parquet = tmp_path / "events.parquet"
+    _synthetic_frame(80).to_parquet(parquet)
+    manifest = train_option_b(
+        parquet=parquet,
+        bundle_dir=tmp_path / "bundle",
+        runs_dir=tmp_path / "runs",
+        threshold_fitting="train_f1_max",
+    )
+    assert manifest.threshold_fitting == "train_f1_max"
+    assert manifest.metrics["threshold_fitting_requested"] == "train_f1_max"
+    assert manifest.metrics["threshold_experiment_aborted"] is False
+
+
+def test_single_class_val_aborts_to_train_f1(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import alphaguard.ml.train_option_b as tob
+
+    def boom(*_args, **_kwargs):
+        raise AssertionError("Fβ fitter must not run when val has one class")
+
+    monkeypatch.setattr(tob, "run_hpo", _fake_hpo)
+    monkeypatch.setattr(tob, "fit_threshold_train_val_fbeta", boom)
+    n = 80
+    df = _synthetic_frame(n)
+    n_train = int(n * 0.8)
+    n_fit = int(n_train * 0.8)
+    df.loc[n_fit : n_train - 1, "label_high_risk"] = 0
+    parquet = tmp_path / "events.parquet"
+    df.to_parquet(parquet)
+    manifest = train_option_b(
+        parquet=parquet,
+        bundle_dir=tmp_path / "bundle",
+        runs_dir=tmp_path / "runs",
+        threshold_fitting="train_val_fbeta_0.5",
+    )
+    assert manifest.threshold_fitting == "train_f1_max"
+    assert manifest.metrics["threshold_fitting_requested"] == "train_val_fbeta_0.5"
+    assert manifest.metrics["threshold_experiment_aborted"] is True
+    assert manifest.metrics["threshold_abort_reason"] == "val labels have <2 classes"
+
+
+def test_unknown_threshold_fitting_rejected(tmp_path: Path) -> None:
+    with pytest.raises(TrainError, match="threshold_fitting"):
+        train_option_b(
+            parquet=tmp_path / "missing.parquet",
+            threshold_fitting="test_f1_max",
+        )

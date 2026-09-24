@@ -275,7 +275,7 @@ The gate policy is deterministic and code-owned:
 | `HOLD` | Always `approve` (no directional exposure to veto); still record score for traces/interview story |
 | `PASS` | Always `approve` (no trade proposed); still record score |
 
-**Threshold fitting (binding):** After the time-ordered split, choose `score_threshold` on **train only** by maximizing **train F1** for `label_high_risk` against `proba_high_risk >= threshold`. Freeze that threshold into the bundle manifest; evaluate test with the frozen value. Optional `vol_veto_threshold` (if enabled) is likewise fit on train only (e.g. train 90th percentile of `volatility_20d` among train rows) and frozen.
+**Threshold fitting (binding):** After the time-ordered split, choose `score_threshold` **without using the held-out test partition**. Shipped Option B default is `train_f1_max`: maximize train F1 for `label_high_risk` on full-train `proba_high_risk`. Optional A/B method `train_val_fbeta_0.5` (`--threshold-fitting train_val_fbeta_0.5`) fits an auxiliary booster on the first 80% of train (time order) with the HPO winner and scores the last 20% (`val`). It chooses `t` on **val labels and val probabilities only** from `linspace(0.05, 0.95, 19)` by maximizing binary positive-class Fβ with β=0.5, `Fβ=(1+β²)TP/((1+β²)TP+FP+β²FN)` (not a multilabel weighted average). Tie-break: higher precision, then lower `t`. The shipped booster is still fit on the full train; test is scored once with the frozen `t`. If val has fewer than 2 classes, keep `train_f1_max` and record `threshold_experiment_aborted` plus the reason. Mac locked-test of `train_val_fbeta_0.5` on 2026-09-24 **failed** (test F1 0.0, precision 0.0), so Fβ is not the shipped default. Optional `vol_veto_threshold` (if enabled) is likewise fit on train only (e.g. train 90th percentile of `volatility_20d` among train rows) and frozen.
 
 Optional vol veto: if enabled in the model bundle, `volatility_20d >= vol_veto_threshold` rejects `BUY` only. This veto is **policy**, not part of the learned label (AG2).
 
@@ -304,7 +304,7 @@ Agent 2 is a **regime / downside-risk gate**, not an alpha model. It must **not*
 
 **Split / threshold order (binding):**
 1. Sort by `published_at`; first 80% train / last 20% test. **No random shuffle.**
-2. Fit `score_threshold` on **train only** by maximizing train F1 on `proba_high_risk` (§7.4); fit optional `vol_veto_threshold` on train only.
+2. Fit `score_threshold` on **train only** by maximizing train F1 (`train_f1_max`, the shipped default). Optional A/B `train_val_fbeta_0.5` fits `t` on a train-internal time val (last 20% of train) by maximizing binary Fβ (β=0.5); if that val has &lt;2 classes, fall back to `train_f1_max` and record the abort (§7.4). Do not use test rows. Fit optional `vol_veto_threshold` on train only.
 3. Freeze thresholds + `score_kind` + `label_window` into the model bundle manifest; evaluate test with frozen values.
 
 ### 7.6 Model bundle manifest (AG-P1-4)
@@ -319,8 +319,8 @@ A loadable gate artifact is a **directory/bundle**, not a lone `.json` score str
 | `feature_names` | Ordered list — scoring must use this order |
 | `feature_dtypes` / preprocessing notes | Enough to prevent silent skew |
 | `score_kind` | `proba_high_risk` (XGBoost `predict_proba[:,1]`) |
-| `score_threshold` | Train-fitted downside threshold (train-F1 max) |
-| `threshold_fitting` | e.g. `train_f1_max` |
+| `score_threshold` | Train-side downside threshold (shipped default `train_f1_max`; optional A/B val Fβ β=0.5) |
+| `threshold_fitting` | `train_f1_max` (default) or `train_val_fbeta_0.5` |
 | `vol_veto_enabled` | bool |
 | `vol_veto_threshold` | Present if enabled; train-fitted |
 | `policy_version` | e.g. `v1` matching §7.4 |
@@ -547,7 +547,7 @@ Do **not** expand smoke to require this. Guide 06 adds optional Yahoo RSS → pr
 - [x] Downside-risk scorer + deterministic policy; forward-return-only labels; split-before-threshold  
 - [x] Unified as-of + `RetrievalHit` + `feature_as_of` + locked `fwd_return_5d` session bounds  
 - [x] `PipelineService` sole retrieval owner + run envelope; application owns identity fields  
-- [x] `score_kind=proba_high_risk` + train-F1 threshold fitting in §7.4/§7.6  
+- [x] `score_kind=proba_high_risk` + train-side threshold fitting (`train_f1_max` shipped default; optional `train_val_fbeta_0.5` A/B) in §7.4/§7.6  
 - [x] Model bundle manifest; resource mode matrix; Kafka later-slice contract sketched  
 - [x] Ranking non-goal stated (simple top-k; no neural reranker)  
 - [x] Edge cases and failure modes listed  

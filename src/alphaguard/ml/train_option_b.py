@@ -1,4 +1,10 @@
-"""Option B XGBoost train — nested time-aware HPO + train-only threshold (Guide 05b)."""
+"""Option B XGBoost train — nested time-aware HPO + train-only threshold (Guide 05b).
+
+Shipped default is `train_f1_max` on full-train probabilities. Optional A/B
+`train_val_fbeta_0.5` (binary Fβ, β=0.5, last 20% of train by time) stays
+selectable; the 2026-09-24 Mac locked-test of that method failed, so it is
+not the default. The held-out test partition is never used to pick t.
+"""
 
 from __future__ import annotations
 
@@ -21,7 +27,19 @@ import xgboost as xgb
 from alphaguard.contracts.decisions import FEATURE_NAMES
 from alphaguard.contracts.manifest import LabelWindow, ModelBundleManifest, TrainWindow
 from alphaguard.ml.gate import write_manifest
-from alphaguard.ml.train_eval import fit_threshold_train_f1, split_metrics
+from alphaguard.ml.train_eval import (
+    FBETA_BETA,
+    METHOD_TRAIN_F1_MAX,
+    METHOD_TRAIN_VAL_FBETA,
+    THRESHOLD_METHODS,
+    TRAIN_VAL_FRACTION,
+    VAL_SINGLE_CLASS_REASON,
+    fbeta_from_counts,
+    fit_threshold_train_f1,
+    fit_threshold_train_val_fbeta,
+    split_metrics,
+    train_val_sizes,
+)
 from alphaguard.ml.train_hpo import N_SPLITS, booster_params, run_hpo, train_booster
 from alphaguard.ml.train_option_b_errors import TrainError
 
@@ -107,7 +125,8 @@ def atomic_write_bundle(
         (tmp_path / "README.md").write_text(
             "# Option B model bundle\n\n"
             f"`bundle_kind=option_b` — trained downside-risk scorer (Guide 05b).\n"
-            f"score_threshold={manifest.score_threshold:.4f} (train F1 max).\n"
+            f"score_threshold={manifest.score_threshold:.4f} "
+            f"(threshold_fitting={manifest.threshold_fitting}).\n"
             f"hyperparam_search={manifest.metrics.get('hyperparam_search')}\n"
             "Not a production risk model; lab-scale metrics only.\n"
             "Default smoke still uses the fixture bundle unless MODEL_BUNDLE_DIR points here.\n",
@@ -123,11 +142,80 @@ def write_run_summary(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
 
 
+def _val_probability_slice(
+    split: SplitData,
+    winner: dict[str, Any],
+    scale_pos_weight: float,
+) -> tuple[np.ndarray, np.ndarray | None, dict[str, Any]]:
+    """Score the last 20% of train. The auxiliary booster sees only the fit prefix.
+
+    Test rows are not read. A single-class val aborts the Fβ experiment.
+    """
+    n_fit, n_val = train_val_sizes(len(split.y_train))
+    y_val = split.y_train[n_fit:]
+    meta: dict[str, Any] = {
+        "threshold_n_fit": n_fit,
+        "threshold_n_val": n_val,
+        "threshold_val_fraction": TRAIN_VAL_FRACTION,
+        "threshold_experiment_aborted": False,
+        "threshold_abort_reason": None,
+    }
+    if len(np.unique(y_val)) < 2:
+        meta["threshold_experiment_aborted"] = True
+        meta["threshold_abort_reason"] = VAL_SINGLE_CLASS_REASON
+        return y_val, None, meta
+    booster = train_booster(
+        split.x_train[:n_fit],
+        split.y_train[:n_fit],
+        max_depth=winner["max_depth"],
+        eta=winner["eta"],
+        num_boost_round=winner["num_boost_round"],
+        scale_pos_weight=scale_pos_weight,
+    )
+    dval = xgb.DMatrix(split.x_train[n_fit:], feature_names=list(FEATURE_NAMES))
+    return y_val, booster.predict(dval), meta
+
+
+def _choose_threshold(
+    split: SplitData,
+    train_probs: np.ndarray,
+    winner: dict[str, Any],
+    scale_pos_weight: float,
+    threshold_fitting: str,
+) -> tuple[float, str, dict[str, Any]]:
+    """Return (t, method actually used, metadata). Test arrays are not arguments."""
+    if threshold_fitting == METHOD_TRAIN_F1_MAX:
+        return (
+            fit_threshold_train_f1(split.y_train, train_probs),
+            METHOD_TRAIN_F1_MAX,
+            {
+                "threshold_n_fit": None,
+                "threshold_n_val": None,
+                "threshold_val_fraction": None,
+                "threshold_experiment_aborted": False,
+                "threshold_abort_reason": None,
+            },
+        )
+    y_val, probs_val, meta = _val_probability_slice(split, winner, scale_pos_weight)
+    if meta["threshold_experiment_aborted"] or probs_val is None:
+        return fit_threshold_train_f1(split.y_train, train_probs), METHOD_TRAIN_F1_MAX, meta
+    threshold = fit_threshold_train_val_fbeta(y_val, probs_val, beta=FBETA_BETA)
+    val_m = split_metrics(y_val, probs_val, threshold)
+    meta["val_metrics"] = val_m
+    meta["val_fbeta"] = fbeta_from_counts(val_m, beta=FBETA_BETA)
+    return threshold, METHOD_TRAIN_VAL_FBETA, meta
+
+
 def train_option_b(
     parquet: Path = DEFAULT_PARQUET,
     bundle_dir: Path = DEFAULT_BUNDLE,
     runs_dir: Path = DEFAULT_RUNS,
+    threshold_fitting: str = METHOD_TRAIN_F1_MAX,
 ) -> ModelBundleManifest:
+    if threshold_fitting not in THRESHOLD_METHODS:
+        raise TrainError(
+            f"unknown threshold_fitting={threshold_fitting!r}; expected one of {THRESHOLD_METHODS}"
+        )
     df = load_training_frame(parquet)
     split = time_ordered_split(df)
     n_pos = int(split.y_train.sum())
@@ -150,7 +238,15 @@ def train_option_b(
     dtest = xgb.DMatrix(split.x_test, feature_names=list(FEATURE_NAMES))
     train_probs = booster.predict(dtrain)
     test_probs = booster.predict(dtest)
-    threshold = fit_threshold_train_f1(split.y_train, train_probs)
+    # Frozen t is train-only (default: full-train F1; optional: train-internal val Fβ).
+    # test_probs are scored after t is chosen.
+    threshold, recorded_method, thresh_meta = _choose_threshold(
+        split,
+        train_probs,
+        winner,
+        scale_pos_weight,
+        threshold_fitting,
+    )
     train_m = split_metrics(split.y_train, train_probs, threshold)
     test_m = split_metrics(split.y_test, test_probs, threshold)
     gap = abs(train_m["f1"] - test_m["f1"])
@@ -190,7 +286,25 @@ def train_option_b(
         "scale_pos_weight": scale_pos_weight,
         "hpo": hpo,
         "hyperparam_search": "timeseries_split_grid_05b",
+        "threshold_fitting_requested": threshold_fitting,
+        "threshold_experiment_aborted": thresh_meta["threshold_experiment_aborted"],
+        "threshold_abort_reason": thresh_meta["threshold_abort_reason"],
+        "threshold_n_fit": thresh_meta["threshold_n_fit"],
+        "threshold_n_val": thresh_meta["threshold_n_val"],
+        "threshold_val_fraction": thresh_meta["threshold_val_fraction"],
     }
+    val_block = thresh_meta.get("val_metrics")
+    if val_block is not None:
+        metrics.update(
+            val_precision=val_block["precision"],
+            val_recall=val_block["recall"],
+            val_f1=val_block["f1"],
+            val_fbeta=thresh_meta["val_fbeta"],
+            val_tp=val_block["tp"],
+            val_fp=val_block["fp"],
+            val_tn=val_block["tn"],
+            val_fn=val_block["fn"],
+        )
 
     created = datetime.now(timezone.utc)
     manifest = ModelBundleManifest(
@@ -201,7 +315,7 @@ def train_option_b(
         feature_dtypes={name: "float" for name in FEATURE_NAMES},
         score_kind="proba_high_risk",
         score_threshold=threshold,
-        threshold_fitting="train_f1_max",
+        threshold_fitting=recorded_method,
         vol_veto_enabled=False,
         vol_veto_threshold=None,
         policy_version="v1",
@@ -233,14 +347,25 @@ def train_option_b(
             "bundle_dir": str(bundle_dir),
             "bundle_kind": "option_b",
             "score_threshold": threshold,
+            "threshold_fitting": recorded_method,
+            "threshold_fitting_requested": threshold_fitting,
+            "threshold_experiment_aborted": thresh_meta["threshold_experiment_aborted"],
+            "threshold_abort_reason": thresh_meta["threshold_abort_reason"],
             "metrics": metrics,
             "winner": winner,
             "dataset_hash": manifest.dataset_hash,
         },
     )
+    if thresh_meta["threshold_experiment_aborted"]:
+        logger.warning(
+            "threshold experiment aborted (%s); fell back to %s",
+            thresh_meta["threshold_abort_reason"],
+            recorded_method,
+        )
     logger.info(
-        "wrote Option B bundle to %s (test_f1=%.4f, threshold=%.4f)",
+        "wrote Option B bundle to %s (threshold_fitting=%s, test_f1=%.4f, threshold=%.4f)",
         bundle_dir,
+        recorded_method,
         test_m["f1"],
         threshold,
     )

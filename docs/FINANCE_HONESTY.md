@@ -29,6 +29,23 @@ Quoted from a local `data/derived/model_bundle_option_b/manifest.json` (`bundle_
 
 Notes: `n_positive_test=3` — test F1 remains **noisy / weak**, not hidden. Prior pre-alias manifest (2026-07-17) had test F1 = 0.0 on 2 positives; drift after META/GOOGL enter the sample is expected. Fixture `bundle_kind=fixture` F1 must never be marketed as model quality. See [`TRAINING_DATA.md`](./TRAINING_DATA.md).
 
+## JH-63.1 precision-weighted threshold (Mac A/B — 2026-09-24)
+
+Same frozen parquet `data/derived/training_events.parquet`; `dataset_hash=a8bdd0fbda9ce31bce28de41a66a9698baeafb3fb58b1ab8ebdc586e1b10af1c`. Kaggle/FinBERT were **not** regenerated. Threshold fitting never used the held-out test. Comparison artifact (local): `artifacts/runs/jh63_threshold_compare_20260924T182930Z.json`.
+
+| Method | t | Split | Precision | Recall | F1 | Confusion (TP/FP/TN/FN) | Notes |
+|--------|---|-------|-----------|--------|----|-------------------------|-------|
+| `train_f1_max` (A) | 0.50 | Train | 0.590 | 0.838 | 0.693 | 62 / 43 / 283 / 12 | |
+| `train_f1_max` (A) | 0.50 | Test | **0.05** | 0.333 | **0.087** | 1 / 19 / 78 / 2 | `n_positive_test=3` |
+| `train_val_fbeta_0.5` (B) | 0.65 | Train | 0.846 | 0.446 | 0.584 | 33 / 6 / 320 / 41 | |
+| `train_val_fbeta_0.5` (B) | 0.65 | Val (fit) | 0.167 | 0.400 | F1=0.235 / Fβ=0.189 | 2 / 10 / 65 / 3 | last 20% of train; not test |
+| `train_val_fbeta_0.5` (B) | 0.65 | Test | **0.0** | 0.0 | **0.0** | 0 / 0 / 97 / 3 | `n_positive_test=3`; zero positives predicted |
+
+- `threshold_experiment_aborted`: false (both).
+- **Verdict (locked TEST for Fβ method B): Fail.** Test F1=0.0 ≤ ≈0.087 baseline; test precision=0.0 < 0.08. Soft not met. Do not claim an improvement. Higher t=0.65 wiped all test positives (and FPs). With n_positive_test=3 the holdout remains noisy/weak.
+- **Shipped default:** `train_f1_max`. Fβ remains available for A/B only (`--threshold-fitting train_val_fbeta_0.5`).
+- This is not a production risk model; the gate is not alpha; there is no PnL.
+
 ## Pointers
 
 - Product status / MV boxes → [`VISION.md`](./VISION.md)
