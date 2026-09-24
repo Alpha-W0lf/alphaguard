@@ -6,7 +6,7 @@ import logging
 import uuid
 from datetime import datetime, timezone
 
-from alphaguard.agents.analyst import Agent1Analyst
+from alphaguard.agents.analyst import Agent1Analyst, FixtureAgent1Analyst
 from alphaguard.config import Settings
 from alphaguard.contracts.envelope import PipelineRunEnvelope, RunError
 from alphaguard.contracts.events import NewsEvent
@@ -23,7 +23,7 @@ class PipelineService:
     def __init__(
         self,
         settings: Settings,
-        analyst: Agent1Analyst | None = None,
+        analyst: Agent1Analyst | FixtureAgent1Analyst | None = None,
         gate: DownsideRiskGate | None = None,
         rag: RagService | None = None,
         skip_ollama_preflight: bool = False,
@@ -36,12 +36,17 @@ class PipelineService:
         self.skip_ollama_preflight = skip_ollama_preflight
         self.resolved_model = resolved_model or settings.ollama_model
 
-    def _get_analyst(self) -> Agent1Analyst:
+    def _get_analyst(self) -> Agent1Analyst | FixtureAgent1Analyst:
         if self._analyst is None:
-            self._analyst = Agent1Analyst(
-                model=self.resolved_model,
-                base_url=self.settings.ollama_base_url,
-            )
+            if self.resolved_model == "fixture" or self.settings.alphaguard_analyst_mode == "fixture":
+                self._analyst = FixtureAgent1Analyst(
+                    self.settings.fixtures_dir / "analyst_proposals.json"
+                )
+            else:
+                self._analyst = Agent1Analyst(
+                    model=self.resolved_model,
+                    base_url=self.settings.ollama_base_url,
+                )
         return self._analyst
 
     def _get_gate(self) -> DownsideRiskGate:

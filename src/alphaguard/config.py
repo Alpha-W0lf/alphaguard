@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     alphaguard_mode: Literal["replay", "live"] = "replay"
     alphaguard_rag_mode: Literal["fixture", "qdrant"] = "fixture"
+    alphaguard_analyst_mode: Literal["ollama", "fixture"] = "ollama"
     ollama_model: str = "gemma4:e2b"
     ollama_base_url: str = "http://127.0.0.1:11434"
     ollama_fallback_model: str = "qwen3.5:4b"

@@ -29,19 +29,28 @@ From repo root:
 uv sync --all-extras
 # or: make sync
 
-# 2. Env template (never commit .env)
-cp -n .env.example .env
+# 2. Env template (never commit .env; safe copy without overwriting)
+[ -f .env ] || cp .env.example .env
 
-# 3. Pull default generator (D1)
+# 3. Fixture model bundle (plumbing only — not Option B)
+make bundle
+
+# 4. First-success stranger smoke (no host Ollama required)
+make smoke-fixture
+# or run the full test suite:
+make test
+
+# 5. Live Ollama smoke (optional local LLM generator)
+# Pull default generator (D1)
 ollama pull gemma4:e2b
 # If pull returns HTTP 412: upgrade Ollama, then pull again.
 # Fallback: export OLLAMA_MODEL=qwen3.5:4b && ollama pull qwen3.5:4b
 
-# 4. Fixture model bundle (plumbing only — not Option B)
-make bundle
-
-# 5. Smoke with Kafka DOWN (Makefile: "Kafka must remain stopped")
+# Smoke with Kafka DOWN (Makefile: "Kafka must remain stopped")
 make smoke
+
+# 6. Run FastAPI service
+make serve
 ```
 
 Smoke defaults: `ALPHAGUARD_MODE=replay`, `ALPHAGUARD_RAG_MODE=fixture`, `resource_mode=replay_fixture`. **Compose is optional** — smoke does not require Kafka or Qdrant.
