@@ -68,7 +68,8 @@ Example `make smoke` run — the analyst proposes BUY on an Apple headline; the 
 - [`docs/VISION.md`](docs/VISION.md) — product / why  
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — contracts / how  
 - [`docs/FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md) — gate ≠ alpha; empirical lab metrics; zero fabricated alpha  
-- [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md) — parallel experiment harness, run registry, and leakage guards (JH-63.2)  
+- [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md) — experiment harness, run registry, and multi-seed search  
+- [`docs/PROMOTION_POLICY.md`](docs/PROMOTION_POLICY.md) — multi-seed promotion gates and governance  
 - [`GETTING_STARTED.md`](GETTING_STARTED.md) — operator path  
 - [`FAQ.md`](FAQ.md) — Technical FAQ  
 - [`docs/assets/`](docs/assets/) — packaging visuals  

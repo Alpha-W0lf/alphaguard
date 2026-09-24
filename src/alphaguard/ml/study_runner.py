@@ -11,6 +11,11 @@ from pathlib import Path
 
 from alphaguard.ml.study_executor import execute_run, get_git_sha
 from alphaguard.ml.study_mlflow import log_run_to_mlflow
+from alphaguard.ml.study_promotion import (
+    build_extra_seed_configs,
+    evaluate_study_promotion,
+    select_shortlist,
+)
 from alphaguard.ml.study_registry import StudyRegistry
 from alphaguard.ml.study_schema import (
     ModelHyperparams,
@@ -102,13 +107,29 @@ def run_study(
     registry_root: Path | str = "artifacts/runs",
     max_workers: int = 1,
     matrix_source_path: str | None = None,
+    existing_study_dir: Path | str | None = None,
 ) -> tuple[ParentStudyRecord, list[RunRecord]]:
     """Execute all matrix runs in parallel (or sequential) and persist to registry."""
     registry = StudyRegistry(registry_root)
     registry.ensure_study_dirs(matrix.study_id)
 
-    configs = generate_run_configs(matrix)
+    run_records: list[RunRecord] = []
+    if existing_study_dir is not None:
+        source_dir = Path(existing_study_dir)
+        source_registry = StudyRegistry(source_dir.parent.parent)
+        run_records = source_registry.list_runs(matrix.study_id)
+        configs = []
+    else:
+        configs = generate_run_configs(matrix)
+        run_records = []
     git_sha = get_git_sha()
+
+    total_runs = len(configs) if existing_study_dir is None else len(run_records)
+    child_ids = (
+        [c.run_id for c in configs]
+        if existing_study_dir is None
+        else [r.run_id for r in run_records]
+    )
 
     parent = ParentStudyRecord(
         study_id=matrix.study_id,
@@ -117,12 +138,11 @@ def run_study(
         dataset_hash=matrix.dataset_hash or "",
         dataset_path=matrix.dataset_path,
         matrix_source_path=matrix_source_path,
-        total_runs=len(configs),
-        child_run_ids=[c.run_id for c in configs],
+        total_runs=total_runs,
+        child_run_ids=child_ids,
     )
     registry.save_study(parent)
 
-    run_records: list[RunRecord] = []
     bundles_dir = registry.bundles_dir(matrix.study_id)
 
     if max_workers <= 1 or len(configs) <= 1:
@@ -149,6 +169,75 @@ def run_study(
 
     # Sort records deterministically by run_id
     run_records.sort(key=lambda r: r.run_id)
+
+    # Multi-seed promotion gate stage (JH-AG-93.1)
+    if matrix.promotion and matrix.promotion.enabled:
+        shortlist = select_shortlist(
+            run_records,
+            top_k=matrix.promotion.shortlist_top_k,
+            sort_by=matrix.promotion.sort_by,
+        )
+        extra_configs = build_extra_seed_configs(
+            shortlist=shortlist,
+            extra_seeds=matrix.promotion.extra_seeds,
+            existing_runs=run_records,
+            study_id=matrix.study_id,
+            start_index=len(run_records),
+        )
+
+        if extra_configs:
+            logger.info(
+                "Scheduling %d extra-seed run(s) across %d candidate(s)...",
+                len(extra_configs),
+                len(shortlist),
+            )
+            # Update parent with expanded total_runs and child_run_ids
+            parent.total_runs += len(extra_configs)
+            parent.child_run_ids.extend([c.run_id for c in extra_configs])
+            registry.save_study(parent)
+
+            if max_workers <= 1 or len(extra_configs) <= 1:
+                for cfg in extra_configs:
+                    b_dir = bundles_dir / cfg.run_id
+                    rec = execute_run(cfg, b_dir)
+                    rec.stage = "extra_seed"
+                    registry.save_run(rec)
+                    if matrix.enable_mlflow:
+                        log_run_to_mlflow(rec, tracking_uri=matrix.mlflow_tracking_uri)
+                    run_records.append(rec)
+            else:
+                mp_ctx = mp.get_context("spawn")
+                with ProcessPoolExecutor(max_workers=max_workers, mp_context=mp_ctx) as executor:
+                    future_to_cfg = {
+                        executor.submit(_worker_task, cfg, str(bundles_dir / cfg.run_id)): cfg
+                        for cfg in extra_configs
+                    }
+                    for future in as_completed(future_to_cfg):
+                        rec = future.result()
+                        rec.stage = "extra_seed"
+                        registry.save_run(rec)
+                        if matrix.enable_mlflow:
+                            log_run_to_mlflow(rec, tracking_uri=matrix.mlflow_tracking_uri)
+                        run_records.append(rec)
+
+            run_records.sort(key=lambda r: r.run_id)
+
+        # Evaluate promotion status across all runs
+        (
+            decision,
+            seeds_cleared,
+            seeds_failed,
+            seed_metrics_summary,
+            rollup,
+            notes,
+        ) = evaluate_study_promotion(shortlist, run_records, matrix.promotion)
+
+        parent.promotion_decision = decision
+        parent.seeds_cleared = seeds_cleared
+        parent.seeds_failed = seeds_failed
+        parent.seed_metrics_summary = seed_metrics_summary
+        parent.promotion_rollup = rollup
+        parent.notes = notes
 
     # Finalize parent study record
     completed = sum(1 for r in run_records if not r.aborted)
