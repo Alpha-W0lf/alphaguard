@@ -30,7 +30,7 @@ flowchart LR
 
 1. **Analyst LLM ≠ risk model** — idea generation and downside risk evaluation are decoupled by design. Risk policy remains deterministic, calibrated, and auditable rather than hidden in LLM token sampling.
 2. **Strict as-of temporal isolation** — features and retrieval contexts strictly enforce point-in-time constraints (`available_at <= published_at`), eliminating look-ahead bias across both inference and training.
-3. **Replay-first architecture** — `make smoke` executes the complete vertical slice locally using fixtures; Kafka and Qdrant provide scalable integration paths without creating single-point demo failures.
+3. **Replay-first architecture** — `make smoke` proves the full vertical slice on fixtures; Kafka and Qdrant scale the same contracts when configured.
 4. **Local-first LLMOps telemetry** — comprehensive execution metadata is always written locally to `artifacts/runs/`; LangSmith and Phoenix spans fail-open when configured.
 5. **Empirical ML rigor** — parallel study matrices, leakage-free nested splits, and immutable run registries evaluate candidates on locked held-out test sets. We publish honest holdout metrics and never soften failed experiments or claim unverified alpha.
 
