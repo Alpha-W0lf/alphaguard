@@ -180,6 +180,9 @@ def test_locked_test_split_drops_straddling_train_rows() -> None:
     assert len(plain.y_train) == boundary
     assert len(purged.y_train) == boundary - 6
     assert len(purged.y_test) == n - boundary
+    nested = split_for_walk_forward(df, 0.8, "off")  # frame WITH session columns
+    assert len(nested.y_train) == boundary - 6
+    assert len(nested.y_test) == n - boundary
 
 
 def _both_class_frame(n: int = 180) -> pd.DataFrame:

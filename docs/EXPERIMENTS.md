@@ -78,6 +78,12 @@ Each matrix cell runs in an isolated process with its own seed and isolated mode
 
 `--walk-forward` defaults to `off` and `--economic` defaults to `off`. Those defaults leave the single 80/20 split unchanged.
 
+#### macOS OpenMP / XGBoost crashes
+
+On macOS, unbounded OpenMP inside libomp (pulled in by XGBoost) can SIGSEGV during study runs or pytest — classic "Python quit unexpectedly" popups with stacks in `__kmp_fork_barrier` / `__kmp_launch_worker`. Dismissing the dialog does not fix the crash; the next parallel run will hit it again.
+
+AlphaGuard setdefaults these env vars to `1` (never overwriting a value you already set) via `apply_native_thread_limits()` before XGBoost is imported: `OMP_NUM_THREADS`, `MKL_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `VECLIB_MAXIMUM_THREADS`, `NUMEXPR_NUM_THREADS`, `XGB_NUM_THREAD`. On Darwin the CLI also defaults `--workers` to **1** (laptop-safe). Other platforms still default to 4. Pass `--workers N` to override; when `workers>1`, ProcessPool already uses `spawn` (not fork).
+
 ### 2.3 Phase B (walk-forward + economic stub)
 
 One seed, still on freeze `534a341a…`. Threshold policy for this command is `train_f1_max`. Model hyperparameters, calibration, and beta are read from the YAML and the YAML is not edited. Walk-forward folds stay inside the dev block. The locked test is scored once. Promotion prints `candidate` or `no candidate` from the unchanged floors. It does not claim a quality decision.
