@@ -8,9 +8,14 @@ from pathlib import Path
 
 import yaml
 
-from alphaguard.ml.study_compare import write_study_compare
-from alphaguard.ml.study_runner import run_study
-from alphaguard.ml.study_schema import StudyMatrixConfig
+# Cap OpenMP/BLAS/XGBoost threads BEFORE importing modules that pull xgboost.
+from alphaguard.ml.thread_limits import apply_native_thread_limits
+
+apply_native_thread_limits()
+
+from alphaguard.ml.study_compare import write_study_compare  # noqa: E402
+from alphaguard.ml.study_runner import run_study  # noqa: E402
+from alphaguard.ml.study_schema import StudyMatrixConfig  # noqa: E402
 
 
 def load_matrix_yaml(yaml_path: Path) -> StudyMatrixConfig:
@@ -34,8 +39,12 @@ def run_study_cli(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--workers",
         type=int,
-        default=4,
-        help="Number of parallel worker processes (default: 4)",
+        default=None,
+        help=(
+            "Number of parallel worker processes. Darwin defaults to 1 because of "
+            "OpenMP/XGBoost crash risk; other platforms default to 4. Spawn is already "
+            "used when workers>1."
+        ),
     )
     parser.add_argument(
         "--artifacts",
@@ -76,6 +85,18 @@ def run_study_cli(argv: list[str] | None = None) -> int:
         help="Run multi-seed promotion gate on an existing study directory",
     )
     args = parser.parse_args(argv)
+
+    if args.workers is None:
+        if sys.platform == "darwin":
+            args.workers = 1
+            print(
+                "Darwin: defaulting --workers to 1 "
+                "(OpenMP/XGBoost crash risk). Pass --workers N to override."
+            )
+        else:
+            args.workers = 4
+    elif sys.platform == "darwin":
+        print(f"Darwin: using user-specified --workers={args.workers}")
 
     if not args.study.exists():
         print(f"ERROR: study config not found: {args.study}", file=sys.stderr)

@@ -1,0 +1,46 @@
+study_id: jh63_go_gate_nested_purge_534a
+description: "Nested Go-gate on freeze 534a341a with locked-test trading-day purge aligned to expanding4 (train_end 7029); matrix C winner hparams; Go UNCLAIMED"
+dataset_path: data/derived/training_events.parquet
+dataset_hash: 534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3
+
+seeds:
+  - 42
+
+threshold_methods:
+  - train_val_fbeta_0.5
+
+betas:
+  - 1.0
+
+calibration_methods:
+  - isotonic
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - 2
+
+split_policy: nested_time_aware_v1
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns
+
+promotion:
+  enabled: true
+  shortlist_top_k: 3
+  extra_seeds:
+    - 7
+    - 123
+  floors:
+    f1: 0.30
+    precision: 0.25
+    auprc: 0.18
+  sort_by: test_f1

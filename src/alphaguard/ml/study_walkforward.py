@@ -156,15 +156,14 @@ def _session_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray] | None:
 
 
 def split_for_walk_forward(df: pd.DataFrame, train_frac: float, walk_forward: str):
-    """Time-ordered split. Phase B with session dates purges the locked-test gap.
+    """With session dates, both `off` and `expanding4` purge the locked-test gap.
 
-    Without session dates this is the historical 80/20 cut with no gap, so
-    synthetic harness tests keep their row counts.
+    Without them, historical 80/20 cut with no gap.
     """
     from alphaguard.ml.train_option_b import SplitData, time_ordered_split
 
-    if walk_forward != "expanding4":
-        return time_ordered_split(df, train_frac=train_frac)
+    if walk_forward not in ("off", "expanding4"):
+        raise ValueError(f"walk_forward must be off or expanding4, got {walk_forward!r}")
     indexed = _session_indices(df)
     if indexed is None:
         return time_ordered_split(df, train_frac=train_frac)
