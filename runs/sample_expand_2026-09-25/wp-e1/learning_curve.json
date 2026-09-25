@@ -1,0 +1,190 @@
+{
+  "s2": "VARIANCE-DOMINATED",
+  "note": "Rebuilt from e1_stdout.log after crash-interrupted first pass",
+  "gap_at_100pct": 0.1566,
+  "seed_spread_at_100pct": 0.0429,
+  "val_means_nondecreasing": [
+    0.239,
+    0.2868,
+    0.3066,
+    0.3551
+  ],
+  "curve": [
+    {
+      "frac": 0.25,
+      "n_td": 535,
+      "val_auprc_mean": 0.23898,
+      "val_auprc_std": 0.03534001980757793,
+      "train_auprc_mean": 0.7385999999999999,
+      "seeds": [
+        {
+          "frac": 0.25,
+          "seed": 0,
+          "n_td": 535,
+          "train_auprc": 0.7152,
+          "val_auprc": 0.1876
+        },
+        {
+          "frac": 0.25,
+          "seed": 1,
+          "n_td": 535,
+          "train_auprc": 0.8156,
+          "val_auprc": 0.2733
+        },
+        {
+          "frac": 0.25,
+          "seed": 2,
+          "n_td": 535,
+          "train_auprc": 0.7293,
+          "val_auprc": 0.2711
+        },
+        {
+          "frac": 0.25,
+          "seed": 3,
+          "n_td": 535,
+          "train_auprc": 0.6766,
+          "val_auprc": 0.2355
+        },
+        {
+          "frac": 0.25,
+          "seed": 4,
+          "n_td": 535,
+          "train_auprc": 0.7563,
+          "val_auprc": 0.2274
+        }
+      ]
+    },
+    {
+      "frac": 0.5,
+      "n_td": 1070,
+      "val_auprc_mean": 0.28676,
+      "val_auprc_std": 0.06661008181949636,
+      "train_auprc_mean": 0.61764,
+      "seeds": [
+        {
+          "frac": 0.5,
+          "seed": 0,
+          "n_td": 1070,
+          "train_auprc": 0.6037,
+          "val_auprc": 0.1968
+        },
+        {
+          "frac": 0.5,
+          "seed": 1,
+          "n_td": 1070,
+          "train_auprc": 0.6301,
+          "val_auprc": 0.3016
+        },
+        {
+          "frac": 0.5,
+          "seed": 2,
+          "n_td": 1070,
+          "train_auprc": 0.6289,
+          "val_auprc": 0.2453
+        },
+        {
+          "frac": 0.5,
+          "seed": 3,
+          "n_td": 1070,
+          "train_auprc": 0.6121,
+          "val_auprc": 0.3665
+        },
+        {
+          "frac": 0.5,
+          "seed": 4,
+          "n_td": 1070,
+          "train_auprc": 0.6134,
+          "val_auprc": 0.3236
+        }
+      ]
+    },
+    {
+      "frac": 0.75,
+      "n_td": 1604,
+      "val_auprc_mean": 0.30658,
+      "val_auprc_std": 0.07528968720880704,
+      "train_auprc_mean": 0.56132,
+      "seeds": [
+        {
+          "frac": 0.75,
+          "seed": 0,
+          "n_td": 1604,
+          "train_auprc": 0.5625,
+          "val_auprc": 0.2173
+        },
+        {
+          "frac": 0.75,
+          "seed": 1,
+          "n_td": 1604,
+          "train_auprc": 0.5865,
+          "val_auprc": 0.3165
+        },
+        {
+          "frac": 0.75,
+          "seed": 2,
+          "n_td": 1604,
+          "train_auprc": 0.5677,
+          "val_auprc": 0.3638
+        },
+        {
+          "frac": 0.75,
+          "seed": 3,
+          "n_td": 1604,
+          "train_auprc": 0.5384,
+          "val_auprc": 0.3921
+        },
+        {
+          "frac": 0.75,
+          "seed": 4,
+          "n_td": 1604,
+          "train_auprc": 0.5515,
+          "val_auprc": 0.2432
+        }
+      ]
+    },
+    {
+      "frac": 1.0,
+      "n_td": 2139,
+      "val_auprc_mean": 0.35512,
+      "val_auprc_std": 0.04284795210975665,
+      "train_auprc_mean": 0.51176,
+      "seeds": [
+        {
+          "frac": 1.0,
+          "seed": 0,
+          "n_td": 2139,
+          "train_auprc": 0.5108,
+          "val_auprc": 0.413
+        },
+        {
+          "frac": 1.0,
+          "seed": 1,
+          "n_td": 2139,
+          "train_auprc": 0.5079,
+          "val_auprc": 0.3505
+        },
+        {
+          "frac": 1.0,
+          "seed": 2,
+          "n_td": 2139,
+          "train_auprc": 0.5248,
+          "val_auprc": 0.3729
+        },
+        {
+          "frac": 1.0,
+          "seed": 3,
+          "n_td": 2139,
+          "train_auprc": 0.5138,
+          "val_auprc": 0.3434
+        },
+        {
+          "frac": 1.0,
+          "seed": 4,
+          "n_td": 2139,
+          "train_auprc": 0.5015,
+          "val_auprc": 0.2958
+        }
+      ]
+    }
+  ]
+}

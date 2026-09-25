@@ -1,0 +1,38 @@
+study_id: jh63_wf_expanding4_2e8db9a9
+description: "expanding4 walk-forward purge-on on freeze 2e8db9a9 (sample-expand NEW8, Option B 9-feature); date-anchored locked-test; matrix C winner hparams; Go UNCLAIMED; compare to 534a / 001856a6 purge-on"
+dataset_path: data/derived/training_events_jh63e_ecb73eca.parquet
+dataset_hash: 2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528
+
+seeds:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+
+threshold_methods:
+  - train_f1_max
+
+betas:
+  - 1.0
+
+calibration_methods:
+  - isotonic
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - 2
+
+split_policy: nested_time_aware_v1_date_anchor
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns

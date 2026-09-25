@@ -1,0 +1,46 @@
+{
+  "machine": "Toms-MB-Pro-M2-Pro",
+  "model": "ProsusAI/finbert",
+  "device": "cpu",
+  "n_headlines": 1000,
+  "batch_size": 32,
+  "max_length": 64,
+  "OMP_NUM_THREADS": 1,
+  "load_seconds": 1.367,
+  "infer_seconds": 10.434,
+  "headlines_per_sec": 95.836,
+  "seconds_per_headline": 0.0104,
+  "projected_infer_wall_hours": {
+    "50000": {
+      "infer_hours": 0.14492280440269192
+    },
+    "100000": {
+      "infer_hours": 0.28984560880538385
+    },
+    "200000": {
+      "infer_hours": 0.5796912176107677
+    },
+    "500000": {
+      "infer_hours": 1.4492280440269194
+    }
+  },
+  "note": "Infer-only at batch=32 max_length=64 OMP=1 on M2 Pro. E2 also pays yfinance+asof. Candidate set \u2248201k all-archive / 174k dev-window dedup headlines (Processed CSV).",
+  "status": "Verified",
+  "projected_infer_wall_hours_updated": {
+    "candidate_all_rows_201255": {
+      "n": 201255,
+      "infer_hours": 0.583,
+      "infer_minutes": 35.0
+    },
+    "candidate_dev_rows_174225": {
+      "n": 174225,
+      "infer_hours": 0.505,
+      "infer_minutes": 30.3
+    },
+    "archive_dedup_1384360": {
+      "n": 1384360,
+      "infer_hours": 4.013,
+      "infer_minutes": 240.8
+    }
+  }
+}

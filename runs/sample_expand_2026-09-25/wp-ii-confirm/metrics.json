@@ -1,0 +1,291 @@
+{
+  "schema": "jh63_path_ii_confirm_holdout_B_v1",
+  "stamp_america_chicago": "2026-09-25 05:52 PM CT",
+  "worktree": "/Users/tom/Documents/Git/alphaguard-wt-option-b",
+  "machine": "Toms-MB-Pro-M2-Pro (75e939cd-aeeb-4f71-9e40-ae8dfbd16e8c)",
+  "routing": "local \u00b7 workers=1 \u00b7 OMP_NUM_THREADS=1 \u00b7 no CloudAgent",
+  "prereg": {
+    "path": "/Users/tom/Documents/Git/custom_resumes/docs/backlog/2026-09-25_jh63_selection_rule_holdout_prereg.md",
+    "self_sha256": "5fbae0d07f50714211eb6a79a1e6b6fe1d5a5657f1e1959562d6338260514b6d",
+    "holdout": "B",
+    "selection_rule": "max F1 on inner-val subject to P>=0.25; else no operable point Fail",
+    "ticker_list_canonical_sha256": "1b107bb20f4f5b0d9cb9f4194cf320688be8d9654a9c2e4a084bc25e20a93f2f",
+    "ticker_json": "/Users/tom/Documents/Git/custom_resumes/docs/backlog/2026-09-25_jh63_selection_rule_holdout_B_tickers.json"
+  },
+  "freeze": {
+    "dataset_path": "/Users/tom/Documents/Git/alphaguard-wt-option-b/data/derived/training_events_jh63e_ecb73eca.parquet",
+    "dataset_hash": "2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528",
+    "label": "fwd_return_5d < -0.03 (label_high_risk, -3%/5d)",
+    "features": [
+      "finbert_sentiment",
+      "volatility_20d",
+      "return_5d_prior",
+      "return_20d_prior",
+      "spy_return_5d",
+      "rs_20d",
+      "drawdown_20d",
+      "volatility_5d",
+      "spy_volatility_20d"
+    ],
+    "xgb": {
+      "objective": "binary:logistic",
+      "eval_metric": "logloss",
+      "max_depth": 2,
+      "eta": 0.1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "reg_lambda": 1.0,
+      "min_child_weight": 1,
+      "scale_pos_weight": 2.0,
+      "nthread": 1,
+      "num_boost_round": 40
+    },
+    "calibration": "isotonic",
+    "split_policy": "nested_time_aware_v1_date_anchor",
+    "boundary_index": 189362,
+    "train_end_purged": 188579,
+    "seeds": [
+      42,
+      7,
+      123
+    ],
+    "threshold_sweep": "THRESHOLD_GRID 0.05..0.95 step 0.05 (nested harness)",
+    "tie_break": "higher threshold / lower recall among equal F1"
+  },
+  "holdout_B": {
+    "tickers": [
+      "ADBE",
+      "AVGO",
+      "BIDU",
+      "CCL",
+      "CRM",
+      "CVS",
+      "DD",
+      "FDX",
+      "GLD",
+      "GSK",
+      "JNJ",
+      "MDT",
+      "MO",
+      "MRVL",
+      "NOK",
+      "REGN",
+      "SLB",
+      "SNY",
+      "TM",
+      "XLK"
+    ],
+    "n": 1925,
+    "n_pos": 644,
+    "base_rate": 0.33454545454545453,
+    "eval_slice": "locked-window-only (index >= boundary) on holdout tickers",
+    "train_policy": "holdout tickers removed from purged train prefix",
+    "n_train_after_exclude": 154706
+  },
+  "floors": {
+    "f1": 0.3,
+    "precision": 0.25,
+    "auprc": 0.18
+  },
+  "seeds": [
+    {
+      "seed": 42,
+      "n_train": 154706,
+      "n_fit": 123764,
+      "n_val": 30942,
+      "n_pos_train": 26288,
+      "n_pos_val": 5529,
+      "operable_point": true,
+      "operable_reason": null,
+      "val_pick": {
+        "threshold": 0.25,
+        "f1": 0.13364526977628308,
+        "precision": 0.34885496183206105,
+        "recall": 0.0826550913365889,
+        "n_eligible": 15
+      },
+      "wall_time_s": 0.386,
+      "holdout": {
+        "n": 1925,
+        "n_pos": 644,
+        "base_rate": 0.33454545454545453,
+        "threshold": 0.25,
+        "f1": 0.28241123038810895,
+        "precision": 0.30158730158730157,
+        "recall": 0.265527950310559,
+        "auprc": 0.34107439685959057,
+        "lift_precision": 0.9014837819185645,
+        "lift_auprc": 1.019515860178124,
+        "tp": 171,
+        "fp": 396,
+        "tn": 885,
+        "fn": 473
+      },
+      "served_regression_only": {
+        "n": 1788,
+        "n_pos": 233,
+        "base_rate": 0.1303131991051454,
+        "threshold": 0.25,
+        "f1": 0.2588597842835131,
+        "precision": 0.20192307692307693,
+        "recall": 0.3605150214592275,
+        "auprc": 0.18008568913445436,
+        "lift_precision": 1.5495212941564873,
+        "lift_auprc": 1.3819451166197614,
+        "tp": 84,
+        "fp": 332,
+        "tn": 1223,
+        "fn": 149
+      },
+      "floors_clear": false,
+      "failed_floors": [
+        "f1 (0.2824 < 0.3)"
+      ],
+      "seed_verdict": "FAIL"
+    },
+    {
+      "seed": 7,
+      "n_train": 154706,
+      "n_fit": 123764,
+      "n_val": 30942,
+      "n_pos_train": 26288,
+      "n_pos_val": 5529,
+      "operable_point": true,
+      "operable_reason": null,
+      "val_pick": {
+        "threshold": 0.25,
+        "f1": 0.12696019300361883,
+        "precision": 0.38168631006346326,
+        "recall": 0.07614396816784229,
+        "n_eligible": 15
+      },
+      "wall_time_s": 0.371,
+      "holdout": {
+        "n": 1925,
+        "n_pos": 644,
+        "base_rate": 0.33454545454545453,
+        "threshold": 0.25,
+        "f1": 0.27883817427385893,
+        "precision": 0.2994652406417112,
+        "recall": 0.2608695652173913,
+        "auprc": 0.33995542160708997,
+        "lift_precision": 0.8951406649616368,
+        "lift_auprc": 1.016171097195106,
+        "tp": 168,
+        "fp": 393,
+        "tn": 888,
+        "fn": 476
+      },
+      "served_regression_only": {
+        "n": 1788,
+        "n_pos": 233,
+        "base_rate": 0.1303131991051454,
+        "threshold": 0.25,
+        "f1": 0.23113964686998395,
+        "precision": 0.18461538461538463,
+        "recall": 0.3090128755364807,
+        "auprc": 0.1772310692753119,
+        "lift_precision": 1.4167051832287885,
+        "lift_auprc": 1.360039278387372,
+        "tp": 72,
+        "fp": 318,
+        "tn": 1237,
+        "fn": 161
+      },
+      "floors_clear": false,
+      "failed_floors": [
+        "f1 (0.2788 < 0.3)"
+      ],
+      "seed_verdict": "FAIL"
+    },
+    {
+      "seed": 123,
+      "n_train": 154706,
+      "n_fit": 123764,
+      "n_val": 30942,
+      "n_pos_train": 26288,
+      "n_pos_val": 5529,
+      "operable_point": true,
+      "operable_reason": null,
+      "val_pick": {
+        "threshold": 0.25,
+        "f1": 0.13399648917495613,
+        "precision": 0.35042081101759753,
+        "recall": 0.08283595586905408,
+        "n_eligible": 6
+      },
+      "wall_time_s": 0.369,
+      "holdout": {
+        "n": 1925,
+        "n_pos": 644,
+        "base_rate": 0.33454545454545453,
+        "threshold": 0.25,
+        "f1": 0.22388059701492535,
+        "precision": 0.2803738317757009,
+        "recall": 0.18633540372670807,
+        "auprc": 0.3316915869152531,
+        "lift_precision": 0.8380739536773669,
+        "lift_auprc": 0.9914694174097239,
+        "tp": 120,
+        "fp": 308,
+        "tn": 973,
+        "fn": 524
+      },
+      "served_regression_only": {
+        "n": 1788,
+        "n_pos": 233,
+        "base_rate": 0.1303131991051454,
+        "threshold": 0.25,
+        "f1": 0.26272577996715923,
+        "precision": 0.2127659574468085,
+        "recall": 0.34334763948497854,
+        "auprc": 0.2117267548333905,
+        "lift_precision": 1.6327276047849513,
+        "lift_auprc": 1.6247529512536576,
+        "tp": 80,
+        "fp": 296,
+        "tn": 1259,
+        "fn": 153
+      },
+      "floors_clear": false,
+      "failed_floors": [
+        "f1 (0.2239 < 0.3)"
+      ],
+      "seed_verdict": "FAIL"
+    }
+  ],
+  "study_verdict": "FAIL",
+  "model_quality_go_claimed": false,
+  "e4_served_published_regression_quote": {
+    "7": {
+      "f1": 0.2488,
+      "precision": 0.1421,
+      "recall": 1.0,
+      "auprc": 0.1572,
+      "threshold": 0.15
+    },
+    "42": {
+      "f1": 0.246,
+      "precision": 0.1403,
+      "recall": 1.0,
+      "auprc": 0.1648,
+      "threshold": 0.15
+    },
+    "123": {
+      "f1": 0.2467,
+      "precision": 0.1407,
+      "recall": 1.0,
+      "auprc": 0.2031,
+      "threshold": 0.15
+    }
+  },
+  "anti_shopping": {
+    "one_look": true,
+    "second_threshold": false,
+    "label_change": false,
+    "feature_add": false,
+    "ticker_redraw": false,
+    "served_used_for_go": false
+  },
+  "wall_time_s": 24.195
+}

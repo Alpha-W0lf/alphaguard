@@ -1,0 +1,111 @@
+{
+  "primary_source": {
+    "path": "/Users/tom/Documents/Git/alphaguard-wt-option-b/data/raw/kaggle_stock_news/analyst_ratings_processed.csv",
+    "rows_raw": 1400469,
+    "rows_after_clean": 1397890,
+    "rows_after_dedup": 1384360,
+    "alias_applied": {
+      "FB\u2192META": 389,
+      "GOOG\u2192GOOGL": 1209
+    },
+    "alias_version": "fb_meta_v1+goog_googl_v1"
+  },
+  "partner_source": {
+    "path": "/Users/tom/Documents/Git/alphaguard-wt-option-b/data/raw/kaggle_stock_news/raw_partner_headlines.csv",
+    "rows_raw": 1845559,
+    "rows_after_clean": 1845559,
+    "rows_after_dedup": 1822509,
+    "alias_applied": {
+      "FB\u2192META": 53,
+      "GOOG\u2192GOOGL": 5
+    },
+    "alias_version": "fb_meta_v1+goog_googl_v1"
+  },
+  "n_tickers_post_dedup": 6191,
+  "total_dedup_rows": 1384360,
+  "tickers_ge200_dev": 1772,
+  "partner_served_coverage": {
+    "AAPL": {
+      "dedup_rows": 32,
+      "headline_days": 7,
+      "date_min": "2020-05-27",
+      "date_max": "2020-06-02"
+    },
+    "AMZN": {
+      "dedup_rows": 0,
+      "headline_days": 0,
+      "date_min": null,
+      "date_max": null
+    },
+    "GOOGL": {
+      "dedup_rows": 176,
+      "headline_days": 29,
+      "date_min": "2020-05-02",
+      "date_max": "2020-06-03"
+    },
+    "META": {
+      "dedup_rows": 53,
+      "headline_days": 11,
+      "date_min": "2020-05-22",
+      "date_max": "2020-06-02"
+    },
+    "NVDA": {
+      "dedup_rows": 0,
+      "headline_days": 0,
+      "date_min": null,
+      "date_max": null
+    },
+    "QQQ": {
+      "dedup_rows": 0,
+      "headline_days": 0,
+      "date_min": null,
+      "date_max": null
+    },
+    "SPY": {
+      "dedup_rows": 14,
+      "headline_days": 2,
+      "date_min": "2020-06-02",
+      "date_max": "2020-06-03"
+    },
+    "MSFT": {
+      "dedup_rows": 0,
+      "headline_days": 0,
+      "date_min": null,
+      "date_max": null
+    }
+  },
+  "alias_registry": [
+    {
+      "rule_id": "fb_meta_v1",
+      "from": "FB",
+      "to": "META"
+    },
+    {
+      "rule_id": "goog_googl_v1",
+      "from": "GOOG",
+      "to": "GOOGL"
+    }
+  ],
+  "forbidden_price_fetch": [
+    "FB",
+    "GOOG"
+  ],
+  "universe_contract": [
+    "AAPL",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "MSFT",
+    "NVDA",
+    "QQQ",
+    "SPY"
+  ],
+  "served_present_in_freeze": [
+    "AAPL",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "NVDA",
+    "QQQ"
+  ]
+}

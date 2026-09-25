@@ -189,7 +189,18 @@ def load_filter_dedup_sample(
     target_rows: int = 500,
     random_seed: int = 42,
     apply_archive_aliases: bool = True,
+    training_universe: frozenset[str] | None = None,
 ) -> tuple[pd.DataFrame, IngestStats]:
+    """Filter/dedup/sample archive rows for training.
+
+    ``training_universe=None`` keeps the historical served ``TICKER_UNIVERSE``
+    path (byte-identical). Pass an explicit frozenset to expand training-only
+    tickers without editing ``contracts/events.TICKER_UNIVERSE``.
+    """
+    universe = TICKER_UNIVERSE if training_universe is None else frozenset(training_universe)
+    if not universe:
+        raise ValueError("training_universe must be non-empty when provided")
+
     raw = pd.read_csv(csv_path)
     rows_raw = len(raw)
     df = _require_columns(raw)
@@ -202,12 +213,12 @@ def load_filter_dedup_sample(
     df["ticker"], alias_applied_counts, alias_candidates_oou, alias_rule_version = (
         _apply_archive_aliases(df["ticker"], apply_archive_aliases=apply_archive_aliases)
     )
-    in_u = df["ticker"].isin(TICKER_UNIVERSE)
+    in_u = df["ticker"].isin(universe)
     oou_dropped = int((~in_u).sum())
     df = df.loc[in_u].copy()
     rows_universe = len(df)
     universe_tickers_absent = tuple(
-        sorted(t for t in TICKER_UNIVERSE if int((df["ticker"] == t).sum()) == 0)
+        sorted(t for t in universe if int((df["ticker"] == t).sum()) == 0)
     )
 
     df["calendar_date"] = df["date"].map(parse_calendar_date)
@@ -229,10 +240,10 @@ def load_filter_dedup_sample(
     if rows_after_dedup <= target_rows:
         sampled = df.copy()
     else:
-        per = max(1, target_rows // len(TICKER_UNIVERSE))
+        per = max(1, target_rows // len(universe))
         parts: list[pd.DataFrame] = []
         taken_idx: set[Any] = set()
-        for ticker in sorted(TICKER_UNIVERSE):
+        for ticker in sorted(universe):
             sub = df.loc[df["ticker"] == ticker]
             if sub.empty:
                 continue

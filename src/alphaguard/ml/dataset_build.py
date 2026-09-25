@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -10,6 +11,7 @@ from typing import Any
 
 import pandas as pd
 
+from alphaguard.contracts.events import TICKER_UNIVERSE
 from alphaguard.ml.dataset_asof import (
     compute_features_and_label,
     make_cached_close_fetcher,
@@ -57,9 +59,33 @@ REQUIRED_COLUMNS = [
     "builder_version",
 ]
 
+# Served-universe flag is metadata for eval slices; not a model feature.
+OUTPUT_COLUMNS = REQUIRED_COLUMNS + ["served_universe"]
+
 DEFAULT_RAW = Path("data/raw/kaggle_stock_news")
 DEFAULT_OUT = Path("data/derived/training_events.parquet")
 KAGGLE_SLUG = SOURCE_DATASET_ID
+
+
+def load_training_universe_file(path: Path) -> frozenset[str]:
+    """Load tickers from candidate_tickers.json (list or ``candidate_tickers`` key)."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(payload, dict):
+        if "candidate_tickers" not in payload:
+            raise ValueError(
+                f"{path}: expected key 'candidate_tickers' or a JSON list of tickers"
+            )
+        tickers = payload["candidate_tickers"]
+    elif isinstance(payload, list):
+        tickers = payload
+    else:
+        raise ValueError(f"{path}: expected JSON object or list, got {type(payload).__name__}")
+    if not isinstance(tickers, list) or not tickers:
+        raise ValueError(f"{path}: ticker list must be a non-empty JSON array")
+    cleaned = [str(t).strip().upper() for t in tickers]
+    if any(not t for t in cleaned):
+        raise ValueError(f"{path}: blank ticker entries are not allowed")
+    return frozenset(cleaned)
 
 
 def ensure_kaggle_download(raw_dir: Path) -> Path:
@@ -104,6 +130,8 @@ def build_training_events(
     skip_download: bool = False,
     skip_finbert: bool = False,
     fetch_closes: Any | None = None,
+    training_universe: frozenset[str] | None = None,
+    finbert_batch_size: int = 16,
 ) -> pd.DataFrame:
     if skip_download:
         csv_path = discover_news_csv(raw_dir)
@@ -111,13 +139,20 @@ def build_training_events(
         csv_path = ensure_kaggle_download(raw_dir)
 
     sampled, stats = load_filter_dedup_sample(
-        csv_path, target_rows=target_rows, random_seed=random_seed
+        csv_path,
+        target_rows=target_rows,
+        random_seed=random_seed,
+        training_universe=training_universe,
     )
     print(
         f"ingest: raw={stats.rows_raw} universe={stats.rows_universe} "
         f"dedup={stats.rows_after_dedup} sampled={stats.rows_sampled} "
         f"oou_dropped={stats.oou_dropped} missing_dropped={stats.missing_fields_dropped}"
     )
+    if training_universe is None:
+        print("training_universe=default(TICKER_UNIVERSE)")
+    else:
+        print(f"training_universe=explicit n={len(training_universe)}")
     print(f"csv_discovered={csv_path}")
     if stats.alias_rule_version == "off":
         print("NOTE: archive aliases off (honesty / test path)")
@@ -173,6 +208,7 @@ def build_training_events(
         raise RuntimeError(_alias_fail_closed_message(stats))
 
     df = pd.DataFrame(rows)
+    print(f"asof_label_join: kept={len(df)} dropped_no_closes_or_label={dropped_label}")
     if skip_finbert:
         if out_path == DEFAULT_OUT or "training_events.parquet" in out_path.name:
             raise RuntimeError(
@@ -185,12 +221,17 @@ def build_training_events(
         print(
             "FinBERT batch: prefer Kafka/Qdrant/Ollama down (resource_mode=finbert_train)"
         )
-        df["finbert_sentiment"] = score_headlines(df["headline"].tolist())
+        df["finbert_sentiment"] = score_headlines(
+            df["headline"].tolist(), batch_size=finbert_batch_size
+        )
+
+    # Served = original serving contract (TICKER_UNIVERSE), not the training expand set.
+    df["served_universe"] = df["ticker"].isin(TICKER_UNIVERSE)
 
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
         raise RuntimeError(f"missing columns: {missing}")
-    df = df[REQUIRED_COLUMNS]
+    df = df[OUTPUT_COLUMNS]
 
     n = len(df)
     if n < target_rows and not allow_shortfall:
@@ -206,6 +247,10 @@ def build_training_events(
     print(f"time_split preview: train={split} test={n - split} (no train performed)")
     print("rows_by_ticker:")
     print(df["ticker"].value_counts().sort_index().to_string())
+    print(
+        f"served_universe rows={int(df['served_universe'].sum())} "
+        f"non_served={int((~df['served_universe']).sum())}"
+    )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     tmp_path = out_path.with_suffix(out_path.suffix + ".tmp")
@@ -232,7 +277,25 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Dev-only: zero sentiment (do not use for Option B claims)",
     )
+    p.add_argument(
+        "--training-universe-file",
+        type=Path,
+        default=None,
+        help=(
+            "JSON with candidate_tickers list (training-only expand). "
+            "Default None keeps TICKER_UNIVERSE byte-identical path."
+        ),
+    )
+    p.add_argument(
+        "--finbert-batch-size",
+        type=int,
+        default=16,
+        help="FinBERT batch size (default 16; safer on 16GB unified memory)",
+    )
     args = p.parse_args(argv)
+    training_universe: frozenset[str] | None = None
+    if args.training_universe_file is not None:
+        training_universe = load_training_universe_file(args.training_universe_file)
     try:
         build_training_events(
             raw_dir=args.raw_dir,
@@ -242,6 +305,8 @@ def main(argv: list[str] | None = None) -> int:
             allow_shortfall=args.allow_shortfall,
             skip_download=args.skip_download,
             skip_finbert=args.skip_finbert,
+            training_universe=training_universe,
+            finbert_batch_size=args.finbert_batch_size,
         )
     except Exception as exc:  # noqa: BLE001 — CLI boundary
         print(f"ERROR: {exc}", file=sys.stderr)

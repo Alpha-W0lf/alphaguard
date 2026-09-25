@@ -1,0 +1,23 @@
+--- configs/studies/jh63_go_gate_nested_purge_001856a6.yaml	2026-09-25 14:34:45
++++ configs/studies/jh63_go_gate_nested_purge_2e8db9a9.yaml	2026-09-25 16:21:48
+@@ -1,7 +1,7 @@
+-study_id: jh63_go_gate_nested_purge_001856a6
+-description: "Nested Go-gate on freeze 001856a6 (Option B 9-feature) with locked-test trading-day purge aligned to expanding4; matrix C winner hparams; Go UNCLAIMED"
+-dataset_path: data/derived/training_events.parquet
+-dataset_hash: 001856a6b70801edefb578c37687be1555269de852baf7794294f2a51bce2034
++study_id: jh63_go_gate_nested_purge_2e8db9a9
++description: "Nested Go-gate on freeze 2e8db9a9 (sample-expand NEW8, Option B 9-feature) with date-anchored locked-test + trading-day purge aligned to expanding4; matrix C winner hparams; primary verdict = served_universe locked-test (G3); Go UNCLAIMED"
++dataset_path: data/derived/training_events_jh63e_ecb73eca.parquet
++dataset_hash: 2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528
+ 
+ seeds:
+   - 42
+@@ -27,7 +27,7 @@
+ scale_pos_weights:
+   - 2
+ 
+-split_policy: nested_time_aware_v1
++split_policy: nested_time_aware_v1_date_anchor
+ train_frac: 0.8
+ val_frac: 0.2
+ enable_mlflow: false

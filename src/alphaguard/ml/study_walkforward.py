@@ -12,6 +12,7 @@ Without those dates the gap stays the historical 5 global rows.
 from __future__ import annotations
 
 import logging
+from datetime import date
 from dataclasses import dataclass, replace
 
 import numpy as np
@@ -34,6 +35,12 @@ logger = logging.getLogger(__name__)
 # Label window end is close_5_trading_sessions_later (fwd_return_5d).
 LABEL_HORIZON_ROWS = 5
 _AGG_KEYS = ("f1", "precision", "recall", "auprc", "positive_rate")
+
+# WP-E2 date-anchored locked-test boundary (G5): first feature_as_of of freeze
+# 001856a6 locked test (E0 freeze_profile.json). Old row-fraction policy stays default.
+LOCKED_TEST_ASOF_ANCHOR_001856A6 = date(2020, 2, 25)
+SPLIT_POLICY_NESTED_V1 = "nested_time_aware_v1"
+SPLIT_POLICY_NESTED_V1_DATE_ANCHOR = "nested_time_aware_v1_date_anchor"
 
 
 @dataclass(frozen=True)
@@ -155,34 +162,109 @@ def _session_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray] | None:
     return feature_idx, label_end_idx
 
 
-def split_for_walk_forward(df: pd.DataFrame, train_frac: float, walk_forward: str):
+
+def _test_served_mask(test_df: pd.DataFrame) -> np.ndarray | None:
+    """Boolean mask over locked-test rows when served_universe column exists."""
+    if "served_universe" not in test_df.columns:
+        return None
+    return test_df["served_universe"].astype(bool).to_numpy()
+
+def resolve_locked_test_boundary(
+    df: pd.DataFrame,
+    *,
+    train_frac: float,
+    split_policy: str = SPLIT_POLICY_NESTED_V1,
+    date_anchor: date | None = None,
+) -> int:
+    """Return the first locked-test row index for a time-ordered frame.
+
+    ``nested_time_aware_v1`` keeps the historical ``int(n * train_frac)`` cut.
+    ``nested_time_aware_v1_date_anchor`` uses the first row whose
+    ``feature_as_of >= date_anchor`` (default: 001856a6 locked-test asof).
+    """
+    n_rows = len(df)
+    if split_policy == SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
+        if "feature_as_of" not in df.columns:
+            raise ValueError(
+                "split_policy nested_time_aware_v1_date_anchor requires feature_as_of"
+            )
+        anchor = date_anchor or LOCKED_TEST_ASOF_ANCHOR_001856A6
+        asof = pd.to_datetime(df["feature_as_of"]).map(
+            lambda v: v.date() if hasattr(v, "date") else v
+        )
+        hits = np.flatnonzero(asof.to_numpy() >= anchor)
+        if len(hits) == 0:
+            raise ValueError(f"no rows with feature_as_of >= {anchor.isoformat()}")
+        boundary = int(hits[0])
+        if boundary < 1 or boundary >= n_rows:
+            raise ValueError(
+                f"date-anchor boundary={boundary} invalid for n_rows={n_rows} "
+                f"anchor={anchor.isoformat()}"
+            )
+        return boundary
+    if split_policy not in (SPLIT_POLICY_NESTED_V1, "time_ordered_80_20"):
+        raise ValueError(f"unknown split_policy: {split_policy!r}")
+    return int(n_rows * train_frac)
+
+
+def split_for_walk_forward(
+    df: pd.DataFrame,
+    train_frac: float,
+    walk_forward: str,
+    *,
+    split_policy: str = SPLIT_POLICY_NESTED_V1,
+    date_anchor: date | None = None,
+):
     """With session dates, both `off` and `expanding4` purge the locked-test gap.
 
     Without them, historical 80/20 cut with no gap.
+    Date-anchored policy (``nested_time_aware_v1_date_anchor``) freezes the
+    locked-test start to the first ``feature_as_of >=`` anchor so adding
+    training rows cannot slide the boundary in calendar time.
     """
     from alphaguard.ml.train_option_b import SplitData, time_ordered_split
 
     if walk_forward not in ("off", "expanding4"):
         raise ValueError(f"walk_forward must be off or expanding4, got {walk_forward!r}")
     indexed = _session_indices(df)
+    n_rows = len(df)
+    boundary = resolve_locked_test_boundary(
+        df,
+        train_frac=train_frac,
+        split_policy=split_policy,
+        date_anchor=date_anchor,
+    )
     if indexed is None:
+        # No session indices: fall back to plain prefix cut (date-anchor still applies).
+        if split_policy == SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
+            names = list(FEATURE_NAMES)
+            train = df.iloc[:boundary]
+            test = df.iloc[boundary:]
+            return SplitData(
+                x_train=train[names].to_numpy(dtype=float),
+                y_train=train["label_high_risk"].to_numpy(dtype=int),
+                x_test=test[names].to_numpy(dtype=float),
+                y_test=test["label_high_risk"].to_numpy(dtype=int),
+                train_start=str(train["published_at"].iloc[0]),
+                train_end=str(train["published_at"].iloc[-1]),
+                test_served_mask=_test_served_mask(test),
+            )
         return time_ordered_split(df, train_frac=train_frac)
     feature_idx, label_end_idx = indexed
-    n_rows = len(df)
-    boundary = int(n_rows * train_frac)
     if boundary < 1 or boundary >= n_rows:
         return time_ordered_split(df, train_frac=train_frac)
     next_session = int(np.min(feature_idx[boundary:]))
     train_end = prefix_end_before_session(
         label_end_idx, candidate_end=boundary, next_session=next_session
     )
-    if train_end == boundary:
+    if train_end == boundary and split_policy != SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
         return time_ordered_split(df, train_frac=train_frac)
     logger.info(
-        "locked-test trading-day embargo train_end=%s boundary=%s dropped=%s",
+        "locked-test trading-day embargo train_end=%s boundary=%s dropped=%s policy=%s",
         train_end,
         boundary,
         boundary - train_end,
+        split_policy,
     )
     names = list(FEATURE_NAMES)
     train = df.iloc[:train_end]
@@ -194,6 +276,7 @@ def split_for_walk_forward(df: pd.DataFrame, train_frac: float, walk_forward: st
         y_test=test["label_high_risk"].to_numpy(dtype=int),
         train_start=str(train["published_at"].iloc[0]),
         train_end=str(train["published_at"].iloc[-1]),
+        test_served_mask=_test_served_mask(test),
     )
 
 

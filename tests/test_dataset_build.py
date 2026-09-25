@@ -6,6 +6,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -18,6 +19,7 @@ from alphaguard.ml.dataset_asof import (
 )
 from alphaguard.ml.dataset_build import build_training_events
 from alphaguard.ml.dataset_finbert import sentiment_from_probs
+from alphaguard.contracts.events import TICKER_UNIVERSE
 from alphaguard.ml.dataset_ingest import (
     BUILDER_VERSION,
     event_id_for,
@@ -25,6 +27,15 @@ from alphaguard.ml.dataset_ingest import (
     normalize_headline,
     reject_oou_tickers,
     source_row_hash,
+)
+from alphaguard.ml.study_walkforward import (
+    LOCKED_TEST_ASOF_ANCHOR_001856A6,
+    SPLIT_POLICY_NESTED_V1_DATE_ANCHOR,
+    apply_trading_day_embargo,
+    expanding4_folds,
+    horizon_overlap_count,
+    resolve_locked_test_boundary,
+    split_for_walk_forward,
 )
 
 ET = ZoneInfo("America/New_York")
@@ -279,3 +290,150 @@ def test_title_column_alias(tmp_path: Path) -> None:
     # 17:00 ET should not collapse to 09:30
     pub = df.iloc[0]["published_at_parsed"]
     assert pub.astimezone(ZoneInfo("America/New_York")).hour == 17
+
+
+def test_training_universe_none_matches_explicit_served(tmp_path: Path) -> None:
+    """Default training_universe=None is byte-identical to explicit TICKER_UNIVERSE."""
+    csv = tmp_path / "news.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-01,AAPL,Apple news\n"
+        "2020-03-02,NVDA,Nvidia news\n"
+        "2020-03-03,TSLA,Tesla oou\n"
+        "2020-03-04,MSFT,Microsoft news\n",
+        encoding="utf-8",
+    )
+    df_default, stats_default = load_filter_dedup_sample(csv, target_rows=10, random_seed=42)
+    df_explicit, stats_explicit = load_filter_dedup_sample(
+        csv, target_rows=10, random_seed=42, training_universe=TICKER_UNIVERSE
+    )
+    assert list(df_default["event_id"]) == list(df_explicit["event_id"])
+    assert list(df_default["ticker"]) == list(df_explicit["ticker"])
+    assert list(df_default["source_row_hash"]) == list(df_explicit["source_row_hash"])
+    assert stats_default.rows_universe == stats_explicit.rows_universe
+    assert stats_default.oou_dropped == stats_explicit.oou_dropped == 1
+    assert set(df_default["ticker"]).isdisjoint({"TSLA"})
+
+
+def test_training_universe_expand_keeps_aliases(tmp_path: Path) -> None:
+    csv = tmp_path / "news.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-01,FB,Facebook news\n"
+        "2020-03-02,GOOG,Alphabet class C\n"
+        "2020-03-03,MU,Micron news\n"
+        "2020-03-04,TSLA,Still oou for this universe\n",
+        encoding="utf-8",
+    )
+    universe = frozenset({"META", "GOOGL", "MU"})
+    df, stats = load_filter_dedup_sample(
+        csv, target_rows=10, random_seed=42, training_universe=universe
+    )
+    assert stats.alias_applied_counts.get("FB→META") == 1
+    assert stats.alias_applied_counts.get("GOOG→GOOGL") == 1
+    assert set(df["ticker"]) == {"META", "GOOGL", "MU"}
+    assert "TSLA" not in set(df["ticker"])
+    assert "FB" not in set(df["ticker"])
+    assert "GOOG" not in set(df["ticker"])
+
+
+def test_build_writes_served_universe_column(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    csv = raw / "analyst_ratings_processed.csv"
+    csv.write_text(
+        "date,stock,headline\n"
+        "2020-03-02 10:00:00,AAPL,Apple news\n"
+        "2020-03-03 10:00:00,MU,Micron news\n",
+        encoding="utf-8",
+    )
+    sessions = pd.bdate_range("2019-12-02", "2020-04-30").date.tolist()
+
+    def fetch(ticker: str, start: date, end: date) -> pd.Series:
+        assert ticker not in {"FB", "GOOG"}
+        idx = [d for d in sessions if start <= d <= end]
+        base = 200.0 if ticker == "SPY" else 100.0
+        return pd.Series({d: base + i * 0.01 for i, d in enumerate(idx)})
+
+    out = tmp_path / "dev_nofinbert.parquet"
+    df = build_training_events(
+        raw_dir=raw,
+        out_path=out,
+        target_rows=10,
+        random_seed=42,
+        allow_shortfall=True,
+        skip_download=True,
+        skip_finbert=True,
+        fetch_closes=fetch,
+        training_universe=frozenset({"AAPL", "MU"}),
+    )
+    assert "served_universe" in df.columns
+    assert bool(df.loc[df["ticker"] == "AAPL", "served_universe"].iloc[0]) is True
+    assert bool(df.loc[df["ticker"] == "MU", "served_universe"].iloc[0]) is False
+
+
+def test_date_anchor_excludes_asof_ge_anchor_from_train() -> None:
+    n = 40
+    asof_dates = [date(2020, 2, 20) + __import__("datetime").timedelta(days=i) for i in range(n)]
+    # Ensure some rows land on/after the locked anchor.
+    asof_dates = [
+        date(2020, 2, 20) if i < 20 else date(2020, 2, 25) if i < 25 else date(2020, 2, 26)
+        for i in range(n)
+    ]
+    df = pd.DataFrame(
+        {
+            "label_high_risk": [0, 1] * (n // 2),
+            "published_at": pd.date_range("2020-01-01", periods=n, tz="UTC"),
+            "feature_as_of": asof_dates,
+            **{name: np.zeros(n) for name in (
+                "finbert_sentiment",
+                "volatility_20d",
+                "return_5d_prior",
+                "return_20d_prior",
+                "spy_return_5d",
+                "rs_20d",
+                "drawdown_20d",
+                "volatility_5d",
+                "spy_volatility_20d",
+            )},
+        }
+    )
+    from alphaguard.contracts.decisions import FEATURE_NAMES as _FN
+
+    for name in _FN:
+        if name not in df.columns:
+            df[name] = 0.0
+    boundary = resolve_locked_test_boundary(
+        df, train_frac=0.8, split_policy=SPLIT_POLICY_NESTED_V1_DATE_ANCHOR
+    )
+    assert boundary == 20
+    split = split_for_walk_forward(
+        df, 0.8, "off", split_policy=SPLIT_POLICY_NESTED_V1_DATE_ANCHOR
+    )
+    train_asof = df.iloc[: len(split.y_train)]["feature_as_of"]
+    assert (train_asof >= LOCKED_TEST_ASOF_ANCHOR_001856A6).sum() == 0
+    test_asof = df.iloc[boundary:]["feature_as_of"]
+    assert (test_asof >= LOCKED_TEST_ASOF_ANCHOR_001856A6).all()
+
+
+def test_purge_holds_across_tickers_same_session() -> None:
+    """Trading-day purge uses shared session indices across tickers."""
+    n = 60
+    # Two tickers interleaved on the same session calendar.
+    feature = np.array([i // 2 for i in range(n)], dtype=int)
+    label_end = feature + 5
+    folds, _n_dev, _source = expanding4_folds(n, embargo_rows=5)
+    # Force label windows from late train to overlap early val sessions.
+    fold = folds[0]
+    label_end = label_end.copy()
+    label_end[fold.val_start - 10 : fold.val_start] = feature[fold.val_start]
+    before = horizon_overlap_count(
+        label_end, feature, fold.train_end, fold.val_start, fold.val_end
+    )
+    assert before > 0
+    purged, changed = apply_trading_day_embargo(folds, label_end, feature)
+    assert changed
+    after = horizon_overlap_count(
+        label_end, feature, purged[0].train_end, purged[0].val_start, purged[0].val_end
+    )
+    assert after == 0
