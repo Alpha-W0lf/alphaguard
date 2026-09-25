@@ -13,9 +13,9 @@ from alphaguard.ml.thread_limits import apply_native_thread_limits
 
 apply_native_thread_limits()
 
-from alphaguard.ml.study_compare import write_study_compare
-from alphaguard.ml.study_runner import run_study
-from alphaguard.ml.study_schema import StudyMatrixConfig
+from alphaguard.ml.study_compare import write_study_compare  # noqa: E402
+from alphaguard.ml.study_runner import run_study  # noqa: E402
+from alphaguard.ml.study_schema import StudyMatrixConfig  # noqa: E402
 
 
 def load_matrix_yaml(yaml_path: Path) -> StudyMatrixConfig:
