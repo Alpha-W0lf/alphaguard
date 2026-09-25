@@ -1,0 +1,114 @@
+{
+  "new_path": "data/derived/training_events_jh63e_ecb73eca.parquet",
+  "dataset_hash": "2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528",
+  "new8": "2e8db9a9",
+  "n_rows": 201255,
+  "n_served": 8907,
+  "served_pos": 1506,
+  "event_ids_match": true,
+  "drift": [
+    {
+      "col": "finbert_sentiment",
+      "n_mismatch": 8857,
+      "frac": 0.9943864376333221,
+      "max_abs_diff": 3.388524055480957e-05,
+      "mean_abs_diff": 6.136140125601115e-07,
+      "median_abs_diff": 2.3189932107925415e-07
+    },
+    {
+      "col": "volatility_20d",
+      "n_mismatch": 8578,
+      "frac": 0.9630627596272595,
+      "max_abs_diff": 5.207480464369807e-06,
+      "mean_abs_diff": 7.851827574879609e-07,
+      "median_abs_diff": 6.152676890192055e-07
+    },
+    {
+      "col": "return_5d_prior",
+      "n_mismatch": 8224,
+      "frac": 0.9233187380711799,
+      "max_abs_diff": 1.3389440270961117e-06,
+      "mean_abs_diff": 2.085047098889486e-07,
+      "median_abs_diff": 1.5594476543423497e-07
+    },
+    {
+      "col": "return_20d_prior",
+      "n_mismatch": 8204,
+      "frac": 0.9210733131245088,
+      "max_abs_diff": 1.4797422995815879e-06,
+      "mean_abs_diff": 2.2172555877157652e-07,
+      "median_abs_diff": 1.7852619615954524e-07
+    },
+    {
+      "col": "spy_return_5d",
+      "n_mismatch": 8677,
+      "frac": 0.9741776131132817,
+      "max_abs_diff": 1.1860762987314644e-06,
+      "mean_abs_diff": 2.551514982066373e-07,
+      "median_abs_diff": 2.2859102699612777e-07
+    },
+    {
+      "col": "rs_20d",
+      "n_mismatch": 8907,
+      "frac": 1.0,
+      "max_abs_diff": 1.699458369586182e-06,
+      "mean_abs_diff": 3.4994603141083367e-07,
+      "median_abs_diff": 2.9243739019246817e-07
+    },
+    {
+      "col": "drawdown_20d",
+      "n_mismatch": 6419,
+      "frac": 0.720669136634108,
+      "max_abs_diff": 1.0123150044893947e-06,
+      "mean_abs_diff": 1.4863057101841697e-07,
+      "median_abs_diff": 8.965852937858898e-08
+    },
+    {
+      "col": "volatility_5d",
+      "n_mismatch": 8578,
+      "frac": 0.9630627596272595,
+      "max_abs_diff": 1.627240792698159e-05,
+      "mean_abs_diff": 1.826421464743362e-06,
+      "median_abs_diff": 1.4019562649125739e-06
+    },
+    {
+      "col": "spy_volatility_20d",
+      "n_mismatch": 8907,
+      "frac": 1.0,
+      "max_abs_diff": 4.085276067378185e-06,
+      "mean_abs_diff": 8.872166265939692e-07,
+      "median_abs_diff": 7.041069474272854e-07
+    },
+    {
+      "col": "label_high_risk",
+      "n_mismatch": 0,
+      "frac": 0.0,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "median_abs_diff": 0.0
+    },
+    {
+      "col": "fwd_return_5d",
+      "n_mismatch": 8252,
+      "frac": 0.9264623329965196,
+      "max_abs_diff": 1.5137239395279778e-06,
+      "mean_abs_diff": 2.0676342627175868e-07,
+      "median_abs_diff": 1.5670613728868688e-07
+    }
+  ],
+  "finbert_corr": 0.9999999999978966,
+  "label_mismatch": 0,
+  "s4": "STOP_FAIL",
+  "file_sha256": "ecb73ecae9b0704011345927cb05749aa6147e54dfb4d0f65d819740189a12cf",
+  "dataset_hash_full_xy": "2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528",
+  "dataset_hash_served_xy": "7b989bfd8961d570",
+  "diagnosis": {
+    "event_id_label_exact": true,
+    "feature_bit_identical": false,
+    "finbert_mps_matches_new_freeze": true,
+    "finbert_mps_vs_cpu_max_abs": 2.41e-06,
+    "finbert_mps_vs_old_freeze_sample_max_abs": 1.23e-06,
+    "price_drift_consistent_with_yfinance_adj_close_refresh": true,
+    "label_threshold_crossed": false
+  }
+}

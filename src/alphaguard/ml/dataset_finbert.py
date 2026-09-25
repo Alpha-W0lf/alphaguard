@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import logging
+import warnings
 from typing import Sequence
 
 # Soft pin (human-locked 2026-07-16): Hub ID is ProsusAI/finbert — ProsusAI/finbert-tone does not exist.
 FINBERT_MODEL_ID = "ProsusAI/finbert"
+
+logger = logging.getLogger(__name__)
 
 
 def sentiment_from_probs(pos: float, neg: float) -> float:
@@ -26,22 +30,33 @@ def _load_finbert_runtime():
     return torch, AutoTokenizer, AutoModelForSequenceClassification
 
 
-def score_headlines(
+def _prefer_device(torch) -> str:
+    """Return ``mps`` when Apple Metal is available, else ``cpu``."""
+    try:
+        if bool(getattr(torch.backends, "mps", None) and torch.backends.mps.is_available()):
+            return "mps"
+    except Exception:  # noqa: BLE001 — defensive probe
+        pass
+    return "cpu"
+
+
+def _score_headlines_on_device(
     headlines: Sequence[str],
     *,
-    model_id: str = FINBERT_MODEL_ID,
-    batch_size: int = 16,
+    model_id: str,
+    batch_size: int,
+    device_name: str,
+    torch,
+    AutoTokenizer,
+    AutoModelForSequenceClassification,
 ) -> list[float]:
-    """Run FinBERT offline. Lazy-imports transformers/torch.
-
-    Uses the default Hub auth (HF cache / HF_TOKEN). Public weights; no token=False workaround.
-    """
-    if not headlines:
-        return []
-    torch, AutoTokenizer, AutoModelForSequenceClassification = _load_finbert_runtime()
+    device = torch.device(device_name)
+    logger.info("FinBERT device=%s batch_size=%s", device_name, batch_size)
+    print(f"FinBERT device={device_name} batch_size={batch_size}", flush=True)
 
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForSequenceClassification.from_pretrained(model_id)
+    model.to(device)
     model.eval()
     id2label = {int(k): v.lower() for k, v in model.config.id2label.items()}
 
@@ -56,6 +71,7 @@ def score_headlines(
                 max_length=128,
                 return_tensors="pt",
             )
+            enc = {k: v.to(device) for k, v in enc.items()}
             logits = model(**enc).logits
             probs = torch.softmax(logits, dim=-1).cpu().numpy()
             for row in probs:
@@ -68,6 +84,52 @@ def score_headlines(
                         neg = float(p)
                 scores.append(sentiment_from_probs(pos, neg))
     return scores
+
+
+def score_headlines(
+    headlines: Sequence[str],
+    *,
+    model_id: str = FINBERT_MODEL_ID,
+    batch_size: int = 16,
+) -> list[float]:
+    """Run FinBERT offline. Lazy-imports transformers/torch.
+
+    Prefers Apple MPS when available; falls back to CPU on MPS errors.
+    Uses the default Hub auth (HF cache / HF_TOKEN). Public weights; no token=False workaround.
+    """
+    if not headlines:
+        return []
+    torch, AutoTokenizer, AutoModelForSequenceClassification = _load_finbert_runtime()
+    preferred = _prefer_device(torch)
+    try:
+        return _score_headlines_on_device(
+            headlines,
+            model_id=model_id,
+            batch_size=batch_size,
+            device_name=preferred,
+            torch=torch,
+            AutoTokenizer=AutoTokenizer,
+            AutoModelForSequenceClassification=AutoModelForSequenceClassification,
+        )
+    except Exception as exc:  # noqa: BLE001 — MPS OOM / unsupported ops
+        if preferred != "mps":
+            raise
+        msg = (
+            f"FinBERT MPS failed ({type(exc).__name__}: {exc}); "
+            "falling back to CPU for this scoring run"
+        )
+        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+        logger.warning(msg)
+        print(f"WARNING: {msg}", flush=True)
+        return _score_headlines_on_device(
+            headlines,
+            model_id=model_id,
+            batch_size=batch_size,
+            device_name="cpu",
+            torch=torch,
+            AutoTokenizer=AutoTokenizer,
+            AutoModelForSequenceClassification=AutoModelForSequenceClassification,
+        )
 
 
 def score_headlines_resume(

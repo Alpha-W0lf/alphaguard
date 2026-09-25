@@ -135,7 +135,9 @@ def execute_run(
         )
 
     try:
-        split = split_for_walk_forward(df, config.train_frac, walk_forward)
+        split = split_for_walk_forward(
+            df, config.train_frac, walk_forward, split_policy=config.split_policy
+        )
     except Exception as exc:
         return _abort(f"Time-ordered split failed: {exc}", d_hash=actual_hash)
 
@@ -263,9 +265,39 @@ def execute_run(
     raw_test_probs = booster.predict(dtest)
     test_probs = calibrator.predict_proba(raw_test_probs)
 
-    test_metrics_dict = compute_metrics_suite(
+    test_all_metrics_dict = compute_metrics_suite(
         split.y_test, test_probs, threshold=threshold, beta=config.beta
     )
+    # G3: when served_universe mask is present, primary metrics["test"] is the
+    # served locked-test slice; full-universe locked-test is metrics["test_all"].
+    served_mask = getattr(split, "test_served_mask", None)
+    if served_mask is not None and int(np.asarray(served_mask).sum()) > 0:
+        mask = np.asarray(served_mask, dtype=bool)
+        metrics_map["test_all"] = SplitMetrics(
+            n_samples=test_all_metrics_dict["n_samples"],
+            n_positive=test_all_metrics_dict["n_positive"],
+            prevalence=test_all_metrics_dict["prevalence"],
+            threshold=threshold,
+            beta=config.beta,
+            precision=test_all_metrics_dict["precision"],
+            recall=test_all_metrics_dict["recall"],
+            f1=test_all_metrics_dict["f1"],
+            fbeta=test_all_metrics_dict["fbeta"],
+            auprc=test_all_metrics_dict["auprc"],
+            brier=test_all_metrics_dict["brier"],
+            confusion=ConfusionMatrix(**test_all_metrics_dict["confusion"]),
+        )
+        test_metrics_dict = compute_metrics_suite(
+            split.y_test[mask], test_probs[mask], threshold=threshold, beta=config.beta
+        )
+        logger.info(
+            "G3 primary locked-test = served_universe slice n=%s pos=%s (full n=%s)",
+            test_metrics_dict["n_samples"],
+            test_metrics_dict["n_positive"],
+            test_all_metrics_dict["n_samples"],
+        )
+    else:
+        test_metrics_dict = test_all_metrics_dict
     test_confusion = ConfusionMatrix(**test_metrics_dict["confusion"])
     metrics_map["test"] = SplitMetrics(
         n_samples=test_metrics_dict["n_samples"],
@@ -373,7 +405,7 @@ def execute_run(
         confusion=test_confusion,
         n_positive_train=n_pos_train,
         n_positive_val=n_pos_val,
-        n_positive_test=int(split.y_test.sum()),
+        n_positive_test=int(test_metrics_dict["n_positive"]),
         config=config,
         schema_version=schema_version,
         walk_forward=walk_forward_block,

@@ -190,6 +190,27 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | `src/alphaguard/ml/train_hpo.py` | Nested time-grid HPO |
 | `src/alphaguard/ml/train_eval.py` | Threshold + PRF1 helpers |
 
+## Training universe (sample expand, 2026-09-25)
+
+Optional builder path for JH-63 sample expand. **Serving contract unchanged:** `TICKER_UNIVERSE` / serving validators stay the 8-name set. Training may use a larger archive ticker set via `--training-universe-file`.
+
+| Field | Value |
+|-------|--------|
+| Candidate rule (G2 locked) | US-listed; ≥200 deduped headlines in `001856a6` **dev** window `[2011-03-02, 2020-02-25]`; yfinance adjusted closes for history probe; top **K=100** + 6 served names |
+| Usable tickers | **106** (=100 extras + AAPL, AMZN, GOOGL, META, NVDA, QQQ) |
+| Artifact | `runs/sample_expand_2026-09-25/wp-e0/candidate_tickers.json` |
+| Expanded freeze | `data/derived/training_events_jh63e_ecb73eca.parquet` (file sha `ecb73eca…`, study hash `2e8db9a9…`, **n=201255**) |
+| Served rows in freeze | **8907** (`served_universe=true`); event_ids + labels match Option B freeze; 9-feature floats float-tolerant vs `001856a6` (see E2 S4) |
+| Column | `served_universe` bool — G3 primary eval = served locked-test |
+| Split | `nested_time_aware_v1_date_anchor` with locked as-of anchor `2020-02-25` (avoids silent test-boundary move when n grows) |
+| CLI | `scripts/build_training_events.py --training-universe-file <json> --out <new path>` (never overwrite `001856a6` / canonical) |
+
+### Survivorship caveat
+
+yfinance lacks many delisted / thin names. E0 closed-probe drop: **881** of 1772 ≥200-dev candidates (749 empty_series / delisted-ish · 133 starts_too_late). Surviving extras are therefore **survivorship-biased** toward names with continuous Yahoo history. META fails the closes probe (`starts_too_late` IPO) but remains force-included as served. Domain shift (small/mid-cap archive names ≠ mega-cap tech served slice) is expected; primary Go metrics stay on the **served** locked-test (G3), not full-universe F1.
+
+**Go status for this freeze:** nested seeds 42/7/123 all FAIL floors → **Model Quality Go UNCLAIMED**. See `runs/sample_expand_2026-09-25/summary.md` and EXPERIMENTS.md §11. Fail stays Fail.
+
 ## Honesty
 
 - Dataset builder ≠ production risk model.

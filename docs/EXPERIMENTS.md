@@ -354,3 +354,46 @@ Nested clean metrics (purge-aligned, n_train=7029, n_test=1782):
 | 123 | 0.1467 | 0.1006 | 0.1525 | FAIL |
 
 Harness `promotion_decision=rejected`. **Do not claim Model Quality Go.** Decision gate returns to Tom (floor review / park / authorize a *new* pre-registered slice).
+
+
+---
+
+## 11. Sample expand — training universe (2026-09-25) — FAIL, Go UNCLAIMED
+
+Pre-registered slice: admit archive tickers into **training** only (G2: ≥200 dev-window headlines, closes OK, top K=100 + 6 served). Same 9 Option B features, same label, same floors. Serving `TICKER_UNIVERSE` untouched. **Anti-shopping:** FAIL stops iteration; no volume, no floor change, no ticker-rule re-pick, no grid change.
+
+| field | value |
+| --- | --- |
+| Date (CT) | 2026-09-25 ~4:30 PM |
+| Worktree | `alphaguard-wt-option-b` @ `1f53808` (never option-a) |
+| Plan | `docs/plans/2026-09-25_jh63_sample_expand_strategy_plan.md` |
+| Prior freezes | `534a341a…` and `001856a6…` — Fail remains Fail |
+| New freeze | `data/derived/training_events_jh63e_ecb73eca.parquet` (file `ecb73eca…`, n=**201255**) |
+| Study hash | `2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528` |
+| Nested study | `jh63_go_gate_nested_purge_2e8db9a9` — seeds 42/7/123 all **FAIL** |
+| WF study | `jh63_wf_expanding4_2e8db9a9` — seeds 0–4 served locked-test below floors (report-only) |
+| Primary Go population (G3) | served_universe locked-test n=**1788** / pos=**233** |
+| Rollup | `runs/sample_expand_2026-09-25/summary.md` |
+| `model_quality_go` | **UNCLAIMED** |
+
+### Gate path (E0→E4)
+
+| WP | Gate | Outcome |
+|---|---|---|
+| E0 | S1 | CLEAR — 106 usable tickers; projected ticker-days ~30.7× vs 2826 |
+| E1 | S2 / S3 / G4 | variance-dominated; permutation p=0.0100 **SIGNIFICANT**; E2 ALLOWED |
+| E2 | S4 (strict bit-identity) | **FAIL** on served 9-feature floats (event_ids + labels exact; max\|Δ\| ~1e-5). Tom skipped next-step widget; parent defaulted **float-tolerance proceed** (no splice) → E3/E4 |
+| E3 | configs | nested + WF clones to `*_2e8db9a9`; date-anchor; served-primary glue |
+| E4 | S5 | **FAIL** — all three nested seeds miss floors |
+
+### Nested served locked-test (NEW8)
+
+| seed | F1 | P | AUPRC | floors |
+| ---: | ---: | ---: | ---: | --- |
+| 42 | 0.2460 | 0.1403 | 0.1648 | FAIL |
+| 7 | 0.2488 | 0.1421 | 0.1572 | FAIL |
+| 123 | 0.2467 | 0.1407 | 0.2031 | FAIL (F1, P) |
+
+Side-by-side vs prior served nested: NEW8 F1 ≈ 0.25 beats `001856a6` (0.10–0.18) and sits near `534a` F1 — **precision remains ~0.14 vs floor 0.25**. Same failure mode. Fail stands.
+
+Harness `promotion_decision=rejected`. **Do not claim Model Quality Go.** Next = none unless Tom authorizes a *new* pre-registered slice.

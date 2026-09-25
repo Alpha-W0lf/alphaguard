@@ -68,6 +68,9 @@ class SplitData:
     y_test: np.ndarray
     train_start: str
     train_end: str
+    # Optional G3 mask: True for locked-test rows with served_universe==True.
+    # When set, study_executor scores primary metrics['test'] on this slice.
+    test_served_mask: np.ndarray | None = None
 
 
 def load_training_frame(parquet: Path) -> pd.DataFrame:

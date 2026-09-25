@@ -1,0 +1,129 @@
+{
+  "git_sha": "1f53808d0945bab0b7a3119a9ee00ab524df6145",
+  "freeze_hash_prefix": "001856a6",
+  "freeze_path": "/Users/tom/Documents/Git/alphaguard-wt-option-b/data/derived/training_events_optionB_001856a6.parquet",
+  "n_rows": 8907,
+  "n_unique_event_id": 8907,
+  "n_unique_headline": 7495,
+  "n_tickers": 6,
+  "unique_ticker_days": 2826,
+  "unique_feature_as_of": 1665,
+  "singleton_ticker_day_groups": 1085,
+  "multi_row_ticker_day_groups": 1741,
+  "rows_in_repeated_ticker_day_groups": 7822,
+  "phase_c_7822_definition": "rows belonging to (ticker, feature_as_of) groups with n_rows>=2; Verified=7822",
+  "ticker_day_rows_describe": {
+    "mean": 3.1518046709129512,
+    "median": 2.0,
+    "max": 56
+  },
+  "pos_rows": 1506,
+  "prevalence": 0.16908049848433815,
+  "pos_ticker_days": 453,
+  "distinct_dates_with_ge1_positive": 324,
+  "feature_as_of_min": "2011-03-02",
+  "feature_as_of_max": "2020-06-10",
+  "dev_block": {
+    "n_rows": 7125,
+    "n_pos": 1273,
+    "asof_min": "2011-03-02",
+    "asof_max": "2020-02-25",
+    "unique_ticker_days": 2464
+  },
+  "locked_test": {
+    "n_rows": 1782,
+    "n_pos": 233,
+    "asof_min": "2020-02-25",
+    "asof_max": "2020-06-10",
+    "unique_ticker_days": 364,
+    "anchor_feature_as_of": "2020-02-25"
+  },
+  "per_ticker": {
+    "AAPL": {
+      "rows": 469,
+      "unique_ticker_days": 66,
+      "pos_rows": 66,
+      "pos_ticker_days": 8
+    },
+    "AMZN": {
+      "rows": 329,
+      "unique_ticker_days": 32,
+      "pos_rows": 19,
+      "pos_ticker_days": 2
+    },
+    "GOOGL": {
+      "rows": 1824,
+      "unique_ticker_days": 439,
+      "pos_rows": 330,
+      "pos_ticker_days": 72
+    },
+    "META": {
+      "rows": 389,
+      "unique_ticker_days": 78,
+      "pos_rows": 64,
+      "pos_ticker_days": 16
+    },
+    "NVDA": {
+      "rows": 3124,
+      "unique_ticker_days": 1154,
+      "pos_rows": 770,
+      "pos_ticker_days": 257
+    },
+    "QQQ": {
+      "rows": 2772,
+      "unique_ticker_days": 1057,
+      "pos_rows": 257,
+      "pos_ticker_days": 98
+    }
+  },
+  "approx_train_quartile_pos_by_ticker": [
+    {
+      "fold": 0,
+      "asof_lo": "2011-03-02",
+      "asof_hi": "2012-05-16",
+      "n_rows": 1781,
+      "n_pos_rows": 287,
+      "pos_rows_by_ticker": {
+        "NVDA": 148,
+        "QQQ": 139
+      }
+    },
+    {
+      "fold": 1,
+      "asof_lo": "2012-05-16",
+      "asof_hi": "2017-09-15",
+      "n_rows": 1778,
+      "n_pos_rows": 270,
+      "pos_rows_by_ticker": {
+        "NVDA": 243,
+        "QQQ": 27
+      }
+    },
+    {
+      "fold": 2,
+      "asof_lo": "2017-09-15",
+      "asof_hi": "2019-02-22",
+      "n_rows": 1784,
+      "n_pos_rows": 362,
+      "pos_rows_by_ticker": {
+        "GOOGL": 94,
+        "NVDA": 200,
+        "QQQ": 68
+      }
+    },
+    {
+      "fold": 3,
+      "asof_lo": "2019-02-22",
+      "asof_hi": "2020-02-25",
+      "n_rows": 1782,
+      "n_pos_rows": 354,
+      "pos_rows_by_ticker": {
+        "GOOGL": 177,
+        "META": 12,
+        "NVDA": 152,
+        "QQQ": 13
+      }
+    }
+  ],
+  "status": "Verified"
+}
