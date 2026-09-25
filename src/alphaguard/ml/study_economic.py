@@ -2,9 +2,13 @@
 
 Costs are unitless (`label="stub"`). No dollar figures.
 
-Rules baseline: there is no stored rules column on the training frame.
-The pure function is the existing deterministic vol veto
-(`volatility_20d >= 0.05`, the eval-harness gate constant). No model and no seed.
+Rules baseline: the training frame has no stored rules column. The pure
+function applies the existing downside cutoff (`LABEL_THRESHOLD = -0.03`)
+to `return_5d_prior`, which is known at feature time. No model and no seed.
+
+The eval-harness vol veto (`volatility_20d >= 0.05`) is not this baseline.
+On freeze `534a341a` that cutoff alerts on essentially every row (min vol
+is about 0.047), so it is not an alert budget.
 """
 
 from __future__ import annotations
@@ -14,11 +18,11 @@ import hashlib
 import numpy as np
 import pandas as pd
 
+from alphaguard.ml.dataset_asof import LABEL_THRESHOLD
 from alphaguard.ml.study_schema import EconomicBlock, EconomicSplit, ShadowAgreement
 
-# Same constant as eval.harness.build_vol_veto_gate. Not fit on labels.
-VOL_VETO_THRESHOLD = 0.05
-RULES_SPEC = "volatility_20d>=0.05"
+# Prior-window downside, same cutoff as the label. Not fit on the forward label.
+RULES_SPEC = f"return_5d_prior<{LABEL_THRESHOLD}"
 
 
 def rules_fn_hash(spec: str) -> str:
@@ -36,10 +40,10 @@ def derive_rules_alerts(df: pd.DataFrame) -> tuple[np.ndarray, str, str]:
         spec = "column:rules_alert"
         alerts = df["rules_alert"].astype(bool).to_numpy()
     else:
-        if "volatility_20d" not in df.columns:
-            raise ValueError("economic stub needs rules_alert or volatility_20d")
+        if "return_5d_prior" not in df.columns:
+            raise ValueError("economic stub needs rules_alert or return_5d_prior")
         spec = RULES_SPEC
-        alerts = df["volatility_20d"].to_numpy(dtype=float) >= VOL_VETO_THRESHOLD
+        alerts = df["return_5d_prior"].to_numpy(dtype=float) < LABEL_THRESHOLD
     return np.asarray(alerts, dtype=bool), spec, rules_fn_hash(spec)
 
 

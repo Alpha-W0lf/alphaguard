@@ -13,6 +13,7 @@ import pandas as pd
 from alphaguard.contracts.decisions import FEATURE_NAMES
 from alphaguard.ml.study_economic import (
     RULES_SPEC,
+    derive_rules_alerts,
     economic_split,
     rules_fn_hash,
 )
@@ -222,6 +223,19 @@ def test_embargo_defaults_and_log(caplog) -> None:
         expanding4_folds(200)
     assert "embargo_rows=5" in caplog.text
     assert "label_horizon" in caplog.text
+
+
+def test_rules_baseline_is_prior_downside_not_saturated_vol() -> None:
+    df = pd.DataFrame(
+        {
+            "volatility_20d": [0.30, 0.30, 0.30, 0.30],
+            "return_5d_prior": [-0.04, -0.01, 0.02, -0.05],
+        }
+    )
+    alerts, spec, digest = derive_rules_alerts(df)
+    assert spec == "return_5d_prior<-0.03"
+    assert digest == rules_fn_hash(spec)
+    assert alerts.tolist() == [True, False, False, True]
 
 
 def test_economic_stub_matches_hand_computation() -> None:
