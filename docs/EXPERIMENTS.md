@@ -326,3 +326,31 @@ Local artifacts (gitignored): `runs/phaseb_phasec_2026-09-25/{SUMMARY.md,PROMOTE
 
 Harness proposal only (`no candidate`). **Do not claim Model Quality Go.**
 
+
+---
+
+## 10. Option B — four features + new freeze (2026-09-25) — FAIL, Go UNCLAIMED
+
+Pre-registered features `rs_20d`, `drawdown_20d`, `volatility_5d`, `spy_volatility_20d` added to the as-of builder; freeze rebuilt with FinBERT on. **Anti-shopping:** FAIL stops iteration; no new features.
+
+| field | value |
+| --- | --- |
+| Date (CT) | 2026-09-25 ~2:30 PM |
+| Branch | `analysis/option-b-2026-09-25` (from `71d6f5f` / PR #19) |
+| Plan | `docs/plans/2026-09-25_jh63_option_b_features_freeze_plan.md` |
+| Old freeze | `534a341a…` (n=8907) — Fail remains Fail |
+| New freeze | `001856a6b70801edefb578c37687be1555269de852baf7794294f2a51bce2034` (`<NEW8>=001856a6`, n=8907) |
+| Nested study | `jh63_go_gate_nested_purge_001856a6` — seeds 42/7/123 all **FAIL** floors |
+| WF study | `jh63_wf_expanding4_001856a6` — seeds 0–4 locked-test below floors |
+| Summary | `runs/optionB_2026-09-25/summary.md` |
+| `model_quality_go` | **UNCLAIMED** |
+
+Nested clean metrics (purge-aligned, n_train=7029, n_test=1782):
+
+| seed | F1 | P | AUPRC | floors |
+| ---: | ---: | ---: | ---: | --- |
+| 42 | 0.0951 | 0.0806 | 0.1321 | FAIL |
+| 7 | 0.1793 | 0.1263 | 0.1349 | FAIL |
+| 123 | 0.1467 | 0.1006 | 0.1525 | FAIL |
+
+Harness `promotion_decision=rejected`. **Do not claim Model Quality Go.** Decision gate returns to Tom (floor review / park / authorize a *new* pre-registered slice).

@@ -1,0 +1,182 @@
+[
+  {
+    "seed": 0,
+    "fold": 0,
+    "f1": 0.24242424242424243,
+    "precision": 0.16597510373443983,
+    "auprc": 0.16677495052832828,
+    "n_rows": 1068,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_000_e76d107d_s0.json"
+  },
+  {
+    "seed": 0,
+    "fold": 1,
+    "f1": 0.3897216274089936,
+    "precision": 0.5449101796407185,
+    "auprc": 0.40629225080647646,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_000_e76d107d_s0.json"
+  },
+  {
+    "seed": 0,
+    "fold": 2,
+    "f1": 0.2621951219512195,
+    "precision": 0.30714285714285716,
+    "auprc": 0.2086863083998444,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_000_e76d107d_s0.json"
+  },
+  {
+    "seed": 0,
+    "fold": 3,
+    "f1": 0.43414634146341463,
+    "precision": 0.39555555555555555,
+    "auprc": 0.413020870309041,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_000_e76d107d_s0.json"
+  },
+  {
+    "seed": 1,
+    "fold": 0,
+    "f1": 0.16188870151770657,
+    "precision": 0.11566265060240964,
+    "auprc": 0.16320983734009692,
+    "n_rows": 1068,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_001_d62c0c0b_s1.json"
+  },
+  {
+    "seed": 1,
+    "fold": 1,
+    "f1": 0.3510392609699769,
+    "precision": 0.5714285714285714,
+    "auprc": 0.41913944224700717,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_001_d62c0c0b_s1.json"
+  },
+  {
+    "seed": 1,
+    "fold": 2,
+    "f1": 0.2406015037593985,
+    "precision": 0.22748815165876776,
+    "auprc": 0.19585355567096263,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_001_d62c0c0b_s1.json"
+  },
+  {
+    "seed": 1,
+    "fold": 3,
+    "f1": 0.37526652452025583,
+    "precision": 0.30985915492957744,
+    "auprc": 0.3505014617781639,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_001_d62c0c0b_s1.json"
+  },
+  {
+    "seed": 2,
+    "fold": 0,
+    "f1": 0.22733423545331527,
+    "precision": 0.1497326203208556,
+    "auprc": 0.17161404085082874,
+    "n_rows": 1068,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_002_869ec9e1_s2.json"
+  },
+  {
+    "seed": 2,
+    "fold": 1,
+    "f1": 0.36705882352941177,
+    "precision": 0.624,
+    "auprc": 0.4990366933119819,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_002_869ec9e1_s2.json"
+  },
+  {
+    "seed": 2,
+    "fold": 2,
+    "f1": 0.22395833333333331,
+    "precision": 0.2193877551020408,
+    "auprc": 0.17852029571703176,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_002_869ec9e1_s2.json"
+  },
+  {
+    "seed": 2,
+    "fold": 3,
+    "f1": 0.41752577319587636,
+    "precision": 0.39901477832512317,
+    "auprc": 0.3729104651393199,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_002_869ec9e1_s2.json"
+  },
+  {
+    "seed": 3,
+    "fold": 0,
+    "f1": 0.2071307300509338,
+    "precision": 0.14841849148418493,
+    "auprc": 0.17076490840858716,
+    "n_rows": 1068,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_003_f0e88fce_s3.json"
+  },
+  {
+    "seed": 3,
+    "fold": 1,
+    "f1": 0.3705357142857143,
+    "precision": 0.5608108108108109,
+    "auprc": 0.4318219815542853,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_003_f0e88fce_s3.json"
+  },
+  {
+    "seed": 3,
+    "fold": 2,
+    "f1": 0.2663551401869159,
+    "precision": 0.2375,
+    "auprc": 0.2099828911078312,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_003_f0e88fce_s3.json"
+  },
+  {
+    "seed": 3,
+    "fold": 3,
+    "f1": 0.41928721174004185,
+    "precision": 0.3424657534246575,
+    "auprc": 0.3433680692997894,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_003_f0e88fce_s3.json"
+  },
+  {
+    "seed": 4,
+    "fold": 0,
+    "f1": 0.224,
+    "precision": 0.14685314685314685,
+    "auprc": 0.16321127429963922,
+    "n_rows": 1068,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_004_0e8a509c_s4.json"
+  },
+  {
+    "seed": 4,
+    "fold": 1,
+    "f1": 0.35714285714285715,
+    "precision": 0.5405405405405406,
+    "auprc": 0.4341452963644974,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_004_0e8a509c_s4.json"
+  },
+  {
+    "seed": 4,
+    "fold": 2,
+    "f1": 0.2439024390243902,
+    "precision": 0.22522522522522523,
+    "auprc": 0.19673521595117882,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_004_0e8a509c_s4.json"
+  },
+  {
+    "seed": 4,
+    "fold": 3,
+    "f1": 0.39090909090909093,
+    "precision": 0.33725490196078434,
+    "auprc": 0.29576837872699724,
+    "n_rows": 1069,
+    "path": "artifacts/runs/studies/jh63_wf_expanding4_001856a6/runs/run_004_0e8a509c_s4.json"
+  }
+]

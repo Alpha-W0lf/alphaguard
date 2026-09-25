@@ -127,6 +127,24 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 | Corporate actions | yfinance `auto_adjust=True` (splits and dividends in the close) |
 | Halts / delistings | Missing close drops the row. No imputed return |
 | As-of | Stored `feature_as_of` is the last completed session whose close is `<= published_at`. FinBERT has no separate clock; the headline is available at `published_at` |
+
+### Option B feature set (freeze rebuild 2026-09-25)
+
+Five original features plus four pre-registered additions. All price features use closes inside the existing `prior20 → feature_as_of` window so n stays 8907.
+
+| Feature | Definition (as-of `feature_as_of`) |
+|---|---|
+| `finbert_sentiment` | `P(pos) − P(neg)` from `ProsusAI/finbert` on the headline |
+| `volatility_20d` | Annualized std of the 20 daily returns ending at as-of |
+| `return_5d_prior` | `close(as_of)/close(prior5) − 1` |
+| `return_20d_prior` | `close(as_of)/close(prior20) − 1` |
+| `spy_return_5d` | SPY `return_5d_prior` |
+| `rs_20d` | `return_20d_prior − spy_return_20d` (internal `spy_return_20d` not a model feature) |
+| `drawdown_20d` | `close(as_of) / max(close[prior20..as_of]) − 1` |
+| `volatility_5d` | Annualized std of the 5 daily returns in `[prior5..as_of]` |
+| `spy_volatility_20d` | `_vol_20d` on SPY closes |
+
+Rejected for this freeze: denser return grids, SMA distance, volume, 60-day windows (would change n). Anti-shopping: this set is fixed; FAIL does not authorize new features.
 | Embargo | Phase B on freeze `534a341a…` used **5 global rows**. On this multi-ticker frame that gap is 1–3 sessions and label windows cross the next block. When `feature_as_of` is present, the walk-forward train prefix and the locked-test train prefix now stop before the next block's feature session (`embargo_source=trading_day_horizon`). Frames without session dates keep the 5-row gap |
 | FinBERT | `ProsusAI/finbert`; score = `P(pos) - P(neg)`; offline batch only |
 | `--skip-finbert` | **Forbidden** for canonical `training_events.parquet` |

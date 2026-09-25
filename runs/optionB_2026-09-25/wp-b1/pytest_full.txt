@@ -1,0 +1,18 @@
+........................................................................ [ 38%]
+....................................s................................... [ 76%]
+............................................                             [100%]
+=============================== warnings summary ===============================
+../alphaguard/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/tom/Documents/Git/alphaguard/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+../alphaguard/.venv/lib/python3.12/site-packages/kafka/protocol/schemas/load_json.py:14: 109 warnings
+  /Users/tom/Documents/Git/alphaguard/.venv/lib/python3.12/site-packages/kafka/protocol/schemas/load_json.py:14: DeprecationWarning: read_text is deprecated. Use files() instead. Refer to https://importlib-resources.readthedocs.io/en/latest/using.html#migrating-from-legacy for migration advice.
+    msg_json = importlib.resources.read_text(package, msg_type + '.json')
+
+../../../../../Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/resources/_legacy.py:79: 109 warnings
+  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/resources/_legacy.py:79: DeprecationWarning: open_text is deprecated. Use files() instead. Refer to https://importlib-resources.readthedocs.io/en/latest/using.html#migrating-from-legacy for migration advice.
+    with open_text(package, resource, encoding, errors) as fp:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+187 passed, 1 skipped, 6 deselected, 219 warnings in 10.42s

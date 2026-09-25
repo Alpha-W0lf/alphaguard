@@ -7,17 +7,25 @@
     "volatility_20d",
     "return_5d_prior",
     "return_20d_prior",
-    "spy_return_5d"
+    "spy_return_5d",
+    "rs_20d",
+    "drawdown_20d",
+    "volatility_5d",
+    "spy_volatility_20d"
   ],
   "feature_dtypes": {
     "finbert_sentiment": "float",
     "volatility_20d": "float",
     "return_5d_prior": "float",
     "return_20d_prior": "float",
-    "spy_return_5d": "float"
+    "spy_return_5d": "float",
+    "rs_20d": "float",
+    "drawdown_20d": "float",
+    "volatility_5d": "float",
+    "spy_volatility_20d": "float"
   },
   "score_kind": "proba_high_risk",
-  "score_threshold": 0.45000000000000007,
+  "score_threshold": 0.25,
   "threshold_fitting": "train_f1_max",
   "vol_veto_enabled": false,
   "vol_veto_threshold": null,
@@ -31,7 +39,7 @@
     "start": "synthetic",
     "end": "synthetic"
   },
-  "dataset_hash": "588c726bfa83eb57",
+  "dataset_hash": "9144821b77f9e4a8",
   "dataset_source": "scripts/build_fixture_bundle.py synthetic",
   "metrics": {
     "train_f1_at_threshold": 1.0,
@@ -41,6 +49,6 @@
     "xgboost": "3.3.0",
     "numpy": "2.5.1"
   },
-  "created_at": "2026-07-13T04:06:40.776659Z",
+  "created_at": "2026-09-25T19:19:21.800909Z",
   "model_filename": "model.json"
 }

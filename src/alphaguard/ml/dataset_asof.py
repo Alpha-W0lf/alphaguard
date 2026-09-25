@@ -159,13 +159,20 @@ def _return_between(series: pd.Series, start: date, end: date) -> float | None:
     return (b / a) - 1.0
 
 
-def _vol_20d(series: pd.Series, as_of: date, sessions: list[date]) -> float | None:
-    end_i = None
+def _vol_window(
+    series: pd.Series, as_of: date, sessions: list[date], n: int
+) -> float | None:
+    """Annualized std of the ``n`` daily returns ending at ``as_of``.
+
+    Window uses ``n+1`` session closes from ``sessions[end_i - n]`` through
+    ``as_of`` inclusive. Incomplete windows (missing closes or too few
+    returns) fail closed as ``None``.
+    """
     try:
         end_i = sessions.index(as_of)
     except ValueError:
         return None
-    start_i = end_i - 20
+    start_i = end_i - n
     if start_i < 0:
         return None
     window_dates = sessions[start_i : end_i + 1]
@@ -176,9 +183,40 @@ def _vol_20d(series: pd.Series, as_of: date, sessions: list[date]) -> float | No
             return None
         vals.append(c)
     rets = np.diff(vals) / np.array(vals[:-1])
-    if len(rets) < 5:
+    if len(rets) < min(5, n):
+        return None
+    if len(rets) < n:
         return None
     return float(np.std(rets, ddof=1) * np.sqrt(252))
+
+
+def _vol_20d(series: pd.Series, as_of: date, sessions: list[date]) -> float | None:
+    """Thin wrapper — byte-identical to the pre-Option-B ``_vol_20d``."""
+    return _vol_window(series, as_of, sessions, 20)
+
+
+def _drawdown_window(
+    series: pd.Series, as_of: date, sessions: list[date], n: int
+) -> float | None:
+    """``close(as_of) / max(close[prior_n .. as_of]) - 1``; fail closed on gaps."""
+    try:
+        end_i = sessions.index(as_of)
+    except ValueError:
+        return None
+    start_i = end_i - n
+    if start_i < 0:
+        return None
+    window_dates = sessions[start_i : end_i + 1]
+    vals = []
+    for d in window_dates:
+        c = _close_on(series, d)
+        if c is None:
+            return None
+        vals.append(c)
+    peak = max(vals)
+    if peak == 0 or not np.isfinite(peak):
+        return None
+    return float(vals[-1] / peak - 1.0)
 
 
 def compute_features_and_label(
@@ -213,17 +251,27 @@ def compute_features_and_label(
     return_5d_prior = _return_between(ticker_closes, prior5, feature_as_of)
     return_20d_prior = _return_between(ticker_closes, prior20, feature_as_of)
     spy_return_5d = _return_between(spy_closes, prior5, feature_as_of)
+    spy_return_20d = _return_between(spy_closes, prior20, feature_as_of)
     volatility_20d = _vol_20d(ticker_closes, feature_as_of, sessions)
+    volatility_5d = _vol_window(ticker_closes, feature_as_of, sessions, 5)
+    drawdown_20d = _drawdown_window(ticker_closes, feature_as_of, sessions, 20)
+    spy_volatility_20d = _vol_20d(spy_closes, feature_as_of, sessions)
     fwd_return_5d = _return_between(ticker_closes, label_start, label_end)
 
     if None in (
         return_5d_prior,
         return_20d_prior,
         spy_return_5d,
+        spy_return_20d,
         volatility_20d,
+        volatility_5d,
+        drawdown_20d,
+        spy_volatility_20d,
         fwd_return_5d,
     ):
         return None
+
+    rs_20d = float(return_20d_prior) - float(spy_return_20d)
 
     label_high_risk = 1 if fwd_return_5d < LABEL_THRESHOLD else 0
     return {
@@ -232,6 +280,10 @@ def compute_features_and_label(
         "return_5d_prior": float(return_5d_prior),
         "return_20d_prior": float(return_20d_prior),
         "spy_return_5d": float(spy_return_5d),
+        "rs_20d": float(rs_20d),
+        "drawdown_20d": float(drawdown_20d),
+        "volatility_5d": float(volatility_5d),
+        "spy_volatility_20d": float(spy_volatility_20d),
         "fwd_return_5d": float(fwd_return_5d),
         "label_high_risk": int(label_high_risk),
     }

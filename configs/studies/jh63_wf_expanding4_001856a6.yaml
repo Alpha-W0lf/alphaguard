@@ -1,0 +1,38 @@
+study_id: jh63_wf_expanding4_001856a6
+description: "expanding4 walk-forward purge-on on freeze 001856a6 (Option B 9-feature); matrix C winner hparams; Go UNCLAIMED; compare to Phase B 534a purge-on"
+dataset_path: data/derived/training_events.parquet
+dataset_hash: 001856a6b70801edefb578c37687be1555269de852baf7794294f2a51bce2034
+
+seeds:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+
+threshold_methods:
+  - train_f1_max
+
+betas:
+  - 1.0
+
+calibration_methods:
+  - isotonic
+
+max_depths:
+  - 2
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - 2
+
+split_policy: nested_time_aware_v1
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns
