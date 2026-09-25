@@ -287,3 +287,36 @@ Artifacts: `artifacts/runs/studies/jh63_go_gate_phase_c_534a/{study.json,compare
 
 Harness proposal only (`rejected`). **Do not claim Model Quality Go.**
 
+---
+
+## 9. Phase B re-run with Phase C purge (2026-09-25) — no candidate, Go UNCLAIMED
+
+Authorized WF expanding4 comparison on freeze `534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3` after the session-horizon purge landed (PR #16 / HEAD includes PR #17). **This IS the purge-on comparison** vs old `runs/phaseb_2026-09-25/` (pre-purge `embargo_rows=5`). Floors unchanged: F1 ≥ 0.30, P ≥ 0.25, AUPRC ≥ 0.18. Seeds 0–4. **Model Quality Go remains UNCLAIMED.** Fail stays Fail.
+
+| field | value |
+| --- | --- |
+| Date (CT) | 2026-09-25 ~1:13 PM |
+| Harness SHA | `f56a870c848d1486acad9c0d15616e6546cfcdc4` |
+| Freeze hash | `534a341a…` (`dataset_hash_match: true`) |
+| Config | `configs/studies/jh63_go_gate_seeds_7_123.yaml` (matrix C winner hparams) |
+| Flags | `--walk-forward expanding4 --economic on --cost-fp 1 --cost-fn 10` |
+| Purge | ON — `trading_day_horizon`; fold gaps 29, 11, 38, 75; locked-test drop 96 (`train_end=7029` vs boundary 7125) |
+| Promote | **no candidate** (0/5 seeds clear floors) |
+| `model_quality_go_claimed` | `false` |
+
+Per-seed locked-test floors vs old Phase B (`runs/phaseb_2026-09-25`):
+
+| seed | old F1 | new F1 | old P | new P | old AUPRC | new AUPRC | floors |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 0 | 0.3006 | 0.2489 | 0.2115 | 0.1452 | 0.1924 | 0.1945 | N / N |
+| 1 | 0.2517 | 0.2347 | 0.1531 | 0.1366 | 0.1969 | 0.1676 | N / N |
+| 2 | 0.2585 | 0.2408 | 0.1586 | 0.1397 | 0.1972 | 0.1597 | N / N |
+| 3 | 0.2564 | 0.2465 | 0.1601 | 0.1527 | 0.1919 | 0.1670 | N / N |
+| 4 | 0.2540 | 0.2451 | 0.1526 | 0.1498 | 0.1809 | 0.1727 | N / N |
+
+Train membership (seed 0 folds): old gaps all 5 → new 29/11/38/75; `n_positive_train` 1273 → 1201; locked-test `n_positive_test` unchanged at 233; `n_dev` / `locked_test_start` still 7125.
+
+Local artifacts (gitignored): `runs/phaseb_phasec_2026-09-25/{SUMMARY.md,PROMOTE.txt,driver.log,seed*/}`. Old `runs/phaseb_2026-09-25/` left intact.
+
+Harness proposal only (`no candidate`). **Do not claim Model Quality Go.**
+
