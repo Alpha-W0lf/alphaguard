@@ -238,4 +238,41 @@ def compute_features_and_label(
 
 
 def label_high_risk_from_fwd(fwd_return_5d: float) -> int:
+    """1 iff the forward return is strictly below -3 percent, as a fraction.
+
+    ``-0.03`` itself is 0. Units are fractions (``close_end / close_start - 1``),
+    not percents. The anchor is the first completed session close at or after
+    the event; the window ends five XNYS sessions later.
+    """
     return 1 if fwd_return_5d < LABEL_THRESHOLD else 0
+
+
+def frame_session_indices(
+    df: pd.DataFrame, calendar: Any | None = None
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return ``(feature_session_idx, label_end_session_idx)`` for each row.
+
+    Feature index uses stored ``feature_as_of`` when that column is present.
+    Label end is five XNYS sessions after the label-start session. A missing
+    session is a sentinel past the calendar so embargo logic drops the row.
+    """
+    cal = calendar or _xnys_calendar()
+    sessions = _session_list(cal)
+    index = {day: i for i, day in enumerate(sessions)}
+    sentinel = len(sessions)
+    feature_idx = np.empty(len(df), dtype=int)
+    label_end_idx = np.empty(len(df), dtype=int)
+    published = pd.to_datetime(df["published_at"], utc=True)
+    stored = df["feature_as_of"] if "feature_as_of" in df.columns else None
+    for i, pub in enumerate(published):
+        pdt = pub.to_pydatetime()
+        if stored is not None and not pd.isna(stored.iloc[i]):
+            raw = stored.iloc[i]
+            feature_day = raw if isinstance(raw, date) else pd.Timestamp(raw).date()
+        else:
+            feature_day = feature_as_of_session(pdt, cal)
+        label_start = label_start_session(pdt, cal)
+        label_end = session_offset(sessions, label_start, 5)
+        feature_idx[i] = index.get(feature_day, sentinel)
+        label_end_idx[i] = index[label_end] if label_end is not None else sentinel
+    return feature_idx, label_end_idx

@@ -208,3 +208,48 @@ promotion:
 ```
 
 Executing this configuration runs primary discovery, automatically evaluates shortlisted configurations across seeds 7 and 123, updates `study.json` with multi-seed rollups, and appends a "Promotion Gate" report to `compare.md`.
+
+---
+
+## 7. Phase C — labels and data audit (2026-09-25)
+
+Audit of freeze `534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3` (n=8907). The Phase B Fail on this freeze stands: harness `78b85bf6`, 0/5 seeds clear the unchanged floors, no candidate. The Phase B summary stays as recorded. **Model Quality Go remains UNCLAIMED.**
+
+Local evidence (not committed): `runs/phasec_2026-09-25/audit/` (`gates.md`, `c1_labels.json`, `c2_folds.json`, `c3_leakage.json`, `c4_rules.json`). Re-run: `uv run python scripts/audit_phase_c.py`.
+
+### Gate (a) — fired
+
+C1 recomputed `label_high_risk` from `fwd_return_5d < -0.03` on every row: **0 mismatches**. As-of check: **0 violations**. Construction duplicates on `(ticker, ET date, normalized headline)`: **0**. Repeated `(ticker, feature_as_of)` headlines: 7822 rows under the headline-level dedup rule.
+
+The recorded 5-global-row embargo is short of 5 feature sessions on **5/5 boundaries** and leaves **229** train rows whose 5-session label window reaches the next block (fold gaps 24, 6, 33, 70; locked test 96, and that boundary had no row gap).
+
+The trading-day purge in `study_walkforward.py` moves those train ends back. On this freeze the purged gaps are 29, 11, 38, 75, and 96 rows, each covering at least 6 feature sessions, and **overlap rows = 0**. Frames without session dates still use the 5-row gap, so the Phase B unit tests keep that protocol.
+
+### Gate (b) — fired
+
+| slice | n | prevalence | verdict | evidence |
+| --- | ---: | ---: | --- | --- |
+| fold 0 | 1068 | 0.1667 | artifact | 177/178 positives are NVDA (99.4%). Dates 2016-08-19 to 2018-03-12. The archive in that window is NVDA and QQQ only |
+| fold 1 | 1069 | 0.2806 | regime | NVDA 48%, GOOGL 29%, QQQ 23%. Same-day QQQ forward return median −3.2% on 97% of positives. Dates 2018-03-12 to 2018-12-19 |
+| fold 2 | 1069 | 0.1759 | regime | GOOGL 60%, NVDA 37%. QQQ forward median −2.1% on 51% of positives |
+| fold 3 | 1069 | 0.1731 | regime | NVDA 51%, GOOGL 38%. QQQ forward median −8.2% (Feb 2020) |
+| locked test | 1782 | 0.1308 | regime | Six tickers. QQQ forward median −9.5%. Date range only; no per-row label edits |
+
+Fold 1 is the high-prevalence fold (0.2806). Positives are spread across three tickers and line up with the late-2018 market drawdown. AUPRC / prevalence from the Phase B run JSON is diagnostic only (`c2_folds.json`).
+
+### Gate (c) — fired (misaligned)
+
+Rules spec `return_5d_prior < -0.03`. Veto-set positive rate is higher on **2/4** folds (folds 2 and 3). Folds 0 and 1 go the other way. The locked test is higher (0.368 vs 0.085). The 3/4 rule counts the four folds. Verdict: **misaligned**.
+
+### WP-C5 — fired, no new freeze
+
+Pre-registered change, decided before any new hash:
+
+- Fired gates: (a), (b), and (c).
+- Label definition stays `fwd_return_5d < -0.03`. No second label. AG2 keeps the prior-return rule out of the target. Fold 0's single-ticker positives are the archive (no AAPL, AMZN, or META rows before 2020), not a threshold to retune.
+- Defect fix that landed: when session dates exist, train rows stop before the next block's feature session. Hyperparameters, feature names, and the booster family are unchanged.
+- Old freeze `534a341a…`. Phase B harness commit `78b85bf6`. Floors stay F1 ≥ 0.30, P ≥ 0.25, AUPRC ≥ 0.18. Seeds 0–4, `--walk-forward expanding4`, `--economic on`, `--cost-fp 1`, `--cost-fn 10` stay the comparison flags.
+- Comparison layout, if a later run is authorized: old `runs/phaseb_2026-09-25/SUMMARY.md` vs the new summary, per seed, per fold, and on the locked test.
+- No new parquet. The dataset hash is SHA-256 of the feature matrix and labels. The embargo is not in those bytes. Rebuilding with `scripts/build_training_events.py` would not encode the purge and could move adjusted closes. Hash remains `534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3`.
+
+The five Phase B seeds were not re-run. A re-run on this commit would change train membership, so it would not be a freeze-only comparison.

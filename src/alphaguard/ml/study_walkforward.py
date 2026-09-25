@@ -3,12 +3,16 @@
 Layout: first 40% of dev is the initial train, then four contiguous validation
 blocks of 15% of dev. Fold k trains on everything before val block k, minus
 an embargo gap. The locked test (last 20%) is not indexed here.
+
+When the frame has session dates, the gap is the trading-day label horizon:
+every kept train row's 5-session label window ends before the next block.
+Without those dates the gap stays the historical 5 global rows.
 """
 
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import numpy as np
 import pandas as pd
@@ -68,6 +72,130 @@ def resolve_embargo_rows(
             raise ValueError(f"label horizon must be >= 0, got {horizon_rows}")
         return horizon_rows, "label_horizon"
     return int(n_dev * 0.01), "dev_rows_1pct"
+
+
+def prefix_end_before_session(
+    label_end_session: np.ndarray,
+    *,
+    candidate_end: int,
+    next_session: int,
+) -> int:
+    """Exclusive train end whose label windows finish before ``next_session``.
+
+    Rows are time-ordered. The cut is the first row whose label-end session
+    reaches the next block. Earlier rows stay. A cut at 0 is an error.
+    """
+    if candidate_end < 1:
+        raise ValueError(f"candidate train end must be >= 1, got {candidate_end}")
+    window = np.asarray(label_end_session[:candidate_end], dtype=int)
+    hits = np.flatnonzero(window >= int(next_session))
+    train_end = int(hits[0]) if len(hits) else int(candidate_end)
+    if train_end < 1:
+        raise ValueError("trading-day embargo removed every train row")
+    return train_end
+
+
+def horizon_overlap_count(
+    label_end_session: np.ndarray,
+    feature_session: np.ndarray,
+    train_end: int,
+    next_start: int,
+    next_end: int,
+) -> int:
+    """Train rows whose 5-session label window reaches the next block."""
+    if next_start >= next_end or train_end < 1:
+        return 0
+    next_session = int(np.min(feature_session[next_start:next_end]))
+    return int(np.sum(label_end_session[:train_end] >= next_session))
+
+
+def apply_trading_day_embargo(
+    folds: list[FoldIndex],
+    label_end_session: np.ndarray,
+    feature_session: np.ndarray,
+) -> tuple[list[FoldIndex], bool]:
+    """Move each train end back so label windows do not enter the val block.
+
+    The 5-global-row gap is not a trading-day embargo on multi-ticker frames.
+    Val blocks stay put. Returns the new folds and whether any train end moved.
+    """
+    purged: list[FoldIndex] = []
+    changed = False
+    for fold in folds:
+        next_session = int(np.min(feature_session[fold.val_start : fold.val_end]))
+        new_end = prefix_end_before_session(
+            label_end_session,
+            candidate_end=fold.val_start,
+            next_session=next_session,
+        )
+        if new_end != fold.train_end:
+            changed = True
+        purged.append(
+            replace(
+                fold,
+                train_end=new_end,
+                embargo_rows=fold.val_start - new_end,
+            )
+        )
+    return purged, changed
+
+
+def _session_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray] | None:
+    """Injected columns win. Otherwise compute from ``feature_as_of``."""
+    if "_feature_session_idx" in df.columns and "_label_end_session_idx" in df.columns:
+        return (
+            df["_feature_session_idx"].to_numpy(dtype=int),
+            df["_label_end_session_idx"].to_numpy(dtype=int),
+        )
+    if "feature_as_of" not in df.columns:
+        return None
+    from alphaguard.ml.dataset_asof import frame_session_indices
+
+    feature_idx, label_end_idx = frame_session_indices(df)
+    return feature_idx, label_end_idx
+
+
+def split_for_walk_forward(df: pd.DataFrame, train_frac: float, walk_forward: str):
+    """Time-ordered split. Phase B with session dates purges the locked-test gap.
+
+    Without session dates this is the historical 80/20 cut with no gap, so
+    synthetic harness tests keep their row counts.
+    """
+    from alphaguard.ml.train_option_b import SplitData, time_ordered_split
+
+    if walk_forward != "expanding4":
+        return time_ordered_split(df, train_frac=train_frac)
+    indexed = _session_indices(df)
+    if indexed is None:
+        return time_ordered_split(df, train_frac=train_frac)
+    feature_idx, label_end_idx = indexed
+    n_rows = len(df)
+    boundary = int(n_rows * train_frac)
+    if boundary < 1 or boundary >= n_rows:
+        return time_ordered_split(df, train_frac=train_frac)
+    next_session = int(np.min(feature_idx[boundary:]))
+    train_end = prefix_end_before_session(
+        label_end_idx, candidate_end=boundary, next_session=next_session
+    )
+    if train_end == boundary:
+        return time_ordered_split(df, train_frac=train_frac)
+    logger.info(
+        "locked-test trading-day embargo train_end=%s boundary=%s dropped=%s",
+        train_end,
+        boundary,
+        boundary - train_end,
+    )
+    names = list(FEATURE_NAMES)
+    train = df.iloc[:train_end]
+    test = df.iloc[boundary:]
+    return SplitData(
+        x_train=train[names].to_numpy(dtype=float),
+        y_train=train["label_high_risk"].to_numpy(dtype=int),
+        x_test=test[names].to_numpy(dtype=float),
+        y_test=test["label_high_risk"].to_numpy(dtype=int),
+        train_start=str(train["published_at"].iloc[0]),
+        train_end=str(train["published_at"].iloc[-1]),
+    )
 
 
 def expanding4_folds(
@@ -163,6 +291,16 @@ def evaluate_expanding4(
         n_dev=n_dev,
         embargo_rows=embargo_rows,
     )
+    indexed = _session_indices(df)
+    if indexed is not None:
+        feature_idx, label_end_idx = indexed
+        folds, purged = apply_trading_day_embargo(folds, label_end_idx, feature_idx)
+        if purged:
+            source = "trading_day_horizon"
+            logger.info(
+                "walk-forward trading-day embargo gaps=%s",
+                [fold.val_start - fold.train_end for fold in folds],
+            )
     x_all = df[list(FEATURE_NAMES)].to_numpy(dtype=float)
     y_all = df["label_high_risk"].to_numpy(dtype=int)
     scored: list[FoldScore] = []

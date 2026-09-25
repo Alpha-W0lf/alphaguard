@@ -121,7 +121,13 @@ Discovered CSV is printed as `csv_discovered=...` (expect `analyst_ratings_proce
 | Prices | yfinance **auto_adjust=True** closes |
 | Dedup | `(ticker, calendar_date, normalized_headline)` keep first |
 | Sample | ≈500 stratified; `random_seed=42`; **unique `event_id` required** |
-| Label | `label_high_risk = 1` iff `fwd_return_5d < -0.03` |
+| Label | `label_high_risk = 1` iff `fwd_return_5d < -0.03` (fraction). `-0.03` itself is `0` |
+| Label anchor | First completed XNYS session close at or after the event, through the close **5 trading sessions** later. Weekends and holidays are not sessions |
+| Label units | Fraction `close_end / close_start - 1`, not percent |
+| Corporate actions | yfinance `auto_adjust=True` (splits and dividends in the close) |
+| Halts / delistings | Missing close drops the row. No imputed return |
+| As-of | Stored `feature_as_of` is the last completed session whose close is `<= published_at`. FinBERT has no separate clock; the headline is available at `published_at` |
+| Embargo | Phase B on freeze `534a341a…` used **5 global rows**. On this multi-ticker frame that gap is 1–3 sessions and label windows cross the next block. When `feature_as_of` is present, the walk-forward train prefix and the locked-test train prefix now stop before the next block's feature session (`embargo_source=trading_day_horizon`). Frames without session dates keep the 5-row gap |
 | FinBERT | `ProsusAI/finbert`; score = `P(pos) - P(neg)`; offline batch only |
 | `--skip-finbert` | **Forbidden** for canonical `training_events.parquet` |
 | Split preview | Time-ordered 80/20 counts printed — **does not train** |
@@ -161,6 +167,7 @@ ALPHAGUARD_MODE=replay ALPHAGUARD_RAG_MODE=fixture make smoke
 | `src/alphaguard/ml/dataset_finbert.py` | Offline FinBERT |
 | `src/alphaguard/ml/features.py` | **Fixture-only** — must stay FinBERT-free |
 | `scripts/train_option_b_gate.py` | Training CLI |
+| `scripts/audit_phase_c.py` | Read-only label, fold, leakage, and rules audit |
 | `src/alphaguard/ml/train_option_b.py` | Option B train orchestration |
 | `src/alphaguard/ml/train_hpo.py` | Nested time-grid HPO |
 | `src/alphaguard/ml/train_eval.py` | Threshold + PRF1 helpers |
