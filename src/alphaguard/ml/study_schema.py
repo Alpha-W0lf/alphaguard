@@ -102,6 +102,84 @@ class SplitMetrics(BaseModel):
     confusion: ConfusionMatrix
 
 
+# Absent on pre-Phase-B artifacts (implicit 1.0). Written only when a Phase B block ran.
+SCHEMA_VERSION_PHASE_B = "1.1"
+
+
+class WalkForwardFoldMetrics(BaseModel):
+    """One expanding-window validation block inside the dev split."""
+
+    fold: int
+    n_rows: int
+    positive_rate: float
+    precision: float
+    recall: float
+    f1: float
+    auprc: float
+    threshold: float
+    train_start: int
+    train_end: int
+    val_start: int
+    val_end: int
+
+
+class WalkForwardAggregate(BaseModel):
+    """mean / min / sample-std across the four folds. Floors do not read this."""
+
+    mean: dict[str, float]
+    min: dict[str, float]
+    std: dict[str, float]
+
+
+class WalkForwardBlock(BaseModel):
+    mode: Literal["expanding4"] = "expanding4"
+    embargo_rows: int
+    embargo_source: str
+    n_dev: int
+    locked_test_start: int
+    folds: list[WalkForwardFoldMetrics]
+    aggregate: WalkForwardAggregate
+
+
+class ShadowAgreement(BaseModel):
+    """2×2 counts of model-alert vs rules-alert at the matched rules budget."""
+
+    model_alert_rules_alert: int
+    model_alert_rules_quiet: int
+    model_quiet_rules_alert: int
+    model_quiet_rules_quiet: int
+
+
+class EconomicSplit(BaseModel):
+    rules_alerts: int
+    model_alerts_at_threshold: int
+    precision_at_rules_budget_model: float
+    recall_at_rules_budget_model: float
+    precision_at_rules_budget_rules: float
+    recall_at_rules_budget_rules: float
+    incremental_tp: int
+    rules_only_tp: int
+    stub_cost_model_at_threshold: float
+    stub_cost_model_at_budget: float
+    stub_cost_rules: float
+    shadow_agreement: ShadowAgreement
+    n_rows: int
+    positive_rate: float
+
+
+class EconomicBlock(BaseModel):
+    """Unitless stub costs. label is always 'stub'. Not a dollar or PnL figure."""
+
+    label: Literal["stub"] = "stub"
+    cost_fp: float = 1.0
+    cost_fn: float = 10.0
+    rules_spec: str
+    rules_fn_hash: str
+    rules_mask_hash: str
+    folds: list[EconomicSplit] = Field(default_factory=list)
+    locked_test: EconomicSplit
+
+
 class RunRecord(BaseModel):
     """Child run record persisted to artifacts/runs/studies/<study_id>/runs/<run_id>.json."""
 
@@ -127,6 +205,10 @@ class RunRecord(BaseModel):
     n_positive_test: int = 0
     created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     config: RunConfig
+    # Omitted from the artifact when null so walk-forward off stays byte-identical.
+    schema_version: str | None = None
+    walk_forward: WalkForwardBlock | None = None
+    economic: EconomicBlock | None = None
 
 
 class ParentStudyRecord(BaseModel):

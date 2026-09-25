@@ -4,8 +4,21 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 from alphaguard.ml.study_schema import ParentStudyRecord, RunRecord
+
+
+def dump_run_record(record: RunRecord) -> dict[str, Any]:
+    """Serialize a run. Null Phase B blocks are omitted so off-mode bytes match."""
+    data = record.model_dump(mode="json")
+    if record.walk_forward is None:
+        data.pop("walk_forward", None)
+    if record.economic is None:
+        data.pop("economic", None)
+    if record.schema_version is None:
+        data.pop("schema_version", None)
+    return data
 
 
 class StudyRegistry:
@@ -46,7 +59,7 @@ class StudyRegistry:
         self.ensure_study_dirs(record.study_id)
         out_path = self.runs_dir(record.study_id) / f"{record.run_id}.json"
         out_path.write_text(
-            json.dumps(record.model_dump(), indent=2, default=str) + "\n",
+            json.dumps(dump_run_record(record), indent=2, default=str) + "\n",
             encoding="utf-8",
         )
         return out_path

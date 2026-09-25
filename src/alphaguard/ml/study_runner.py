@@ -96,10 +96,23 @@ def generate_run_configs(matrix: StudyMatrixConfig) -> list[RunConfig]:
     return configs
 
 
-def _worker_task(config: RunConfig, bundle_dir_str: str) -> RunRecord:
+def _worker_task(
+    config: RunConfig,
+    bundle_dir_str: str,
+    walk_forward: str = "off",
+    economic: str = "off",
+    cost_fp: float = 1.0,
+    cost_fn: float = 10.0,
+) -> RunRecord:
     """Top-level worker function pickled to ProcessPoolExecutor processes."""
-    bundle_dir = Path(bundle_dir_str)
-    return execute_run(config, bundle_dir)
+    return execute_run(
+        config,
+        Path(bundle_dir_str),
+        walk_forward=walk_forward,
+        economic=economic,
+        cost_fp=cost_fp,
+        cost_fn=cost_fn,
+    )
 
 
 def run_study(
@@ -108,6 +121,11 @@ def run_study(
     max_workers: int = 1,
     matrix_source_path: str | None = None,
     existing_study_dir: Path | str | None = None,
+    *,
+    walk_forward: str = "off",
+    economic: str = "off",
+    cost_fp: float = 1.0,
+    cost_fn: float = 10.0,
 ) -> tuple[ParentStudyRecord, list[RunRecord]]:
     """Execute all matrix runs in parallel (or sequential) and persist to registry."""
     registry = StudyRegistry(registry_root)
@@ -148,7 +166,14 @@ def run_study(
     if max_workers <= 1 or len(configs) <= 1:
         for cfg in configs:
             b_dir = bundles_dir / cfg.run_id
-            rec = execute_run(cfg, b_dir)
+            rec = execute_run(
+                cfg,
+                b_dir,
+                walk_forward=walk_forward,
+                economic=economic,
+                cost_fp=cost_fp,
+                cost_fn=cost_fn,
+            )
             registry.save_run(rec)
             if matrix.enable_mlflow:
                 log_run_to_mlflow(rec, tracking_uri=matrix.mlflow_tracking_uri)
@@ -157,7 +182,15 @@ def run_study(
         mp_ctx = mp.get_context("spawn")
         with ProcessPoolExecutor(max_workers=max_workers, mp_context=mp_ctx) as executor:
             future_to_cfg = {
-                executor.submit(_worker_task, cfg, str(bundles_dir / cfg.run_id)): cfg
+                executor.submit(
+                    _worker_task,
+                    cfg,
+                    str(bundles_dir / cfg.run_id),
+                    walk_forward,
+                    economic,
+                    cost_fp,
+                    cost_fn,
+                ): cfg
                 for cfg in configs
             }
             for future in as_completed(future_to_cfg):
@@ -199,7 +232,14 @@ def run_study(
             if max_workers <= 1 or len(extra_configs) <= 1:
                 for cfg in extra_configs:
                     b_dir = bundles_dir / cfg.run_id
-                    rec = execute_run(cfg, b_dir)
+                    rec = execute_run(
+                        cfg,
+                        b_dir,
+                        walk_forward=walk_forward,
+                        economic=economic,
+                        cost_fp=cost_fp,
+                        cost_fn=cost_fn,
+                    )
                     rec.stage = "extra_seed"
                     registry.save_run(rec)
                     if matrix.enable_mlflow:
@@ -209,7 +249,15 @@ def run_study(
                 mp_ctx = mp.get_context("spawn")
                 with ProcessPoolExecutor(max_workers=max_workers, mp_context=mp_ctx) as executor:
                     future_to_cfg = {
-                        executor.submit(_worker_task, cfg, str(bundles_dir / cfg.run_id)): cfg
+                        executor.submit(
+                            _worker_task,
+                            cfg,
+                            str(bundles_dir / cfg.run_id),
+                            walk_forward,
+                            economic,
+                            cost_fp,
+                            cost_fn,
+                        ): cfg
                         for cfg in extra_configs
                     }
                     for future in as_completed(future_to_cfg):

@@ -26,6 +26,30 @@ from alphaguard.ml.study_schema import (
 )
 
 
+def _phase_b_informational(runs: list[RunRecord]) -> str:
+    """Print Phase B blocks in the proposal. Floors do not read them."""
+    bits: list[str] = []
+    for run in runs:
+        if run.walk_forward is not None:
+            agg = run.walk_forward.aggregate
+            bits.append(
+                f"{run.run_id} walk_forward f1_mean={agg.mean.get('f1')} "
+                f"f1_min={agg.min.get('f1')} embargo_rows={run.walk_forward.embargo_rows}"
+            )
+        if run.economic is not None:
+            locked = run.economic.locked_test
+            bits.append(
+                f"{run.run_id} economic stub label={run.economic.label} "
+                f"model_p_at_budget={locked.precision_at_rules_budget_model} "
+                f"rules_p_at_budget={locked.precision_at_rules_budget_rules} "
+                f"stub_cost_model_at_budget={locked.stub_cost_model_at_budget} "
+                f"stub_cost_rules={locked.stub_cost_rules}"
+            )
+    if not bits:
+        return ""
+    return " Informational Phase B blocks (floors unchanged): " + "; ".join(bits)
+
+
 def evaluate_floors(
     test_f1: float,
     test_precision: float,
@@ -305,6 +329,7 @@ def evaluate_study_promotion(
             f"(F1>={promotion_config.floors.f1}, P>={promotion_config.floors.precision}, "
             f"AUPRC>={promotion_config.floors.auprc})."
         )
+    notes += _phase_b_informational(all_runs)
 
     rollup = {
         "decision": decision,
