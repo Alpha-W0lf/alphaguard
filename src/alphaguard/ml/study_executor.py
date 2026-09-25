@@ -80,7 +80,16 @@ def _build_booster_params(
     return params
 
 
-def execute_run(config: RunConfig, bundle_dir: Path) -> RunRecord:
+def execute_run(
+    config: RunConfig,
+    bundle_dir: Path,
+    *,
+    walk_forward: str = "off",
+    economic: str = "off",
+    cost_fp: float = 1.0,
+    cost_fn: float = 10.0,
+    embargo_rows: int | None = None,
+) -> RunRecord:
     """Execute a single run configuration end-to-end with strict leakage guards."""
     start_time = time.time()
     git_sha = get_git_sha()
@@ -317,6 +326,33 @@ def execute_run(config: RunConfig, bundle_dir: Path) -> RunRecord:
     )
     atomic_write_bundle(bundle_dir, booster, manifest)
 
+    schema_version = None
+    walk_forward_block = None
+    economic_block = None
+    if walk_forward != "off" or economic != "off":
+        from alphaguard.ml.study_phaseb import attach_phase_b
+
+        try:
+            schema_version, walk_forward_block, economic_block = attach_phase_b(
+                df=df,
+                config=config,
+                y_test=split.y_test,
+                test_probs=test_probs,
+                test_threshold=threshold,
+                walk_forward=walk_forward,
+                economic=economic,
+                cost_fp=cost_fp,
+                cost_fn=cost_fn,
+                embargo_rows=embargo_rows,
+            )
+        except Exception as exc:
+            logger.exception("phase B block failed")
+            phase_reason = f"phase B failed: {exc}"
+            aborted_experiment = True
+            abort_reason = (
+                phase_reason if not abort_reason else f"{abort_reason}; {phase_reason}"
+            )
+
     wall_time = time.time() - start_time
     return RunRecord(
         run_id=config.run_id,
@@ -339,4 +375,7 @@ def execute_run(config: RunConfig, bundle_dir: Path) -> RunRecord:
         n_positive_val=n_pos_val,
         n_positive_test=int(split.y_test.sum()),
         config=config,
+        schema_version=schema_version,
+        walk_forward=walk_forward_block,
+        economic=economic_block,
     )

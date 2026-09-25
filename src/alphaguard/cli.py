@@ -231,6 +231,10 @@ def main(argv: list[str] | None = None) -> None:
     s_run.add_argument("--artifacts", type=Path, default=Path("artifacts/runs"))
     s_run.add_argument("--dataset-path", type=Path, default=None)
     s_run.add_argument("--dataset-hash", type=str, default=None)
+    s_run.add_argument("--walk-forward", choices=["off", "expanding4"], default="off")
+    s_run.add_argument("--economic", choices=["off", "on"], default="off")
+    s_run.add_argument("--cost-fp", type=float, default=1.0)
+    s_run.add_argument("--cost-fn", type=float, default=10.0)
 
     s_cmp = study_sub.add_parser("compare", help="Generate compare table from study dir")
     s_cmp.add_argument("--study-dir", type=Path, required=True)
@@ -279,6 +283,18 @@ def main(argv: list[str] | None = None) -> None:
                 run_args.extend(["--dataset-path", str(args.dataset_path)])
             if args.dataset_hash:
                 run_args.extend(["--dataset-hash", args.dataset_hash])
+            run_args.extend(
+                [
+                    "--walk-forward",
+                    args.walk_forward,
+                    "--economic",
+                    args.economic,
+                    "--cost-fp",
+                    str(args.cost_fp),
+                    "--cost-fn",
+                    str(args.cost_fn),
+                ]
+            )
             sys.exit(run_study_cli(run_args))
 
         if args.study_command == "compare":

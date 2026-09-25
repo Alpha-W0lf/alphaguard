@@ -76,6 +76,28 @@ alphaguard study run --study configs/studies/jh63_2_smoke.yaml --workers 4
 
 Each matrix cell runs in an isolated process with its own seed and isolated model bundle directory under `artifacts/runs/studies/<study_id>/bundles/<run_id>/`.
 
+`--walk-forward` defaults to `off` and `--economic` defaults to `off`. Those defaults leave the single 80/20 split unchanged.
+
+### 2.3 Phase B (walk-forward + economic stub)
+
+One seed, still on freeze `534a341a…`. Threshold policy for this command is `train_f1_max`. Model hyperparameters, calibration, and beta are read from the YAML and the YAML is not edited. Walk-forward folds stay inside the dev block. The locked test is scored once. Promotion prints `candidate` or `no candidate` from the unchanged floors. It does not claim a quality decision.
+
+```bash
+python scripts/run_phase_b.py run \
+  --config configs/studies/jh63_go_gate_seeds_7_123.yaml \
+  --freeze 534a341a \
+  --seed 0 \
+  --walk-forward expanding4 \
+  --economic on \
+  --cost-fp 1 \
+  --cost-fn 10 \
+  --out runs/phaseb_YYYY-MM-DD/seed0
+python scripts/run_phase_b.py summarize runs/phaseb_YYYY-MM-DD
+python scripts/run_phase_b.py promote runs/phaseb_YYYY-MM-DD
+```
+
+Optional blocks `walk_forward` and `economic` are omitted from the run JSON when they were not run (`schema_version` `1.1` only when a block is present). Stub costs are unitless (`label: stub`).
+
 ---
 
 ## 3. Run Registry Layout

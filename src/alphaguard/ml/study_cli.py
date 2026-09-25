@@ -56,6 +56,20 @@ def run_study_cli(argv: list[str] | None = None) -> int:
         help="Override expected dataset hash in config",
     )
     parser.add_argument(
+        "--walk-forward",
+        choices=["off", "expanding4"],
+        default="off",
+        help="Walk-forward inside the dev block. Default off keeps the single split.",
+    )
+    parser.add_argument(
+        "--economic",
+        choices=["off", "on"],
+        default="off",
+        help="Rules-budget economic stub. Default off.",
+    )
+    parser.add_argument("--cost-fp", type=float, default=1.0)
+    parser.add_argument("--cost-fn", type=float, default=10.0)
+    parser.add_argument(
         "--promote-from",
         type=Path,
         default=None,
@@ -103,6 +117,10 @@ def run_study_cli(argv: list[str] | None = None) -> int:
         max_workers=args.workers,
         matrix_source_path=str(args.study),
         existing_study_dir=args.promote_from,
+        walk_forward=args.walk_forward,
+        economic=args.economic,
+        cost_fp=args.cost_fp,
+        cost_fn=args.cost_fn,
     )
 
     study_dir = args.artifacts / "studies" / matrix.study_id
