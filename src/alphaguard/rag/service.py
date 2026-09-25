@@ -24,8 +24,13 @@ def event_point_id(event_id: str) -> str:
 def _get_embedder() -> Any:
     global _EMBEDDER
     if _EMBEDDER is None:
-        from sentence_transformers import SentenceTransformer
-
+        try:
+            from sentence_transformers import SentenceTransformer
+        except ImportError as exc:
+            raise ImportError(
+                "Qdrant embeddings need the embed extra: "
+                "uv sync --extra embed (or pip install 'alphaguard[embed]')."
+            ) from exc
         _EMBEDDER = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     return _EMBEDDER
 

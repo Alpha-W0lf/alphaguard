@@ -1,7 +1,7 @@
 .PHONY: smoke smoke-fixture preflight sync test bundle serve
 
 sync:
-	uv sync --all-extras
+	uv sync
 
 preflight:
 	ALPHAGUARD_MODE=replay uv run alphaguard preflight

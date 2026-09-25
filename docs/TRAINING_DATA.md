@@ -99,7 +99,7 @@ Or use: `./scripts/run_direct_network.sh uv run python scripts/build_training_ev
 uv pip install kaggle
 # or: pip install kaggle
 
-uv sync
+uv sync --extra train
 
 ./scripts/run_direct_network.sh kaggle datasets download \
   -d miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests \

@@ -13,6 +13,19 @@ def sentiment_from_probs(pos: float, neg: float) -> float:
     return float(pos) - float(neg)
 
 
+def _load_finbert_runtime():
+    """Import transformers + torch. Requires the ``train`` extra."""
+    try:
+        import torch
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    except ImportError as exc:
+        raise ImportError(
+            "Offline FinBERT needs the train extra: "
+            "uv sync --extra train (or pip install 'alphaguard[train]')."
+        ) from exc
+    return torch, AutoTokenizer, AutoModelForSequenceClassification
+
+
 def score_headlines(
     headlines: Sequence[str],
     *,
@@ -25,8 +38,7 @@ def score_headlines(
     """
     if not headlines:
         return []
-    from transformers import AutoModelForSequenceClassification, AutoTokenizer
-    import torch
+    torch, AutoTokenizer, AutoModelForSequenceClassification = _load_finbert_runtime()
 
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForSequenceClassification.from_pretrained(model_id)

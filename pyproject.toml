@@ -18,14 +18,12 @@ dependencies = [
   "scikit-learn>=1.5",
   "numpy>=1.26",
   "qdrant-client>=1.11",
-  "sentence-transformers>=3.0",
   "python-dotenv>=1.0",
   "kafka-python>=2.0",
   "pandas>=2.2",
   "pyarrow>=15.0",
   "yfinance>=0.2",
   "exchange-calendars>=4.5",
-  "transformers>=4.40",
   "langsmith>=0.10.2",
   "arize-phoenix-otel>=0.16.0",
   "pyyaml>=6.0",
@@ -35,6 +33,15 @@ dependencies = [
 dev = [
   "pytest>=8.0",
   "ruff>=0.6",
+]
+# Qdrant embeddings. Pulls Torch; fixture RAG does not.
+embed = [
+  "sentence-transformers>=3.0",
+]
+# Offline FinBERT (dataset_finbert). transformers does not depend on torch.
+train = [
+  "transformers>=4.40",
+  "torch>=2.2",
 ]
 
 [project.scripts]
