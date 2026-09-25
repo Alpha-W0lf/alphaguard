@@ -31,6 +31,7 @@ from alphaguard.ml.study_schema import (
     RunRecord,
     SplitMetrics,
 )
+from alphaguard.ml.study_walkforward import split_for_walk_forward
 from alphaguard.ml.train_eval import (
     METHOD_TRAIN_F1_MAX,
     VAL_SINGLE_CLASS_REASON,
@@ -43,7 +44,6 @@ from alphaguard.ml.train_option_b import (
     atomic_write_bundle,
     dataset_hash,
     load_training_frame,
-    time_ordered_split,
 )
 
 logger = logging.getLogger(__name__)
@@ -135,7 +135,7 @@ def execute_run(
         )
 
     try:
-        split = time_ordered_split(df, train_frac=config.train_frac)
+        split = split_for_walk_forward(df, config.train_frac, walk_forward)
     except Exception as exc:
         return _abort(f"Time-ordered split failed: {exc}", d_hash=actual_hash)
 
