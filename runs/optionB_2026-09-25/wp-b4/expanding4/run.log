@@ -1,0 +1,6 @@
+Darwin: using user-specified --workers=1
+Starting study 'jh63_wf_expanding4_001856a6' with 1 workers across registry 'artifacts/runs'...
+Completed study 'jh63_wf_expanding4_001856a6': total=5, completed=5, aborted=0, promotion_decision='none'
+Compare table generated at:
+  artifacts/runs/studies/jh63_wf_expanding4_001856a6/compare.md
+  artifacts/runs/studies/jh63_wf_expanding4_001856a6/compare.csv

@@ -31,6 +31,10 @@ def _row(**overrides: float) -> FeatureRow:
         "return_5d_prior": 0.01,
         "return_20d_prior": 0.02,
         "spy_return_5d": 0.005,
+        "rs_20d": 0.015,
+        "drawdown_20d": -0.02,
+        "volatility_5d": 0.18,
+        "spy_volatility_20d": 0.12,
     }
     values.update(overrides)
     return FeatureRow(

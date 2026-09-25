@@ -1,0 +1,8 @@
+{
+  "train_end": 7029,
+  "boundary": 7125,
+  "n_train": 7029,
+  "n_test": 1782,
+  "cross_split_norm_headline_dups": 14,
+  "cross_split_ticker_headline_dups": 7
+}

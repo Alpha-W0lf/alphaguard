@@ -17,6 +17,10 @@ FEATURE_NAMES: tuple[str, ...] = (
     "return_5d_prior",
     "return_20d_prior",
     "spy_return_5d",
+    "rs_20d",
+    "drawdown_20d",
+    "volatility_5d",
+    "spy_volatility_20d",
 )
 
 

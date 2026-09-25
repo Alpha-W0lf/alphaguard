@@ -1,0 +1,9 @@
+{
+  "status": "Verified",
+  "backup": "data/derived/training_events_jh633_534a341a.parquet",
+  "dataset_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "n": 8907,
+  "label_prevalence": 0.16908049848433815,
+  "label_positive_n": 1506,
+  "script": "inline WP-B0 verification"
+}

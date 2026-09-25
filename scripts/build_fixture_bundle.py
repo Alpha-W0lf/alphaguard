@@ -26,6 +26,10 @@ def _synthetic_rows(n: int = 64) -> tuple[np.ndarray, np.ndarray]:
         1.5 * x[:, FEATURE_NAMES.index("volatility_20d")]
         - 1.2 * x[:, FEATURE_NAMES.index("return_5d_prior")]
         - 0.8 * x[:, FEATURE_NAMES.index("finbert_sentiment")]
+        - 1.0 * x[:, FEATURE_NAMES.index("drawdown_20d")]
+        + 1.0 * x[:, FEATURE_NAMES.index("volatility_5d")]
+        + 0.8 * x[:, FEATURE_NAMES.index("spy_volatility_20d")]
+        - 0.7 * x[:, FEATURE_NAMES.index("rs_20d")]
     )
     y = (logits > 0).astype(int)
     return x, y

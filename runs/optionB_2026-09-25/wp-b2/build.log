@@ -1,0 +1,23 @@
+ingest: raw=1400469 universe=10215 dedup=8907 sampled=8907 oou_dropped=1387675 missing_dropped=2579
+csv_discovered=data/raw/kaggle_stock_news/analyst_ratings_processed.csv
+documented aliases applied (fb_meta_v1+goog_googl_v1): {'FB→META': 389, 'GOOG→GOOGL': 1209}
+WARNING: universe tickers with 0 rows after filter (absent in archive / after documented aliases): ['MSFT', 'SPY']
+yfinance cache miss: downloading AAPL …
+yfinance cache miss: downloading SPY …
+yfinance cache miss: downloading AMZN …
+yfinance cache miss: downloading META …
+yfinance cache miss: downloading GOOGL …
+yfinance cache miss: downloading NVDA …
+yfinance cache miss: downloading QQQ …
+FinBERT batch: prefer Kafka/Qdrant/Ollama down (resource_mode=finbert_train)
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 33788.43it/s]
+time_split preview: train=7125 test=1782 (no train performed)
+rows_by_ticker:
+ticker
+AAPL      469
+AMZN      329
+GOOGL    1824
+META      389
+NVDA     3124
+QQQ      2772
+wrote data/derived/training_events.parquet rows=8907

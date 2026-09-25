@@ -1,0 +1,53 @@
+[
+  {
+    "seed": 42,
+    "run": "run_000_2a42d7dc_s42.json",
+    "f1": 0.09507042253521127,
+    "precision": 0.08059701492537313,
+    "auprc": 0.13206969775366276,
+    "n_train": 7029,
+    "n_test": 1782,
+    "verdict": "FAIL",
+    "fails": [
+      "F1",
+      "P",
+      "AUPRC"
+    ],
+    "path": "artifacts/runs/studies/jh63_go_gate_nested_purge_001856a6/runs/run_000_2a42d7dc_s42.json",
+    "gain": null
+  },
+  {
+    "seed": 7,
+    "run": "run_001_c035b7c8_s7.json",
+    "f1": 0.1793275217932752,
+    "precision": 0.12631578947368421,
+    "auprc": 0.1349471108599538,
+    "n_train": 7029,
+    "n_test": 1782,
+    "verdict": "FAIL",
+    "fails": [
+      "F1",
+      "P",
+      "AUPRC"
+    ],
+    "path": "artifacts/runs/studies/jh63_go_gate_nested_purge_001856a6/runs/run_001_c035b7c8_s7.json",
+    "gain": null
+  },
+  {
+    "seed": 123,
+    "run": "run_002_2ba2f1aa_s123.json",
+    "f1": 0.14668218859138535,
+    "precision": 0.10063897763578275,
+    "auprc": 0.1524977895872598,
+    "n_train": 7029,
+    "n_test": 1782,
+    "verdict": "FAIL",
+    "fails": [
+      "F1",
+      "P",
+      "AUPRC"
+    ],
+    "path": "artifacts/runs/studies/jh63_go_gate_nested_purge_001856a6/runs/run_002_2ba2f1aa_s123.json",
+    "gain": null
+  }
+]

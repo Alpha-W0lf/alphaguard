@@ -310,15 +310,28 @@ def test_gate_summary_and_report_do_not_claim_go() -> None:
     assert _GO_ASSIGN.search(text) is None
 
 
-@pytest.mark.skipif(
-    not Path("data/derived/training_events.parquet").exists(),
-    reason="freeze parquet is local and gitignored",
+# Historical 5-feature freeze columns (pre Option B). Kept for backup hash checks.
+_LEGACY_534A_FEATURE_NAMES = (
+    "finbert_sentiment",
+    "volatility_20d",
+    "return_5d_prior",
+    "return_20d_prior",
+    "spy_return_5d",
 )
-def test_local_freeze_534a341a_gate_verdicts() -> None:
-    path = Path("data/derived/training_events.parquet")
-    df = load_training_frame(path)
+
+
+@pytest.mark.skipif(
+    not Path("data/derived/training_events_jh633_534a341a.parquet").exists(),
+    reason="534a backup parquet is local and gitignored",
+)
+def test_local_freeze_534a341a_backup_gate_verdicts() -> None:
+    """Historical Fail record: 534a backup still audits clean under legacy 5 features."""
+    import pandas as pd
+
+    path = Path("data/derived/training_events_jh633_534a341a.parquet")
+    df = pd.read_parquet(path)
     digest = dataset_hash(
-        df[list(FEATURE_NAMES)].to_numpy(dtype=float),
+        df[list(_LEGACY_534A_FEATURE_NAMES)].to_numpy(dtype=float),
         df["label_high_risk"].to_numpy(dtype=int),
     )
     assert digest.startswith("534a341a")
@@ -334,6 +347,32 @@ def test_local_freeze_534a341a_gate_verdicts() -> None:
     gates = report["gates"]
     assert gates["a_fired"] and gates["b_fired"] and gates["c_fired"] and gates["c5_fired"]
     assert gates["model_quality_go"] == "UNCLAIMED"
+
+
+@pytest.mark.skipif(
+    not Path("data/derived/training_events.parquet").exists(),
+    reason="freeze parquet is local and gitignored",
+)
+def test_local_freeze_current_has_option_b_features() -> None:
+    """After Option B rebuild, live parquet must expose all FEATURE_NAMES."""
+    path = Path("data/derived/training_events.parquet")
+    try:
+        df = load_training_frame(path)
+    except Exception as exc:  # noqa: BLE001
+        # Pre-rebuild (still 5-col) is expected during WP-B1; skip until WP-B2.
+        if "missing columns" in str(exc):
+            import pytest as _pytest
+
+            _pytest.skip(f"live freeze not yet rebuilt for Option B: {exc}")
+        raise
+    for name in FEATURE_NAMES:
+        assert name in df.columns
+    digest = dataset_hash(
+        df[list(FEATURE_NAMES)].to_numpy(dtype=float),
+        df["label_high_risk"].to_numpy(dtype=int),
+    )
+    assert not digest.startswith("534a341a")
+    assert len(df) == 8907
 
 
 def test_clean_gate_does_not_fire_c5() -> None:

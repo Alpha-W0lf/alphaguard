@@ -1,0 +1,42 @@
+{
+  "n_new": 8907,
+  "n_old": 8907,
+  "n_ok": true,
+  "label_prev_new": 0.16908049848433815,
+  "label_prev_old": 0.16908049848433815,
+  "label_pos_new": 1506,
+  "label_pos_old": 1506,
+  "label_ok": true,
+  "finbert_join_rows": 8907,
+  "finbert_both": 8907,
+  "finbert_left_only": 0,
+  "finbert_right_only": 0,
+  "finbert_identical_allclose": true,
+  "finbert_identical_exact": true,
+  "new_hash": "001856a6b70801edefb578c37687be1555269de852baf7794294f2a51bce2034",
+  "new8": "001856a6",
+  "hash_ne_534a": true,
+  "nan_count_9feat": 0,
+  "feature_names": [
+    "finbert_sentiment",
+    "volatility_20d",
+    "return_5d_prior",
+    "return_20d_prior",
+    "spy_return_5d",
+    "rs_20d",
+    "drawdown_20d",
+    "volatility_5d",
+    "spy_volatility_20d"
+  ],
+  "legacy5_identical": false,
+  "legacy5_detail": {
+    "finbert_sentiment": true,
+    "volatility_20d": false,
+    "return_5d_prior": false,
+    "return_20d_prior": false,
+    "spy_return_5d": false,
+    "label_high_risk": true
+  },
+  "STOP": [],
+  "status": "PASS"
+}
