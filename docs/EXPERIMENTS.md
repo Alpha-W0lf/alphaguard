@@ -253,3 +253,37 @@ Pre-registered change, decided before any new hash:
 - No new parquet. The dataset hash is SHA-256 of the feature matrix and labels. The embargo is not in those bytes. Rebuilding with `scripts/build_training_events.py` would not encode the purge and could move adjusted closes. Hash remains `534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3`.
 
 The five Phase B seeds were not re-run. A re-run on this commit would change train membership, so it would not be a freeze-only comparison.
+
+---
+
+## 8. Phase C Go-gate re-run (2026-09-25) — FAIL, Go UNCLAIMED
+
+Post–Phase-C multi-seed Go gate on freeze `534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3` after PR #16 (`ebfb8c2`, session-horizon purge on HEAD). Floors unchanged: F1 ≥ 0.30, Precision ≥ 0.25, AUPRC ≥ 0.18. **Model Quality Go remains UNCLAIMED.** Phase B Fail summary above stands.
+
+| field | value |
+| --- | --- |
+| Date (CDT) | 2026-09-25 13:08 |
+| Harness SHA | `ebfb8c249440c39747b7581da4ca94782e3dfc2a` |
+| Freeze hash | `534a341a…` (`dataset_hash_match: true`) |
+| Study id | `jh63_go_gate_phase_c_534a` |
+| Config | `configs/studies/jh63_go_gate_phase_c_534a.yaml` |
+| CLI | `uv run python scripts/run_study.py --study configs/studies/jh63_go_gate_phase_c_534a.yaml --workers 2` |
+| Walk-forward | `off` (default nested split) |
+| Promotion decision | `rejected` |
+| Gate overall | **FAIL** |
+| `model_quality_go_claimed` | `false` |
+
+Per-seed locked-test floors (matrix C winner hparams: `train_val_fbeta_0.5`, β=1.0, isotonic, depth 2, η=0.1, rounds 40, spw 2):
+
+| seed | role | F1 | P | AUPRC | floor |
+| ---: | --- | ---: | ---: | ---: | --- |
+| 42 | primary | 0.3658 | 0.2787 | 0.2087 | PASS |
+| 7 | extra | 0.2664 | 0.1711 | 0.1946 | FAIL (F1, P) |
+| 123 | extra | 0.3227 | 0.2263 | 0.1963 | FAIL (P) |
+
+Artifacts: `artifacts/runs/studies/jh63_go_gate_phase_c_534a/{study.json,compare.md,go_gate_summary.json}`.
+
+**Purge note:** Phase C trading-day purge in `study_walkforward.py` activates for `--walk-forward expanding4` (and WF folds). This Go-gate used the documented nested path (`walk_forward=off`), so train membership matches the prior nested Go-gate (`jh63_go_gate_seeds_7_123`); seed 7/123 metrics are unchanged. A WF expanding4 re-run was not part of this authorized CLI.
+
+Harness proposal only (`rejected`). **Do not claim Model Quality Go.**
+
