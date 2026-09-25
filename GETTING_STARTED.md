@@ -26,8 +26,9 @@ From repo root:
 
 ```bash
 # 1. Sync (Python 3.12 from .python-version)
-uv sync --all-extras
+uv sync
 # or: make sync
+# Slim default (no Torch). Qdrant embeddings: uv sync --extra embed. Offline FinBERT: uv sync --extra train.
 
 # 2. Env template (never commit .env; safe copy without overwriting)
 [ -f .env ] || cp .env.example .env

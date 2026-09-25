@@ -38,8 +38,10 @@ flowchart LR
 
 **1. Stranger verification & tests (no host Ollama required — 0 MB model download):**
 
+Default install is slim (no Torch). Install `[embed]` for Qdrant embeddings and `[train]` for offline FinBERT (`uv sync --extra embed` / `uv sync --extra train`).
+
 ```bash
-uv sync --all-extras             # or: make sync
+uv sync                          # or: make sync
 [ -f .env ] || cp .env.example .env
 make bundle                      # builds local fixture risk bundle
 make test                        # unit, golden, import boundary, and API tests
