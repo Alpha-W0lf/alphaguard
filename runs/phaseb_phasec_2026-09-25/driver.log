@@ -1,0 +1,155 @@
+START seed 0 2026-09-25T18:13:24Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:locked-test trading-day embargo train_end=7029 boundary=7125 dropped=96
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward trading-day embargo gaps=[29, 11, 38, 75]
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=0 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=f56a870c848d1486acad9c0d15616e6546cfcdc4 out=runs/phaseb_phasec_2026-09-25/seed0/run.json
+EXIT seed 0  2026-09-25T18:13:28Z
+START seed 1 2026-09-25T18:13:28Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:locked-test trading-day embargo train_end=7029 boundary=7125 dropped=96
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward trading-day embargo gaps=[29, 11, 38, 75]
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=1 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=f56a870c848d1486acad9c0d15616e6546cfcdc4 out=runs/phaseb_phasec_2026-09-25/seed1/run.json
+EXIT seed 1  2026-09-25T18:13:31Z
+START seed 2 2026-09-25T18:13:31Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:locked-test trading-day embargo train_end=7029 boundary=7125 dropped=96
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward trading-day embargo gaps=[29, 11, 38, 75]
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=2 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=f56a870c848d1486acad9c0d15616e6546cfcdc4 out=runs/phaseb_phasec_2026-09-25/seed2/run.json
+EXIT seed 2  2026-09-25T18:13:35Z
+START seed 3 2026-09-25T18:13:35Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:locked-test trading-day embargo train_end=7029 boundary=7125 dropped=96
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward trading-day embargo gaps=[29, 11, 38, 75]
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=3 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=f56a870c848d1486acad9c0d15616e6546cfcdc4 out=runs/phaseb_phasec_2026-09-25/seed3/run.json
+EXIT seed 3  2026-09-25T18:13:39Z
+START seed 4 2026-09-25T18:13:39Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:locked-test trading-day embargo train_end=7029 boundary=7125 dropped=96
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward trading-day embargo gaps=[29, 11, 38, 75]
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=4 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=f56a870c848d1486acad9c0d15616e6546cfcdc4 out=runs/phaseb_phasec_2026-09-25/seed4/run.json
+EXIT seed 4  2026-09-25T18:13:43Z
+# Phase B summary
+
+Harness evidence only. This file does not claim a quality decision.
+
+## Per-seed × per-fold
+
+| seed | fold | F1 | P | AUPRC | positive_rate | n_rows |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0.1639 | 0.1226 | 0.1641 | 0.1667 | 1068 |
+| 0 | 1 | 0.4588 | 0.4961 | 0.5067 | 0.2806 | 1069 |
+| 0 | 2 | 0.1900 | 0.1885 | 0.1778 | 0.1759 | 1069 |
+| 0 | 3 | 0.4252 | 0.3745 | 0.4694 | 0.1731 | 1069 |
+| 1 | 0 | 0.1026 | 0.0943 | 0.1664 | 0.1667 | 1068 |
+| 1 | 1 | 0.4936 | 0.5466 | 0.5095 | 0.2806 | 1069 |
+| 1 | 2 | 0.1627 | 0.1606 | 0.1686 | 0.1759 | 1069 |
+| 1 | 3 | 0.4208 | 0.3514 | 0.4862 | 0.1731 | 1069 |
+| 2 | 0 | 0.1507 | 0.1269 | 0.1637 | 0.1667 | 1068 |
+| 2 | 1 | 0.4195 | 0.4585 | 0.4238 | 0.2806 | 1069 |
+| 2 | 2 | 0.1891 | 0.1776 | 0.1762 | 0.1759 | 1069 |
+| 2 | 3 | 0.4865 | 0.4865 | 0.4771 | 0.1731 | 1069 |
+| 3 | 0 | 0.0495 | 0.0442 | 0.1514 | 0.1667 | 1068 |
+| 3 | 1 | 0.3378 | 0.5208 | 0.4612 | 0.2806 | 1069 |
+| 3 | 2 | 0.1667 | 0.1633 | 0.1676 | 0.1759 | 1069 |
+| 3 | 3 | 0.4295 | 0.3664 | 0.4978 | 0.1731 | 1069 |
+| 4 | 0 | 0.0705 | 0.0639 | 0.1543 | 0.1667 | 1068 |
+| 4 | 1 | 0.3798 | 0.4821 | 0.4737 | 0.2806 | 1069 |
+| 4 | 2 | 0.2217 | 0.2026 | 0.1778 | 0.1759 | 1069 |
+| 4 | 3 | 0.4637 | 0.4798 | 0.5028 | 0.1731 | 1069 |
+
+## Locked-test floors
+
+Floors unchanged: F1 ≥ 0.30, P ≥ 0.25, AUPRC ≥ 0.18.
+
+| seed | F1 | P | AUPRC | floors |
+| --- | --- | --- | --- | --- |
+| 0 | 0.2489 | 0.1452 | 0.1945 | fail (f1 (0.2489 < 0.3000), precision (0.1452 < 0.2500)) |
+| 1 | 0.2347 | 0.1366 | 0.1676 | fail (f1 (0.2347 < 0.3000), precision (0.1366 < 0.2500), auprc (0.1676 < 0.1800)) |
+| 2 | 0.2408 | 0.1397 | 0.1597 | fail (f1 (0.2408 < 0.3000), precision (0.1397 < 0.2500), auprc (0.1597 < 0.1800)) |
+| 3 | 0.2465 | 0.1527 | 0.1670 | fail (f1 (0.2465 < 0.3000), precision (0.1527 < 0.2500), auprc (0.1670 < 0.1800)) |
+| 4 | 0.2451 | 0.1498 | 0.1727 | fail (f1 (0.2451 < 0.3000), precision (0.1498 < 0.2500), auprc (0.1727 < 0.1800)) |
+
+## Rules vs model at budget
+
+| seed | split | precision_model | precision_rules | stub_cost_model | stub_cost_rules |
+| --- | --- | --- | --- | --- | --- |
+| 0 | fold 0 | 0.1154 | 0.1593 | 1731.0000 | 1643.0000 |
+| 0 | fold 1 | 0.4693 | 0.2455 | 1847.0000 | 2529.0000 |
+| 0 | fold 2 | 0.1846 | 0.2564 | 1679.0000 | 1525.0000 |
+| 0 | fold 3 | 0.8810 | 0.2262 | 1120.0000 | 1725.0000 |
+| 0 | locked_test | 0.2708 | 0.3681 | 1760.0000 | 1452.0000 |
+| 1 | fold 0 | 0.1044 | 0.1593 | 1753.0000 | 1643.0000 |
+| 1 | fold 1 | 0.4946 | 0.2455 | 1770.0000 | 2529.0000 |
+| 1 | fold 2 | 0.1590 | 0.2564 | 1734.0000 | 1525.0000 |
+| 1 | fold 3 | 0.8333 | 0.2262 | 1164.0000 | 1725.0000 |
+| 1 | locked_test | 0.3993 | 0.3681 | 1353.0000 | 1452.0000 |
+| 2 | fold 0 | 0.1429 | 0.1593 | 1676.0000 | 1643.0000 |
+| 2 | fold 1 | 0.4874 | 0.2455 | 1792.0000 | 2529.0000 |
+| 2 | fold 2 | 0.1487 | 0.2564 | 1756.0000 | 1525.0000 |
+| 2 | fold 3 | 0.8810 | 0.2262 | 1120.0000 | 1725.0000 |
+| 2 | locked_test | 0.3611 | 0.3681 | 1474.0000 | 1452.0000 |
+| 3 | fold 0 | 0.0275 | 0.1593 | 1907.0000 | 1643.0000 |
+| 3 | fold 1 | 0.4043 | 0.2455 | 2045.0000 | 2529.0000 |
+| 3 | fold 2 | 0.1590 | 0.2564 | 1734.0000 | 1525.0000 |
+| 3 | fold 3 | 0.7143 | 0.2262 | 1274.0000 | 1725.0000 |
+| 3 | locked_test | 0.3958 | 0.3681 | 1364.0000 | 1452.0000 |
+| 4 | fold 0 | 0.0549 | 0.1593 | 1852.0000 | 1643.0000 |
+| 4 | fold 1 | 0.4296 | 0.2455 | 1968.0000 | 2529.0000 |
+| 4 | fold 2 | 0.1692 | 0.2564 | 1712.0000 | 1525.0000 |
+| 4 | fold 3 | 0.8929 | 0.2262 | 1109.0000 | 1725.0000 |
+| 4 | locked_test | 0.3924 | 0.3681 | 1375.0000 | 1452.0000 |
+
+## Per-fold positive rate
+
+See the per-seed × per-fold table (`positive_rate` column). Diagnostic only.
+
+## Phase C trigger
+
+- fired: Y
+- positive_rate max/min per seed: [1.6838166510757717, 1.6838166510757717, 1.6838166510757717, 1.6838166510757717, 1.6838166510757717]
+- fold_to_fold_std_f1: 0.16790157573242404
+- seed_to_seed_std_f1: 0.005586496437004328
+- positive_rate_varies_gt_2x: False
+- fold_std_gt_seed_std: True
+INFO:alphaguard.ml.study_phaseb:phase B promote decision=no candidate runs=5
+no candidate
+seed 0: fail f1 (0.2489 < 0.3000), precision (0.1452 < 0.2500)
+  walk_forward informational f1_mean=0.30946549805499707 f1_min=0.16387337057728119 embargo_rows=29
+  economic stub informational precision_model=0.2708333333333333 precision_rules=0.3680555555555556 stub_cost_model=1760.0 stub_cost_rules=1452.0 label=stub
+seed 1: fail f1 (0.2347 < 0.3000), precision (0.1366 < 0.2500), auprc (0.1676 < 0.1800)
+  walk_forward informational f1_mean=0.29492987972261286 f1_min=0.10256410256410257 embargo_rows=29
+  economic stub informational precision_model=0.3993055555555556 precision_rules=0.3680555555555556 stub_cost_model=1353.0 stub_cost_rules=1452.0 label=stub
+seed 2: fail f1 (0.2408 < 0.3000), precision (0.1397 < 0.2500), auprc (0.1597 < 0.1800)
+  walk_forward informational f1_mean=0.31143899540321285 f1_min=0.1506849315068493 embargo_rows=29
+  economic stub informational precision_model=0.3611111111111111 precision_rules=0.3680555555555556 stub_cost_model=1474.0 stub_cost_rules=1452.0 label=stub
+seed 3: fail f1 (0.2465 < 0.3000), precision (0.1527 < 0.2500), auprc (0.1670 < 0.1800)
+  walk_forward informational f1_mean=0.24588491408545898 f1_min=0.04950495049504951 embargo_rows=29
+  economic stub informational precision_model=0.3958333333333333 precision_rules=0.3680555555555556 stub_cost_model=1364.0 stub_cost_rules=1452.0 label=stub
+seed 4: fail f1 (0.2451 < 0.3000), precision (0.1498 < 0.2500), auprc (0.1727 < 0.1800)
+  walk_forward informational f1_mean=0.28392521121958214 f1_min=0.07052896725440806 embargo_rows=29
+  economic stub informational precision_model=0.3923611111111111 precision_rules=0.3680555555555556 stub_cost_model=1375.0 stub_cost_rules=1452.0 label=stub

@@ -1,0 +1,114 @@
+{
+  "construction_duplicates": 0,
+  "asof_repetition_rows": 7822,
+  "asof_violation_count": 0,
+  "asof_violations": [],
+  "finbert_clock": "headline at published_at; no separate FinBERT timestamp",
+  "recorded_boundaries": [
+    {
+      "name": "fold_0",
+      "train_end": 2845,
+      "next_start": 2850,
+      "next_end": 3918,
+      "gap_rows": 5,
+      "unique_feature_sessions_in_gap": 3,
+      "gap_shorter_than_horizon": true,
+      "overlap_rows": 24
+    },
+    {
+      "name": "fold_1",
+      "train_end": 3913,
+      "next_start": 3918,
+      "next_end": 4987,
+      "gap_rows": 5,
+      "unique_feature_sessions_in_gap": 2,
+      "gap_shorter_than_horizon": true,
+      "overlap_rows": 6
+    },
+    {
+      "name": "fold_2",
+      "train_end": 4982,
+      "next_start": 4987,
+      "next_end": 6056,
+      "gap_rows": 5,
+      "unique_feature_sessions_in_gap": 1,
+      "gap_shorter_than_horizon": true,
+      "overlap_rows": 33
+    },
+    {
+      "name": "fold_3",
+      "train_end": 6051,
+      "next_start": 6056,
+      "next_end": 7125,
+      "gap_rows": 5,
+      "unique_feature_sessions_in_gap": 2,
+      "gap_shorter_than_horizon": true,
+      "overlap_rows": 70
+    },
+    {
+      "name": "locked_test",
+      "train_end": 7125,
+      "next_start": 7125,
+      "next_end": 8907,
+      "gap_rows": 0,
+      "unique_feature_sessions_in_gap": 0,
+      "gap_shorter_than_horizon": true,
+      "overlap_rows": 96
+    }
+  ],
+  "purged_boundaries": [
+    {
+      "name": "fold_0",
+      "train_end": 2821,
+      "next_start": 2850,
+      "next_end": 3918,
+      "gap_rows": 29,
+      "unique_feature_sessions_in_gap": 7,
+      "gap_shorter_than_horizon": false,
+      "overlap_rows": 0
+    },
+    {
+      "name": "fold_1",
+      "train_end": 3907,
+      "next_start": 3918,
+      "next_end": 4987,
+      "gap_rows": 11,
+      "unique_feature_sessions_in_gap": 7,
+      "gap_shorter_than_horizon": false,
+      "overlap_rows": 0
+    },
+    {
+      "name": "fold_2",
+      "train_end": 4949,
+      "next_start": 4987,
+      "next_end": 6056,
+      "gap_rows": 38,
+      "unique_feature_sessions_in_gap": 6,
+      "gap_shorter_than_horizon": false,
+      "overlap_rows": 0
+    },
+    {
+      "name": "fold_3",
+      "train_end": 5981,
+      "next_start": 6056,
+      "next_end": 7125,
+      "gap_rows": 75,
+      "unique_feature_sessions_in_gap": 7,
+      "gap_shorter_than_horizon": false,
+      "overlap_rows": 0
+    },
+    {
+      "name": "locked_test",
+      "train_end": 7029,
+      "next_start": 7125,
+      "next_end": 8907,
+      "gap_rows": 96,
+      "unique_feature_sessions_in_gap": 7,
+      "gap_shorter_than_horizon": false,
+      "overlap_rows": 0
+    }
+  ],
+  "row_embargo_overlap_rows": 229,
+  "row_embargo_short_boundaries": 5,
+  "purged_overlap_rows": 0
+}

@@ -1,0 +1,615 @@
+{
+  "market_fwd_distribution": {
+    "n_dates": 1665,
+    "mean": 0.006258780783745816,
+    "std": 0.04389444548682958,
+    "p10": -0.04114792962879301,
+    "p50": 0.006768678892117519,
+    "p90": 0.0507945757605852
+  },
+  "spy_return_5d_note": "spy_return_5d is the prior 5-day feature, not the label window",
+  "slices": [
+    {
+      "verdict": "artifact",
+      "reasons": [
+        "one_ticker"
+      ],
+      "n": 1068,
+      "n_positive": 178,
+      "prevalence": 0.16666666666666666,
+      "ticker_count": 2,
+      "positive_ticker_count": 2,
+      "date_min": "2016-08-19",
+      "date_max": "2018-03-12",
+      "top_ticker_share": 0.9943820224719101,
+      "top_day_share": 0.11235955056179775,
+      "top5_tickers": [
+        {
+          "key": "NVDA",
+          "n": 177,
+          "share": 0.9943820224719101
+        },
+        {
+          "key": "QQQ",
+          "n": 1,
+          "share": 0.0056179775280898875
+        }
+      ],
+      "top5_dates": [
+        {
+          "key": "2016-12-27",
+          "n": 20,
+          "share": 0.11235955056179775
+        },
+        {
+          "key": "2017-02-09",
+          "n": 19,
+          "share": 0.10674157303370786
+        },
+        {
+          "key": "2016-12-28",
+          "n": 10,
+          "share": 0.056179775280898875
+        },
+        {
+          "key": "2017-09-15",
+          "n": 9,
+          "share": 0.05056179775280899
+        },
+        {
+          "key": "2017-01-06",
+          "n": 6,
+          "share": 0.033707865168539325
+        }
+      ],
+      "top5_date_share": 0.3595505617977528,
+      "top5_ticker_share": 1.0,
+      "construction_duplicate_positives": 0,
+      "max_interior_session_gap": 5,
+      "market_ticker": "QQQ",
+      "market_coverage": 0.3202247191011236,
+      "market_fwd_median_on_positives": 0.003588867069168389,
+      "name": "fold_0",
+      "fold": 0
+    },
+    {
+      "verdict": "regime",
+      "reasons": [
+        "spread_and_market_drawdown"
+      ],
+      "n": 1069,
+      "n_positive": 300,
+      "prevalence": 0.2806361085126286,
+      "ticker_count": 3,
+      "positive_ticker_count": 3,
+      "date_min": "2018-03-12",
+      "date_max": "2018-12-19",
+      "top_ticker_share": 0.48333333333333334,
+      "top_day_share": 0.13,
+      "top5_tickers": [
+        {
+          "key": "NVDA",
+          "n": 145,
+          "share": 0.48333333333333334
+        },
+        {
+          "key": "GOOGL",
+          "n": 87,
+          "share": 0.29
+        },
+        {
+          "key": "QQQ",
+          "n": 68,
+          "share": 0.22666666666666666
+        }
+      ],
+      "top5_dates": [
+        {
+          "key": "2018-11-15",
+          "n": 39,
+          "share": 0.13
+        },
+        {
+          "key": "2018-05-10",
+          "n": 21,
+          "share": 0.07
+        },
+        {
+          "key": "2018-10-05",
+          "n": 14,
+          "share": 0.04666666666666667
+        },
+        {
+          "key": "2018-11-14",
+          "n": 14,
+          "share": 0.04666666666666667
+        },
+        {
+          "key": "2018-12-11",
+          "n": 9,
+          "share": 0.03
+        }
+      ],
+      "top5_date_share": 0.3233333333333333,
+      "top5_ticker_share": 1.0,
+      "construction_duplicate_positives": 0,
+      "max_interior_session_gap": 3,
+      "market_ticker": "QQQ",
+      "market_coverage": 0.97,
+      "market_fwd_median_on_positives": -0.03236199725596656,
+      "name": "fold_1",
+      "fold": 1
+    },
+    {
+      "verdict": "regime",
+      "reasons": [
+        "spread_and_market_drawdown"
+      ],
+      "n": 1069,
+      "n_positive": 188,
+      "prevalence": 0.17586529466791395,
+      "ticker_count": 3,
+      "positive_ticker_count": 3,
+      "date_min": "2018-12-20",
+      "date_max": "2019-07-26",
+      "top_ticker_share": 0.601063829787234,
+      "top_day_share": 0.21808510638297873,
+      "top5_tickers": [
+        {
+          "key": "GOOGL",
+          "n": 113,
+          "share": 0.601063829787234
+        },
+        {
+          "key": "NVDA",
+          "n": 70,
+          "share": 0.3723404255319149
+        },
+        {
+          "key": "QQQ",
+          "n": 5,
+          "share": 0.026595744680851064
+        }
+      ],
+      "top5_dates": [
+        {
+          "key": "2019-07-25",
+          "n": 43,
+          "share": 0.22872340425531915
+        },
+        {
+          "key": "2019-05-16",
+          "n": 17,
+          "share": 0.09042553191489362
+        },
+        {
+          "key": "2019-04-26",
+          "n": 8,
+          "share": 0.0425531914893617
+        },
+        {
+          "key": "2019-02-01",
+          "n": 7,
+          "share": 0.03723404255319149
+        },
+        {
+          "key": "2019-05-03",
+          "n": 7,
+          "share": 0.03723404255319149
+        }
+      ],
+      "top5_date_share": 0.43617021276595747,
+      "top5_ticker_share": 1.0,
+      "construction_duplicate_positives": 0,
+      "max_interior_session_gap": 2,
+      "market_ticker": "QQQ",
+      "market_coverage": 0.5053191489361702,
+      "market_fwd_median_on_positives": -0.020753462836382797,
+      "name": "fold_2",
+      "fold": 2
+    },
+    {
+      "verdict": "regime",
+      "reasons": [
+        "spread_and_market_drawdown"
+      ],
+      "n": 1069,
+      "n_positive": 185,
+      "prevalence": 0.17305893358278765,
+      "ticker_count": 4,
+      "positive_ticker_count": 4,
+      "date_min": "2019-07-26",
+      "date_max": "2020-02-25",
+      "top_ticker_share": 0.5081081081081081,
+      "top_day_share": 0.1891891891891892,
+      "top5_tickers": [
+        {
+          "key": "NVDA",
+          "n": 94,
+          "share": 0.5081081081081081
+        },
+        {
+          "key": "GOOGL",
+          "n": 71,
+          "share": 0.3837837837837838
+        },
+        {
+          "key": "META",
+          "n": 12,
+          "share": 0.06486486486486487
+        },
+        {
+          "key": "QQQ",
+          "n": 8,
+          "share": 0.043243243243243246
+        }
+      ],
+      "top5_dates": [
+        {
+          "key": "2020-02-13",
+          "n": 38,
+          "share": 0.20540540540540542
+        },
+        {
+          "key": "2020-02-18",
+          "n": 19,
+          "share": 0.10270270270270271
+        },
+        {
+          "key": "2020-02-20",
+          "n": 15,
+          "share": 0.08108108108108109
+        },
+        {
+          "key": "2020-02-14",
+          "n": 14,
+          "share": 0.07567567567567568
+        },
+        {
+          "key": "2020-02-19",
+          "n": 14,
+          "share": 0.07567567567567568
+        }
+      ],
+      "top5_date_share": 0.5405405405405406,
+      "top5_ticker_share": 1.0,
+      "construction_duplicate_positives": 0,
+      "max_interior_session_gap": 2,
+      "market_ticker": "QQQ",
+      "market_coverage": 0.5567567567567567,
+      "market_fwd_median_on_positives": -0.08247779204609385,
+      "name": "fold_3",
+      "fold": 3
+    },
+    {
+      "verdict": "regime",
+      "reasons": [
+        "spread_and_market_drawdown"
+      ],
+      "n": 1782,
+      "n_positive": 233,
+      "prevalence": 0.1307519640852974,
+      "ticker_count": 6,
+      "positive_ticker_count": 6,
+      "date_min": "2020-02-25",
+      "date_max": "2020-06-10",
+      "top_ticker_share": 0.2832618025751073,
+      "top_day_share": 0.06437768240343347,
+      "top5_tickers": [
+        {
+          "key": "AAPL",
+          "n": 66,
+          "share": 0.2832618025751073
+        },
+        {
+          "key": "GOOGL",
+          "n": 59,
+          "share": 0.2532188841201717
+        },
+        {
+          "key": "META",
+          "n": 52,
+          "share": 0.22317596566523606
+        },
+        {
+          "key": "NVDA",
+          "n": 27,
+          "share": 0.11587982832618025
+        },
+        {
+          "key": "AMZN",
+          "n": 19,
+          "share": 0.0815450643776824
+        }
+      ],
+      "top5_dates": [
+        {
+          "key": "2020-03-10",
+          "n": 33,
+          "share": 0.14163090128755365
+        },
+        {
+          "key": "2020-03-12",
+          "n": 23,
+          "share": 0.09871244635193133
+        },
+        {
+          "key": "2020-03-09",
+          "n": 22,
+          "share": 0.0944206008583691
+        },
+        {
+          "key": "2020-03-04",
+          "n": 18,
+          "share": 0.07725321888412018
+        },
+        {
+          "key": "2020-03-06",
+          "n": 18,
+          "share": 0.07725321888412018
+        }
+      ],
+      "top5_date_share": 0.4892703862660944,
+      "top5_ticker_share": 0.9570815450643777,
+      "construction_duplicate_positives": 0,
+      "max_interior_session_gap": 1,
+      "market_ticker": "QQQ",
+      "market_coverage": 0.776824034334764,
+      "market_fwd_median_on_positives": -0.09537989099120558,
+      "name": "locked_test",
+      "fold": null
+    }
+  ],
+  "explicit_fold_1_prevalence_0_2806": {
+    "verdict": "regime",
+    "reasons": [
+      "spread_and_market_drawdown"
+    ],
+    "n": 1069,
+    "n_positive": 300,
+    "prevalence": 0.2806361085126286,
+    "ticker_count": 3,
+    "positive_ticker_count": 3,
+    "date_min": "2018-03-12",
+    "date_max": "2018-12-19",
+    "top_ticker_share": 0.48333333333333334,
+    "top_day_share": 0.13,
+    "top5_tickers": [
+      {
+        "key": "NVDA",
+        "n": 145,
+        "share": 0.48333333333333334
+      },
+      {
+        "key": "GOOGL",
+        "n": 87,
+        "share": 0.29
+      },
+      {
+        "key": "QQQ",
+        "n": 68,
+        "share": 0.22666666666666666
+      }
+    ],
+    "top5_dates": [
+      {
+        "key": "2018-11-15",
+        "n": 39,
+        "share": 0.13
+      },
+      {
+        "key": "2018-05-10",
+        "n": 21,
+        "share": 0.07
+      },
+      {
+        "key": "2018-10-05",
+        "n": 14,
+        "share": 0.04666666666666667
+      },
+      {
+        "key": "2018-11-14",
+        "n": 14,
+        "share": 0.04666666666666667
+      },
+      {
+        "key": "2018-12-11",
+        "n": 9,
+        "share": 0.03
+      }
+    ],
+    "top5_date_share": 0.3233333333333333,
+    "top5_ticker_share": 1.0,
+    "construction_duplicate_positives": 0,
+    "max_interior_session_gap": 3,
+    "market_ticker": "QQQ",
+    "market_coverage": 0.97,
+    "market_fwd_median_on_positives": -0.03236199725596656,
+    "name": "fold_1",
+    "fold": 1
+  },
+  "phaseb_fold_metrics": [
+    {
+      "seed": 0,
+      "fold": 0,
+      "f1": 0.03571428571428571,
+      "auprc": 0.1561955711459272,
+      "positive_rate": 0.16666666666666666,
+      "auprc_lift": 0.9371734268755632,
+      "n_rows": 1068
+    },
+    {
+      "seed": 0,
+      "fold": 1,
+      "f1": 0.44649446494464945,
+      "auprc": 0.49075817851426295,
+      "positive_rate": 0.2806361085126286,
+      "auprc_lift": 1.7487349761058237,
+      "n_rows": 1069
+    },
+    {
+      "seed": 0,
+      "fold": 2,
+      "f1": 0.14669926650366746,
+      "auprc": 0.17684899765822581,
+      "positive_rate": 0.17586529466791395,
+      "auprc_lift": 1.0055935026417202,
+      "n_rows": 1069
+    },
+    {
+      "seed": 0,
+      "fold": 3,
+      "f1": 0.4675324675324675,
+      "auprc": 0.48972447740708436,
+      "positive_rate": 0.17305893358278765,
+      "auprc_lift": 2.829813331611747,
+      "n_rows": 1069
+    },
+    {
+      "seed": 1,
+      "fold": 0,
+      "f1": 0.1274725274725275,
+      "auprc": 0.15595951188146795,
+      "positive_rate": 0.16666666666666666,
+      "auprc_lift": 0.9357570712888077,
+      "n_rows": 1068
+    },
+    {
+      "seed": 1,
+      "fold": 1,
+      "f1": 0.4760213143872114,
+      "auprc": 0.44570214630779437,
+      "positive_rate": 0.2806361085126286,
+      "auprc_lift": 1.5881853146767742,
+      "n_rows": 1069
+    },
+    {
+      "seed": 1,
+      "fold": 2,
+      "f1": 0.23039215686274508,
+      "auprc": 0.18697041927161365,
+      "positive_rate": 0.17586529466791395,
+      "auprc_lift": 1.0631456287306116,
+      "n_rows": 1069
+    },
+    {
+      "seed": 1,
+      "fold": 3,
+      "f1": 0.4656716417910448,
+      "auprc": 0.47118107451464986,
+      "positive_rate": 0.17305893358278765,
+      "auprc_lift": 2.7226625332765444,
+      "n_rows": 1069
+    },
+    {
+      "seed": 2,
+      "fold": 0,
+      "f1": 0.22026431718061673,
+      "auprc": 0.17290948941959455,
+      "positive_rate": 0.16666666666666666,
+      "auprc_lift": 1.0374569365175674,
+      "n_rows": 1068
+    },
+    {
+      "seed": 2,
+      "fold": 1,
+      "f1": 0.38596491228070173,
+      "auprc": 0.4191059521082771,
+      "positive_rate": 0.2806361085126286,
+      "auprc_lift": 1.4934142093458276,
+      "n_rows": 1069
+    },
+    {
+      "seed": 2,
+      "fold": 2,
+      "f1": 0.18732782369146006,
+      "auprc": 0.16538980841230913,
+      "positive_rate": 0.17586529466791395,
+      "auprc_lift": 0.9404346020891406,
+      "n_rows": 1069
+    },
+    {
+      "seed": 2,
+      "fold": 3,
+      "f1": 0.46786632390745503,
+      "auprc": 0.43372883494211745,
+      "positive_rate": 0.17305893358278765,
+      "auprc_lift": 2.506249321908776,
+      "n_rows": 1069
+    },
+    {
+      "seed": 3,
+      "fold": 0,
+      "f1": 0.02112676056338028,
+      "auprc": 0.15215178994778084,
+      "positive_rate": 0.16666666666666666,
+      "auprc_lift": 0.912910739686685,
+      "n_rows": 1068
+    },
+    {
+      "seed": 3,
+      "fold": 1,
+      "f1": 0.3932584269662921,
+      "auprc": 0.44459929031642215,
+      "positive_rate": 0.2806361085126286,
+      "auprc_lift": 1.584255471160851,
+      "n_rows": 1069
+    },
+    {
+      "seed": 3,
+      "fold": 2,
+      "f1": 0.2558139534883721,
+      "auprc": 0.17989116533101376,
+      "positive_rate": 0.17586529466791395,
+      "auprc_lift": 1.0228917858449664,
+      "n_rows": 1069
+    },
+    {
+      "seed": 3,
+      "fold": 3,
+      "f1": 0.4486486486486486,
+      "auprc": 0.48409064062237167,
+      "positive_rate": 0.17305893358278765,
+      "auprc_lift": 2.7972588909476506,
+      "n_rows": 1069
+    },
+    {
+      "seed": 4,
+      "fold": 0,
+      "f1": 0.09361702127659574,
+      "auprc": 0.15859492009319276,
+      "positive_rate": 0.16666666666666666,
+      "auprc_lift": 0.9515695205591566,
+      "n_rows": 1068
+    },
+    {
+      "seed": 4,
+      "fold": 1,
+      "f1": 0.35820895522388063,
+      "auprc": 0.4708966647300084,
+      "positive_rate": 0.2806361085126286,
+      "auprc_lift": 1.67796178198793,
+      "n_rows": 1069
+    },
+    {
+      "seed": 4,
+      "fold": 2,
+      "f1": 0.21709006928406469,
+      "auprc": 0.1731494217867048,
+      "positive_rate": 0.17586529466791395,
+      "auprc_lift": 0.9845570845212097,
+      "n_rows": 1069
+    },
+    {
+      "seed": 4,
+      "fold": 3,
+      "f1": 0.46272493573264784,
+      "auprc": 0.4691339323790487,
+      "positive_rate": 0.17305893358278765,
+      "auprc_lift": 2.7108333714227193,
+      "n_rows": 1069
+    }
+  ],
+  "auprc_lift_is_not_a_floor": true,
+  "any_artifact": true
+}

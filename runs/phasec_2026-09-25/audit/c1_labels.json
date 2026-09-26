@@ -1,0 +1,45 @@
+{
+  "threshold": -0.03,
+  "units": "fraction",
+  "anchor": "first_completed_session_close_at_or_after_event",
+  "horizon_trading_sessions": 5,
+  "corporate_actions": "yfinance auto_adjust=True closes (splits and dividends)",
+  "halts_and_delistings": "missing close drops the row; no imputed return",
+  "equality_at_threshold_is_negative": true,
+  "n_rows": 8907,
+  "mismatch_count": 0,
+  "mismatch_rows": [],
+  "prevalence_full": 0.16908049848433815,
+  "slices": [
+    {
+      "name": "fold_0",
+      "n": 1068,
+      "n_positive": 178,
+      "prevalence": 0.16666666666666666
+    },
+    {
+      "name": "fold_1",
+      "n": 1069,
+      "n_positive": 300,
+      "prevalence": 0.2806361085126286
+    },
+    {
+      "name": "fold_2",
+      "n": 1069,
+      "n_positive": 188,
+      "prevalence": 0.17586529466791395
+    },
+    {
+      "name": "fold_3",
+      "n": 1069,
+      "n_positive": 185,
+      "prevalence": 0.17305893358278765
+    },
+    {
+      "name": "locked_test",
+      "n": 1782,
+      "n_positive": 233,
+      "prevalence": 0.1307519640852974
+    }
+  ]
+}

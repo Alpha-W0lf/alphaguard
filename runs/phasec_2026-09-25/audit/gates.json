@@ -1,0 +1,14 @@
+{
+  "freeze": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "a_fired": true,
+  "a_reasons": [
+    "C3 horizon overlaps on the 5-row embargo=229",
+    "C3 5-row embargo is shorter than 5 feature sessions on 5 boundaries"
+  ],
+  "b_fired": true,
+  "c_fired": true,
+  "c_verdict": "misaligned",
+  "c5_fired": true,
+  "purged_overlap_rows": 0,
+  "model_quality_go": "UNCLAIMED"
+}

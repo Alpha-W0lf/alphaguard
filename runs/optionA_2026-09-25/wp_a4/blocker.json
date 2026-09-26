@@ -1,0 +1,55 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "script_path": "scripts/option_a/run_option_a.py (executor inline 2026-09-25)",
+  "generated_at_utc": "2026-09-25T18:35:14Z",
+  "label_definition": "fwd_return_5d < -0.03",
+  "model_quality_go": "UNCLAIMED",
+  "verdict": "BLOCKED",
+  "blocked": true,
+  "reason": "Saved row-level predictions are missing for nested seeds 42/7/123 and purge-on WF expanding4. Bundles contain model.json+manifest+README only; run.json has aggregate metrics/confusion but not per-row scores. Per plan WP-A4 blocker: stop and report; do not re-run the grid to regenerate them.",
+  "has_row_predictions": false,
+  "searched": {
+    "nested_bundle_files": [
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_001_dbd03aaa_s7/model.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_001_dbd03aaa_s7/README.md",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_001_dbd03aaa_s7/manifest.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_000_3e1eb9a9_s42/model.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_000_3e1eb9a9_s42/README.md",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_000_3e1eb9a9_s42/manifest.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_002_a00b59ff_s123/model.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_002_a00b59ff_s123/README.md",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/bundles/run_002_a00b59ff_s123/manifest.json"
+    ],
+    "nested_run_files": [
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/runs/run_001_dbd03aaa_s7.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/runs/run_002_a00b59ff_s123.json",
+      "artifacts/runs/studies/jh63_go_gate_phase_c_534a/runs/run_000_3e1eb9a9_s42.json"
+    ],
+    "purge_on_files_sample": [
+      "runs/phaseb_phasec_2026-09-25/PROMOTE.txt",
+      "runs/phaseb_phasec_2026-09-25/SUMMARY.md",
+      "runs/phaseb_phasec_2026-09-25/driver.log",
+      "runs/phaseb_phasec_2026-09-25/seed3/run.json",
+      "runs/phaseb_phasec_2026-09-25/seed4/run.json",
+      "runs/phaseb_phasec_2026-09-25/seed2/run.json",
+      "runs/phaseb_phasec_2026-09-25/seed0/run.json",
+      "runs/phaseb_phasec_2026-09-25/seed1/run.json",
+      "runs/phaseb_phasec_2026-09-25/seed3/bundle/model.json",
+      "runs/phaseb_phasec_2026-09-25/seed3/bundle/README.md",
+      "runs/phaseb_phasec_2026-09-25/seed3/bundle/manifest.json",
+      "runs/phaseb_phasec_2026-09-25/seed4/bundle/model.json",
+      "runs/phaseb_phasec_2026-09-25/seed4/bundle/README.md",
+      "runs/phaseb_phasec_2026-09-25/seed4/bundle/manifest.json",
+      "runs/phaseb_phasec_2026-09-25/seed2/bundle/model.json",
+      "runs/phaseb_phasec_2026-09-25/seed2/bundle/README.md",
+      "runs/phaseb_phasec_2026-09-25/seed2/bundle/manifest.json",
+      "runs/phaseb_phasec_2026-09-25/seed0/bundle/model.json",
+      "runs/phaseb_phasec_2026-09-25/seed0/bundle/README.md",
+      "runs/phaseb_phasec_2026-09-25/seed0/bundle/manifest.json",
+      "runs/phaseb_phasec_2026-09-25/seed1/bundle/model.json",
+      "runs/phaseb_phasec_2026-09-25/seed1/bundle/README.md",
+      "runs/phaseb_phasec_2026-09-25/seed1/bundle/manifest.json"
+    ],
+    "prediction_like_files": []
+  }
+}

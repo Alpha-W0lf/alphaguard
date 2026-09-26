@@ -1,0 +1,55 @@
+{
+  "bundle_id": "study-jh63_go_gate_seeds_7_123-phaseb_48be9e12_s0",
+  "model_version": "0.1.0-experiment",
+  "bundle_kind": "option_b",
+  "feature_names": [
+    "finbert_sentiment",
+    "volatility_20d",
+    "return_5d_prior",
+    "return_20d_prior",
+    "spy_return_5d"
+  ],
+  "feature_dtypes": {
+    "finbert_sentiment": "float",
+    "volatility_20d": "float",
+    "return_5d_prior": "float",
+    "return_20d_prior": "float",
+    "spy_return_5d": "float"
+  },
+  "score_kind": "proba_high_risk",
+  "score_threshold": 0.3,
+  "threshold_fitting": "train_f1_max",
+  "vol_veto_enabled": false,
+  "vol_veto_threshold": null,
+  "policy_version": "v1",
+  "label_definition": "fwd_return_5d < -0.03",
+  "label_window": {
+    "start": "first_completed_session_close_at_or_after_event_session",
+    "end": "close_5_trading_sessions_later"
+  },
+  "train_window": {
+    "start": "2011-03-03 15:06:00+00:00",
+    "end": "2020-02-26 14:53:00+00:00"
+  },
+  "dataset_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "dataset_source": "data/derived/training_events.parquet",
+  "metrics": {
+    "test_precision": 0.21153846153846154,
+    "test_recall": 0.51931330472103,
+    "test_f1": 0.30062111801242236,
+    "test_fbeta": 0.30062111801242236,
+    "test_auprc": 0.19241480061177546,
+    "test_brier": 0.17280963598762206,
+    "seed": 0,
+    "threshold_method": "train_f1_max",
+    "calibration_method": "isotonic"
+  },
+  "library_versions": {
+    "xgboost": "3.3.0",
+    "numpy": "2.5.1",
+    "sklearn": "1.9.0",
+    "python": "3.12.7"
+  },
+  "created_at": "2026-09-25T16:45:10.923022Z",
+  "model_filename": "model.json"
+}

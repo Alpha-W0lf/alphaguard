@@ -1,0 +1,314 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "script_path": "scripts/option_a/run_option_a.py (executor inline 2026-09-25)",
+  "generated_at_utc": "2026-09-25T18:35:13Z",
+  "label_definition": "fwd_return_5d < -0.03",
+  "model_quality_go": "UNCLAIMED",
+  "floors": {
+    "f1": 0.3,
+    "precision": 0.25,
+    "auprc": 0.18
+  },
+  "null_baselines": [
+    {
+      "name": "fold_0",
+      "n": 1068,
+      "prevalence": 0.16666666666666666,
+      "random_classifier_auprc": 0.16666666666666666,
+      "constant_positive": {
+        "precision": 0.16666666666666666,
+        "recall": 1.0,
+        "f1": 0.2857142857142857,
+        "auprc": 0.16666666666666666
+      },
+      "constant_negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "auprc": 0.16666666666666666
+      },
+      "prior_only_ticker": {
+        "auprc": 0.19671565993009293,
+        "f1": 0.3286908077994429,
+        "precision": 0.19688542825361513,
+        "recall": 0.9943820224719101
+      },
+      "floor_auprc": 0.18,
+      "lift_over_prevalence_for_auprc_floor": 1.08
+    },
+    {
+      "name": "fold_1",
+      "n": 1069,
+      "prevalence": 0.2806361085126286,
+      "random_classifier_auprc": 0.2806361085126286,
+      "constant_positive": {
+        "precision": 0.2806361085126286,
+        "recall": 1.0,
+        "f1": 0.4382761139517896,
+        "auprc": 0.2806361085126286
+      },
+      "constant_negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "auprc": 0.2806361085126286
+      },
+      "prior_only_ticker": {
+        "auprc": 0.3411907532677173,
+        "f1": 0.47298674821610603,
+        "precision": 0.3406754772393539,
+        "recall": 0.7733333333333333
+      },
+      "floor_auprc": 0.18,
+      "lift_over_prevalence_for_auprc_floor": 0.6414000000000001
+    },
+    {
+      "name": "fold_2",
+      "n": 1069,
+      "prevalence": 0.17586529466791395,
+      "random_classifier_auprc": 0.17586529466791395,
+      "constant_positive": {
+        "precision": 0.17586529466791395,
+        "recall": 1.0,
+        "f1": 0.29912490055688146,
+        "auprc": 0.17586529466791395
+      },
+      "constant_negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "auprc": 0.17586529466791395
+      },
+      "prior_only_ticker": {
+        "auprc": 0.2329001977505557,
+        "f1": 0.3584720861900098,
+        "precision": 0.21968787515006002,
+        "recall": 0.973404255319149
+      },
+      "floor_auprc": 0.18,
+      "lift_over_prevalence_for_auprc_floor": 1.0235106382978723
+    },
+    {
+      "name": "fold_3",
+      "n": 1069,
+      "prevalence": 0.17305893358278765,
+      "random_classifier_auprc": 0.17305893358278765,
+      "constant_positive": {
+        "precision": 0.17305893358278765,
+        "recall": 1.0,
+        "f1": 0.29505582137161085,
+        "auprc": 0.17305893358278765
+      },
+      "constant_negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "auprc": 0.17305893358278765
+      },
+      "prior_only_ticker": {
+        "auprc": 0.26023049993509695,
+        "f1": 0.1188118811881188,
+        "precision": 0.7058823529411765,
+        "recall": 0.06486486486486487
+      },
+      "floor_auprc": 0.18,
+      "lift_over_prevalence_for_auprc_floor": 1.040108108108108
+    },
+    {
+      "name": "locked_test",
+      "n": 1782,
+      "prevalence": 0.1307519640852974,
+      "random_classifier_auprc": 0.1307519640852974,
+      "constant_positive": {
+        "precision": 0.1307519640852974,
+        "recall": 1.0,
+        "f1": 0.2312655086848635,
+        "auprc": 0.1307519640852974
+      },
+      "constant_negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "auprc": 0.1307519640852974
+      },
+      "prior_only_ticker": {
+        "auprc": 0.1547254901841885,
+        "f1": 0.24735557363710334,
+        "precision": 0.15261044176706828,
+        "recall": 0.6523605150214592
+      },
+      "floor_auprc": 0.18,
+      "lift_over_prevalence_for_auprc_floor": 1.3766523605150216
+    }
+  ],
+  "existing_fail_metrics": {
+    "nested_seeds": [
+      {
+        "seed": 42,
+        "f1": 0.3658,
+        "precision": 0.2787,
+        "auprc": 0.2087,
+        "seed_pass": true,
+        "source": "artifacts/runs/studies/jh63_go_gate_phase_c_534a/go_gate_summary.json"
+      },
+      {
+        "seed": 7,
+        "f1": 0.2664,
+        "precision": 0.1711,
+        "auprc": 0.1946,
+        "seed_pass": false,
+        "source": "artifacts/runs/studies/jh63_go_gate_phase_c_534a/go_gate_summary.json"
+      },
+      {
+        "seed": 123,
+        "f1": 0.3227,
+        "precision": 0.2263,
+        "auprc": 0.1963,
+        "seed_pass": false,
+        "source": "artifacts/runs/studies/jh63_go_gate_phase_c_534a/go_gate_summary.json"
+      }
+    ],
+    "purge_on_wf_seeds": [
+      {
+        "seed": 0,
+        "f1": 0.24892703862660942,
+        "precision": 0.1452074391988555,
+        "auprc": 0.19448644659751174,
+        "source": "runs/phaseb_phasec_2026-09-25/seed0/run.json"
+      },
+      {
+        "seed": 1,
+        "f1": 0.23472474289171202,
+        "precision": 0.13661971830985917,
+        "auprc": 0.1675595998587927,
+        "source": "runs/phaseb_phasec_2026-09-25/seed1/run.json"
+      },
+      {
+        "seed": 2,
+        "f1": 0.24080664294187426,
+        "precision": 0.1397109428768066,
+        "auprc": 0.15969001435464758,
+        "source": "runs/phaseb_phasec_2026-09-25/seed2/run.json"
+      },
+      {
+        "seed": 3,
+        "f1": 0.2464846980976013,
+        "precision": 0.1526639344262295,
+        "auprc": 0.16698369466693774,
+        "source": "runs/phaseb_phasec_2026-09-25/seed3/run.json"
+      },
+      {
+        "seed": 4,
+        "f1": 0.2451209992193599,
+        "precision": 0.14980916030534353,
+        "auprc": 0.17268941630764761,
+        "source": "runs/phaseb_phasec_2026-09-25/seed4/run.json"
+      }
+    ]
+  },
+  "per_seed_statements": [
+    {
+      "path": "nested_jh63_go_gate_phase_c_534a",
+      "seed": 42,
+      "metrics": {
+        "f1": 0.3658,
+        "precision": 0.2787,
+        "auprc": 0.2087
+      },
+      "seed_pass_recorded": true,
+      "auprc_lift_over_prevalence": 1.5961519313304722,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Seed 42: locked_test AUPRC 0.2087 vs prevalence null 0.1308 (lift 1.596x); floor 0.18 needs lift 1.377x. F1=0.3658 (floor 0.30 met); P=0.2787 (floor 0.25 met)."
+    },
+    {
+      "path": "nested_jh63_go_gate_phase_c_534a",
+      "seed": 7,
+      "metrics": {
+        "f1": 0.2664,
+        "precision": 0.1711,
+        "auprc": 0.1946
+      },
+      "seed_pass_recorded": false,
+      "auprc_lift_over_prevalence": 1.4883141630901289,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Seed 7: locked_test AUPRC 0.1946 vs prevalence null 0.1308 (lift 1.488x); floor 0.18 needs lift 1.377x. F1=0.2664 (floor 0.30 missed); P=0.1711 (floor 0.25 missed)."
+    },
+    {
+      "path": "nested_jh63_go_gate_phase_c_534a",
+      "seed": 123,
+      "metrics": {
+        "f1": 0.3227,
+        "precision": 0.2263,
+        "auprc": 0.1963
+      },
+      "seed_pass_recorded": false,
+      "auprc_lift_over_prevalence": 1.5013158798283264,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Seed 123: locked_test AUPRC 0.1963 vs prevalence null 0.1308 (lift 1.501x); floor 0.18 needs lift 1.377x. F1=0.3227 (floor 0.30 met); P=0.2263 (floor 0.25 missed)."
+    },
+    {
+      "path": "purge_on_wf_phaseb_phasec_2026-09-25",
+      "seed": 0,
+      "metrics": {
+        "f1": 0.24892703862660942,
+        "precision": 0.1452074391988555,
+        "auprc": 0.19448644659751174
+      },
+      "auprc_lift_over_prevalence": 1.4874456988702403,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Purge-on WF seed 0: AUPRC 0.1945 (lift 1.487x vs null); F1=0.2489; P=0.1452. Source `runs/phaseb_phasec_2026-09-25/seed0/run.json`."
+    },
+    {
+      "path": "purge_on_wf_phaseb_phasec_2026-09-25",
+      "seed": 1,
+      "metrics": {
+        "f1": 0.23472474289171202,
+        "precision": 0.13661971830985917,
+        "auprc": 0.1675595998587927
+      },
+      "auprc_lift_over_prevalence": 1.2815073259586636,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Purge-on WF seed 1: AUPRC 0.1676 (lift 1.282x vs null); F1=0.2347; P=0.1366. Source `runs/phaseb_phasec_2026-09-25/seed1/run.json`."
+    },
+    {
+      "path": "purge_on_wf_phaseb_phasec_2026-09-25",
+      "seed": 2,
+      "metrics": {
+        "f1": 0.24080664294187426,
+        "precision": 0.1397109428768066,
+        "auprc": 0.15969001435464758
+      },
+      "auprc_lift_over_prevalence": 1.2213201956222404,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Purge-on WF seed 2: AUPRC 0.1597 (lift 1.221x vs null); F1=0.2408; P=0.1397. Source `runs/phaseb_phasec_2026-09-25/seed2/run.json`."
+    },
+    {
+      "path": "purge_on_wf_phaseb_phasec_2026-09-25",
+      "seed": 3,
+      "metrics": {
+        "f1": 0.2464846980976013,
+        "precision": 0.1526639344262295,
+        "auprc": 0.16698369466693774
+      },
+      "auprc_lift_over_prevalence": 1.2771027635042194,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Purge-on WF seed 3: AUPRC 0.1670 (lift 1.277x vs null); F1=0.2465; P=0.1527. Source `runs/phaseb_phasec_2026-09-25/seed3/run.json`."
+    },
+    {
+      "path": "purge_on_wf_phaseb_phasec_2026-09-25",
+      "seed": 4,
+      "metrics": {
+        "f1": 0.2451209992193599,
+        "precision": 0.14980916030534353,
+        "auprc": 0.17268941630764761
+      },
+      "auprc_lift_over_prevalence": 1.3207405144215798,
+      "auprc_lift_required_for_floor": 1.3766523605150216,
+      "statement": "Purge-on WF seed 4: AUPRC 0.1727 (lift 1.321x vs null); F1=0.2451; P=0.1498. Source `runs/phaseb_phasec_2026-09-25/seed4/run.json`."
+    }
+  ],
+  "noise_band_flag": {
+    "flag": true,
+    "reason": "AUPRC floor 0.18 is 1.38x locked_test prevalence 0.1308 (n=1782). Flag if floor sits near prevalence noise band on this sample size."
+  }
+}

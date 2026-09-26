@@ -1,0 +1,17 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "dataset_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "dataset_hash_match": true,
+  "script_path": "scripts/option_a/nested_purge_align_check.py",
+  "generated_at_utc": "2026-09-25T18:53:36Z",
+  "walk_forward": "off",
+  "n_rows": 8907,
+  "boundary_test_start": 7125,
+  "n_train": 7029,
+  "n_test": 1782,
+  "prefix_end_before_session": 7029,
+  "same_ticker_overlap_train_rows": 0,
+  "wp_a1_purge_on_counterfactual_train_end": 7029,
+  "rollup_nested_purged_train_end": 7029,
+  "model_quality_go": "UNCLAIMED"
+}

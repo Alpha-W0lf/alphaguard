@@ -1,0 +1,44 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "script_path": "scripts/option_a/run_option_a.py (executor inline 2026-09-25)",
+  "generated_at_utc": "2026-09-25T18:35:14Z",
+  "label_definition": "fwd_return_5d < -0.03",
+  "model_quality_go": "UNCLAIMED",
+  "branch_expected": "analysis/option-a-2026-09-25",
+  "wp": {
+    "a1": {
+      "verdict": "PASS_WITH_FLAG",
+      "purge_on_total": 0,
+      "nested_off": 92,
+      "nested_affected_tickers": [
+        "GOOGL",
+        "META",
+        "NVDA",
+        "QQQ"
+      ],
+      "headlines_nested": 14,
+      "nested_purged_train_end": 7029,
+      "n_dev": 7125
+    },
+    "a2": {
+      "verdict": "PASS",
+      "fold0_nvda": 177,
+      "slices": 5
+    },
+    "a3": {
+      "verdict": "PASS",
+      "locked_prevalence": 0.1307519640852974,
+      "noise_band_flag": true,
+      "n_statements": 8
+    },
+    "a4": {
+      "verdict": "BLOCKED",
+      "blocked": true
+    },
+    "a5": {
+      "draft_conclusion": "a",
+      "path": "docs/plans/optionA_verdict_2026-09-25.md",
+      "run_summary": "runs/optionA_2026-09-25/wp_a5/summary.md"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+no candidate
+seed 0: fail f1 (0.2489 < 0.3000), precision (0.1452 < 0.2500)
+  walk_forward informational f1_mean=0.30946549805499707 f1_min=0.16387337057728119 embargo_rows=29
+  economic stub informational precision_model=0.2708333333333333 precision_rules=0.3680555555555556 stub_cost_model=1760.0 stub_cost_rules=1452.0 label=stub
+seed 1: fail f1 (0.2347 < 0.3000), precision (0.1366 < 0.2500), auprc (0.1676 < 0.1800)
+  walk_forward informational f1_mean=0.29492987972261286 f1_min=0.10256410256410257 embargo_rows=29
+  economic stub informational precision_model=0.3993055555555556 precision_rules=0.3680555555555556 stub_cost_model=1353.0 stub_cost_rules=1452.0 label=stub
+seed 2: fail f1 (0.2408 < 0.3000), precision (0.1397 < 0.2500), auprc (0.1597 < 0.1800)
+  walk_forward informational f1_mean=0.31143899540321285 f1_min=0.1506849315068493 embargo_rows=29
+  economic stub informational precision_model=0.3611111111111111 precision_rules=0.3680555555555556 stub_cost_model=1474.0 stub_cost_rules=1452.0 label=stub
+seed 3: fail f1 (0.2465 < 0.3000), precision (0.1527 < 0.2500), auprc (0.1670 < 0.1800)
+  walk_forward informational f1_mean=0.24588491408545898 f1_min=0.04950495049504951 embargo_rows=29
+  economic stub informational precision_model=0.3958333333333333 precision_rules=0.3680555555555556 stub_cost_model=1364.0 stub_cost_rules=1452.0 label=stub
+seed 4: fail f1 (0.2451 < 0.3000), precision (0.1498 < 0.2500), auprc (0.1727 < 0.1800)
+  walk_forward informational f1_mean=0.28392521121958214 f1_min=0.07052896725440806 embargo_rows=29
+  economic stub informational precision_model=0.3923611111111111 precision_rules=0.3680555555555556 stub_cost_model=1375.0 stub_cost_rules=1452.0 label=stub

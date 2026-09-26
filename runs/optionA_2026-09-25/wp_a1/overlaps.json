@@ -1,0 +1,2052 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "script_path": "scripts/option_a/run_option_a.py (executor inline 2026-09-25)",
+  "generated_at_utc": "2026-09-25T18:35:13Z",
+  "label_definition": "fwd_return_5d < -0.03",
+  "model_quality_go": "UNCLAIMED",
+  "embargo_source_recorded": "explicit",
+  "n_rows": 8907,
+  "n_dev": 7125,
+  "purge_changed_folds": true,
+  "walk_forward_expanding4": {
+    "purge_off": [
+      {
+        "name": "fold_0",
+        "mode": "purge_off",
+        "train_end": 2845,
+        "test_start": 2850,
+        "test_end": 3918,
+        "embargo_rows": 5,
+        "global_session_overlap_rows": 24,
+        "same_ticker": {
+          "overlap_train_rows": 6,
+          "affected_tickers": [
+            "QQQ"
+          ],
+          "by_ticker": {
+            "QQQ": 6
+          },
+          "details_sample": [
+            {
+              "train_row": 2824,
+              "ticker": "QQQ",
+              "feature_session": 2487,
+              "label_end_session": 2493,
+              "n_overlapping_test_rows": 1,
+              "published_at": "2016-08-11 20:55:00+00:00"
+            },
+            {
+              "train_row": 2839,
+              "ticker": "QQQ",
+              "feature_session": 2488,
+              "label_end_session": 2494,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2016-08-12 21:22:00+00:00"
+            },
+            {
+              "train_row": 2841,
+              "ticker": "QQQ",
+              "feature_session": 2488,
+              "label_end_session": 2494,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2016-08-15 17:23:00+00:00"
+            },
+            {
+              "train_row": 2842,
+              "ticker": "QQQ",
+              "feature_session": 2489,
+              "label_end_session": 2495,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2016-08-15 20:28:00+00:00"
+            },
+            {
+              "train_row": 2843,
+              "ticker": "QQQ",
+              "feature_session": 2490,
+              "label_end_session": 2496,
+              "n_overlapping_test_rows": 3,
+              "published_at": "2016-08-16 21:41:00+00:00"
+            },
+            {
+              "train_row": 2844,
+              "ticker": "QQQ",
+              "feature_session": 2491,
+              "label_end_session": 2497,
+              "n_overlapping_test_rows": 4,
+              "published_at": "2016-08-17 21:02:00+00:00"
+            }
+          ]
+        }
+      },
+      {
+        "name": "fold_1",
+        "mode": "purge_off",
+        "train_end": 3913,
+        "test_start": 3918,
+        "test_end": 4987,
+        "embargo_rows": 5,
+        "global_session_overlap_rows": 6,
+        "same_ticker": {
+          "overlap_train_rows": 5,
+          "affected_tickers": [
+            "NVDA"
+          ],
+          "by_ticker": {
+            "NVDA": 5
+          },
+          "details_sample": [
+            {
+              "train_row": 3908,
+              "ticker": "NVDA",
+              "feature_session": 2879,
+              "label_end_session": 2885,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-03-06 16:55:00+00:00"
+            },
+            {
+              "train_row": 3909,
+              "ticker": "NVDA",
+              "feature_session": 2880,
+              "label_end_session": 2886,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-03-06 21:17:00+00:00"
+            },
+            {
+              "train_row": 3910,
+              "ticker": "NVDA",
+              "feature_session": 2881,
+              "label_end_session": 2887,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-03-08 17:40:00+00:00"
+            },
+            {
+              "train_row": 3911,
+              "ticker": "NVDA",
+              "feature_session": 2881,
+              "label_end_session": 2887,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-03-08 17:54:00+00:00"
+            },
+            {
+              "train_row": 3912,
+              "ticker": "NVDA",
+              "feature_session": 2882,
+              "label_end_session": 2888,
+              "n_overlapping_test_rows": 3,
+              "published_at": "2018-03-08 21:49:00+00:00"
+            }
+          ]
+        }
+      },
+      {
+        "name": "fold_2",
+        "mode": "purge_off",
+        "train_end": 4982,
+        "test_start": 4987,
+        "test_end": 6056,
+        "embargo_rows": 5,
+        "global_session_overlap_rows": 33,
+        "same_ticker": {
+          "overlap_train_rows": 26,
+          "affected_tickers": [
+            "GOOGL",
+            "NVDA",
+            "QQQ"
+          ],
+          "by_ticker": {
+            "GOOGL": 6,
+            "NVDA": 2,
+            "QQQ": 18
+          },
+          "details_sample": [
+            {
+              "train_row": 4958,
+              "ticker": "GOOGL",
+              "feature_session": 3076,
+              "label_end_session": 3082,
+              "n_overlapping_test_rows": 3,
+              "published_at": "2018-12-13 22:02:00+00:00"
+            },
+            {
+              "train_row": 4961,
+              "ticker": "GOOGL",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 4,
+              "published_at": "2018-12-15 21:48:00+00:00"
+            },
+            {
+              "train_row": 4964,
+              "ticker": "GOOGL",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 4,
+              "published_at": "2018-12-17 16:54:00+00:00"
+            },
+            {
+              "train_row": 4965,
+              "ticker": "GOOGL",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 4,
+              "published_at": "2018-12-17 17:38:00+00:00"
+            },
+            {
+              "train_row": 4968,
+              "ticker": "GOOGL",
+              "feature_session": 3078,
+              "label_end_session": 3084,
+              "n_overlapping_test_rows": 7,
+              "published_at": "2018-12-18 12:33:00+00:00"
+            },
+            {
+              "train_row": 4970,
+              "ticker": "GOOGL",
+              "feature_session": 3078,
+              "label_end_session": 3084,
+              "n_overlapping_test_rows": 7,
+              "published_at": "2018-12-18 16:20:00+00:00"
+            },
+            {
+              "train_row": 4973,
+              "ticker": "NVDA",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 3,
+              "published_at": "2018-12-18 22:22:00+00:00"
+            },
+            {
+              "train_row": 4975,
+              "ticker": "NVDA",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 3,
+              "published_at": "2018-12-19 16:35:00+00:00"
+            },
+            {
+              "train_row": 4955,
+              "ticker": "QQQ",
+              "feature_session": 3075,
+              "label_end_session": 3081,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-12-13 14:55:00+00:00"
+            },
+            {
+              "train_row": 4957,
+              "ticker": "QQQ",
+              "feature_session": 3075,
+              "label_end_session": 3081,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-12-13 20:47:00+00:00"
+            },
+            {
+              "train_row": 4959,
+              "ticker": "QQQ",
+              "feature_session": 3076,
+              "label_end_session": 3082,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-12-14 17:42:00+00:00"
+            },
+            {
+              "train_row": 4960,
+              "ticker": "QQQ",
+              "feature_session": 3077,
+              "label_end_session": 3082,
+              "n_overlapping_test_rows": 2,
+              "published_at": "2018-12-14 21:00:00+00:00"
+            },
+            {
+              "train_row": 4962,
+              "ticker": "QQQ",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 8,
+              "published_at": "2018-12-16 19:33:00+00:00"
+            },
+            {
+              "train_row": 4963,
+              "ticker": "QQQ",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 8,
+              "published_at": "2018-12-17 15:07:00+00:00"
+            },
+            {
+              "train_row": 4966,
+              "ticker": "QQQ",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 8,
+              "published_at": "2018-12-17 17:38:00+00:00"
+            },
+            {
+              "train_row": 4967,
+              "ticker": "QQQ",
+              "feature_session": 3077,
+              "label_end_session": 3083,
+              "n_overlapping_test_rows": 8,
+              "published_at": "2018-12-17 20:27:00+00:00"
+            },
+            {
+              "train_row": 4969,
+              "ticker": "QQQ",
+              "feature_session": 3078,
+              "label_end_session": 3084,
+              "n_overlapping_test_rows": 12,
+              "published_at": "2018-12-18 14:59:00+00:00"
+            },
+            {
+              "train_row": 4971,
+              "ticker": "QQQ",
+              "feature_session": 3078,
+              "label_end_session": 3084,
+              "n_overlapping_test_rows": 12,
+              "published_at": "2018-12-18 19:19:00+00:00"
+            },
+            {
+              "train_row": 4972,
+              "ticker": "QQQ",
+              "feature_session": 3078,
+              "label_end_session": 3084,
+              "n_overlapping_test_rows": 12,
+              "published_at": "2018-12-18 20:40:00+00:00"
+            },
+            {
+              "train_row": 4974,
+              "ticker": "QQQ",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 17,
+              "published_at": "2018-12-19 14:48:00+00:00"
+            },
+            {
+              "train_row": 4976,
+              "ticker": "QQQ",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 17,
+              "published_at": "2018-12-19 18:17:00+00:00"
+            },
+            {
+              "train_row": 4977,
+              "ticker": "QQQ",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 17,
+              "published_at": "2018-12-19 19:35:00+00:00"
+            },
+            {
+              "train_row": 4978,
+              "ticker": "QQQ",
+              "feature_session": 3079,
+              "label_end_session": 3085,
+              "n_overlapping_test_rows": 17,
+              "published_at": "2018-12-19 20:47:00+00:00"
+            },
+            {
+              "train_row": 4979,
+              "ticker": "QQQ",
+              "feature_session": 3080,
+              "label_end_session": 3086,
+              "n_overlapping_test_rows": 18,
+              "published_at": "2018-12-19 21:22:00+00:00"
+            },
+            {
+              "train_row": 4980,
+              "ticker": "QQQ",
+              "feature_session": 3080,
+              "label_end_session": 3086,
+              "n_overlapping_test_rows": 18,
+              "published_at": "2018-12-20 15:22:00+00:00"
+            },
+            {
+              "train_row": 4981,
+              "ticker": "QQQ",
+              "feature_session": 3080,
+              "label_end_session": 3086,
+              "n_overlapping_test_rows": 18,
+              "published_at": "2018-12-20 16:02:00+00:00"
+            }
+          ]
+        }
+      },
+      {
+        "name": "fold_3",
+        "mode": "purge_off",
+        "train_end": 6051,
+        "test_start": 6056,
+        "test_end": 7125,
+        "embargo_rows": 5,
+        "global_session_overlap_rows": 70,
+        "same_ticker": {
+          "overlap_train_rows": 70,
+          "affected_tickers": [
+            "GOOGL",
+            "NVDA",
+            "QQQ"
+          ],
+          "by_ticker": {
+            "GOOGL": 61,
+            "NVDA": 6,
+            "QQQ": 3
+          },
+          "details_sample": [
+            {
+              "train_row": 5981,
+              "ticker": "GOOGL",
+              "feature_session": 3224,
+              "label_end_session": 3230,
+              "n_overlapping_test_rows": 7,
+              "published_at": "2019-07-19 13:33:00+00:00"
+            },
+            {
+              "train_row": 5982,
+              "ticker": "GOOGL",
+              "feature_session": 3224,
+              "label_end_session": 3230,
+              "n_overlapping_test_rows": 7,
+              "published_at": "2019-07-19 13:48:00+00:00"
+            },
+            {
+              "train_row": 5983,
+              "ticker": "GOOGL",
+              "feature_session": 3224,
+              "label_end_session": 3230,
+              "n_overlapping_test_rows": 7,
+              "published_at": "2019-07-19 15:48:00+00:00"
+            },
+            {
+              "train_row": 5984,
+              "ticker": "GOOGL",
+              "feature_session": 3225,
+              "label_end_session": 3231,
+              "n_overlapping_test_rows": 14,
+              "published_at": "2019-07-21 21:02:00+00:00"
+            },
+            {
+              "train_row": 5985,
+              "ticker": "GOOGL",
+              "feature_session": 3225,
+              "label_end_session": 3231,
+              "n_overlapping_test_rows": 14,
+              "published_at": "2019-07-22 11:34:00+00:00"
+            },
+            {
+              "train_row": 5986,
+              "ticker": "GOOGL",
+              "feature_session": 3225,
+              "label_end_session": 3231,
+              "n_overlapping_test_rows": 14,
+              "published_at": "2019-07-22 14:03:00+00:00"
+            },
+            {
+              "train_row": 5988,
+              "ticker": "GOOGL",
+              "feature_session": 3225,
+              "label_end_session": 3231,
+              "n_overlapping_test_rows": 14,
+              "published_at": "2019-07-22 16:22:00+00:00"
+            },
+            {
+              "train_row": 5991,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-23 20:46:00+00:00"
+            },
+            {
+              "train_row": 5992,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-23 20:49:00+00:00"
+            },
+            {
+              "train_row": 5993,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-23 20:58:00+00:00"
+            },
+            {
+              "train_row": 5994,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-23 21:34:00+00:00"
+            },
+            {
+              "train_row": 5995,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-24 12:08:00+00:00"
+            },
+            {
+              "train_row": 5996,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-24 14:36:00+00:00"
+            },
+            {
+              "train_row": 5998,
+              "ticker": "GOOGL",
+              "feature_session": 3227,
+              "label_end_session": 3233,
+              "n_overlapping_test_rows": 20,
+              "published_at": "2019-07-24 15:44:00+00:00"
+            },
+            {
+              "train_row": 6000,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 08:36:00+00:00"
+            },
+            {
+              "train_row": 6001,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 08:36:00+00:00"
+            },
+            {
+              "train_row": 6002,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 10:07:00+00:00"
+            },
+            {
+              "train_row": 6003,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 12:27:00+00:00"
+            },
+            {
+              "train_row": 6004,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 13:53:00+00:00"
+            },
+            {
+              "train_row": 6005,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 14:32:00+00:00"
+            },
+            {
+              "train_row": 6006,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 15:10:00+00:00"
+            },
+            {
+              "train_row": 6009,
+              "ticker": "GOOGL",
+              "feature_session": 3228,
+              "label_end_session": 3234,
+              "n_overlapping_test_rows": 22,
+              "published_at": "2019-07-25 17:35:00+00:00"
+            },
+            {
+              "train_row": 6010,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 20:03:00+00:00"
+            },
+            {
+              "train_row": 6011,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 20:09:00+00:00"
+            },
+            {
+              "train_row": 6012,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 20:20:00+00:00"
+            },
+            {
+              "train_row": 6013,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 20:38:00+00:00"
+            },
+            {
+              "train_row": 6014,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 21:13:00+00:00"
+            },
+            {
+              "train_row": 6015,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 21:14:00+00:00"
+            },
+            {
+              "train_row": 6016,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-25 21:14:00+00:00"
+            },
+            {
+              "train_row": 6018,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 08:35:00+00:00"
+            },
+            {
+              "train_row": 6019,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 08:53:00+00:00"
+            },
+            {
+              "train_row": 6020,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 10:08:00+00:00"
+            },
+            {
+              "train_row": 6021,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:05:00+00:00"
+            },
+            {
+              "train_row": 6022,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:08:00+00:00"
+            },
+            {
+              "train_row": 6023,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:11:00+00:00"
+            },
+            {
+              "train_row": 6024,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:24:00+00:00"
+            },
+            {
+              "train_row": 6025,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:28:00+00:00"
+            },
+            {
+              "train_row": 6026,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:47:00+00:00"
+            },
+            {
+              "train_row": 6027,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 11:49:00+00:00"
+            },
+            {
+              "train_row": 6028,
+              "ticker": "GOOGL",
+              "feature_session": 3229,
+              "label_end_session": 3235,
+              "n_overlapping_test_rows": 24,
+              "published_at": "2019-07-26 12:06:00+00:00"
+            }
+          ]
+        }
+      }
+    ],
+    "purge_on": [
+      {
+        "name": "fold_0",
+        "mode": "purge_on",
+        "train_end": 2821,
+        "test_start": 2850,
+        "test_end": 3918,
+        "embargo_rows": 29,
+        "global_session_overlap_rows": 0,
+        "same_ticker": {
+          "overlap_train_rows": 0,
+          "affected_tickers": [],
+          "by_ticker": {},
+          "details_sample": []
+        }
+      },
+      {
+        "name": "fold_1",
+        "mode": "purge_on",
+        "train_end": 3907,
+        "test_start": 3918,
+        "test_end": 4987,
+        "embargo_rows": 11,
+        "global_session_overlap_rows": 0,
+        "same_ticker": {
+          "overlap_train_rows": 0,
+          "affected_tickers": [],
+          "by_ticker": {},
+          "details_sample": []
+        }
+      },
+      {
+        "name": "fold_2",
+        "mode": "purge_on",
+        "train_end": 4949,
+        "test_start": 4987,
+        "test_end": 6056,
+        "embargo_rows": 38,
+        "global_session_overlap_rows": 0,
+        "same_ticker": {
+          "overlap_train_rows": 0,
+          "affected_tickers": [],
+          "by_ticker": {},
+          "details_sample": []
+        }
+      },
+      {
+        "name": "fold_3",
+        "mode": "purge_on",
+        "train_end": 5981,
+        "test_start": 6056,
+        "test_end": 7125,
+        "embargo_rows": 75,
+        "global_session_overlap_rows": 0,
+        "same_ticker": {
+          "overlap_train_rows": 0,
+          "affected_tickers": [],
+          "by_ticker": {},
+          "details_sample": []
+        }
+      }
+    ],
+    "purge_on_same_ticker_total": 0,
+    "purge_off_same_ticker_total": 107
+  },
+  "nested_path": {
+    "study_id": "jh63_go_gate_phase_c_534a",
+    "walk_forward": "off",
+    "purge_off": {
+      "name": "nested_locked_test",
+      "mode": "purge_off",
+      "train_end": 7125,
+      "test_start": 7125,
+      "test_end": 8907,
+      "embargo_rows": 0,
+      "global_session_overlap_rows": 96,
+      "same_ticker": {
+        "overlap_train_rows": 92,
+        "affected_tickers": [
+          "GOOGL",
+          "META",
+          "NVDA",
+          "QQQ"
+        ],
+        "by_ticker": {
+          "GOOGL": 45,
+          "META": 17,
+          "NVDA": 29,
+          "QQQ": 1
+        },
+        "details_sample": [
+          {
+            "train_row": 7029,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-17 14:49:00+00:00"
+          },
+          {
+            "train_row": 7031,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-18 12:37:00+00:00"
+          },
+          {
+            "train_row": 7033,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-18 13:57:00+00:00"
+          },
+          {
+            "train_row": 7034,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-18 14:18:00+00:00"
+          },
+          {
+            "train_row": 7037,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-18 16:03:00+00:00"
+          },
+          {
+            "train_row": 7041,
+            "ticker": "GOOGL",
+            "feature_session": 3370,
+            "label_end_session": 3376,
+            "n_overlapping_test_rows": 1,
+            "published_at": "2020-02-18 18:00:00+00:00"
+          },
+          {
+            "train_row": 7043,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 10:05:00+00:00"
+          },
+          {
+            "train_row": 7045,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 11:00:00+00:00"
+          },
+          {
+            "train_row": 7047,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 12:14:00+00:00"
+          },
+          {
+            "train_row": 7053,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 14:57:00+00:00"
+          },
+          {
+            "train_row": 7054,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 15:02:00+00:00"
+          },
+          {
+            "train_row": 7055,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 15:05:00+00:00"
+          },
+          {
+            "train_row": 7056,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 15:32:00+00:00"
+          },
+          {
+            "train_row": 7058,
+            "ticker": "GOOGL",
+            "feature_session": 3371,
+            "label_end_session": 3377,
+            "n_overlapping_test_rows": 6,
+            "published_at": "2020-02-19 17:15:00+00:00"
+          },
+          {
+            "train_row": 7065,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 12:35:00+00:00"
+          },
+          {
+            "train_row": 7067,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 13:42:00+00:00"
+          },
+          {
+            "train_row": 7070,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 16:27:00+00:00"
+          },
+          {
+            "train_row": 7072,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 16:49:00+00:00"
+          },
+          {
+            "train_row": 7073,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 17:20:00+00:00"
+          },
+          {
+            "train_row": 7074,
+            "ticker": "GOOGL",
+            "feature_session": 3372,
+            "label_end_session": 3378,
+            "n_overlapping_test_rows": 8,
+            "published_at": "2020-02-20 18:00:00+00:00"
+          },
+          {
+            "train_row": 7076,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 04:17:00+00:00"
+          },
+          {
+            "train_row": 7077,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 07:42:00+00:00"
+          },
+          {
+            "train_row": 7078,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 09:48:00+00:00"
+          },
+          {
+            "train_row": 7080,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 11:29:00+00:00"
+          },
+          {
+            "train_row": 7081,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 12:05:00+00:00"
+          },
+          {
+            "train_row": 7083,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 15:05:00+00:00"
+          },
+          {
+            "train_row": 7087,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 16:58:00+00:00"
+          },
+          {
+            "train_row": 7088,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 19:07:00+00:00"
+          },
+          {
+            "train_row": 7089,
+            "ticker": "GOOGL",
+            "feature_session": 3373,
+            "label_end_session": 3379,
+            "n_overlapping_test_rows": 11,
+            "published_at": "2020-02-21 19:14:00+00:00"
+          },
+          {
+            "train_row": 7093,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 09:05:00+00:00"
+          },
+          {
+            "train_row": 7094,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 12:12:00+00:00"
+          },
+          {
+            "train_row": 7095,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 12:30:00+00:00"
+          },
+          {
+            "train_row": 7098,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 13:55:00+00:00"
+          },
+          {
+            "train_row": 7101,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 15:30:00+00:00"
+          },
+          {
+            "train_row": 7102,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 16:28:00+00:00"
+          },
+          {
+            "train_row": 7103,
+            "ticker": "GOOGL",
+            "feature_session": 3374,
+            "label_end_session": 3380,
+            "n_overlapping_test_rows": 18,
+            "published_at": "2020-02-24 20:22:00+00:00"
+          },
+          {
+            "train_row": 7109,
+            "ticker": "GOOGL",
+            "feature_session": 3375,
+            "label_end_session": 3381,
+            "n_overlapping_test_rows": 19,
+            "published_at": "2020-02-25 14:35:00+00:00"
+          },
+          {
+            "train_row": 7110,
+            "ticker": "GOOGL",
+            "feature_session": 3375,
+            "label_end_session": 3381,
+            "n_overlapping_test_rows": 19,
+            "published_at": "2020-02-25 14:39:00+00:00"
+          },
+          {
+            "train_row": 7113,
+            "ticker": "GOOGL",
+            "feature_session": 3375,
+            "label_end_session": 3381,
+            "n_overlapping_test_rows": 19,
+            "published_at": "2020-02-25 14:53:00+00:00"
+          },
+          {
+            "train_row": 7115,
+            "ticker": "GOOGL",
+            "feature_session": 3375,
+            "label_end_session": 3381,
+            "n_overlapping_test_rows": 19,
+            "published_at": "2020-02-25 15:10:00+00:00"
+          }
+        ]
+      }
+    },
+    "purge_on_counterfactual": {
+      "name": "nested_locked_test",
+      "mode": "purge_on_counterfactual",
+      "train_end": 7029,
+      "test_start": 7125,
+      "test_end": 8907,
+      "embargo_rows": 96,
+      "global_session_overlap_rows": 0,
+      "same_ticker": {
+        "overlap_train_rows": 0,
+        "affected_tickers": [],
+        "by_ticker": {},
+        "details_sample": []
+      }
+    }
+  },
+  "headline_duplicates": {
+    "nested": {
+      "shared_normalized_headline_hashes": 14,
+      "left_unique": 6113,
+      "right_unique": 1382,
+      "samples": [
+        {
+          "headline_sha256": "ba161f9b914b3a41f1075d588028d788de4704070a2d0f49a109100772f6465b",
+          "normalized": "q1 13f roundup: how buffett, einhorn, ackman and others adjusted their portfolios",
+          "left_rows": [
+            5708
+          ],
+          "right_rows": [
+            8422,
+            8423,
+            8424
+          ],
+          "left_tickers": [
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AMZN",
+            "GOOGL",
+            "META"
+          ]
+        },
+        {
+          "headline_sha256": "0fce52b065c793064cbec1ca57fd5eef125542081fd377394c9266bead1ed055",
+          "normalized": "35 stocks moving in thursday's pre-market session",
+          "left_rows": [
+            5126
+          ],
+          "right_rows": [
+            8007
+          ],
+          "left_tickers": [
+            "NVDA"
+          ],
+          "right_tickers": [
+            "META"
+          ]
+        },
+        {
+          "headline_sha256": "4a5d05a0be9d539fc3bffa9d05293978b4d68f5f4cfbbe06dbf2ea2e417d720f",
+          "normalized": "stocks that hit 52-week highs on wednesday",
+          "left_rows": [
+            6691,
+            6820,
+            7056
+          ],
+          "right_rows": [
+            8492,
+            8493
+          ],
+          "left_tickers": [
+            "NVDA",
+            "GOOGL",
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AMZN",
+            "META"
+          ]
+        },
+        {
+          "headline_sha256": "463f195c0e8898e522f47638a614b1705a0d03cf4007c572c74da7e064c19ebd",
+          "normalized": "stocks that hit 52-week highs on thursday",
+          "left_rows": [
+            6482,
+            6674,
+            6696
+          ],
+          "right_rows": [
+            8522,
+            8523
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "NVDA",
+            "NVDA"
+          ],
+          "right_tickers": [
+            "META",
+            "AMZN"
+          ]
+        },
+        {
+          "headline_sha256": "9efe6208a90c4d3ceb4c298590c2c06668bd6f21e34874db05f6b6e62eb42401",
+          "normalized": "a peek into the markets: us stock futures signal higher start on wall street",
+          "left_rows": [
+            6139
+          ],
+          "right_rows": [
+            7737,
+            7844
+          ],
+          "left_tickers": [
+            "NVDA"
+          ],
+          "right_tickers": [
+            "AAPL",
+            "NVDA"
+          ]
+        },
+        {
+          "headline_sha256": "6fd67545c9f2e7cfb6e1651924e04348c6c322ab4d657ec68d6b490b56abe286",
+          "normalized": "10 biggest price target changes for thursday",
+          "left_rows": [
+            6647,
+            6987
+          ],
+          "right_rows": [
+            7809,
+            8013
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "NVDA"
+          ],
+          "right_tickers": [
+            "AAPL",
+            "META"
+          ]
+        },
+        {
+          "headline_sha256": "fb944d1f80c52428c51112e422a1a904ff665de6ebf803447f839c64212d1b95",
+          "normalized": "stocks that hit 52-week highs on friday",
+          "left_rows": [
+            6549,
+            6654,
+            6679
+          ],
+          "right_rows": [
+            8816
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "GOOGL",
+            "NVDA"
+          ],
+          "right_tickers": [
+            "AAPL"
+          ]
+        },
+        {
+          "headline_sha256": "cef2679876c142da1250864510ed8893eda001472279dc79c829fefe0d081ce5",
+          "normalized": "32 stocks moving in friday's pre-market session",
+          "left_rows": [
+            6025
+          ],
+          "right_rows": [
+            8117,
+            8118
+          ],
+          "left_tickers": [
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AAPL",
+            "AMZN"
+          ]
+        },
+        {
+          "headline_sha256": "a01120119447a958bdb8fcd0f4663745d500ef110769500431ed4895961c7508",
+          "normalized": "stocks that hit 52-week highs on tuesday",
+          "left_rows": [
+            6685,
+            6818,
+            6966
+          ],
+          "right_rows": [
+            8319,
+            8466,
+            8593
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "GOOGL",
+            "NVDA"
+          ],
+          "right_tickers": [
+            "NVDA",
+            "NVDA",
+            "NVDA"
+          ]
+        },
+        {
+          "headline_sha256": "bdbdc31edb297e49ccb28333f38c8b249eaa7a4704e324a446e46fd7212da2c5",
+          "normalized": "10 biggest price target changes for friday",
+          "left_rows": [
+            2834,
+            4356,
+            6033
+          ],
+          "right_rows": [
+            7738,
+            7825,
+            8130
+          ],
+          "left_tickers": [
+            "NVDA",
+            "NVDA",
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AAPL",
+            "AAPL",
+            "AAPL"
+          ]
+        },
+        {
+          "headline_sha256": "a5a9676034d5bb0bf4ee43cc41b3895248c7bc5e4123a49a66b436a55db5216b",
+          "normalized": "10 biggest price target changes for wednesday",
+          "left_rows": [
+            4325,
+            4387,
+            4424
+          ],
+          "right_rows": [
+            7621,
+            7946,
+            8893
+          ],
+          "left_tickers": [
+            "NVDA",
+            "GOOGL",
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AAPL",
+            "GOOGL",
+            "AAPL"
+          ]
+        },
+        {
+          "headline_sha256": "a58253ff486ecc59cb619793328818bba384d4d9b20d16006e95b4e099717890",
+          "normalized": "10 biggest price target changes for monday",
+          "left_rows": [
+            5044,
+            5268,
+            6750
+          ],
+          "right_rows": [
+            8294,
+            8438,
+            8712
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "NVDA",
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "NVDA",
+            "NVDA",
+            "AMZN"
+          ]
+        },
+        {
+          "headline_sha256": "55634a2964fbfbb7436061649bfd0391a6f684817d81db6d0c1abe39e5fb589c",
+          "normalized": "stocks that hit 52-week highs on monday",
+          "left_rows": [
+            6417,
+            6574,
+            6596
+          ],
+          "right_rows": [
+            8299,
+            8442
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "GOOGL",
+            "NVDA"
+          ],
+          "right_tickers": [
+            "NVDA",
+            "NVDA"
+          ]
+        },
+        {
+          "headline_sha256": "8d022618db9d0f61b303aa5e4bac770716714bf992fb6ffe1e8d7952dfdaf2fe",
+          "normalized": "10 biggest price target changes for tuesday",
+          "left_rows": [
+            5617,
+            6358,
+            6438
+          ],
+          "right_rows": [
+            7355
+          ],
+          "left_tickers": [
+            "GOOGL",
+            "NVDA",
+            "GOOGL"
+          ],
+          "right_tickers": [
+            "AAPL"
+          ]
+        }
+      ]
+    },
+    "walk_forward_purge_off": [
+      {
+        "name": "fold_0",
+        "shared_normalized_headline_hashes": 8,
+        "left_unique": 2001,
+        "right_unique": 1038,
+        "samples": [
+          {
+            "headline_sha256": "84d975212eeaedeee812a58ea30f06dba88ca5b64e8b6db265502dfa7c72fc3a",
+            "normalized": "benzinga's top initiations",
+            "left_rows": [
+              1914,
+              2689,
+              2754
+            ],
+            "right_rows": [
+              2875,
+              2911
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA",
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "a041c245618fef2d4422f5d846ccb87b85d645a4a582451368d5fc44ec9cb14c",
+            "normalized": "dan nathan's powershares qqq trust, series 1 (etf) trade",
+            "left_rows": [
+              2390
+            ],
+            "right_rows": [
+              3255
+            ],
+            "left_tickers": [
+              "QQQ"
+            ],
+            "right_tickers": [
+              "QQQ"
+            ]
+          },
+          {
+            "headline_sha256": "7fad7e0067d6f8e800de65e3051b36142c9333677e72848965f68ce7d0f61129",
+            "normalized": "can you guess this chart?",
+            "left_rows": [
+              2818
+            ],
+            "right_rows": [
+              2956
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "281bbf009f9c6e76f65a8635ad7eeb527ae1a33688aaf4b53633789eb914bea1",
+            "normalized": "watch these 7 huge put purchases in wednesday trade",
+            "left_rows": [
+              2812
+            ],
+            "right_rows": [
+              3496
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "ef23fba78d2f4a5ae3ada9eed5b07a3355f43c60995070f06c95f92e8084527a",
+            "normalized": "benzinga's top upgrades",
+            "left_rows": [
+              1422,
+              1809,
+              2244
+            ],
+            "right_rows": [
+              2938
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "95c7746706e9268e46b581f321b7e6e0de657eabd6a67d83098cc701f8ad9389",
+            "normalized": "benzinga's volume movers",
+            "left_rows": [
+              2520,
+              2676,
+              2735
+            ],
+            "right_rows": [
+              2944
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "6cbf07a8ea5e74dea10b96fd0c5555f9750faa5184d651423083fd9c82f46308",
+            "normalized": "stocks hitting 52-week highs",
+            "left_rows": [
+              2257,
+              2261,
+              2412
+            ],
+            "right_rows": [
+              3002
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "55b7c35072bf12f26c5317e985c7be97054b0690c30466b3363da58a5c540272",
+            "normalized": "18 stocks moving in friday's pre-market session",
+            "left_rows": [
+              2831
+            ],
+            "right_rows": [
+              2936
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fold_1",
+        "shared_normalized_headline_hashes": 7,
+        "left_unique": 3031,
+        "right_unique": 1054,
+        "samples": [
+          {
+            "headline_sha256": "1e14bdfeafb4b0b19ca6f2b543f98fd8b2d15247891ca323afe4318742dea241",
+            "normalized": "8 stocks moving in thursday's after-hours session",
+            "left_rows": [
+              3865
+            ],
+            "right_rows": [
+              4796
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "b8d7852097de76e92422781c3fdf6d87bb1d42a720f6660d6825a794e181242b",
+            "normalized": "8 biggest price target changes for friday",
+            "left_rows": [
+              3716
+            ],
+            "right_rows": [
+              4807
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "0d3abbb1106ac13f6ac755063b410d4aa03d81825173cdb23df4f71ff8eef1cd",
+            "normalized": "vetr crowd downgrades nvidia",
+            "left_rows": [
+              3569
+            ],
+            "right_rows": [
+              3924
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "bdbdc31edb297e49ccb28333f38c8b249eaa7a4704e324a446e46fd7212da2c5",
+            "normalized": "10 biggest price target changes for friday",
+            "left_rows": [
+              2834
+            ],
+            "right_rows": [
+              4356
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "93fd852467ef42e5368fbdf67b9e751a25b85de8a5f195a038d023a2ddc727ed",
+            "normalized": "5 biggest price target changes for monday",
+            "left_rows": [
+              3519,
+              3562,
+              3594
+            ],
+            "right_rows": [
+              4868
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "47811d742fd11a89920b5a754f3c774ff9a775f784f2d7349718f0dcd59a5f38",
+            "normalized": "28 stocks moving in friday's pre-market session",
+            "left_rows": [
+              3869
+            ],
+            "right_rows": [
+              4802
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "48afb5ebc26a329da4af4988cf1b68881c97a988990475749e8dbfb022430a7c",
+            "normalized": "5 biggest price target changes for friday",
+            "left_rows": [
+              3306,
+              3514,
+              3555
+            ],
+            "right_rows": [
+              4082
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fold_2",
+        "shared_normalized_headline_hashes": 5,
+        "left_unique": 4078,
+        "right_unique": 1046,
+        "samples": [
+          {
+            "headline_sha256": "e14001a39b0a3ac2adc18e5f532de6d4dfc9fea3136589d6b2d3e589bfa13c64",
+            "normalized": "8 biggest price target changes for tuesday",
+            "left_rows": [
+              4053
+            ],
+            "right_rows": [
+              5172,
+              5237
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA",
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "ecf94e452e4c11a901b10c66cd16d50ed05a4e39c77ba356df95b373ef44189b",
+            "normalized": "30 stocks moving in tuesday's pre-market session",
+            "left_rows": [
+              4701
+            ],
+            "right_rows": [
+              5610
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "bdbdc31edb297e49ccb28333f38c8b249eaa7a4704e324a446e46fd7212da2c5",
+            "normalized": "10 biggest price target changes for friday",
+            "left_rows": [
+              2834,
+              4356
+            ],
+            "right_rows": [
+              6033
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "a5a9676034d5bb0bf4ee43cc41b3895248c7bc5e4123a49a66b436a55db5216b",
+            "normalized": "10 biggest price target changes for wednesday",
+            "left_rows": [
+              4325,
+              4387,
+              4424
+            ],
+            "right_rows": [
+              5121
+            ],
+            "left_tickers": [
+              "NVDA",
+              "GOOGL",
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "977ae45a4c76027723405c2bae2797afddf736dede4a2496cc98ee4ad7fd7b50",
+            "normalized": "31 stocks moving in friday's pre-market session",
+            "left_rows": [
+              3688
+            ],
+            "right_rows": [
+              5305
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fold_3",
+        "shared_normalized_headline_hashes": 11,
+        "left_unique": 5119,
+        "right_unique": 1000,
+        "samples": [
+          {
+            "headline_sha256": "7e7cde28fa481e4f485bc2615a8d3545db874d2e23b383924d6d78db3dcc8c44",
+            "normalized": "26 technology stocks moving in today's pre-market session",
+            "left_rows": [
+              6035
+            ],
+            "right_rows": [
+              6090
+            ],
+            "left_tickers": [
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "38eee7af59d500de3c75033cae9bd6ffd68e0d47ebdf2e25d0ef592a1c0e3354",
+            "normalized": "30 stocks moving in friday's pre-market session",
+            "left_rows": [
+              3136
+            ],
+            "right_rows": [
+              6999
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "e14001a39b0a3ac2adc18e5f532de6d4dfc9fea3136589d6b2d3e589bfa13c64",
+            "normalized": "8 biggest price target changes for tuesday",
+            "left_rows": [
+              4053,
+              5172,
+              5237
+            ],
+            "right_rows": [
+              6733
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "4ac6da382068d1fcab006b491343b176ddbef4d679b29faf65100ad64cd0e9e3",
+            "normalized": "a peek into the markets: us stock futures edge higher ahead of economic reports",
+            "left_rows": [
+              5303
+            ],
+            "right_rows": [
+              6996
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "ac758a2ac79e5195747da3d2f05260fb4e8a066f6d13c43cb773b90e40f6914c",
+            "normalized": "5 stocks moving in thursday's after-hours session",
+            "left_rows": [
+              5700,
+              6013
+            ],
+            "right_rows": [
+              6137,
+              6531
+            ],
+            "left_tickers": [
+              "NVDA",
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "NVDA",
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "bdbdc31edb297e49ccb28333f38c8b249eaa7a4704e324a446e46fd7212da2c5",
+            "normalized": "10 biggest price target changes for friday",
+            "left_rows": [
+              2834,
+              4356,
+              6033
+            ],
+            "right_rows": [
+              6144,
+              6543,
+              6833
+            ],
+            "left_tickers": [
+              "NVDA",
+              "NVDA",
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "NVDA",
+              "NVDA",
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "a5a9676034d5bb0bf4ee43cc41b3895248c7bc5e4123a49a66b436a55db5216b",
+            "normalized": "10 biggest price target changes for wednesday",
+            "left_rows": [
+              4325,
+              4387,
+              4424
+            ],
+            "right_rows": [
+              6932,
+              7048
+            ],
+            "left_tickers": [
+              "NVDA",
+              "GOOGL",
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "GOOGL",
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "a58253ff486ecc59cb619793328818bba384d4d9b20d16006e95b4e099717890",
+            "normalized": "10 biggest price target changes for monday",
+            "left_rows": [
+              5044,
+              5268
+            ],
+            "right_rows": [
+              6750,
+              6773,
+              6846
+            ],
+            "left_tickers": [
+              "GOOGL",
+              "NVDA"
+            ],
+            "right_tickers": [
+              "GOOGL",
+              "NVDA",
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "8d022618db9d0f61b303aa5e4bac770716714bf992fb6ffe1e8d7952dfdaf2fe",
+            "normalized": "10 biggest price target changes for tuesday",
+            "left_rows": [
+              5617
+            ],
+            "right_rows": [
+              6358,
+              6438,
+              6623
+            ],
+            "left_tickers": [
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "NVDA",
+              "GOOGL",
+              "GOOGL"
+            ]
+          },
+          {
+            "headline_sha256": "e41621c3d8308246949433b88b5170c621a1b605532e33c868c5c456408cddca",
+            "normalized": "41 stocks moving in friday's mid-day session",
+            "left_rows": [
+              4361
+            ],
+            "right_rows": [
+              6156
+            ],
+            "left_tickers": [
+              "NVDA"
+            ],
+            "right_tickers": [
+              "NVDA"
+            ]
+          },
+          {
+            "headline_sha256": "5c41033c751a9ca6a4c43f9610f1069ee2e7a701081448b0caa78de0b742f7dd",
+            "normalized": "q4 13f roundup: how buffett, einhorn, ackman and others adjusted their portfolios",
+            "left_rows": [
+              5309
+            ],
+            "right_rows": [
+              7041
+            ],
+            "left_tickers": [
+              "GOOGL"
+            ],
+            "right_tickers": [
+              "GOOGL"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "pass_criteria": {
+    "purge_on_wf_same_ticker_overlaps_zero": true,
+    "nested_overlap_quantified": true
+  },
+  "question_pre_purge_phase_b_leakage": "Purge-off WF and nested paths show non-zero same-ticker label-window overlaps; purge-on WF is zero. Worse purge-on Phase B scores are consistent with a pre-purge leakage benefit, but do not prove it (overlap counts Verified; causal claim Unverified)."
+}

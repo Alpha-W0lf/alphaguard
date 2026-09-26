@@ -1,0 +1,67 @@
+harness_commit=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c
+freeze=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3
+rules_spec=return_5d_prior<-0.03
+START seed 0 2026-09-25T16:45:09Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=0 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c out=runs/phaseb_2026-09-25/seed0/run.json
+EXIT seed 0 0 2026-09-25T16:45:11Z
+START seed 1 2026-09-25T16:45:11Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=1 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c out=runs/phaseb_2026-09-25/seed1/run.json
+EXIT seed 1 0 2026-09-25T16:45:12Z
+START seed 2 2026-09-25T16:45:12Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=2 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c out=runs/phaseb_2026-09-25/seed2/run.json
+EXIT seed 2 0 2026-09-25T16:45:14Z
+START seed 3 2026-09-25T16:45:14Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=3 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c out=runs/phaseb_2026-09-25/seed3/run.json
+EXIT seed 3 0 2026-09-25T16:45:15Z
+START seed 4 2026-09-25T16:45:15Z
+INFO:alphaguard.ml.study_phaseb_cli:phase B threshold_method=train_f1_max (plan default); yaml listed ['train_val_fbeta_0.5']
+INFO:alphaguard.ml.study_walkforward:walk-forward embargo_rows=5 source=label_horizon n_dev=7125 n_rows=8907
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=0 n_rows=1068 positive_rate=0.166667
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=1 n_rows=1069 positive_rate=0.280636
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=2 n_rows=1069 positive_rate=0.175865
+INFO:alphaguard.ml.study_walkforward:walk-forward fold=3 n_rows=1069 positive_rate=0.173059
+seed=4 aborted=False dataset_hash=534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3 git_sha=78b85bf6a8c6d8e6c27c534515d2fabf4842e12c out=runs/phaseb_2026-09-25/seed4/run.json
+EXIT seed 4 0 2026-09-25T16:45:17Z
+PROMOTE
+INFO:alphaguard.ml.study_phaseb:phase B promote decision=no candidate runs=5
+no candidate
+seed 0: fail precision (0.2115 < 0.2500)
+  walk_forward informational f1_mean=0.27411012117376754 f1_min=0.03571428571428571 embargo_rows=5
+  economic stub informational precision_model=0.2708333333333333 precision_rules=0.3680555555555556 stub_cost_model=1760.0 stub_cost_rules=1452.0 label=stub
+seed 1: fail f1 (0.2517 < 0.3000), precision (0.1531 < 0.2500)
+  walk_forward informational f1_mean=0.3248894101283822 f1_min=0.1274725274725275 embargo_rows=5
+  economic stub informational precision_model=0.2534722222222222 precision_rules=0.3680555555555556 stub_cost_model=1815.0 stub_cost_rules=1452.0 label=stub
+seed 2: fail f1 (0.2585 < 0.3000), precision (0.1586 < 0.2500)
+  walk_forward informational f1_mean=0.3153558442650584 f1_min=0.18732782369146006 embargo_rows=5
+  economic stub informational precision_model=0.3229166666666667 precision_rules=0.3680555555555556 stub_cost_model=1595.0 stub_cost_rules=1452.0 label=stub
+seed 3: fail f1 (0.2564 < 0.3000), precision (0.1601 < 0.2500)
+  walk_forward informational f1_mean=0.27971194741667327 f1_min=0.02112676056338028 embargo_rows=5
+  economic stub informational precision_model=0.3368055555555556 precision_rules=0.3680555555555556 stub_cost_model=1551.0 stub_cost_rules=1452.0 label=stub
+seed 4: fail f1 (0.2540 < 0.3000), precision (0.1526 < 0.2500)
+  walk_forward informational f1_mean=0.2829102453792972 f1_min=0.09361702127659574 embargo_rows=5
+  economic stub informational precision_model=0.2326388888888889 precision_rules=0.3680555555555556 stub_cost_model=1881.0 stub_cost_rules=1452.0 label=stub
+DONE 2026-09-25T16:45:19Z

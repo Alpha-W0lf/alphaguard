@@ -1,0 +1,49 @@
+{
+  "rules_spec": "return_5d_prior<-0.03",
+  "rules_fn_hash": "bdeee40103c756cca95d449efd9728be33744c558d95ab68c4ab341f74921961",
+  "slices": [
+    {
+      "n": 1068,
+      "n_veto": 182,
+      "veto_positive_rate": 0.15934065934065933,
+      "non_veto_positive_rate": 0.16817155756207675,
+      "veto_higher": false,
+      "name": "fold_0"
+    },
+    {
+      "n": 1069,
+      "n_veto": 277,
+      "veto_positive_rate": 0.24548736462093862,
+      "non_veto_positive_rate": 0.29292929292929293,
+      "veto_higher": false,
+      "name": "fold_1"
+    },
+    {
+      "n": 1069,
+      "n_veto": 195,
+      "veto_positive_rate": 0.2564102564102564,
+      "non_veto_positive_rate": 0.15789473684210525,
+      "veto_higher": true,
+      "name": "fold_2"
+    },
+    {
+      "n": 1069,
+      "n_veto": 84,
+      "veto_positive_rate": 0.2261904761904762,
+      "non_veto_positive_rate": 0.16852791878172588,
+      "veto_higher": true,
+      "name": "fold_3"
+    },
+    {
+      "n": 1782,
+      "n_veto": 288,
+      "veto_positive_rate": 0.3680555555555556,
+      "non_veto_positive_rate": 0.08500669344042838,
+      "veto_higher": true,
+      "name": "locked_test"
+    }
+  ],
+  "folds_veto_higher": 2,
+  "fold_count": 4,
+  "verdict": "misaligned"
+}

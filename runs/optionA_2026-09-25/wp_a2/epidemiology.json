@@ -1,0 +1,454 @@
+{
+  "freeze_hash": "534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3",
+  "script_path": "scripts/option_a/run_option_a.py (executor inline 2026-09-25)",
+  "generated_at_utc": "2026-09-25T18:35:13Z",
+  "label_definition": "fwd_return_5d < -0.03",
+  "model_quality_go": "UNCLAIMED",
+  "slices": [
+    {
+      "name": "fold_0",
+      "n": 1068,
+      "n_positive": 178,
+      "prevalence": 0.16666666666666666,
+      "near_threshold": {
+        "pm_50bps": {
+          "band": 0.005,
+          "n_near": 45,
+          "share_all": 0.042134831460674156,
+          "n_pos_near": 11,
+          "share_pos_near": 0.06179775280898876,
+          "n_neg_near": 34,
+          "share_neg_near": 0.038202247191011236
+        },
+        "pm_100bps": {
+          "band": 0.01,
+          "n_near": 101,
+          "share_all": 0.0945692883895131,
+          "n_pos_near": 20,
+          "share_pos_near": 0.11235955056179775,
+          "n_neg_near": 81,
+          "share_neg_near": 0.09101123595505618
+        }
+      },
+      "positives_per_date": {
+        "mean": 3.1785714285714284,
+        "p50": 2.0,
+        "p90": 6.5,
+        "max": 22,
+        "n_dates_with_pos": 56
+      },
+      "selloff_days_pos_rate_ge_0_5": {
+        "n_dates": 52,
+        "n_positives_on_those_dates": 173,
+        "share_of_slice_positives": 0.9719101123595506
+      },
+      "top_positive_dates": [
+        {
+          "date": "2016-12-28",
+          "n_pos": 22
+        },
+        {
+          "date": "2017-02-10",
+          "n_pos": 15
+        },
+        {
+          "date": "2017-02-09",
+          "n_pos": 9
+        },
+        {
+          "date": "2017-09-18",
+          "n_pos": 9
+        },
+        {
+          "date": "2016-12-29",
+          "n_pos": 8
+        },
+        {
+          "date": "2017-01-09",
+          "n_pos": 7
+        },
+        {
+          "date": "2017-06-20",
+          "n_pos": 6
+        },
+        {
+          "date": "2017-03-01",
+          "n_pos": 5
+        },
+        {
+          "date": "2017-08-14",
+          "n_pos": 5
+        },
+        {
+          "date": "2016-12-27",
+          "n_pos": 4
+        }
+      ]
+    },
+    {
+      "name": "fold_1",
+      "n": 1069,
+      "n_positive": 300,
+      "prevalence": 0.2806361085126286,
+      "near_threshold": {
+        "pm_50bps": {
+          "band": 0.005,
+          "n_near": 80,
+          "share_all": 0.07483629560336763,
+          "n_pos_near": 55,
+          "share_pos_near": 0.18333333333333332,
+          "n_neg_near": 25,
+          "share_neg_near": 0.032509752925877766
+        },
+        "pm_100bps": {
+          "band": 0.01,
+          "n_near": 161,
+          "share_all": 0.15060804490177737,
+          "n_pos_near": 96,
+          "share_pos_near": 0.32,
+          "n_neg_near": 65,
+          "share_neg_near": 0.08452535760728218
+        }
+      },
+      "positives_per_date": {
+        "mean": 4.545454545454546,
+        "p50": 3.0,
+        "p90": 9.0,
+        "max": 29,
+        "n_dates_with_pos": 66
+      },
+      "selloff_days_pos_rate_ge_0_5": {
+        "n_dates": 47,
+        "n_positives_on_those_dates": 271,
+        "share_of_slice_positives": 0.9033333333333333
+      },
+      "top_positive_dates": [
+        {
+          "date": "2018-11-16",
+          "n_pos": 29
+        },
+        {
+          "date": "2018-11-15",
+          "n_pos": 24
+        },
+        {
+          "date": "2018-05-10",
+          "n_pos": 14
+        },
+        {
+          "date": "2018-05-11",
+          "n_pos": 14
+        },
+        {
+          "date": "2018-10-08",
+          "n_pos": 12
+        },
+        {
+          "date": "2018-12-13",
+          "n_pos": 10
+        },
+        {
+          "date": "2018-09-28",
+          "n_pos": 9
+        },
+        {
+          "date": "2018-12-12",
+          "n_pos": 9
+        },
+        {
+          "date": "2018-08-28",
+          "n_pos": 8
+        },
+        {
+          "date": "2018-11-07",
+          "n_pos": 7
+        }
+      ]
+    },
+    {
+      "name": "fold_2",
+      "n": 1069,
+      "n_positive": 188,
+      "prevalence": 0.17586529466791395,
+      "near_threshold": {
+        "pm_50bps": {
+          "band": 0.005,
+          "n_near": 42,
+          "share_all": 0.03928905519176801,
+          "n_pos_near": 25,
+          "share_pos_near": 0.13297872340425532,
+          "n_neg_near": 17,
+          "share_neg_near": 0.019296254256526674
+        },
+        "pm_100bps": {
+          "band": 0.01,
+          "n_near": 144,
+          "share_all": 0.13470533208606175,
+          "n_pos_near": 78,
+          "share_pos_near": 0.4148936170212766,
+          "n_neg_near": 66,
+          "share_neg_near": 0.07491486946651532
+        }
+      },
+      "positives_per_date": {
+        "mean": 3.9166666666666665,
+        "p50": 3.0,
+        "p90": 6.6000000000000085,
+        "max": 36,
+        "n_dates_with_pos": 48
+      },
+      "selloff_days_pos_rate_ge_0_5": {
+        "n_dates": 24,
+        "n_positives_on_those_dates": 130,
+        "share_of_slice_positives": 0.6914893617021277
+      },
+      "top_positive_dates": [
+        {
+          "date": "2019-07-26",
+          "n_pos": 36
+        },
+        {
+          "date": "2019-05-16",
+          "n_pos": 12
+        },
+        {
+          "date": "2019-05-17",
+          "n_pos": 10
+        },
+        {
+          "date": "2019-04-29",
+          "n_pos": 8
+        },
+        {
+          "date": "2019-07-25",
+          "n_pos": 8
+        },
+        {
+          "date": "2019-02-04",
+          "n_pos": 6
+        },
+        {
+          "date": "2019-05-06",
+          "n_pos": 6
+        },
+        {
+          "date": "2019-05-07",
+          "n_pos": 6
+        },
+        {
+          "date": "2019-05-23",
+          "n_pos": 6
+        },
+        {
+          "date": "2019-05-29",
+          "n_pos": 6
+        }
+      ]
+    },
+    {
+      "name": "fold_3",
+      "n": 1069,
+      "n_positive": 185,
+      "prevalence": 0.17305893358278765,
+      "near_threshold": {
+        "pm_50bps": {
+          "band": 0.005,
+          "n_near": 42,
+          "share_all": 0.03928905519176801,
+          "n_pos_near": 24,
+          "share_pos_near": 0.12972972972972974,
+          "n_neg_near": 18,
+          "share_neg_near": 0.020361990950226245
+        },
+        "pm_100bps": {
+          "band": 0.01,
+          "n_near": 88,
+          "share_all": 0.0823199251637044,
+          "n_pos_near": 36,
+          "share_pos_near": 0.1945945945945946,
+          "n_neg_near": 52,
+          "share_neg_near": 0.058823529411764705
+        }
+      },
+      "positives_per_date": {
+        "mean": 6.607142857142857,
+        "p50": 3.5,
+        "p90": 14.0,
+        "max": 34,
+        "n_dates_with_pos": 28
+      },
+      "selloff_days_pos_rate_ge_0_5": {
+        "n_dates": 20,
+        "n_positives_on_those_dates": 167,
+        "share_of_slice_positives": 0.9027027027027027
+      },
+      "top_positive_dates": [
+        {
+          "date": "2020-02-14",
+          "n_pos": 34
+        },
+        {
+          "date": "2020-02-19",
+          "n_pos": 20
+        },
+        {
+          "date": "2020-02-20",
+          "n_pos": 14
+        },
+        {
+          "date": "2020-02-21",
+          "n_pos": 14
+        },
+        {
+          "date": "2020-02-18",
+          "n_pos": 13
+        },
+        {
+          "date": "2020-01-17",
+          "n_pos": 11
+        },
+        {
+          "date": "2019-11-25",
+          "n_pos": 10
+        },
+        {
+          "date": "2019-07-30",
+          "n_pos": 9
+        },
+        {
+          "date": "2019-07-31",
+          "n_pos": 8
+        },
+        {
+          "date": "2020-02-25",
+          "n_pos": 8
+        }
+      ]
+    },
+    {
+      "name": "locked_test",
+      "n": 1782,
+      "n_positive": 233,
+      "prevalence": 0.1307519640852974,
+      "near_threshold": {
+        "pm_50bps": {
+          "band": 0.005,
+          "n_near": 51,
+          "share_all": 0.02861952861952862,
+          "n_pos_near": 14,
+          "share_pos_near": 0.060085836909871244,
+          "n_neg_near": 37,
+          "share_neg_near": 0.023886378308586184
+        },
+        "pm_100bps": {
+          "band": 0.01,
+          "n_near": 111,
+          "share_all": 0.06228956228956229,
+          "n_pos_near": 27,
+          "share_pos_near": 0.11587982832618025,
+          "n_neg_near": 84,
+          "share_neg_near": 0.05422853453841188
+        }
+      },
+      "positives_per_date": {
+        "mean": 8.961538461538462,
+        "p50": 7.5,
+        "p90": 19.5,
+        "max": 32,
+        "n_dates_with_pos": 26
+      },
+      "selloff_days_pos_rate_ge_0_5": {
+        "n_dates": 15,
+        "n_positives_on_those_dates": 180,
+        "share_of_slice_positives": 0.7725321888412017
+      },
+      "top_positive_dates": [
+        {
+          "date": "2020-03-11",
+          "n_pos": 32
+        },
+        {
+          "date": "2020-03-13",
+          "n_pos": 22
+        },
+        {
+          "date": "2020-03-10",
+          "n_pos": 20
+        },
+        {
+          "date": "2020-03-09",
+          "n_pos": 19
+        },
+        {
+          "date": "2020-03-05",
+          "n_pos": 18
+        },
+        {
+          "date": "2020-03-06",
+          "n_pos": 15
+        },
+        {
+          "date": "2020-04-14",
+          "n_pos": 12
+        },
+        {
+          "date": "2020-04-30",
+          "n_pos": 12
+        },
+        {
+          "date": "2020-02-28",
+          "n_pos": 10
+        },
+        {
+          "date": "2020-04-16",
+          "n_pos": 10
+        }
+      ]
+    }
+  ],
+  "fold0_per_ticker_positives": {
+    "NVDA": 177,
+    "QQQ": 1
+  },
+  "fold0_nvda_positives": 177,
+  "fold0_nvda_share_of_fold0_positives": 0.9943820224719101,
+  "nvda_inheritance_by_fold": [
+    {
+      "fold": 0,
+      "train_end": 2845,
+      "n_train_positives": 422,
+      "n_nvda_train_positives": 257,
+      "nvda_share_of_train_positives": 0.6090047393364929,
+      "n_nvda_from_rows_before_fold0_end": 257,
+      "early_nvda_share_of_train_positives": 0.6090047393364929
+    },
+    {
+      "fold": 1,
+      "train_end": 3913,
+      "n_train_positives": 599,
+      "n_nvda_train_positives": 433,
+      "nvda_share_of_train_positives": 0.7228714524207012,
+      "n_nvda_from_rows_before_fold0_end": 433,
+      "early_nvda_share_of_train_positives": 0.7228714524207012
+    },
+    {
+      "fold": 2,
+      "train_end": 4982,
+      "n_train_positives": 900,
+      "n_nvda_train_positives": 579,
+      "nvda_share_of_train_positives": 0.6433333333333333,
+      "n_nvda_from_rows_before_fold0_end": 434,
+      "early_nvda_share_of_train_positives": 0.4822222222222222
+    },
+    {
+      "fold": 3,
+      "train_end": 6051,
+      "n_train_positives": 1083,
+      "n_nvda_train_positives": 649,
+      "nvda_share_of_train_positives": 0.5992613111726686,
+      "n_nvda_from_rows_before_fold0_end": 434,
+      "early_nvda_share_of_train_positives": 0.4007386888273315
+    }
+  ],
+  "signal_note": "Large near-threshold mass or high selloff-day positive share means the label is noisy or market-driven rather than ticker-specific. Recorded only; no action in Option A."
+}
