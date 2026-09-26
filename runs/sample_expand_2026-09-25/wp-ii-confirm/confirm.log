@@ -1,0 +1,18 @@
+[wp-ii-confirm] start 2026-09-25 05:51 PM CT
+pre-reg self-SHA OK 5fbae0d07f50714211eb6a79a1e6b6fe1d5a5657f1e1959562d6338260514b6d
+ticker canonical SHA OK 1b107bb20f4f5b0d9cb9f4194cf320688be8d9654a9c2e4a084bc25e20a93f2f
+holdout tickers (20): ['ADBE', 'AVGO', 'BIDU', 'CCL', 'CRM', 'CVS', 'DD', 'FDX', 'GLD', 'GSK', 'JNJ', 'MDT', 'MO', 'MRVL', 'NOK', 'REGN', 'SLB', 'SNY', 'TM', 'XLK']
+dataset hash OK 2e8db9a9ac77975ee7a88ec828748afe70827f50a1a4ee7c5709dde35a8c8528
+boundary=189362 train_end=188579 dropped=783
+holdout B eval n=1925 pos=644
+train after excluding holdout tickers: n=154706 (excluded 33873 rows from [:train_end))
+served locked-test (regression only) n=1788 pos=233
+--- seed 42 ---
+  operable thr=0.2500 valF1=0.1336 valP=0.3489 | holdout F1=0.2824 P=0.3016 R=0.2655 AUPRC=0.3411 → FAIL
+--- seed 7 ---
+  operable thr=0.2500 valF1=0.1270 valP=0.3817 | holdout F1=0.2788 P=0.2995 R=0.2609 AUPRC=0.3400 → FAIL
+--- seed 123 ---
+  operable thr=0.2500 valF1=0.1340 valP=0.3504 | holdout F1=0.2239 P=0.2804 R=0.1863 AUPRC=0.3317 → FAIL
+wrote /Users/tom/Documents/Git/alphaguard-wt-option-b/runs/sample_expand_2026-09-25/wp-ii-confirm/metrics.json
+wrote /Users/tom/Documents/Git/alphaguard-wt-option-b/runs/sample_expand_2026-09-25/wp-ii-confirm/summary.md
+[wp-ii-confirm] done verdict=FAIL go_claimed=False wall=24.2s

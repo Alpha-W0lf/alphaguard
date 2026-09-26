@@ -1,0 +1,15 @@
+FinBERT device=mps batch_size=16
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 46291.19it/s]
+{
+  "preferred_device": "mps",
+  "n_headlines": 32,
+  "batch_size": 16,
+  "seconds": 5.2966,
+  "headlines_per_sec": 6.042,
+  "n_scores": 32,
+  "score_min": -0.917322626337409,
+  "score_max": 0.8218277469277382,
+  "score_mean": -0.05844011303270236,
+  "mps_available": true
+}
+wrote /Users/tom/Documents/Git/alphaguard-wt-option-b/runs/sample_expand_2026-09-25/wp-e2/mps_smoke.json

@@ -1,0 +1,34 @@
+WP-E1 start git=1f53808d0945bab0b7a3119a9ee00ab524df6145 freeze=/Users/tom/Documents/Git/alphaguard-wt-option-b/data/derived/training_events_optionB_001856a6.parquet
+Loaded DEV only: n=7125 (locked index>=7125 discarded)
+fold3 purged: train=[0,5981) val=[6056,7125) embargo_rows=75 source=label_horizon changed=True
+  fold0: train_end=2821 val=[2850,3918) embargo=29
+  fold1: train_end=3907 val=[3918,4987) embargo=11
+  fold2: train_end=4949 val=[4987,6056) embargo=38
+  fold3: train_end=5981 val=[6056,7125) embargo=75
+train_pool rows=5981 pos=1040 ticker_days=2139; val rows=1069 pos=185 prev=0.1731
+  frac=0.25 seed=0 n_td=535 train_auprc=0.7152 val_auprc=0.1876 auprc/prev=1.084 F1=0.0818 P=0.2571
+  frac=0.25 seed=1 n_td=535 train_auprc=0.8156 val_auprc=0.2733 auprc/prev=1.579 F1=0.2810 P=0.2865
+  frac=0.25 seed=2 n_td=535 train_auprc=0.7293 val_auprc=0.2711 auprc/prev=1.567 F1=0.4034 P=0.3299
+  frac=0.25 seed=3 n_td=535 train_auprc=0.6766 val_auprc=0.2355 auprc/prev=1.361 F1=0.3910 P=0.3645
+  frac=0.25 seed=4 n_td=535 train_auprc=0.7563 val_auprc=0.2274 auprc/prev=1.314 F1=0.3349 P=0.2908
+  frac=0.50 seed=0 n_td=1070 train_auprc=0.6037 val_auprc=0.1968 auprc/prev=1.137 F1=0.0704 P=0.1010
+  frac=0.50 seed=1 n_td=1070 train_auprc=0.6301 val_auprc=0.3016 auprc/prev=1.743 F1=0.4090 P=0.3796
+  frac=0.50 seed=2 n_td=1070 train_auprc=0.6289 val_auprc=0.2453 auprc/prev=1.417 F1=0.3750 P=0.3279
+  frac=0.50 seed=3 n_td=1070 train_auprc=0.6121 val_auprc=0.3665 auprc/prev=2.118 F1=0.2548 P=0.4459
+  frac=0.50 seed=4 n_td=1070 train_auprc=0.6134 val_auprc=0.3236 auprc/prev=1.870 F1=0.2576 P=0.4304
+  frac=0.75 seed=0 n_td=1604 train_auprc=0.5625 val_auprc=0.2173 auprc/prev=1.256 F1=0.0611 P=0.1039
+  frac=0.75 seed=1 n_td=1604 train_auprc=0.5865 val_auprc=0.3165 auprc/prev=1.829 F1=0.3725 P=0.3158
+  frac=0.75 seed=2 n_td=1604 train_auprc=0.5677 val_auprc=0.3638 auprc/prev=2.102 F1=0.3370 P=0.2563
+  frac=0.75 seed=3 n_td=1604 train_auprc=0.5384 val_auprc=0.3921 auprc/prev=2.266 F1=0.4611 P=0.4574
+  frac=0.75 seed=4 n_td=1604 train_auprc=0.5515 val_auprc=0.2432 auprc/prev=1.405 F1=0.3848 P=0.3057
+  frac=1.00 seed=0 n_td=2139 train_auprc=0.5108 val_auprc=0.4130 auprc/prev=2.387 F1=0.4341 P=0.3956
+  frac=1.00 seed=1 n_td=2139 train_auprc=0.5079 val_auprc=0.3505 auprc/prev=2.025 F1=0.3753 P=0.3099
+  frac=1.00 seed=2 n_td=2139 train_auprc=0.5248 val_auprc=0.3729 auprc/prev=2.155 F1=0.4175 P=0.3990
+  frac=1.00 seed=3 n_td=2139 train_auprc=0.5138 val_auprc=0.3434 auprc/prev=1.984 F1=0.4193 P=0.3425
+  frac=1.00 seed=4 n_td=2139 train_auprc=0.5015 val_auprc=0.2958 auprc/prev=1.709 F1=0.3909 P=0.3373
+S2 VARIANCE-DOMINATED: gap@100%=0.1566 > seed_spread=0.0429 and val AUPRC non-decreasing 0.2390→0.3551 → may proceed E2 (subject to S3/G4).
+Figueroa power-law (Estimated): a=1.8432 c=-2.2020 b=0.050 rmse=0.0098
+Permutation test: n=200 group-level on train pool, score=val AUPRC
+  observed val_auprc=0.413021
+  perm 25/200 last=0.1577
+  perm 50/200 last=0.2476
