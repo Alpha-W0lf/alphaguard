@@ -1,5 +1,5 @@
 .env
-.venv/
+.venv
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -15,3 +15,7 @@ data/raw/
 !data/fixtures/**
 .coverage
 htmlcov/
+
+# Raw per-seed diagnostic plots/score arrays from ad-hoc ML runs (bulky, reproducible; keep summaries/logs, not these)
+runs/**/*.png
+runs/**/*.npz

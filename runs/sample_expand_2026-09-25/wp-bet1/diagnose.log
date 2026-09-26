@@ -1,0 +1,60 @@
+loading /Users/tom/Documents/Git/alphaguard-wt-option-b/data/derived/training_events_jh63e_ecb73eca.parquet
+dataset hash OK 2e8db9a9ac77… n=201255
+boundary=189362 train_end=188579 n_dev=188579 embargo_src=label_horizon purged=True
+  fold0: train[0:74884) val[75431:103718) embargo=547
+  fold1: train[0:103215) val[103718:132005) embargo=503
+  fold2: train[0:131378) val[132005:160292) embargo=627
+  fold3: train[0:159899) val[160292:188579) embargo=393
+
+=== seed 42 ===
+  XGB OOF n=113148 pos=18805 prev=0.1662
+  XGB AUPRC=0.2273 maxP@R≥0.375=0.2411 F1max R=0.557
+  LogReg AUPRC=0.2274 maxP@R≥0.375=0.2407 F1max R=0.592
+  abl[text] ΔAUPRC=+0.0005 CI[-0.0003,+0.0013] incl0=True
+  abl[price] ΔAUPRC=+0.0628 CI[+0.0594,+0.0661] incl0=False
+  abl[calendar] ΔAUPRC=+0.0003 CI[-0.0013,+0.0018] incl0=True
+  drop1[finbert_sentiment] Δ=+0.0005
+  drop1[volatility_20d] Δ=+0.0164
+  drop1[return_5d_prior] Δ=+0.0003
+  drop1[return_20d_prior] Δ=-0.0000
+  drop1[spy_return_5d] Δ=+0.0004
+  drop1[rs_20d] Δ=+0.0001
+  drop1[drawdown_20d] Δ=+0.0022
+  drop1[volatility_5d] Δ=-0.0003
+  drop1[spy_volatility_20d] Δ=-0.0025
+
+=== seed 7 ===
+  XGB OOF n=113148 pos=18805 prev=0.1662
+  XGB AUPRC=0.2277 maxP@R≥0.375=0.2357 F1max R=0.550
+  LogReg AUPRC=0.2274 maxP@R≥0.375=0.2407 F1max R=0.592
+  abl[text] ΔAUPRC=+0.0024 CI[+0.0015,+0.0032] incl0=False
+  abl[price] ΔAUPRC=+0.0630 CI[+0.0593,+0.0668] incl0=False
+  abl[calendar] ΔAUPRC=-0.0033 CI[-0.0050,-0.0019] incl0=False
+  drop1[finbert_sentiment] Δ=+0.0024
+  drop1[volatility_20d] Δ=+0.0159
+  drop1[return_5d_prior] Δ=-0.0001
+  drop1[return_20d_prior] Δ=-0.0018
+  drop1[spy_return_5d] Δ=-0.0014
+  drop1[rs_20d] Δ=-0.0006
+  drop1[drawdown_20d] Δ=+0.0007
+  drop1[volatility_5d] Δ=-0.0008
+  drop1[spy_volatility_20d] Δ=-0.0028
+
+=== seed 123 ===
+  XGB OOF n=113148 pos=18805 prev=0.1662
+  XGB AUPRC=0.2268 maxP@R≥0.375=0.2405 F1max R=0.568
+  LogReg AUPRC=0.2274 maxP@R≥0.375=0.2407 F1max R=0.592
+  abl[text] ΔAUPRC=-0.0002 CI[-0.0011,+0.0008] incl0=True
+  abl[price] ΔAUPRC=+0.0608 CI[+0.0571,+0.0648] incl0=False
+  abl[calendar] ΔAUPRC=-0.0039 CI[-0.0055,-0.0024] incl0=False
+  drop1[finbert_sentiment] Δ=-0.0002
+  drop1[volatility_20d] Δ=+0.0155
+  drop1[return_5d_prior] Δ=+0.0012
+  drop1[return_20d_prior] Δ=-0.0003
+  drop1[spy_return_5d] Δ=-0.0007
+  drop1[rs_20d] Δ=-0.0015
+  drop1[drawdown_20d] Δ=+0.0003
+  drop1[volatility_5d] Δ=-0.0007
+  drop1[spy_volatility_20d] Δ=-0.0022
+
+Wrote /Users/tom/Documents/Git/alphaguard-wt-option-b/runs/sample_expand_2026-09-25/wp-bet1/diagnosis.json in 237.9s

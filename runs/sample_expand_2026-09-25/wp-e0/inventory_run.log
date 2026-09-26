@@ -1,0 +1,3077 @@
+=== freeze profile ===
+unique_ticker_days 2826 rows_in_repeated 7822
+=== archive load (processed) ===
+processed dedup 1384360
+=== partner load ===
+partner dedup 1822509
+tickers_ge200_dev 1772 n_tickers 6191
+=== closes probe for 1772 ge200 candidates (ranked) ===
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: BBRY"}}}
+$BBRY: possibly delisted; no timezone found
+
+1 Failed download:
+['BBRY']: possibly delisted; no timezone found
+$JCP: possibly delisted; no timezone found
+
+1 Failed download:
+['JCP']: possibly delisted; no timezone found
+$AGN: possibly delisted; no timezone found
+
+1 Failed download:
+['AGN']: possibly delisted; no timezone found
+  probed 25/1772; extras_ok=17 dropped=6
+$TWX: possibly delisted; no timezone found
+
+1 Failed download:
+['TWX']: possibly delisted; no timezone found
+$LNKD: possibly delisted; no timezone found
+
+1 Failed download:
+['LNKD']: possibly delisted; no timezone found
+$EA: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['EA']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$CHK: possibly delisted; no timezone found
+
+1 Failed download:
+['CHK']: possibly delisted; no timezone found
+$MYL: possibly delisted; no timezone found
+
+1 Failed download:
+['MYL']: possibly delisted; no timezone found
+$DISH: possibly delisted; no timezone found
+
+1 Failed download:
+['DISH']: possibly delisted; no timezone found
+$GPS: possibly delisted; no timezone found
+
+1 Failed download:
+['GPS']: possibly delisted; no timezone found
+  probed 50/1772; extras_ok=34 dropped=14
+$ATVI: possibly delisted; no timezone found
+
+1 Failed download:
+['ATVI']: possibly delisted; no timezone found
+$PCLN: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['PCLN']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ZNGA: possibly delisted; no timezone found
+
+1 Failed download:
+['ZNGA']: possibly delisted; no timezone found
+$GMCR: possibly delisted; no timezone found
+
+1 Failed download:
+['GMCR']: possibly delisted; no timezone found
+$FEYE: possibly delisted; no timezone found
+
+1 Failed download:
+['FEYE']: possibly delisted; no timezone found
+  probed 75/1772; extras_ok=53 dropped=20
+$NBG: possibly delisted; no timezone found
+
+1 Failed download:
+['NBG']: possibly delisted; no timezone found
+$MON: possibly delisted; no timezone found
+
+1 Failed download:
+['MON']: possibly delisted; no timezone found
+$YHOO: possibly delisted; no timezone found
+
+1 Failed download:
+['YHOO']: possibly delisted; no timezone found
+$SHLD: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SHLD']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$RAD: possibly delisted; no timezone found
+
+1 Failed download:
+['RAD']: possibly delisted; no timezone found
+$JWN: possibly delisted; no timezone found
+
+1 Failed download:
+['JWN']: possibly delisted; no timezone found
+$TIF: possibly delisted; no timezone found
+
+1 Failed download:
+['TIF']: possibly delisted; no timezone found
+$FCAU: possibly delisted; no timezone found
+
+1 Failed download:
+['FCAU']: possibly delisted; no timezone found
+$BBBY: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BBBY']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$VMW: possibly delisted; no timezone found
+
+1 Failed download:
+['VMW']: possibly delisted; no timezone found
+  probed 100/1772; extras_ok=66 dropped=31
+$WFM: possibly delisted; no timezone found
+
+1 Failed download:
+['WFM']: possibly delisted; no timezone found
+$AKS: possibly delisted; no timezone found
+
+1 Failed download:
+['AKS']: possibly delisted; no timezone found
+$APC: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['APC']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$KORS: possibly delisted; no timezone found
+
+1 Failed download:
+['KORS']: possibly delisted; no timezone found
+  probed 125/1772; extras_ok=85 dropped=37
+$HTZ: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['HTZ']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$AET: possibly delisted; no timezone found
+
+1 Failed download:
+['AET']: possibly delisted; no timezone found
+$FL: possibly delisted; no timezone found
+
+1 Failed download:
+['FL']: possibly delisted; no timezone found
+$JNPR: possibly delisted; no timezone found
+
+1 Failed download:
+['JNPR']: possibly delisted; no timezone found
+$SYMC: possibly delisted; no timezone found
+
+1 Failed download:
+['SYMC']: possibly delisted; no timezone found
+$COH: possibly delisted; no timezone found
+
+1 Failed download:
+['COH']: possibly delisted; no timezone found
+  probed 150/1772; extras_ok=104 dropped=43
+$WBA: possibly delisted; no timezone found
+
+1 Failed download:
+['WBA']: possibly delisted; no timezone found
+$RHT: possibly delisted; no timezone found
+
+1 Failed download:
+['RHT']: possibly delisted; no timezone found
+$CREE: possibly delisted; no timezone found
+
+1 Failed download:
+['CREE']: possibly delisted; no timezone found
+$GWPH: possibly delisted; no timezone found
+
+1 Failed download:
+['GWPH']: possibly delisted; no timezone found
+$SINA: possibly delisted; no timezone found
+
+1 Failed download:
+['SINA']: possibly delisted; no timezone found
+$SNDK: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SNDK']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$X: possibly delisted; no timezone found
+
+1 Failed download:
+['X']: possibly delisted; no timezone found
+$ENDP: possibly delisted; no timezone found
+
+1 Failed download:
+['ENDP']: possibly delisted; no timezone found
+$SPWR: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SPWR']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$LL: possibly delisted; no timezone found
+
+1 Failed download:
+['LL']: possibly delisted; no timezone found
+$BKS: possibly delisted; no timezone found
+
+1 Failed download:
+['BKS']: possibly delisted; no timezone found
+$ESRX: possibly delisted; no timezone found
+
+1 Failed download:
+['ESRX']: possibly delisted; no timezone found
+$BHI: possibly delisted; no timezone found
+
+1 Failed download:
+['BHI']: possibly delisted; no timezone found
+  probed 175/1772; extras_ok=115 dropped=57
+$K: possibly delisted; no timezone found
+
+1 Failed download:
+['K']: possibly delisted; no timezone found
+$SPLS: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SPLS']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$TWC: possibly delisted; no timezone found
+
+1 Failed download:
+['TWC']: possibly delisted; no timezone found
+$BWLD: possibly delisted; no timezone found
+
+1 Failed download:
+['BWLD']: possibly delisted; no timezone found
+  probed 200/1772; extras_ok=131 dropped=66
+$SPLK: possibly delisted; no timezone found
+
+1 Failed download:
+['SPLK']: possibly delisted; no timezone found
+$DRYS: possibly delisted; no timezone found
+
+1 Failed download:
+['DRYS']: possibly delisted; no timezone found
+$WLL: possibly delisted; no timezone found
+
+1 Failed download:
+['WLL']: possibly delisted; no timezone found
+$NAV: possibly delisted; no timezone found
+
+1 Failed download:
+['NAV']: possibly delisted; no timezone found
+$AVP: possibly delisted; no timezone found
+
+1 Failed download:
+['AVP']: possibly delisted; no timezone found
+$GRUB: possibly delisted; no timezone found
+
+1 Failed download:
+['GRUB']: possibly delisted; no timezone found
+$SHPG: possibly delisted; no timezone found
+
+1 Failed download:
+['SHPG']: possibly delisted; no timezone found
+$DNKN: possibly delisted; no timezone found
+
+1 Failed download:
+['DNKN']: possibly delisted; no timezone found
+$SAVE: possibly delisted; no timezone found
+
+1 Failed download:
+['SAVE']: possibly delisted; no timezone found
+$PIR: possibly delisted; no timezone found
+
+1 Failed download:
+['PIR']: possibly delisted; no timezone found
+  probed 225/1772; extras_ok=146 dropped=76
+$MRO: possibly delisted; no timezone found
+
+1 Failed download:
+['MRO']: possibly delisted; no timezone found
+$CLVS: possibly delisted; no timezone found
+
+1 Failed download:
+['CLVS']: possibly delisted; no timezone found
+$BRCM: possibly delisted; no timezone found
+
+1 Failed download:
+['BRCM']: possibly delisted; no timezone found
+$ETFC: possibly delisted; no timezone found
+
+1 Failed download:
+['ETFC']: possibly delisted; no timezone found
+$POT: possibly delisted; no timezone found
+
+1 Failed download:
+['POT']: possibly delisted; no timezone found
+$FNSR: possibly delisted; no timezone found
+
+1 Failed download:
+['FNSR']: possibly delisted; no timezone found
+$OSTK: possibly delisted; no timezone found
+
+1 Failed download:
+['OSTK']: possibly delisted; no timezone found
+  probed 250/1772; extras_ok=162 dropped=85
+$FDO: possibly delisted; no timezone found
+
+1 Failed download:
+['FDO']: possibly delisted; no timezone found
+$ODP: possibly delisted; no timezone found
+
+1 Failed download:
+['ODP']: possibly delisted; no timezone found
+$SODA: possibly delisted; no timezone found
+
+1 Failed download:
+['SODA']: possibly delisted; no timezone found
+$SWHC: possibly delisted; no timezone found
+
+1 Failed download:
+['SWHC']: possibly delisted; no timezone found
+$BIG: possibly delisted; no timezone found
+
+1 Failed download:
+['BIG']: possibly delisted; no timezone found
+$ARNA: possibly delisted; no timezone found
+
+1 Failed download:
+['ARNA']: possibly delisted; no timezone found
+$LGF: possibly delisted; no timezone found
+
+1 Failed download:
+['LGF']: possibly delisted; no timezone found
+  probed 275/1772; extras_ok=178 dropped=94
+$FINL: possibly delisted; no timezone found
+
+1 Failed download:
+['FINL']: possibly delisted; no timezone found
+$CTL: possibly delisted; no timezone found
+
+1 Failed download:
+['CTL']: possibly delisted; no timezone found
+$DFS: possibly delisted; no timezone found
+
+1 Failed download:
+['DFS']: possibly delisted; no timezone found
+$AOL: possibly delisted; no timezone found
+
+1 Failed download:
+['AOL']: possibly delisted; no timezone found
+$VVUS: possibly delisted; no timezone found
+
+1 Failed download:
+['VVUS']: possibly delisted; no timezone found
+$CY: possibly delisted; no timezone found
+
+1 Failed download:
+['CY']: possibly delisted; no timezone found
+$RAX: possibly delisted; no timezone found
+
+1 Failed download:
+['RAX']: possibly delisted; no timezone found
+$SGEN: possibly delisted; no timezone found
+
+1 Failed download:
+['SGEN']: possibly delisted; no timezone found
+$ARIA: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ARIA']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$STJ: possibly delisted; no timezone found
+
+1 Failed download:
+['STJ']: possibly delisted; no timezone found
+  probed 300/1772; extras_ok=191 dropped=106
+$CTXS: possibly delisted; no timezone found
+
+1 Failed download:
+['CTXS']: possibly delisted; no timezone found
+$HZNP: possibly delisted; no timezone found
+
+1 Failed download:
+['HZNP']: possibly delisted; no timezone found
+$DF: possibly delisted; no timezone found
+
+1 Failed download:
+['DF']: possibly delisted; no timezone found
+$SKX: possibly delisted; no timezone found
+
+1 Failed download:
+['SKX']: possibly delisted; no timezone found
+$ICPT: possibly delisted; no timezone found
+
+1 Failed download:
+['ICPT']: possibly delisted; no timezone found
+$DISCA: possibly delisted; no timezone found
+
+1 Failed download:
+['DISCA']: possibly delisted; no timezone found
+  probed 325/1772; extras_ok=209 dropped=113
+$JEC: possibly delisted; no timezone found
+
+1 Failed download:
+['JEC']: possibly delisted; no timezone found
+$PNRA: possibly delisted; no timezone found
+
+1 Failed download:
+['PNRA']: possibly delisted; no timezone found
+$SVU: possibly delisted; no timezone found
+
+1 Failed download:
+['SVU']: possibly delisted; no timezone found
+$BLUE: possibly delisted; no timezone found
+
+1 Failed download:
+['BLUE']: possibly delisted; no timezone found
+$TSL: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TSL']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$NBL: possibly delisted; no timezone found
+
+1 Failed download:
+['NBL']: possibly delisted; no timezone found
+$ANTM: possibly delisted; no timezone found
+
+1 Failed download:
+['ANTM']: possibly delisted; no timezone found
+$NUAN: possibly delisted; no timezone found
+
+1 Failed download:
+['NUAN']: possibly delisted; no timezone found
+$TIVO: possibly delisted; no timezone found
+
+1 Failed download:
+['TIVO']: possibly delisted; no timezone found
+$PXD: possibly delisted; no timezone found
+
+1 Failed download:
+['PXD']: possibly delisted; no timezone found
+$DTV: possibly delisted; no timezone found
+
+1 Failed download:
+['DTV']: possibly delisted; no timezone found
+$GCI: possibly delisted; no timezone found
+
+1 Failed download:
+['GCI']: possibly delisted; no timezone found
+$KSU: possibly delisted; no timezone found
+
+1 Failed download:
+['KSU']: possibly delisted; no timezone found
+  probed 350/1772; extras_ok=221 dropped=126
+$ACHN: possibly delisted; no timezone found
+
+1 Failed download:
+['ACHN']: possibly delisted; no timezone found
+$NLNK: possibly delisted; no timezone found
+
+1 Failed download:
+['NLNK']: possibly delisted; no timezone found
+$MCP: possibly delisted; no timezone found
+
+1 Failed download:
+['MCP']: possibly delisted; no timezone found
+$STI: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['STI']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$GNC: possibly delisted; no timezone found
+
+1 Failed download:
+['GNC']: possibly delisted; no timezone found
+$CLR: possibly delisted; no timezone found
+
+1 Failed download:
+['CLR']: possibly delisted; no timezone found
+$CMA: possibly delisted; no timezone found
+
+1 Failed download:
+['CMA']: possibly delisted; no timezone found
+$CS: possibly delisted; no timezone found
+
+1 Failed download:
+['CS']: possibly delisted; no timezone found
+$GLUU: possibly delisted; no timezone found
+
+1 Failed download:
+['GLUU']: possibly delisted; no timezone found
+  probed 375/1772; extras_ok=236 dropped=136
+$MPEL: possibly delisted; no timezone found
+
+1 Failed download:
+['MPEL']: possibly delisted; no timezone found
+$FTR: possibly delisted; no timezone found
+
+1 Failed download:
+['FTR']: possibly delisted; no timezone found
+$SWN: possibly delisted; no timezone found
+
+1 Failed download:
+['SWN']: possibly delisted; no timezone found
+$JOY: possibly delisted; no timezone found
+
+1 Failed download:
+['JOY']: possibly delisted; no timezone found
+$WFT: possibly delisted; no timezone found
+
+1 Failed download:
+['WFT']: possibly delisted; no timezone found
+$ASNA: possibly delisted; no timezone found
+
+1 Failed download:
+['ASNA']: possibly delisted; no timezone found
+$ARO: possibly delisted; no timezone found
+
+1 Failed download:
+['ARO']: possibly delisted; no timezone found
+$BK: possibly delisted; no timezone found
+
+1 Failed download:
+['BK']: possibly delisted; no timezone found
+$MDCO: possibly delisted; no timezone found
+
+1 Failed download:
+['MDCO']: possibly delisted; no timezone found
+$DGLY: possibly delisted; no timezone found
+
+1 Failed download:
+['DGLY']: possibly delisted; no timezone found
+$HOLX: possibly delisted; no timezone found
+
+1 Failed download:
+['HOLX']: possibly delisted; no timezone found
+$HOT: possibly delisted; no timezone found
+
+1 Failed download:
+['HOT']: possibly delisted; no timezone found
+$MLNX: possibly delisted; no timezone found
+
+1 Failed download:
+['MLNX']: possibly delisted; no timezone found
+  probed 400/1772; extras_ok=248 dropped=149
+$FRED: possibly delisted; no timezone found
+
+1 Failed download:
+['FRED']: possibly delisted; no timezone found
+$TPX: possibly delisted; no timezone found
+
+1 Failed download:
+['TPX']: possibly delisted; no timezone found
+$FRAN: possibly delisted; no timezone found
+
+1 Failed download:
+['FRAN']: possibly delisted; no timezone found
+$OCN: possibly delisted; no timezone found
+
+1 Failed download:
+['OCN']: possibly delisted; no timezone found
+$ECA: possibly delisted; no timezone found
+
+1 Failed download:
+['ECA']: possibly delisted; no timezone found
+$YGE: possibly delisted; no timezone found
+
+1 Failed download:
+['YGE']: possibly delisted; no timezone found
+$NE: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['NE']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$YNDX: possibly delisted; no timezone found
+
+1 Failed download:
+['YNDX']: possibly delisted; no timezone found
+$TASR: possibly delisted; no timezone found
+
+1 Failed download:
+['TASR']: possibly delisted; no timezone found
+$ATHN: possibly delisted; no timezone found
+
+1 Failed download:
+['ATHN']: possibly delisted; no timezone found
+  probed 425/1772; extras_ok=262 dropped=160
+$AKRX: possibly delisted; no timezone found
+
+1 Failed download:
+['AKRX']: possibly delisted; no timezone found
+$AGU: possibly delisted; no timezone found
+
+1 Failed download:
+['AGU']: possibly delisted; no timezone found
+$DLPH: possibly delisted; no timezone found
+
+1 Failed download:
+['DLPH']: possibly delisted; no timezone found
+$MXIM: possibly delisted; no timezone found
+
+1 Failed download:
+['MXIM']: possibly delisted; no timezone found
+$IRBT: possibly delisted; no timezone found
+
+1 Failed download:
+['IRBT']: possibly delisted; no timezone found
+$BRCD: possibly delisted; no timezone found
+
+1 Failed download:
+['BRCD']: possibly delisted; no timezone found
+$QIHU: possibly delisted; no timezone found
+
+1 Failed download:
+['QIHU']: possibly delisted; no timezone found
+$RVBD: possibly delisted; no timezone found
+
+1 Failed download:
+['RVBD']: possibly delisted; no timezone found
+$MW: possibly delisted; no timezone found
+
+1 Failed download:
+['MW']: possibly delisted; no timezone found
+$MDVN: possibly delisted; no timezone found
+
+1 Failed download:
+['MDVN']: possibly delisted; no timezone found
+$ACOR: possibly delisted; no timezone found
+
+1 Failed download:
+['ACOR']: possibly delisted; no timezone found
+  probed 450/1772; extras_ok=274 dropped=173
+$ABC: possibly delisted; no timezone found
+
+1 Failed download:
+['ABC']: possibly delisted; no timezone found
+$ACT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ACT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$RSX: possibly delisted; no timezone found
+
+1 Failed download:
+['RSX']: possibly delisted; no timezone found
+$ADS: possibly delisted; no timezone found
+
+1 Failed download:
+['ADS']: possibly delisted; no timezone found
+$ETF: possibly delisted; no timezone found
+
+1 Failed download:
+['ETF']: possibly delisted; no timezone found
+$JASO: possibly delisted; no timezone found
+
+1 Failed download:
+['JASO']: possibly delisted; no timezone found
+$RAI: possibly delisted; no timezone found
+
+1 Failed download:
+['RAI']: possibly delisted; no timezone found
+$ALXN: possibly delisted; no timezone found
+
+1 Failed download:
+['ALXN']: possibly delisted; no timezone found
+  probed 475/1772; extras_ok=290 dropped=182
+$CHS: possibly delisted; no timezone found
+
+1 Failed download:
+['CHS']: possibly delisted; no timezone found
+$IGT: possibly delisted; no timezone found
+
+1 Failed download:
+['IGT']: possibly delisted; no timezone found
+$XON: possibly delisted; no timezone found
+
+1 Failed download:
+['XON']: possibly delisted; no timezone found
+$SFLY: possibly delisted; no timezone found
+
+1 Failed download:
+['SFLY']: possibly delisted; no timezone found
+$CYBR: possibly delisted; no timezone found
+
+1 Failed download:
+['CYBR']: possibly delisted; no timezone found
+$NLSN: possibly delisted; no timezone found
+
+1 Failed download:
+['NLSN']: possibly delisted; no timezone found
+$IMMU: possibly delisted; no timezone found
+
+1 Failed download:
+['IMMU']: possibly delisted; no timezone found
+$HRS: possibly delisted; no timezone found
+
+1 Failed download:
+['HRS']: possibly delisted; no timezone found
+$DWA: possibly delisted; no timezone found
+
+1 Failed download:
+['DWA']: possibly delisted; no timezone found
+$RSH: possibly delisted; no timezone found
+
+1 Failed download:
+['RSH']: possibly delisted; no timezone found
+  probed 500/1772; extras_ok=303 dropped=194
+$RCII: possibly delisted; no timezone found
+
+1 Failed download:
+['RCII']: possibly delisted; no timezone found
+$TKMR: possibly delisted; no timezone found
+
+1 Failed download:
+['TKMR']: possibly delisted; no timezone found
+$CVC: possibly delisted; no timezone found
+
+1 Failed download:
+['CVC']: possibly delisted; no timezone found
+$ALTR: possibly delisted; no timezone found
+
+1 Failed download:
+['ALTR']: possibly delisted; no timezone found
+$CXO: possibly delisted; no timezone found
+
+1 Failed download:
+['CXO']: possibly delisted; no timezone found
+$GG: possibly delisted; no timezone found
+
+1 Failed download:
+['GG']: possibly delisted; no timezone found
+$INSY: possibly delisted; no timezone found
+
+1 Failed download:
+['INSY']: possibly delisted; no timezone found
+$HA: possibly delisted; no timezone found
+
+1 Failed download:
+['HA']: possibly delisted; no timezone found
+$DO: possibly delisted; no timezone found
+
+1 Failed download:
+['DO']: possibly delisted; no timezone found
+  probed 525/1772; extras_ok=317 dropped=205
+$FOLD: possibly delisted; no timezone found
+
+1 Failed download:
+['FOLD']: possibly delisted; no timezone found
+$TOT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TOT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$TSRO: possibly delisted; no timezone found
+
+1 Failed download:
+['TSRO']: possibly delisted; no timezone found
+$CHL: possibly delisted; no timezone found
+
+1 Failed download:
+['CHL']: possibly delisted; no timezone found
+$LM: possibly delisted; no timezone found
+
+1 Failed download:
+['LM']: possibly delisted; no timezone found
+$RENN: possibly delisted; no timezone found
+
+1 Failed download:
+['RENN']: possibly delisted; no timezone found
+$TERP: possibly delisted; no timezone found
+
+1 Failed download:
+['TERP']: possibly delisted; no timezone found
+  probed 550/1772; extras_ok=334 dropped=213
+$ZIOP: possibly delisted; no timezone found
+
+1 Failed download:
+['ZIOP']: possibly delisted; no timezone found
+$LVLT: possibly delisted; no timezone found
+
+1 Failed download:
+['LVLT']: possibly delisted; no timezone found
+$ZAGG: possibly delisted; no timezone found
+
+1 Failed download:
+['ZAGG']: possibly delisted; no timezone found
+$LCI: possibly delisted; no timezone found
+
+1 Failed download:
+['LCI']: possibly delisted; no timezone found
+$WCG: possibly delisted; no timezone found
+
+1 Failed download:
+['WCG']: possibly delisted; no timezone found
+$CONN: possibly delisted; no timezone found
+
+1 Failed download:
+['CONN']: possibly delisted; no timezone found
+$WLT: possibly delisted; no timezone found
+
+1 Failed download:
+['WLT']: possibly delisted; no timezone found
+$SONC: possibly delisted; no timezone found
+
+1 Failed download:
+['SONC']: possibly delisted; no timezone found
+$DVAX: possibly delisted; no timezone found
+
+1 Failed download:
+['DVAX']: possibly delisted; no timezone found
+  probed 575/1772; extras_ok=349 dropped=223
+$VRNG: possibly delisted; no timezone found
+
+1 Failed download:
+['VRNG']: possibly delisted; no timezone found
+$CSC: possibly delisted; no timezone found
+
+1 Failed download:
+['CSC']: possibly delisted; no timezone found
+$SGMO: possibly delisted; no timezone found
+
+1 Failed download:
+['SGMO']: possibly delisted; no timezone found
+$INFN: possibly delisted; no timezone found
+
+1 Failed download:
+['INFN']: possibly delisted; no timezone found
+$SOL: possibly delisted; no timezone found
+
+1 Failed download:
+['SOL']: possibly delisted; no timezone found
+$CAB: possibly delisted; no timezone found
+
+1 Failed download:
+['CAB']: possibly delisted; no timezone found
+$SGMS: possibly delisted; no timezone found
+
+1 Failed download:
+['SGMS']: possibly delisted; no timezone found
+$COL: possibly delisted; no timezone found
+
+1 Failed download:
+['COL']: possibly delisted; no timezone found
+$DEPO: possibly delisted; no timezone found
+
+1 Failed download:
+['DEPO']: possibly delisted; no timezone found
+$VIA: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['VIA']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ADXS: possibly delisted; no timezone found
+
+1 Failed download:
+['ADXS']: possibly delisted; no timezone found
+  probed 600/1772; extras_ok=360 dropped=237
+$DMND: possibly delisted; no timezone found
+
+1 Failed download:
+['DMND']: possibly delisted; no timezone found
+$HBI: possibly delisted; no timezone found
+
+1 Failed download:
+['HBI']: possibly delisted; no timezone found
+$PETM: possibly delisted; no timezone found
+
+1 Failed download:
+['PETM']: possibly delisted; no timezone found
+$LLL: possibly delisted; no timezone found
+
+1 Failed download:
+['LLL']: possibly delisted; no timezone found
+$WIN: possibly delisted; no timezone found
+
+1 Failed download:
+['WIN']: possibly delisted; no timezone found
+$NUVA: possibly delisted; no timezone found
+
+1 Failed download:
+['NUVA']: possibly delisted; no timezone found
+$SLXP: possibly delisted; no timezone found
+
+1 Failed download:
+['SLXP']: possibly delisted; no timezone found
+$BID: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BID']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ARMH: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ARMH']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ETP: possibly delisted; no timezone found
+
+1 Failed download:
+['ETP']: possibly delisted; no timezone found
+  probed 625/1772; extras_ok=374 dropped=248
+$SWY: possibly delisted; no timezone found
+
+1 Failed download:
+['SWY']: possibly delisted; no timezone found
+$YOKU: possibly delisted; no timezone found
+
+1 Failed download:
+['YOKU']: possibly delisted; no timezone found
+$DPW: possibly delisted; no timezone found
+
+1 Failed download:
+['DPW']: possibly delisted; no timezone found
+$MSG: possibly delisted; no timezone found
+
+1 Failed download:
+['MSG']: possibly delisted; no timezone found
+$AVEO: possibly delisted; no timezone found
+
+1 Failed download:
+['AVEO']: possibly delisted; no timezone found
+$JUNO: possibly delisted; no timezone found
+
+1 Failed download:
+['JUNO']: possibly delisted; no timezone found
+$MJN: possibly delisted; no timezone found
+
+1 Failed download:
+['MJN']: possibly delisted; no timezone found
+$ETE: possibly delisted; no timezone found
+
+1 Failed download:
+['ETE']: possibly delisted; no timezone found
+$RBS: possibly delisted; no timezone found
+
+1 Failed download:
+['RBS']: possibly delisted; no timezone found
+  probed 650/1772; extras_ok=387 dropped=260
+$DNR: possibly delisted; no timezone found
+
+1 Failed download:
+['DNR']: possibly delisted; no timezone found
+$OCLR: possibly delisted; no timezone found
+
+1 Failed download:
+['OCLR']: possibly delisted; no timezone found
+$ESV: possibly delisted; no timezone found
+
+1 Failed download:
+['ESV']: possibly delisted; no timezone found
+$SLCA: possibly delisted; no timezone found
+
+1 Failed download:
+['SLCA']: possibly delisted; no timezone found
+$CRZO: possibly delisted; no timezone found
+
+1 Failed download:
+['CRZO']: possibly delisted; no timezone found
+$HFC: possibly delisted; no timezone found
+
+1 Failed download:
+['HFC']: possibly delisted; no timezone found
+$XEC: possibly delisted; no timezone found
+
+1 Failed download:
+['XEC']: possibly delisted; no timezone found
+  probed 675/1772; extras_ok=403 dropped=269
+$ACRX: possibly delisted; no timezone found
+
+1 Failed download:
+['ACRX']: possibly delisted; no timezone found
+$OAS: possibly delisted; no timezone found
+
+1 Failed download:
+['OAS']: possibly delisted; no timezone found
+$NCR: possibly delisted; no timezone found
+
+1 Failed download:
+['NCR']: possibly delisted; no timezone found
+$KATE: possibly delisted; no timezone found
+
+1 Failed download:
+['KATE']: possibly delisted; no timezone found
+$AXL: possibly delisted; no timezone found
+
+1 Failed download:
+['AXL']: possibly delisted; no timezone found
+$ZGNX: possibly delisted; no timezone found
+
+1 Failed download:
+['ZGNX']: possibly delisted; no timezone found
+$TSO: possibly delisted; no timezone found
+
+1 Failed download:
+['TSO']: possibly delisted; no timezone found
+$BOBE: possibly delisted; no timezone found
+
+1 Failed download:
+['BOBE']: possibly delisted; no timezone found
+$HCP: possibly delisted; no timezone found
+
+1 Failed download:
+['HCP']: possibly delisted; no timezone found
+$SEE: possibly delisted; no timezone found
+
+1 Failed download:
+['SEE']: possibly delisted; no timezone found
+  probed 700/1772; extras_ok=418 dropped=279
+$ELGX: possibly delisted; no timezone found
+
+1 Failed download:
+['ELGX']: possibly delisted; no timezone found
+$COV: possibly delisted; no timezone found
+
+1 Failed download:
+['COV']: possibly delisted; no timezone found
+$AUY: possibly delisted; no timezone found
+
+1 Failed download:
+['AUY']: possibly delisted; no timezone found
+$DBD: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['DBD']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$IPXL: possibly delisted; no timezone found
+
+1 Failed download:
+['IPXL']: possibly delisted; no timezone found
+$SSI: possibly delisted; no timezone found
+
+1 Failed download:
+['SSI']: possibly delisted; no timezone found
+$APOL: possibly delisted; no timezone found
+
+1 Failed download:
+['APOL']: possibly delisted; no timezone found
+$GWR: possibly delisted; no timezone found
+
+1 Failed download:
+['GWR']: possibly delisted; no timezone found
+$ESPR: possibly delisted; no timezone found
+
+1 Failed download:
+['ESPR']: possibly delisted; no timezone found
+$PFPT: possibly delisted; no timezone found
+
+1 Failed download:
+['PFPT']: possibly delisted; no timezone found
+$GGP: possibly delisted; no timezone found
+
+1 Failed download:
+['GGP']: possibly delisted; no timezone found
+$ISIS: possibly delisted; no timezone found
+
+1 Failed download:
+['ISIS']: possibly delisted; no timezone found
+$SGYP: possibly delisted; no timezone found
+
+1 Failed download:
+['SGYP']: possibly delisted; no timezone found
+  probed 725/1772; extras_ok=428 dropped=294
+$YRCW: possibly delisted; no timezone found
+
+1 Failed download:
+['YRCW']: possibly delisted; no timezone found
+$TTM: possibly delisted; no timezone found
+
+1 Failed download:
+['TTM']: possibly delisted; no timezone found
+$SPR: possibly delisted; no timezone found
+
+1 Failed download:
+['SPR']: possibly delisted; no timezone found
+$VAR: possibly delisted; no timezone found
+
+1 Failed download:
+['VAR']: possibly delisted; no timezone found
+$KKD: possibly delisted; no timezone found
+
+1 Failed download:
+['KKD']: possibly delisted; no timezone found
+$IMPV: possibly delisted; no timezone found
+
+1 Failed download:
+['IMPV']: possibly delisted; no timezone found
+$TYC: possibly delisted; no timezone found
+
+1 Failed download:
+['TYC']: possibly delisted; no timezone found
+$OVTI: possibly delisted; no timezone found
+
+1 Failed download:
+['OVTI']: possibly delisted; no timezone found
+  probed 750/1772; extras_ok=444 dropped=303
+$MNTA: possibly delisted; no timezone found
+
+1 Failed download:
+['MNTA']: possibly delisted; no timezone found
+$WBMD: possibly delisted; no timezone found
+
+1 Failed download:
+['WBMD']: possibly delisted; no timezone found
+$CPRX: possibly delisted; no timezone found
+
+1 Failed download:
+['CPRX']: possibly delisted; no timezone found
+$PCYC: possibly delisted; no timezone found
+
+1 Failed download:
+['PCYC']: possibly delisted; no timezone found
+$VSLR: possibly delisted; no timezone found
+
+1 Failed download:
+['VSLR']: possibly delisted; no timezone found
+$TECD: possibly delisted; no timezone found
+
+1 Failed download:
+['TECD']: possibly delisted; no timezone found
+$MMC: possibly delisted; no timezone found
+
+1 Failed download:
+['MMC']: possibly delisted; no timezone found
+$TFM: possibly delisted; no timezone found
+
+1 Failed download:
+['TFM']: possibly delisted; no timezone found
+$RDC: possibly delisted; no timezone found
+
+1 Failed download:
+['RDC']: possibly delisted; no timezone found
+$KERX: possibly delisted; no timezone found
+
+1 Failed download:
+['KERX']: possibly delisted; no timezone found
+$AEZS: possibly delisted; no timezone found
+
+1 Failed download:
+['AEZS']: possibly delisted; no timezone found
+$VRNT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['VRNT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 775/1772; extras_ok=455 dropped=317
+$SIX: possibly delisted; no timezone found
+
+1 Failed download:
+['SIX']: possibly delisted; no timezone found
+$PERY: possibly delisted; no timezone found
+
+1 Failed download:
+['PERY']: possibly delisted; no timezone found
+$TROV: possibly delisted; no timezone found
+
+1 Failed download:
+['TROV']: possibly delisted; no timezone found
+$BLL: possibly delisted; no timezone found
+
+1 Failed download:
+['BLL']: possibly delisted; no timezone found
+$IPG: possibly delisted; no timezone found
+
+1 Failed download:
+['IPG']: possibly delisted; no timezone found
+$ROVI: possibly delisted; no timezone found
+
+1 Failed download:
+['ROVI']: possibly delisted; no timezone found
+$VSI: possibly delisted; no timezone found
+
+1 Failed download:
+['VSI']: possibly delisted; no timezone found
+$SYT: possibly delisted; no timezone found
+
+1 Failed download:
+['SYT']: possibly delisted; no timezone found
+$SCVL: possibly delisted; no timezone found
+
+1 Failed download:
+['SCVL']: possibly delisted; no timezone found
+$TTPH: possibly delisted; no timezone found
+
+1 Failed download:
+['TTPH']: possibly delisted; no timezone found
+  probed 800/1772; extras_ok=468 dropped=329
+$EPZM: possibly delisted; no timezone found
+
+1 Failed download:
+['EPZM']: possibly delisted; no timezone found
+$INFI: possibly delisted; no timezone found
+
+1 Failed download:
+['INFI']: possibly delisted; no timezone found
+$ELY: possibly delisted; no timezone found
+
+1 Failed download:
+['ELY']: possibly delisted; no timezone found
+$ALR: possibly delisted; no timezone found
+
+1 Failed download:
+['ALR']: possibly delisted; no timezone found
+$JJC: possibly delisted; no timezone found
+
+1 Failed download:
+['JJC']: possibly delisted; no timezone found
+$RENT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['RENT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$OREX: possibly delisted; no timezone found
+
+1 Failed download:
+['OREX']: possibly delisted; no timezone found
+$KITE: possibly delisted; no timezone found
+
+1 Failed download:
+['KITE']: possibly delisted; no timezone found
+$CAMP: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CAMP']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$PTLA: possibly delisted; no timezone found
+
+1 Failed download:
+['PTLA']: possibly delisted; no timezone found
+$BRK: possibly delisted; no timezone found
+
+1 Failed download:
+['BRK']: possibly delisted; no timezone found
+$LOGM: possibly delisted; no timezone found
+
+1 Failed download:
+['LOGM']: possibly delisted; no timezone found
+  probed 825/1772; extras_ok=479 dropped=343
+$COMM: possibly delisted; no timezone found
+
+1 Failed download:
+['COMM']: possibly delisted; no timezone found
+$FLT: possibly delisted; no timezone found
+
+1 Failed download:
+['FLT']: possibly delisted; no timezone found
+$PDCO: possibly delisted; no timezone found
+
+1 Failed download:
+['PDCO']: possibly delisted; no timezone found
+$SNCR: possibly delisted; no timezone found
+
+1 Failed download:
+['SNCR']: possibly delisted; no timezone found
+$BAS: possibly delisted; no timezone found
+
+1 Failed download:
+['BAS']: possibly delisted; no timezone found
+$PGNX: possibly delisted; no timezone found
+
+1 Failed download:
+['PGNX']: possibly delisted; no timezone found
+$PSTI: possibly delisted; no timezone found
+
+1 Failed download:
+['PSTI']: possibly delisted; no timezone found
+$CEO: possibly delisted; no timezone found
+
+1 Failed download:
+['CEO']: possibly delisted; no timezone found
+$IDTI: possibly delisted; no timezone found
+
+1 Failed download:
+['IDTI']: possibly delisted; no timezone found
+$CLSN: possibly delisted; no timezone found
+
+1 Failed download:
+['CLSN']: possibly delisted; no timezone found
+$TUP: possibly delisted; no timezone found
+
+1 Failed download:
+['TUP']: possibly delisted; no timezone found
+$HEAR: possibly delisted; no timezone found
+
+1 Failed download:
+['HEAR']: possibly delisted; no timezone found
+  probed 850/1772; extras_ok=491 dropped=356
+$SFUN: possibly delisted; no timezone found
+
+1 Failed download:
+['SFUN']: possibly delisted; no timezone found
+$GALE: possibly delisted; no timezone found
+
+1 Failed download:
+['GALE']: possibly delisted; no timezone found
+$LINE: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['LINE']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$SNI: possibly delisted; no timezone found
+
+1 Failed download:
+['SNI']: possibly delisted; no timezone found
+$WPX: possibly delisted; no timezone found
+
+1 Failed download:
+['WPX']: possibly delisted; no timezone found
+$IACI: possibly delisted; no timezone found
+
+1 Failed download:
+['IACI']: possibly delisted; no timezone found
+$KCG: possibly delisted; no timezone found
+
+1 Failed download:
+['KCG']: possibly delisted; no timezone found
+$MDP: possibly delisted; no timezone found
+
+1 Failed download:
+['MDP']: possibly delisted; no timezone found
+$NPTN: possibly delisted; no timezone found
+
+1 Failed download:
+['NPTN']: possibly delisted; no timezone found
+  probed 875/1772; extras_ok=503 dropped=369
+$CPE: possibly delisted; no timezone found
+
+1 Failed download:
+['CPE']: possibly delisted; no timezone found
+$ATU: possibly delisted; no timezone found
+
+1 Failed download:
+['ATU']: possibly delisted; no timezone found
+$MFRM: possibly delisted; no timezone found
+
+1 Failed download:
+['MFRM']: possibly delisted; no timezone found
+$EBIX: possibly delisted; no timezone found
+
+1 Failed download:
+['EBIX']: possibly delisted; no timezone found
+$HK: possibly delisted; no timezone found
+
+1 Failed download:
+['HK']: possibly delisted; no timezone found
+$IDRA: possibly delisted; no timezone found
+
+1 Failed download:
+['IDRA']: possibly delisted; no timezone found
+$NFX: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['NFX']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$CA: possibly delisted; no timezone found
+
+1 Failed download:
+['CA']: possibly delisted; no timezone found
+$MMP: possibly delisted; no timezone found
+
+1 Failed download:
+['MMP']: possibly delisted; no timezone found
+$LPI: possibly delisted; no timezone found
+
+1 Failed download:
+['LPI']: possibly delisted; no timezone found
+$CUB: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CUB']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$EROS: possibly delisted; no timezone found
+
+1 Failed download:
+['EROS']: possibly delisted; no timezone found
+$MEET: possibly delisted; no timezone found
+
+1 Failed download:
+['MEET']: possibly delisted; no timezone found
+  probed 900/1772; extras_ok=513 dropped=384
+$RRD: possibly delisted; no timezone found
+
+1 Failed download:
+['RRD']: possibly delisted; no timezone found
+$ARQL: possibly delisted; no timezone found
+
+1 Failed download:
+['ARQL']: possibly delisted; no timezone found
+$TSS: possibly delisted; no timezone found
+
+1 Failed download:
+['TSS']: possibly delisted; no timezone found
+$XOMA: possibly delisted; no timezone found
+
+1 Failed download:
+['XOMA']: possibly delisted; no timezone found
+$ZAYO: possibly delisted; no timezone found
+
+1 Failed download:
+['ZAYO']: possibly delisted; no timezone found
+$STMP: possibly delisted; no timezone found
+
+1 Failed download:
+['STMP']: possibly delisted; no timezone found
+$QEP: possibly delisted; no timezone found
+
+1 Failed download:
+['QEP']: possibly delisted; no timezone found
+$WBC: possibly delisted; no timezone found
+
+1 Failed download:
+['WBC']: possibly delisted; no timezone found
+$DCIX: possibly delisted; no timezone found
+
+1 Failed download:
+['DCIX']: possibly delisted; no timezone found
+$PDCE: possibly delisted; no timezone found
+
+1 Failed download:
+['PDCE']: possibly delisted; no timezone found
+$BBG: possibly delisted; no timezone found
+
+1 Failed download:
+['BBG']: possibly delisted; no timezone found
+  probed 925/1772; extras_ok=524 dropped=398
+$BECN: possibly delisted; no timezone found
+
+1 Failed download:
+['BECN']: possibly delisted; no timezone found
+$THS: possibly delisted; no timezone found
+
+1 Failed download:
+['THS']: possibly delisted; no timezone found
+$SCSS: possibly delisted; no timezone found
+
+1 Failed download:
+['SCSS']: possibly delisted; no timezone found
+$CYTR: possibly delisted; no timezone found
+
+1 Failed download:
+['CYTR']: possibly delisted; no timezone found
+$QLIK: possibly delisted; no timezone found
+
+1 Failed download:
+['QLIK']: possibly delisted; no timezone found
+$AVB: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['AVB']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$NSM: possibly delisted; no timezone found
+
+1 Failed download:
+['NSM']: possibly delisted; no timezone found
+$AAN: possibly delisted; no timezone found
+
+1 Failed download:
+['AAN']: possibly delisted; no timezone found
+$ATML: possibly delisted; no timezone found
+
+1 Failed download:
+['ATML']: possibly delisted; no timezone found
+$MNK: possibly delisted; no timezone found
+
+1 Failed download:
+['MNK']: possibly delisted; no timezone found
+  probed 950/1772; extras_ok=536 dropped=411
+$MACK: possibly delisted; no timezone found
+
+1 Failed download:
+['MACK']: possibly delisted; no timezone found
+$ONVO: possibly delisted; no timezone found
+
+1 Failed download:
+['ONVO']: possibly delisted; no timezone found
+$CPN: possibly delisted; no timezone found
+
+1 Failed download:
+['CPN']: possibly delisted; no timezone found
+$FXCM: possibly delisted; no timezone found
+
+1 Failed download:
+['FXCM']: possibly delisted; no timezone found
+$XLRN: possibly delisted; no timezone found
+
+1 Failed download:
+['XLRN']: possibly delisted; no timezone found
+$MTOR: possibly delisted; no timezone found
+
+1 Failed download:
+['MTOR']: possibly delisted; no timezone found
+$WPZ: possibly delisted; no timezone found
+
+1 Failed download:
+['WPZ']: possibly delisted; no timezone found
+$DANG: possibly delisted; no timezone found
+
+1 Failed download:
+['DANG']: possibly delisted; no timezone found
+$KIRK: possibly delisted; no timezone found
+
+1 Failed download:
+['KIRK']: possibly delisted; no timezone found
+$DRRX: possibly delisted; no timezone found
+
+1 Failed download:
+['DRRX']: possibly delisted; no timezone found
+$ALU: possibly delisted; no timezone found
+
+1 Failed download:
+['ALU']: possibly delisted; no timezone found
+$BCR: possibly delisted; no timezone found
+
+1 Failed download:
+['BCR']: possibly delisted; no timezone found
+  probed 975/1772; extras_ok=545 dropped=427
+$PE: possibly delisted; no timezone found
+
+1 Failed download:
+['PE']: possibly delisted; no timezone found
+$MASI: possibly delisted; no timezone found
+
+1 Failed download:
+['MASI']: possibly delisted; no timezone found
+$JDSU: possibly delisted; no timezone found
+
+1 Failed download:
+['JDSU']: possibly delisted; no timezone found
+$TCO: possibly delisted; no timezone found
+
+1 Failed download:
+['TCO']: possibly delisted; no timezone found
+$BDSI: possibly delisted; no timezone found
+
+1 Failed download:
+['BDSI']: possibly delisted; no timezone found
+$IOC: possibly delisted; no timezone found
+
+1 Failed download:
+['IOC']: possibly delisted; no timezone found
+$MHR: possibly delisted; no timezone found
+
+1 Failed download:
+['MHR']: possibly delisted; no timezone found
+$KND: possibly delisted; no timezone found
+
+1 Failed download:
+['KND']: possibly delisted; no timezone found
+$KOOL: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['KOOL']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$LMCA: possibly delisted; no timezone found
+
+1 Failed download:
+['LMCA']: possibly delisted; no timezone found
+  probed 1000/1772; extras_ok=558 dropped=439
+$CR: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CR']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$AKAO: possibly delisted; no timezone found
+
+1 Failed download:
+['AKAO']: possibly delisted; no timezone found
+$ZFGN: possibly delisted; no timezone found
+
+1 Failed download:
+['ZFGN']: possibly delisted; no timezone found
+$SAEX: possibly delisted; no timezone found
+
+1 Failed download:
+['SAEX']: possibly delisted; no timezone found
+$NVCN: possibly delisted; no timezone found
+
+1 Failed download:
+['NVCN']: possibly delisted; no timezone found
+$AGRX: possibly delisted; no timezone found
+
+1 Failed download:
+['AGRX']: possibly delisted; no timezone found
+$ONTX: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ONTX']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$LLTC: possibly delisted; no timezone found
+
+1 Failed download:
+['LLTC']: possibly delisted; no timezone found
+$PTX: possibly delisted; no timezone found
+
+1 Failed download:
+['PTX']: possibly delisted; no timezone found
+$MRNS: possibly delisted; no timezone found
+
+1 Failed download:
+['MRNS']: possibly delisted; no timezone found
+$EV: possibly delisted; no timezone found
+
+1 Failed download:
+['EV']: possibly delisted; no timezone found
+$CPST: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CPST']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1025/1772; extras_ok=569 dropped=453
+$FCS: possibly delisted; no timezone found
+
+1 Failed download:
+['FCS']: possibly delisted; no timezone found
+$CCE: possibly delisted; no timezone found
+
+1 Failed download:
+['CCE']: possibly delisted; no timezone found
+$RLGY: possibly delisted; no timezone found
+
+1 Failed download:
+['RLGY']: possibly delisted; no timezone found
+$MLHR: possibly delisted; no timezone found
+
+1 Failed download:
+['MLHR']: possibly delisted; no timezone found
+$STO: possibly delisted; no timezone found
+
+1 Failed download:
+['STO']: possibly delisted; no timezone found
+$CGIX: possibly delisted; no timezone found
+
+1 Failed download:
+['CGIX']: possibly delisted; no timezone found
+$CBST: possibly delisted; no timezone found
+
+1 Failed download:
+['CBST']: possibly delisted; no timezone found
+$WYN: possibly delisted; no timezone found
+
+1 Failed download:
+['WYN']: possibly delisted; no timezone found
+$TRXC: possibly delisted; no timezone found
+
+1 Failed download:
+['TRXC']: possibly delisted; no timezone found
+$DPLO: possibly delisted; no timezone found
+
+1 Failed download:
+['DPLO']: possibly delisted; no timezone found
+$MANT: possibly delisted; no timezone found
+
+1 Failed download:
+['MANT']: possibly delisted; no timezone found
+$GOL: possibly delisted; no timezone found
+
+1 Failed download:
+['GOL']: possibly delisted; no timezone found
+$ARRS: possibly delisted; no timezone found
+
+1 Failed download:
+['ARRS']: possibly delisted; no timezone found
+  probed 1050/1772; extras_ok=581 dropped=466
+$FPRX: possibly delisted; no timezone found
+
+1 Failed download:
+['FPRX']: possibly delisted; no timezone found
+$RT: possibly delisted; no timezone found
+
+1 Failed download:
+['RT']: possibly delisted; no timezone found
+$WWAV: possibly delisted; no timezone found
+
+1 Failed download:
+['WWAV']: possibly delisted; no timezone found
+$SMRT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SMRT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$THOR: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['THOR']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$WMGI: possibly delisted; no timezone found
+
+1 Failed download:
+['WMGI']: possibly delisted; no timezone found
+$LPNT: possibly delisted; no timezone found
+
+1 Failed download:
+['LPNT']: possibly delisted; no timezone found
+$MSCC: possibly delisted; no timezone found
+
+1 Failed download:
+['MSCC']: possibly delisted; no timezone found
+  probed 1075/1772; extras_ok=598 dropped=474
+$SLW: possibly delisted; no timezone found
+
+1 Failed download:
+['SLW']: possibly delisted; no timezone found
+$CYTX: possibly delisted; no timezone found
+
+1 Failed download:
+['CYTX']: possibly delisted; no timezone found
+$DDR: possibly delisted; no timezone found
+
+1 Failed download:
+['DDR']: possibly delisted; no timezone found
+$CFX: possibly delisted; no timezone found
+
+1 Failed download:
+['CFX']: possibly delisted; no timezone found
+$ECYT: possibly delisted; no timezone found
+
+1 Failed download:
+['ECYT']: possibly delisted; no timezone found
+$ADMS: possibly delisted; no timezone found
+
+1 Failed download:
+['ADMS']: possibly delisted; no timezone found
+$FRC: possibly delisted; no timezone found
+
+1 Failed download:
+['FRC']: possibly delisted; no timezone found
+$ERJ: possibly delisted; no timezone found
+
+1 Failed download:
+['ERJ']: possibly delisted; no timezone found
+$SCHN: possibly delisted; no timezone found
+
+1 Failed download:
+['SCHN']: possibly delisted; no timezone found
+$SCG: possibly delisted; no timezone found
+
+1 Failed download:
+['SCG']: possibly delisted; no timezone found
+$AUXL: possibly delisted; no timezone found
+
+1 Failed download:
+['AUXL']: possibly delisted; no timezone found
+  probed 1100/1772; extras_ok=611 dropped=486
+$INFA: possibly delisted; no timezone found
+
+1 Failed download:
+['INFA']: possibly delisted; no timezone found
+$FLIR: possibly delisted; no timezone found
+
+1 Failed download:
+['FLIR']: possibly delisted; no timezone found
+$PNK: possibly delisted; no timezone found
+
+1 Failed download:
+['PNK']: possibly delisted; no timezone found
+$ICON: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ICON']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$CONE: possibly delisted; no timezone found
+
+1 Failed download:
+['CONE']: possibly delisted; no timezone found
+$LJPC: possibly delisted; no timezone found
+
+1 Failed download:
+['LJPC']: possibly delisted; no timezone found
+$AEGR: possibly delisted; no timezone found
+
+1 Failed download:
+['AEGR']: possibly delisted; no timezone found
+$OWW: possibly delisted; no timezone found
+
+1 Failed download:
+['OWW']: possibly delisted; no timezone found
+$LLNW: possibly delisted; no timezone found
+
+1 Failed download:
+['LLNW']: possibly delisted; no timezone found
+  probed 1125/1772; extras_ok=623 dropped=499
+$JNS: possibly delisted; no timezone found
+
+1 Failed download:
+['JNS']: possibly delisted; no timezone found
+$AREX: possibly delisted; no timezone found
+
+1 Failed download:
+['AREX']: possibly delisted; no timezone found
+$NVRO: possibly delisted; no timezone found
+
+1 Failed download:
+['NVRO']: possibly delisted; no timezone found
+$SKUL: possibly delisted; no timezone found
+
+1 Failed download:
+['SKUL']: possibly delisted; no timezone found
+$BONT: possibly delisted; no timezone found
+
+1 Failed download:
+['BONT']: possibly delisted; no timezone found
+$EGPT: possibly delisted; no timezone found
+
+1 Failed download:
+['EGPT']: possibly delisted; no timezone found
+$OMI: possibly delisted; no timezone found
+
+1 Failed download:
+['OMI']: possibly delisted; no timezone found
+$LXK: possibly delisted; no timezone found
+
+1 Failed download:
+['LXK']: possibly delisted; no timezone found
+$WILN: possibly delisted; no timezone found
+
+1 Failed download:
+['WILN']: possibly delisted; no timezone found
+$HIIQ: possibly delisted; no timezone found
+
+1 Failed download:
+['HIIQ']: possibly delisted; no timezone found
+$ITCI: possibly delisted; no timezone found
+
+1 Failed download:
+['ITCI']: possibly delisted; no timezone found
+$VG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['VG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1150/1772; extras_ok=635 dropped=512
+$MNGA: possibly delisted; no timezone found
+
+1 Failed download:
+['MNGA']: possibly delisted; no timezone found
+$TI: possibly delisted; no timezone found
+
+1 Failed download:
+['TI']: possibly delisted; no timezone found
+$PNM: possibly delisted; no timezone found
+
+1 Failed download:
+['PNM']: possibly delisted; no timezone found
+$JCOM: possibly delisted; no timezone found
+
+1 Failed download:
+['JCOM']: possibly delisted; no timezone found
+$TWOU: possibly delisted; no timezone found
+
+1 Failed download:
+['TWOU']: possibly delisted; no timezone found
+$ATW: possibly delisted; no timezone found
+
+1 Failed download:
+['ATW']: possibly delisted; no timezone found
+$BGFV: possibly delisted; no timezone found
+
+1 Failed download:
+['BGFV']: possibly delisted; no timezone found
+$APRI: possibly delisted; no timezone found
+
+1 Failed download:
+['APRI']: possibly delisted; no timezone found
+$CSOD: possibly delisted; no timezone found
+
+1 Failed download:
+['CSOD']: possibly delisted; no timezone found
+$ULTI: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ULTI']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1175/1772; extras_ok=648 dropped=524
+$WUBA: possibly delisted; no timezone found
+
+1 Failed download:
+['WUBA']: possibly delisted; no timezone found
+$ABB: possibly delisted; no timezone found
+
+1 Failed download:
+['ABB']: possibly delisted; no timezone found
+$SQNM: possibly delisted; no timezone found
+
+1 Failed download:
+['SQNM']: possibly delisted; no timezone found
+$BAM: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BAM']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$HTBX: possibly delisted; no timezone found
+
+1 Failed download:
+['HTBX']: possibly delisted; no timezone found
+$NEPT: possibly delisted; no timezone found
+
+1 Failed download:
+['NEPT']: possibly delisted; no timezone found
+$MGLN: possibly delisted; no timezone found
+
+1 Failed download:
+['MGLN']: possibly delisted; no timezone found
+$IIVI: possibly delisted; no timezone found
+
+1 Failed download:
+['IIVI']: possibly delisted; no timezone found
+$NETE: possibly delisted; no timezone found
+
+1 Failed download:
+['NETE']: possibly delisted; no timezone found
+$SNSS: possibly delisted; no timezone found
+
+1 Failed download:
+['SNSS']: possibly delisted; no timezone found
+$HEB: possibly delisted; no timezone found
+
+1 Failed download:
+['HEB']: possibly delisted; no timezone found
+$CLD: possibly delisted; no timezone found
+
+1 Failed download:
+['CLD']: possibly delisted; no timezone found
+$CBLI: possibly delisted; no timezone found
+
+1 Failed download:
+['CBLI']: possibly delisted; no timezone found
+$SIVB: possibly delisted; no timezone found
+
+1 Failed download:
+['SIVB']: possibly delisted; no timezone found
+$TRCO: possibly delisted; no timezone found
+
+1 Failed download:
+['TRCO']: possibly delisted; no timezone found
+$AL: possibly delisted; no timezone found
+
+1 Failed download:
+['AL']: possibly delisted; no timezone found
+$CAM: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CAM']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1200/1772; extras_ok=653 dropped=544
+$CYOU: possibly delisted; no timezone found
+
+1 Failed download:
+['CYOU']: possibly delisted; no timezone found
+$RVLT: possibly delisted; no timezone found
+
+1 Failed download:
+['RVLT']: possibly delisted; no timezone found
+$SWIR: possibly delisted; no timezone found
+
+1 Failed download:
+['SWIR']: possibly delisted; no timezone found
+$BLCM: possibly delisted; no timezone found
+
+1 Failed download:
+['BLCM']: possibly delisted; no timezone found
+$OZRK: possibly delisted; no timezone found
+
+1 Failed download:
+['OZRK']: possibly delisted; no timezone found
+$RVNC: possibly delisted; no timezone found
+
+1 Failed download:
+['RVNC']: possibly delisted; no timezone found
+$CIE: possibly delisted; no timezone found
+
+1 Failed download:
+['CIE']: possibly delisted; no timezone found
+$PLCM: possibly delisted; no timezone found
+
+1 Failed download:
+['PLCM']: possibly delisted; no timezone found
+$BLOX: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BLOX']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$RDUS: possibly delisted; no timezone found
+
+1 Failed download:
+['RDUS']: possibly delisted; no timezone found
+$GENE: possibly delisted; no timezone found
+
+1 Failed download:
+['GENE']: possibly delisted; no timezone found
+$CCXI: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CCXI']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$GDP: possibly delisted; no timezone found
+
+1 Failed download:
+['GDP']: possibly delisted; no timezone found
+$ESL: possibly delisted; no timezone found
+
+1 Failed download:
+['ESL']: possibly delisted; no timezone found
+$ADMP: possibly delisted; no timezone found
+
+1 Failed download:
+['ADMP']: possibly delisted; no timezone found
+  probed 1225/1772; extras_ok=660 dropped=562
+$USG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['USG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$TIME: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TIME']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$HRC: possibly delisted; no timezone found
+
+1 Failed download:
+['HRC']: possibly delisted; no timezone found
+$AMED: possibly delisted; no timezone found
+
+1 Failed download:
+['AMED']: possibly delisted; no timezone found
+$AGTC: possibly delisted; no timezone found
+
+1 Failed download:
+['AGTC']: possibly delisted; no timezone found
+$SWI: possibly delisted; no timezone found
+
+1 Failed download:
+['SWI']: possibly delisted; no timezone found
+$RWLK: possibly delisted; no timezone found
+
+1 Failed download:
+['RWLK']: possibly delisted; no timezone found
+$EGLE: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['EGLE']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$QSII: possibly delisted; no timezone found
+
+1 Failed download:
+['QSII']: possibly delisted; no timezone found
+$INVN: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['INVN']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$PBY: possibly delisted; no timezone found
+
+1 Failed download:
+['PBY']: possibly delisted; no timezone found
+$TRNX: possibly delisted; no timezone found
+
+1 Failed download:
+['TRNX']: possibly delisted; no timezone found
+$MDC: possibly delisted; no timezone found
+
+1 Failed download:
+['MDC']: possibly delisted; no timezone found
+  probed 1250/1772; extras_ok=670 dropped=577
+$XL: possibly delisted; no timezone found
+
+1 Failed download:
+['XL']: possibly delisted; no timezone found
+$HCN: possibly delisted; no timezone found
+
+1 Failed download:
+['HCN']: possibly delisted; no timezone found
+$HSP: possibly delisted; no timezone found
+
+1 Failed download:
+['HSP']: possibly delisted; no timezone found
+$CBK: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CBK']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$GNCA: possibly delisted; no timezone found
+
+1 Failed download:
+['GNCA']: possibly delisted; no timezone found
+$HMSY: possibly delisted; no timezone found
+
+1 Failed download:
+['HMSY']: possibly delisted; no timezone found
+$ROSE: possibly delisted; no timezone found
+
+1 Failed download:
+['ROSE']: possibly delisted; no timezone found
+$GHDX: possibly delisted; no timezone found
+
+1 Failed download:
+['GHDX']: possibly delisted; no timezone found
+$SRCL: possibly delisted; no timezone found
+
+1 Failed download:
+['SRCL']: possibly delisted; no timezone found
+$KOL: possibly delisted; no timezone found
+
+1 Failed download:
+['KOL']: possibly delisted; no timezone found
+$CRR: possibly delisted; no timezone found
+
+1 Failed download:
+['CRR']: possibly delisted; no timezone found
+  probed 1275/1772; extras_ok=682 dropped=590
+$SGY: possibly delisted; no timezone found
+
+1 Failed download:
+['SGY']: possibly delisted; no timezone found
+$AMAG: possibly delisted; no timezone found
+
+1 Failed download:
+['AMAG']: possibly delisted; no timezone found
+$PRXL: possibly delisted; no timezone found
+
+1 Failed download:
+['PRXL']: possibly delisted; no timezone found
+$BGCP: possibly delisted; no timezone found
+
+1 Failed download:
+['BGCP']: possibly delisted; no timezone found
+$CVA: possibly delisted; no timezone found
+
+1 Failed download:
+['CVA']: possibly delisted; no timezone found
+$PDLI: possibly delisted; no timezone found
+
+1 Failed download:
+['PDLI']: possibly delisted; no timezone found
+$CPHD: possibly delisted; no timezone found
+
+1 Failed download:
+['CPHD']: possibly delisted; no timezone found
+$NAVB: possibly delisted; no timezone found
+
+1 Failed download:
+['NAVB']: possibly delisted; no timezone found
+$EGN: possibly delisted; no timezone found
+
+1 Failed download:
+['EGN']: possibly delisted; no timezone found
+$ZQK: possibly delisted; no timezone found
+
+1 Failed download:
+['ZQK']: possibly delisted; no timezone found
+$CHU: possibly delisted; no timezone found
+
+1 Failed download:
+['CHU']: possibly delisted; no timezone found
+$TEF: possibly delisted; no timezone found
+
+1 Failed download:
+['TEF']: possibly delisted; no timezone found
+  probed 1300/1772; extras_ok=693 dropped=604
+$AFSI: possibly delisted; no timezone found
+
+1 Failed download:
+['AFSI']: possibly delisted; no timezone found
+$PTR: possibly delisted; no timezone found
+
+1 Failed download:
+['PTR']: possibly delisted; no timezone found
+$EVHC: possibly delisted; no timezone found
+
+1 Failed download:
+['EVHC']: possibly delisted; no timezone found
+$PLT: possibly delisted; no timezone found
+
+1 Failed download:
+['PLT']: possibly delisted; no timezone found
+$KEG: possibly delisted; no timezone found
+
+1 Failed download:
+['KEG']: possibly delisted; no timezone found
+$PPHM: possibly delisted; no timezone found
+
+1 Failed download:
+['PPHM']: possibly delisted; no timezone found
+$PWRD: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['PWRD']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ELLI: possibly delisted; no timezone found
+
+1 Failed download:
+['ELLI']: possibly delisted; no timezone found
+$MENT: possibly delisted; no timezone found
+
+1 Failed download:
+['MENT']: possibly delisted; no timezone found
+$HAR: possibly delisted; no timezone found
+
+1 Failed download:
+['HAR']: possibly delisted; no timezone found
+$USAT: possibly delisted; no timezone found
+
+1 Failed download:
+['USAT']: possibly delisted; no timezone found
+$UFS: possibly delisted; no timezone found
+
+1 Failed download:
+['UFS']: possibly delisted; no timezone found
+$QIWI: possibly delisted; no timezone found
+
+1 Failed download:
+['QIWI']: possibly delisted; no timezone found
+  probed 1325/1772; extras_ok=703 dropped=619
+$DRNA: possibly delisted; no timezone found
+
+1 Failed download:
+['DRNA']: possibly delisted; no timezone found
+$POM: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['POM']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$BITA: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BITA']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$PPO: possibly delisted; no timezone found
+
+1 Failed download:
+['PPO']: possibly delisted; no timezone found
+$CEL: possibly delisted; no timezone found
+
+1 Failed download:
+['CEL']: possibly delisted; no timezone found
+$WNR: possibly delisted; no timezone found
+
+1 Failed download:
+['WNR']: possibly delisted; no timezone found
+$BSFT: possibly delisted; no timezone found
+
+1 Failed download:
+['BSFT']: possibly delisted; no timezone found
+$CEMP: possibly delisted; no timezone found
+
+1 Failed download:
+['CEMP']: possibly delisted; no timezone found
+$NPSP: possibly delisted; no timezone found
+
+1 Failed download:
+['NPSP']: possibly delisted; no timezone found
+$LGCY: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['LGCY']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1350/1772; extras_ok=715 dropped=632
+$CBB: possibly delisted; no timezone found
+
+1 Failed download:
+['CBB']: possibly delisted; no timezone found
+$FBHS: possibly delisted; no timezone found
+
+1 Failed download:
+['FBHS']: possibly delisted; no timezone found
+$KAR: possibly delisted; no timezone found
+
+1 Failed download:
+['KAR']: possibly delisted; no timezone found
+$BIOS: possibly delisted; no timezone found
+
+1 Failed download:
+['BIOS']: possibly delisted; no timezone found
+$ORIG: possibly delisted; no timezone found
+
+1 Failed download:
+['ORIG']: possibly delisted; no timezone found
+$OMED: possibly delisted; no timezone found
+
+1 Failed download:
+['OMED']: possibly delisted; no timezone found
+$PCP: possibly delisted; no timezone found
+
+1 Failed download:
+['PCP']: possibly delisted; no timezone found
+$VNTV: possibly delisted; no timezone found
+
+1 Failed download:
+['VNTV']: possibly delisted; no timezone found
+$AAWW: possibly delisted; no timezone found
+
+1 Failed download:
+['AAWW']: possibly delisted; no timezone found
+$SN: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SN']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$SSW: possibly delisted; no timezone found
+
+1 Failed download:
+['SSW']: possibly delisted; no timezone found
+$FGP: possibly delisted; no timezone found
+
+1 Failed download:
+['FGP']: possibly delisted; no timezone found
+$ACST: possibly delisted; no timezone found
+
+1 Failed download:
+['ACST']: possibly delisted; no timezone found
+  probed 1375/1772; extras_ok=723 dropped=649
+$COOL: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['COOL']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$OKS: possibly delisted; no timezone found
+
+1 Failed download:
+['OKS']: possibly delisted; no timezone found
+$LAYN: possibly delisted; no timezone found
+
+1 Failed download:
+['LAYN']: possibly delisted; no timezone found
+$HSC: possibly delisted; no timezone found
+
+1 Failed download:
+['HSC']: possibly delisted; no timezone found
+$AMID: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['AMID']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ISIL: possibly delisted; no timezone found
+
+1 Failed download:
+['ISIL']: possibly delisted; no timezone found
+$AXAS: possibly delisted; no timezone found
+
+1 Failed download:
+['AXAS']: possibly delisted; no timezone found
+$PTIE: possibly delisted; no timezone found
+
+1 Failed download:
+['PTIE']: possibly delisted; no timezone found
+$PRTK: possibly delisted; no timezone found
+
+1 Failed download:
+['PRTK']: possibly delisted; no timezone found
+$CYCC: possibly delisted; no timezone found
+
+1 Failed download:
+['CYCC']: possibly delisted; no timezone found
+  probed 1400/1772; extras_ok=736 dropped=661
+$NLS: possibly delisted; no timezone found
+
+1 Failed download:
+['NLS']: possibly delisted; no timezone found
+$CUR: possibly delisted; no timezone found
+
+1 Failed download:
+['CUR']: possibly delisted; no timezone found
+$CLGX: possibly delisted; no timezone found
+
+1 Failed download:
+['CLGX']: possibly delisted; no timezone found
+$THRX: possibly delisted; no timezone found
+
+1 Failed download:
+['THRX']: possibly delisted; no timezone found
+$SAFM: possibly delisted; no timezone found
+
+1 Failed download:
+['SAFM']: possibly delisted; no timezone found
+$RPTP: possibly delisted; no timezone found
+
+1 Failed download:
+['RPTP']: possibly delisted; no timezone found
+$MPW: possibly delisted; no timezone found
+
+1 Failed download:
+['MPW']: possibly delisted; no timezone found
+$PKI: possibly delisted; no timezone found
+
+1 Failed download:
+['PKI']: possibly delisted; no timezone found
+$PETX: possibly delisted; no timezone found
+
+1 Failed download:
+['PETX']: possibly delisted; no timezone found
+$KBIO: possibly delisted; no timezone found
+
+1 Failed download:
+['KBIO']: possibly delisted; no timezone found
+$SPTN: possibly delisted; no timezone found
+
+1 Failed download:
+['SPTN']: possibly delisted; no timezone found
+  probed 1425/1772; extras_ok=745 dropped=677
+$WAC: possibly delisted; no timezone found
+
+1 Failed download:
+['WAC']: possibly delisted; no timezone found
+$TMH: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TMH']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$SPEX: possibly delisted; no timezone found
+
+1 Failed download:
+['SPEX']: possibly delisted; no timezone found
+$SBNY: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SBNY']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$EFII: possibly delisted; no timezone found
+
+1 Failed download:
+['EFII']: possibly delisted; no timezone found
+$BPI: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BPI']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$REGI: possibly delisted; no timezone found
+
+1 Failed download:
+['REGI']: possibly delisted; no timezone found
+$AVID: possibly delisted; no timezone found
+
+1 Failed download:
+['AVID']: possibly delisted; no timezone found
+$SCMP: possibly delisted; no timezone found
+
+1 Failed download:
+['SCMP']: possibly delisted; no timezone found
+$RATE: possibly delisted; no timezone found
+
+1 Failed download:
+['RATE']: possibly delisted; no timezone found
+$EGL: possibly delisted; no timezone found
+
+1 Failed download:
+['EGL']: possibly delisted; no timezone found
+$PSUN: possibly delisted; no timezone found
+
+1 Failed download:
+['PSUN']: possibly delisted; no timezone found
+$EGLT: possibly delisted; no timezone found
+
+1 Failed download:
+['EGLT']: possibly delisted; no timezone found
+$TRW: possibly delisted; no timezone found
+
+1 Failed download:
+['TRW']: possibly delisted; no timezone found
+$NURO: possibly delisted; no timezone found
+
+1 Failed download:
+['NURO']: possibly delisted; no timezone found
+$CRAY: possibly delisted; no timezone found
+
+1 Failed download:
+['CRAY']: possibly delisted; no timezone found
+  probed 1450/1772; extras_ok=753 dropped=694
+$IM: possibly delisted; no timezone found
+
+1 Failed download:
+['IM']: possibly delisted; no timezone found
+$DEST: possibly delisted; no timezone found
+
+1 Failed download:
+['DEST']: possibly delisted; no timezone found
+$ATK: possibly delisted; no timezone found
+
+1 Failed download:
+['ATK']: possibly delisted; no timezone found
+$ETH: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ETH']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ALIM: possibly delisted; no timezone found
+
+1 Failed download:
+['ALIM']: possibly delisted; no timezone found
+$BPL: possibly delisted; no timezone found
+
+1 Failed download:
+['BPL']: possibly delisted; no timezone found
+$WBS: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['WBS']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$HNT: possibly delisted; no timezone found
+
+1 Failed download:
+['HNT']: possibly delisted; no timezone found
+$NBY: possibly delisted; no timezone found
+
+1 Failed download:
+['NBY']: possibly delisted; no timezone found
+$HLS: possibly delisted; no timezone found
+
+1 Failed download:
+['HLS']: possibly delisted; no timezone found
+$MDAS: possibly delisted; no timezone found
+
+1 Failed download:
+['MDAS']: possibly delisted; no timezone found
+$MDCA: possibly delisted; no timezone found
+
+1 Failed download:
+['MDCA']: possibly delisted; no timezone found
+$VBLT: possibly delisted; no timezone found
+
+1 Failed download:
+['VBLT']: possibly delisted; no timezone found
+$REN: possibly delisted; no timezone found
+
+1 Failed download:
+['REN']: possibly delisted; no timezone found
+  probed 1475/1772; extras_ok=762 dropped=710
+$UNXL: possibly delisted; no timezone found
+
+1 Failed download:
+['UNXL']: possibly delisted; no timezone found
+$FOE: possibly delisted; no timezone found
+
+1 Failed download:
+['FOE']: possibly delisted; no timezone found
+$WTR: possibly delisted; no timezone found
+
+1 Failed download:
+['WTR']: possibly delisted; no timezone found
+$FSL: possibly delisted; no timezone found
+
+1 Failed download:
+['FSL']: possibly delisted; no timezone found
+$GTLS: possibly delisted; no timezone found
+
+1 Failed download:
+['GTLS']: possibly delisted; no timezone found
+$MDSO: possibly delisted; no timezone found
+
+1 Failed download:
+['MDSO']: possibly delisted; no timezone found
+$ALOG: possibly delisted; no timezone found
+
+1 Failed download:
+['ALOG']: possibly delisted; no timezone found
+$NS: possibly delisted; no timezone found
+
+1 Failed download:
+['NS']: possibly delisted; no timezone found
+$EYES: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['EYES']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$INAP: possibly delisted; no timezone found
+
+1 Failed download:
+['INAP']: possibly delisted; no timezone found
+$ISCA: possibly delisted; no timezone found
+
+1 Failed download:
+['ISCA']: possibly delisted; no timezone found
+$RP: possibly delisted; no timezone found
+
+1 Failed download:
+['RP']: possibly delisted; no timezone found
+$CTLT: possibly delisted; no timezone found
+
+1 Failed download:
+['CTLT']: possibly delisted; no timezone found
+$WDR: possibly delisted; no timezone found
+
+1 Failed download:
+['WDR']: possibly delisted; no timezone found
+  probed 1500/1772; extras_ok=770 dropped=727
+$LMNX: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['LMNX']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ITC: possibly delisted; no timezone found
+
+1 Failed download:
+['ITC']: possibly delisted; no timezone found
+$HCLP: possibly delisted; no timezone found
+
+1 Failed download:
+['HCLP']: possibly delisted; no timezone found
+$DNB: possibly delisted; no timezone found
+
+1 Failed download:
+['DNB']: possibly delisted; no timezone found
+$CIR: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CIR']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ONNN: possibly delisted; no timezone found
+
+1 Failed download:
+['ONNN']: possibly delisted; no timezone found
+$RUBI: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['RUBI']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$MWE: possibly delisted; no timezone found
+
+1 Failed download:
+['MWE']: possibly delisted; no timezone found
+$ZMH: possibly delisted; no timezone found
+
+1 Failed download:
+['ZMH']: possibly delisted; no timezone found
+$ANW: possibly delisted; no timezone found
+
+1 Failed download:
+['ANW']: possibly delisted; no timezone found
+$ATRS: possibly delisted; no timezone found
+
+1 Failed download:
+['ATRS']: possibly delisted; no timezone found
+$MITL: possibly delisted; no timezone found
+
+1 Failed download:
+['MITL']: possibly delisted; no timezone found
+$LHCG: possibly delisted; no timezone found
+
+1 Failed download:
+['LHCG']: possibly delisted; no timezone found
+$HIL: possibly delisted; no timezone found
+
+1 Failed download:
+['HIL']: possibly delisted; no timezone found
+  probed 1525/1772; extras_ok=779 dropped=743
+$CATM: possibly delisted; no timezone found
+
+1 Failed download:
+['CATM']: possibly delisted; no timezone found
+$BEBE: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BEBE']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$JAH: possibly delisted; no timezone found
+
+1 Failed download:
+['JAH']: possibly delisted; no timezone found
+$SNV: possibly delisted; no timezone found
+
+1 Failed download:
+['SNV']: possibly delisted; no timezone found
+$AYR: possibly delisted; no timezone found
+
+1 Failed download:
+['AYR']: possibly delisted; no timezone found
+$TA: possibly delisted; no timezone found
+
+1 Failed download:
+['TA']: possibly delisted; no timezone found
+$HLX: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['HLX']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$UTIW: possibly delisted; no timezone found
+
+1 Failed download:
+['UTIW']: possibly delisted; no timezone found
+  probed 1550/1772; extras_ok=793 dropped=754
+$TMHC: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TMHC']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$OFC: possibly delisted; no timezone found
+
+1 Failed download:
+['OFC']: possibly delisted; no timezone found
+$AZPN: possibly delisted; no timezone found
+
+1 Failed download:
+['AZPN']: possibly delisted; no timezone found
+$CBAY: possibly delisted; no timezone found
+
+1 Failed download:
+['CBAY']: possibly delisted; no timezone found
+$COCO: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['COCO']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$OPHT: possibly delisted; no timezone found
+
+1 Failed download:
+['OPHT']: possibly delisted; no timezone found
+$GLOG: possibly delisted; no timezone found
+
+1 Failed download:
+['GLOG']: possibly delisted; no timezone found
+$VOXX: possibly delisted; no timezone found
+
+1 Failed download:
+['VOXX']: possibly delisted; no timezone found
+$VICL: possibly delisted; no timezone found
+
+1 Failed download:
+['VICL']: possibly delisted; no timezone found
+$HNR: possibly delisted; no timezone found
+
+1 Failed download:
+['HNR']: possibly delisted; no timezone found
+$REV: possibly delisted; no timezone found
+
+1 Failed download:
+['REV']: possibly delisted; no timezone found
+$CNCE: possibly delisted; no timezone found
+
+1 Failed download:
+['CNCE']: possibly delisted; no timezone found
+$CSII: possibly delisted; no timezone found
+
+1 Failed download:
+['CSII']: possibly delisted; no timezone found
+$SYNC: possibly delisted; no timezone found
+
+1 Failed download:
+['SYNC']: possibly delisted; no timezone found
+$CHA: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['CHA']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$SORL: possibly delisted; no timezone found
+
+1 Failed download:
+['SORL']: possibly delisted; no timezone found
+  probed 1575/1772; extras_ok=801 dropped=771
+$WIFI: possibly delisted; no timezone found
+
+1 Failed download:
+['WIFI']: possibly delisted; no timezone found
+$MEG: possibly delisted; no timezone found
+
+1 Failed download:
+['MEG']: possibly delisted; no timezone found
+$REXX: possibly delisted; no timezone found
+
+1 Failed download:
+['REXX']: possibly delisted; no timezone found
+$SEMG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['SEMG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ETRM: possibly delisted; no timezone found
+
+1 Failed download:
+['ETRM']: possibly delisted; no timezone found
+$POL: possibly delisted; no timezone found
+
+1 Failed download:
+['POL']: possibly delisted; no timezone found
+$TUES: possibly delisted; no timezone found
+
+1 Failed download:
+['TUES']: possibly delisted; no timezone found
+$PACD: possibly delisted; no timezone found
+
+1 Failed download:
+['PACD']: possibly delisted; no timezone found
+$CKEC: possibly delisted; no timezone found
+
+1 Failed download:
+['CKEC']: possibly delisted; no timezone found
+$INXN: possibly delisted; no timezone found
+
+1 Failed download:
+['INXN']: possibly delisted; no timezone found
+$UEPS: possibly delisted; no timezone found
+
+1 Failed download:
+['UEPS']: possibly delisted; no timezone found
+$CORE: possibly delisted; no timezone found
+
+1 Failed download:
+['CORE']: possibly delisted; no timezone found
+$EQM: possibly delisted; no timezone found
+
+1 Failed download:
+['EQM']: possibly delisted; no timezone found
+$BGG: possibly delisted; no timezone found
+
+1 Failed download:
+['BGG']: possibly delisted; no timezone found
+$EE: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['EE']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$SRDX: possibly delisted; no timezone found
+
+1 Failed download:
+['SRDX']: possibly delisted; no timezone found
+$FOMX: possibly delisted; no timezone found
+
+1 Failed download:
+['FOMX']: possibly delisted; no timezone found
+  probed 1600/1772; extras_ok=808 dropped=789
+$SPW: possibly delisted; no timezone found
+
+1 Failed download:
+['SPW']: possibly delisted; no timezone found
+$XGTI: possibly delisted; no timezone found
+
+1 Failed download:
+['XGTI']: possibly delisted; no timezone found
+$SPA: possibly delisted; no timezone found
+
+1 Failed download:
+['SPA']: possibly delisted; no timezone found
+$DENN: possibly delisted; no timezone found
+
+1 Failed download:
+['DENN']: possibly delisted; no timezone found
+$NWY: possibly delisted; no timezone found
+
+1 Failed download:
+['NWY']: possibly delisted; no timezone found
+$CNHI: possibly delisted; no timezone found
+
+1 Failed download:
+['CNHI']: possibly delisted; no timezone found
+$VRML: possibly delisted; no timezone found
+
+1 Failed download:
+['VRML']: possibly delisted; no timezone found
+$ENLC: possibly delisted; no timezone found
+
+1 Failed download:
+['ENLC']: possibly delisted; no timezone found
+$GIMO: possibly delisted; no timezone found
+
+1 Failed download:
+['GIMO']: possibly delisted; no timezone found
+$USM: possibly delisted; no timezone found
+
+1 Failed download:
+['USM']: possibly delisted; no timezone found
+  probed 1625/1772; extras_ok=822 dropped=800
+$LEG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['LEG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$WSH: possibly delisted; no timezone found
+
+1 Failed download:
+['WSH']: possibly delisted; no timezone found
+$AFMD: possibly delisted; no timezone found
+
+1 Failed download:
+['AFMD']: possibly delisted; no timezone found
+$QTS: possibly delisted; no timezone found
+
+1 Failed download:
+['QTS']: possibly delisted; no timezone found
+$REPH: possibly delisted; no timezone found
+
+1 Failed download:
+['REPH']: possibly delisted; no timezone found
+$RXII: possibly delisted; no timezone found
+
+1 Failed download:
+['RXII']: possibly delisted; no timezone found
+$FIG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['FIG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$TCK: possibly delisted; no timezone found
+
+1 Failed download:
+['TCK']: possibly delisted; no timezone found
+$STML: possibly delisted; no timezone found
+
+1 Failed download:
+['STML']: possibly delisted; no timezone found
+$MEIP: possibly delisted; no timezone found
+
+1 Failed download:
+['MEIP']: possibly delisted; no timezone found
+$CNW: possibly delisted; no timezone found
+
+1 Failed download:
+['CNW']: possibly delisted; no timezone found
+$PHH: possibly delisted; no timezone found
+
+1 Failed download:
+['PHH']: possibly delisted; no timezone found
+$ONTY: possibly delisted; no timezone found
+
+1 Failed download:
+['ONTY']: possibly delisted; no timezone found
+  probed 1650/1772; extras_ok=833 dropped=814
+$JBT: possibly delisted; no timezone found
+
+1 Failed download:
+['JBT']: possibly delisted; no timezone found
+$HDP: possibly delisted; no timezone found
+
+1 Failed download:
+['HDP']: possibly delisted; no timezone found
+$TLM: possibly delisted; no timezone found
+
+1 Failed download:
+['TLM']: possibly delisted; no timezone found
+$BNFT: possibly delisted; no timezone found
+
+1 Failed download:
+['BNFT']: possibly delisted; no timezone found
+$GCAP: possibly delisted; no timezone found
+
+1 Failed download:
+['GCAP']: possibly delisted; no timezone found
+$SIEN: possibly delisted; no timezone found
+
+1 Failed download:
+['SIEN']: possibly delisted; no timezone found
+$AVNR: possibly delisted; no timezone found
+
+1 Failed download:
+['AVNR']: possibly delisted; no timezone found
+$ENZ: possibly delisted; no timezone found
+
+1 Failed download:
+['ENZ']: possibly delisted; no timezone found
+$BMS: possibly delisted; no timezone found
+
+1 Failed download:
+['BMS']: possibly delisted; no timezone found
+$QTM: possibly delisted; no timezone found
+
+1 Failed download:
+['QTM']: possibly delisted; no timezone found
+$PEIX: possibly delisted; no timezone found
+
+1 Failed download:
+['PEIX']: possibly delisted; no timezone found
+$IPCI: possibly delisted; no timezone found
+
+1 Failed download:
+['IPCI']: possibly delisted; no timezone found
+  probed 1675/1772; extras_ok=843 dropped=829
+$SYNT: possibly delisted; no timezone found
+
+1 Failed download:
+['SYNT']: possibly delisted; no timezone found
+$PVA: possibly delisted; no timezone found
+
+1 Failed download:
+['PVA']: possibly delisted; no timezone found
+$HABT: possibly delisted; no timezone found
+
+1 Failed download:
+['HABT']: possibly delisted; no timezone found
+$PTNR: possibly delisted; no timezone found
+
+1 Failed download:
+['PTNR']: possibly delisted; no timezone found
+$GTXI: possibly delisted; no timezone found
+
+1 Failed download:
+['GTXI']: possibly delisted; no timezone found
+$KEYW: possibly delisted; no timezone found
+
+1 Failed download:
+['KEYW']: possibly delisted; no timezone found
+$PINC: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['PINC']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$COT: possibly delisted; no timezone found
+
+1 Failed download:
+['COT']: possibly delisted; no timezone found
+$NYMX: possibly delisted; no timezone found
+
+1 Failed download:
+['NYMX']: possibly delisted; no timezone found
+$BEAT: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['BEAT']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ELX: possibly delisted; no timezone found
+
+1 Failed download:
+['ELX']: possibly delisted; no timezone found
+$SSRI: possibly delisted; no timezone found
+
+1 Failed download:
+['SSRI']: possibly delisted; no timezone found
+  probed 1700/1772; extras_ok=855 dropped=842
+$PBCT: possibly delisted; no timezone found
+
+1 Failed download:
+['PBCT']: possibly delisted; no timezone found
+$DFT: possibly delisted; no timezone found
+
+1 Failed download:
+['DFT']: possibly delisted; no timezone found
+$KEM: possibly delisted; no timezone found
+
+1 Failed download:
+['KEM']: possibly delisted; no timezone found
+$STKL: possibly delisted; no timezone found
+
+1 Failed download:
+['STKL']: possibly delisted; no timezone found
+$TBPH: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08)
+
+1 Failed download:
+['TBPH']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08)
+$NMBL: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['NMBL']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$LTM: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['LTM']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$ITG: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['ITG']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$CPSI: possibly delisted; no timezone found
+
+1 Failed download:
+['CPSI']: possibly delisted; no timezone found
+$IO: possibly delisted; no timezone found
+
+1 Failed download:
+['IO']: possibly delisted; no timezone found
+$ACC: possibly delisted; no timezone found
+
+1 Failed download:
+['ACC']: possibly delisted; no timezone found
+  probed 1725/1772; extras_ok=868 dropped=854
+$SVA: possibly delisted; no timezone found
+
+1 Failed download:
+['SVA']: possibly delisted; no timezone found
+$PES: possibly delisted; no timezone found
+
+1 Failed download:
+['PES']: possibly delisted; no timezone found
+$TWO: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['TWO']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+$NANO: possibly delisted; no timezone found
+
+1 Failed download:
+['NANO']: possibly delisted; no timezone found
+$CVTI: possibly delisted; no timezone found
+
+1 Failed download:
+['CVTI']: possibly delisted; no timezone found
+$RECN: possibly delisted; no timezone found
+
+1 Failed download:
+['RECN']: possibly delisted; no timezone found
+$TNP: possibly delisted; no timezone found
+
+1 Failed download:
+['TNP']: possibly delisted; no timezone found
+$LNDC: possibly delisted; no timezone found
+
+1 Failed download:
+['LNDC']: possibly delisted; no timezone found
+$EDR: possibly delisted; no timezone found
+
+1 Failed download:
+['EDR']: possibly delisted; no timezone found
+$NGD: possibly delisted; no timezone found
+
+1 Failed download:
+['NGD']: possibly delisted; no timezone found
+$SIGM: possibly delisted; no timezone found
+
+1 Failed download:
+['SIGM']: possibly delisted; no timezone found
+$HGG: possibly delisted; no timezone found
+
+1 Failed download:
+['HGG']: possibly delisted; no timezone found
+$RGSE: possibly delisted; no timezone found
+
+1 Failed download:
+['RGSE']: possibly delisted; no timezone found
+$EMES: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+
+1 Failed download:
+['EMES']: possibly delisted; no price data found  (1d 2008-01-01 -> 2021-06-08) (Yahoo error = "Data doesn't exist for startDate = 1199163600, endDate = 1623124800")
+  probed 1750/1772; extras_ok=879 dropped=868
+$HSNI: possibly delisted; no timezone found
+
+1 Failed download:
+['HSNI']: possibly delisted; no timezone found
+$ENOC: possibly delisted; no timezone found
+
+1 Failed download:
+['ENOC']: possibly delisted; no timezone found
+$KS: possibly delisted; no timezone found
+
+1 Failed download:
+['KS']: possibly delisted; no timezone found
+$AFFX: possibly delisted; no timezone found
+
+1 Failed download:
+['AFFX']: possibly delisted; no timezone found
+$WAIR: possibly delisted; no timezone found
+
+1 Failed download:
+['WAIR']: possibly delisted; no timezone found
+$HOLI: possibly delisted; no timezone found
+
+1 Failed download:
+['HOLI']: possibly delisted; no timezone found
+$DRC: possibly delisted; no timezone found
+
+1 Failed download:
+['DRC']: possibly delisted; no timezone found
+$EEP: possibly delisted; no timezone found
+
+1 Failed download:
+['EEP']: possibly delisted; no timezone found
+usable 106 proj_td 86829 3x 8478 S1_STOP False
+DONE core inventory
