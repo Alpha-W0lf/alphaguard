@@ -37,9 +37,9 @@ Same `downside_risk_score` can reject `BUY` (directional exposure) and still app
 
 `bundle_kind=fixture` is synthetic plumbing (`n_rows=64`). Perfect fixture F1 proves the load/score/policy path — **not** Option B generalization. Quote Option B only from a local `bundle_kind=option_b` manifest (`scripts/train_option_b_gate.py`); lab-scale test F1 can be near zero / noisy — still not production proof.
 
-## 7. How does AlphaGuard handle negative experiment results like JH-63.1?
+## 7. How does AlphaGuard handle negative experiment results?
 
-**Fail stays Fail.** In JH-63.1, precision-weighted thresholding (`train_val_fbeta_0.5`) resulted in test F1=0.0 on the held-out test split, worse than baseline. Rather than cherry-picking seeds or softening the result, we published the locked test failure directly in [`FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Isolating and documenting negative results under strict leakage guards is core engineering rigor. Shipped defaults remain `train_f1_max` (aligned across API and `scripts/train_option_b_gate.py`). While the JH-63.3 expanded freeze provides statistical support ($n_{\text{positive, test}} = 233$, test F1≈0.2108), Model Quality Go is not claimed.
+**Fail stays Fail.** One experiment tried precision-weighted thresholding (`train_val_fbeta_0.5`) and got test F1=0.0 on the held-out split — worse than the baseline. Rather than cherry-picking seeds or softening the result, the locked test failure is published directly in [`FINANCE_HONESTY.md`](docs/FINANCE_HONESTY.md). Isolating and documenting negative results under strict leakage guards is core engineering rigor. Shipped defaults remain `train_f1_max` (aligned across the API and `scripts/train_option_b_gate.py`). The expanded freeze provides statistical support ($n_{\text{positive, test}} = 233$, test F1≈0.2108), but Model Quality Go is not claimed.
 
 ## 8. What does replay-first prove vs what Kafka E2E still needs to prove?
 
