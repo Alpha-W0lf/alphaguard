@@ -19,3 +19,7 @@ htmlcov/
 # Raw per-seed diagnostic plots/score arrays from ad-hoc ML runs (bulky, reproducible; keep summaries/logs, not these)
 runs/**/*.png
 runs/**/*.npz
+
+CLAUDE.md
+AGENTS.md
+.cursor/
