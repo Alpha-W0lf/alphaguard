@@ -9,6 +9,11 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import UTC, datetime
 from pathlib import Path
 
+# Cap OpenMP/BLAS/XGBoost threads BEFORE importing study_executor (pulls xgboost).
+from alphaguard.ml.thread_limits import apply_native_thread_limits
+
+apply_native_thread_limits()
+
 from alphaguard.ml.study_executor import execute_run, get_git_sha
 from alphaguard.ml.study_mlflow import log_run_to_mlflow
 from alphaguard.ml.study_promotion import (
@@ -180,7 +185,11 @@ def run_study(
             run_records.append(rec)
     else:
         mp_ctx = mp.get_context("spawn")
-        with ProcessPoolExecutor(max_workers=max_workers, mp_context=mp_ctx) as executor:
+        with ProcessPoolExecutor(
+            max_workers=max_workers,
+            mp_context=mp_ctx,
+            initializer=apply_native_thread_limits,
+        ) as executor:
             future_to_cfg = {
                 executor.submit(
                     _worker_task,
@@ -247,7 +256,11 @@ def run_study(
                     run_records.append(rec)
             else:
                 mp_ctx = mp.get_context("spawn")
-                with ProcessPoolExecutor(max_workers=max_workers, mp_context=mp_ctx) as executor:
+                with ProcessPoolExecutor(
+                    max_workers=max_workers,
+                    mp_context=mp_ctx,
+                    initializer=apply_native_thread_limits,
+                ) as executor:
                     future_to_cfg = {
                         executor.submit(
                             _worker_task,
