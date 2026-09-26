@@ -1,0 +1,42 @@
+study_id: jh63_matrix_c_8907
+description: "JH-63.3 Matrix C on 8907 freeze — seeds/threshold/beta/calibration/depth/spw axes (locked)"
+dataset_path: data/derived/training_events.parquet
+dataset_hash: 534a341a9d89f1266b11a7d4fff305575dcf4c2cc6c766e3d786047ddf042cb3
+
+seeds:
+  - 42
+
+threshold_methods:
+  - train_f1_max
+  - train_val_fbeta_0.5
+
+betas:
+  - 0.5
+  - 1.0
+
+calibration_methods:
+  - none
+  - platt
+  - isotonic
+
+max_depths:
+  - 2
+  - 3
+
+etas:
+  - 0.1
+
+num_boost_rounds:
+  - 40
+
+scale_pos_weights:
+  - null
+  - 2
+  - 5
+  - 10
+
+split_policy: nested_time_aware_v1
+train_frac: 0.8
+val_frac: 0.2
+enable_mlflow: false
+mlflow_tracking_uri: artifacts/mlruns
