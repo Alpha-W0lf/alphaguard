@@ -15,17 +15,10 @@
 
 | Topic | Honesty |
 |-------|---------|
-<<<<<<< HEAD
-| Gate ≠ alpha | Approve/reject is a **risk veto**, not a signal that the idea is profitable. |
-| Costs / slippage / PnL | **Omitted on purpose** — this is a veto gate lab, not an execution strategy. Do not invent backtest PnL claims. |
-| Production risk model | Lab-scale Option B train (JH-63.1 freeze n=500; JH-63.3 full-pool freeze n=8907). Default smoke uses `bundle_kind=fixture` plumbing only. Not a production risk model. |
-| Live eval completeness | No required live-Ollama numeric schema-pass rates; Yahoo RSS may flake; not 24/7 SRE. |
-=======
 | Gate ≠ alpha | Approve/reject is an asymmetric **risk veto** on proposed exposure, not a predictive signal that an idea is profitable. We claim zero alpha. |
-| Costs / slippage / PnL | **Omitted on purpose** — AlphaGuard is a risk veto lab, not an execution algorithm. We publish zero backtest PnL or Sharpe claims. |
-| Production risk model | Option B is an empirical **lab training pipeline** on ~500 events; the default smoke path uses synthetic `bundle_kind=fixture` plumbing to prove orchestration. |
+| Costs / slippage / PnL | **Omitted on purpose.** AlphaGuard is a risk veto lab, not an execution algorithm. We publish zero backtest PnL or Sharpe claims. |
+| Production risk model | Option B is an empirical **lab training pipeline**: a 500-event freeze (published as a Fail, below) and a full-pool re-baseline on 8,907 events. The default smoke path uses synthetic `bundle_kind=fixture` plumbing to prove orchestration. Not a production risk model. |
 | Live eval completeness | No inflated live-Ollama numeric schema-pass rates; Yahoo RSS is subject to external rate limits; not 24/7 production SRE. |
->>>>>>> c2e5af1 (docs(voice): implement JH-63.4 voice pass for technical mastery and empirical honesty)
 
 ## Option B lab metrics (local manifest — regenerate may differ)
 
