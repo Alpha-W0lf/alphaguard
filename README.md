@@ -1,13 +1,13 @@
 # AlphaGuard
 
-**A harness for testing AI trade ideas without fooling yourself.** AlphaGuard is a method project: its goal is to prove the evaluation method, not to ship a trading edge. An LLM analyst proposes trades from financial news, a code-owned risk veto decides whether a BUY may pass, and the harness measures that veto on 8,907 real headline events.
+**A harness for testing AI trade ideas without fooling yourself.** AlphaGuard is a method project: its goal is to prove the evaluation method, not to ship a trading edge. An LLM analyst proposes trades from financial news, a code-owned risk veto decides whether a BUY may pass, and the harness measures the risk model behind that veto on 8,907 real headline events.
 
 [![CI](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Alpha-W0lf/alphaguard/actions/workflows/ci.yml) · License: PolyForm Noncommercial 1.0.0 · Runs locally with no API keys
 
 ## What it demonstrates
 
-- **Point-in-time retrieval and features.** Features use only the last completed NYSE session before the headline, and retrieved context must be published before it. Tests check both.
-- **An audit that caught a leak.** The harness audits its own splits. In an early pass, one tuned configuration cleared the floors on seed 42; the audit then found 92 same-ticker training rows whose 5-day label window reached into the locked test. I added a trading-day purge to the study harness's walk-forward and locked-test splits, with tests that fail if a training label window crosses a boundary (`tests/test_phase_c_audit.py`), and re-ran the configuration with the purge in place ([`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md) §7).
+- **Point-in-time retrieval and features.** Features use only the last completed NYSE session before the headline, and retrieved context must be published at or before it. Tests check both.
+- **An audit that caught a leak.** The harness audits its own splits. In an early pass, one tuned configuration cleared the floors on seed 42; the audit then found 92 same-ticker training rows whose 5-day label window reached into the locked test. I added a trading-day purge to the study harness's walk-forward and locked-test splits, with tests that fail if a training label window crosses a boundary (`tests/test_phase_c_audit.py`), and re-ran the configuration with the purge in place; it no longer cleared the floors ([`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md) §7).
 - **Floors held fixed across experiments.** The risk model predicts whether a stock falls more than 3% in the 5 trading days after a headline. Its floors (F1 ≥ 0.30, precision ≥ 0.25, AUPRC ≥ 0.18 on held-out data, on every seed) were set after the first baseline and held fixed for every later experiment. Studies run before 2026-10-18 shortlisted on locked-test F1, so their results are read as selection-biased ([`docs/PROMOTION_POLICY.md`](docs/PROMOTION_POLICY.md)).
 - **Write-once runs.** Every run record is written once; study runs also record the git SHA, dataset hash and config hash, and a rerun takes a new id.
 - **An LLM analyst checked by a code-owned risk veto.** The LLM proposes; a deterministic policy over a calibrated downside-risk score decides, so the model never approves its own idea.
@@ -45,7 +45,7 @@ make test               # about 200 tests in about 15 s
 make smoke-fixture      # headline -> context -> BUY -> veto -> run record
 ```
 
-Expected output (abridged):
+The demo uses a fixture analyst and a synthetic model bundle, so it shows the pipeline end to end, not model quality. Expected output (abridged):
 
 ```
 === AlphaGuard smoke (replay) ===
@@ -61,7 +61,7 @@ With a local LLM: `ollama pull gemma4:e2b && make smoke`. API server: `make serv
 
 ## How this was built
 
-I direct coding agents under written gates. The contracts came first ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)). Each later experiment had a written plan with floors and stop rules before it ran. Agents work from [`AGENTS.md`](AGENTS.md), and a bug fix ships with a test that fails on the old code. CI runs lint, the test suite and the fixture smoke on every PR.
+I direct coding agents under written gates. The contracts came first ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)). Agents work from [`AGENTS.md`](AGENTS.md), which requires every experiment to start from a written plan with floors and stop rules, and every bug fix to ship with a test that fails on the old code. CI runs lint, the test suite and the fixture smoke on every PR.
 
 ## Repo map
 
