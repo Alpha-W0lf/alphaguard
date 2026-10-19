@@ -1,0 +1,51 @@
+{
+  "evt-aapl-001": {
+    "action": "BUY",
+    "confidence": 0.75,
+    "rationale": "Apple announces record iPhone demand in key markets, supported by supplier reports of higher component orders ahead of spring launches.",
+    "event_id": "evt-aapl-001",
+    "ticker": "AAPL"
+  },
+  "evt-msft-001": {
+    "action": "BUY",
+    "confidence": 0.70,
+    "rationale": "Microsoft expands Azure AI capacity with new data centers and enterprise commitments.",
+    "event_id": "evt-msft-001",
+    "ticker": "MSFT"
+  },
+  "evt-nvda-001": {
+    "action": "BUY",
+    "confidence": 0.80,
+    "rationale": "Nvidia raises data-center GPU outlook citing strong cloud demand and rising order backlogs.",
+    "event_id": "evt-nvda-001",
+    "ticker": "NVDA"
+  },
+  "evt-googl-001": {
+    "action": "HOLD",
+    "confidence": 0.60,
+    "rationale": "Alphabet faces antitrust scrutiny over search advertising, creating regulatory uncertainty despite strong core search revenue.",
+    "event_id": "evt-googl-001",
+    "ticker": "GOOGL"
+  },
+  "evt-amzn-001": {
+    "action": "BUY",
+    "confidence": 0.72,
+    "rationale": "Amazon reports stronger AWS margins and retail efficiency gains.",
+    "event_id": "evt-amzn-001",
+    "ticker": "AMZN"
+  },
+  "evt-meta-001": {
+    "action": "HOLD",
+    "confidence": 0.65,
+    "rationale": "Meta unveils cost cuts while boosting AI infrastructure spend; CapEx increases offset margin improvements.",
+    "event_id": "evt-meta-001",
+    "ticker": "META"
+  },
+  "evt-spy-001": {
+    "action": "PASS",
+    "confidence": 0.50,
+    "rationale": "Broad market rally lifts S&P 500 as inflation cools; broad index ETF has no single-stock catalyst.",
+    "event_id": "evt-spy-001",
+    "ticker": "SPY"
+  }
+}

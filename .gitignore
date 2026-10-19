@@ -1,0 +1,23 @@
+.env
+.venv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+artifacts/
+dist/
+*.egg-info/
+.DS_Store
+data/derived/
+data/raw/
+*.parquet
+!data/fixtures/**
+.coverage
+htmlcov/
+
+# Raw per-seed diagnostic plots/score arrays from ad-hoc ML runs (bulky, reproducible; keep summaries/logs, not these)
+runs/**/*.png
+runs/**/*.npz
+
+.cursor/

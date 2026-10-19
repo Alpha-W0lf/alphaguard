@@ -1,0 +1,454 @@
+"""Expanding-window walk-forward inside the dev block only (Phase B).
+
+Layout: first 40% of dev is the initial train, then four contiguous validation
+blocks of 15% of dev. Fold k trains on everything before val block k, minus
+an embargo gap. The locked test (last 20%) is not indexed here.
+
+When the frame has session dates, the gap is the trading-day label horizon:
+every kept train row's 5-session label window ends before the next block.
+Without those dates the gap stays the historical 5 global rows.
+"""
+
+from __future__ import annotations
+
+import logging
+from datetime import date
+from dataclasses import dataclass, replace
+
+import numpy as np
+import pandas as pd
+import xgboost as xgb
+
+from alphaguard.contracts.decisions import FEATURE_NAMES
+from alphaguard.ml.study_calibration import ProbabilityCalibrator
+from alphaguard.ml.study_metrics import compute_metrics_suite
+from alphaguard.ml.study_schema import (
+    RunConfig,
+    WalkForwardAggregate,
+    WalkForwardBlock,
+    WalkForwardFoldMetrics,
+)
+from alphaguard.ml.train_eval import fit_threshold_train_f1
+
+logger = logging.getLogger(__name__)
+
+# Label window end is close_5_trading_sessions_later (fwd_return_5d).
+LABEL_HORIZON_ROWS = 5
+_AGG_KEYS = ("f1", "precision", "recall", "auprc", "positive_rate")
+
+# Date-anchored locked-test boundary: first feature_as_of of freeze
+# 001856a6 locked test (freeze_profile.json). Old row-fraction policy stays default.
+LOCKED_TEST_ASOF_ANCHOR_001856A6 = date(2020, 2, 25)
+SPLIT_POLICY_NESTED_V1 = "nested_time_aware_v1"
+SPLIT_POLICY_NESTED_V1_DATE_ANCHOR = "nested_time_aware_v1_date_anchor"
+
+
+@dataclass(frozen=True)
+class FoldIndex:
+    fold: int
+    train_start: int
+    train_end: int
+    val_start: int
+    val_end: int
+    embargo_rows: int
+
+
+@dataclass
+class FoldScore:
+    """Val-block scores for the economic stub. Threshold was fit on train only."""
+
+    index: FoldIndex
+    y_val: np.ndarray
+    probs_val: np.ndarray
+    threshold: float
+    metrics: WalkForwardFoldMetrics
+
+
+def resolve_embargo_rows(
+    n_dev: int,
+    explicit: int | None,
+    horizon_rows: int | None = LABEL_HORIZON_ROWS,
+) -> tuple[int, str]:
+    """Default embargo equals the label horizon. Else 1% of dev rows."""
+    if explicit is not None:
+        if explicit < 0:
+            raise ValueError(f"embargo_rows must be >= 0, got {explicit}")
+        return explicit, "explicit"
+    if horizon_rows is not None:
+        if horizon_rows < 0:
+            raise ValueError(f"label horizon must be >= 0, got {horizon_rows}")
+        return horizon_rows, "label_horizon"
+    return int(n_dev * 0.01), "dev_rows_1pct"
+
+
+def prefix_end_before_session(
+    label_end_session: np.ndarray,
+    *,
+    candidate_end: int,
+    next_session: int,
+) -> int:
+    """Exclusive train end whose label windows finish before ``next_session``.
+
+    Rows are time-ordered. The cut is the first row whose label-end session
+    reaches the next block. Earlier rows stay. A cut at 0 is an error.
+    """
+    if candidate_end < 1:
+        raise ValueError(f"candidate train end must be >= 1, got {candidate_end}")
+    window = np.asarray(label_end_session[:candidate_end], dtype=int)
+    hits = np.flatnonzero(window >= int(next_session))
+    train_end = int(hits[0]) if len(hits) else int(candidate_end)
+    if train_end < 1:
+        raise ValueError("trading-day embargo removed every train row")
+    return train_end
+
+
+def horizon_overlap_count(
+    label_end_session: np.ndarray,
+    feature_session: np.ndarray,
+    train_end: int,
+    next_start: int,
+    next_end: int,
+) -> int:
+    """Train rows whose 5-session label window reaches the next block."""
+    if next_start >= next_end or train_end < 1:
+        return 0
+    next_session = int(np.min(feature_session[next_start:next_end]))
+    return int(np.sum(label_end_session[:train_end] >= next_session))
+
+
+def apply_trading_day_embargo(
+    folds: list[FoldIndex],
+    label_end_session: np.ndarray,
+    feature_session: np.ndarray,
+) -> tuple[list[FoldIndex], bool]:
+    """Move each train end back so label windows do not enter the val block.
+
+    The 5-global-row gap is not a trading-day embargo on multi-ticker frames.
+    Val blocks stay put. Returns the new folds and whether any train end moved.
+    """
+    purged: list[FoldIndex] = []
+    changed = False
+    for fold in folds:
+        next_session = int(np.min(feature_session[fold.val_start : fold.val_end]))
+        new_end = prefix_end_before_session(
+            label_end_session,
+            candidate_end=fold.val_start,
+            next_session=next_session,
+        )
+        if new_end != fold.train_end:
+            changed = True
+        purged.append(
+            replace(
+                fold,
+                train_end=new_end,
+                embargo_rows=fold.val_start - new_end,
+            )
+        )
+    return purged, changed
+
+
+def _session_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray] | None:
+    """Injected columns win. Otherwise compute from ``feature_as_of``."""
+    if "_feature_session_idx" in df.columns and "_label_end_session_idx" in df.columns:
+        return (
+            df["_feature_session_idx"].to_numpy(dtype=int),
+            df["_label_end_session_idx"].to_numpy(dtype=int),
+        )
+    if "feature_as_of" not in df.columns:
+        return None
+    from alphaguard.ml.dataset_asof import frame_session_indices
+
+    feature_idx, label_end_idx = frame_session_indices(df)
+    return feature_idx, label_end_idx
+
+
+
+def _test_served_mask(test_df: pd.DataFrame) -> np.ndarray | None:
+    """Boolean mask over locked-test rows when served_universe column exists."""
+    if "served_universe" not in test_df.columns:
+        return None
+    return test_df["served_universe"].astype(bool).to_numpy()
+
+def resolve_locked_test_boundary(
+    df: pd.DataFrame,
+    *,
+    train_frac: float,
+    split_policy: str = SPLIT_POLICY_NESTED_V1,
+    date_anchor: date | None = None,
+) -> int:
+    """Return the first locked-test row index for a time-ordered frame.
+
+    ``nested_time_aware_v1`` keeps the historical ``int(n * train_frac)`` cut.
+    ``nested_time_aware_v1_date_anchor`` uses the first row whose
+    ``feature_as_of >= date_anchor`` (default: 001856a6 locked-test asof).
+    """
+    n_rows = len(df)
+    if split_policy == SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
+        if "feature_as_of" not in df.columns:
+            raise ValueError(
+                "split_policy nested_time_aware_v1_date_anchor requires feature_as_of"
+            )
+        anchor = date_anchor or LOCKED_TEST_ASOF_ANCHOR_001856A6
+        asof = pd.to_datetime(df["feature_as_of"]).map(
+            lambda v: v.date() if hasattr(v, "date") else v
+        )
+        hits = np.flatnonzero(asof.to_numpy() >= anchor)
+        if len(hits) == 0:
+            raise ValueError(f"no rows with feature_as_of >= {anchor.isoformat()}")
+        boundary = int(hits[0])
+        if boundary < 1 or boundary >= n_rows:
+            raise ValueError(
+                f"date-anchor boundary={boundary} invalid for n_rows={n_rows} "
+                f"anchor={anchor.isoformat()}"
+            )
+        return boundary
+    if split_policy not in (SPLIT_POLICY_NESTED_V1, "time_ordered_80_20"):
+        raise ValueError(f"unknown split_policy: {split_policy!r}")
+    return int(n_rows * train_frac)
+
+
+def split_for_walk_forward(
+    df: pd.DataFrame,
+    train_frac: float,
+    walk_forward: str,
+    *,
+    split_policy: str = SPLIT_POLICY_NESTED_V1,
+    date_anchor: date | None = None,
+):
+    """With session dates, both `off` and `expanding4` purge the locked-test gap.
+
+    Without them, historical 80/20 cut with no gap.
+    Date-anchored policy (``nested_time_aware_v1_date_anchor``) freezes the
+    locked-test start to the first ``feature_as_of >=`` anchor so adding
+    training rows cannot slide the boundary in calendar time.
+    """
+    from alphaguard.ml.train_option_b import SplitData, time_ordered_split
+
+    if walk_forward not in ("off", "expanding4"):
+        raise ValueError(f"walk_forward must be off or expanding4, got {walk_forward!r}")
+    indexed = _session_indices(df)
+    n_rows = len(df)
+    boundary = resolve_locked_test_boundary(
+        df,
+        train_frac=train_frac,
+        split_policy=split_policy,
+        date_anchor=date_anchor,
+    )
+    if indexed is None:
+        # No session indices: fall back to plain prefix cut (date-anchor still applies).
+        if split_policy == SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
+            names = list(FEATURE_NAMES)
+            train = df.iloc[:boundary]
+            test = df.iloc[boundary:]
+            return SplitData(
+                x_train=train[names].to_numpy(dtype=float),
+                y_train=train["label_high_risk"].to_numpy(dtype=int),
+                x_test=test[names].to_numpy(dtype=float),
+                y_test=test["label_high_risk"].to_numpy(dtype=int),
+                train_start=str(train["published_at"].iloc[0]),
+                train_end=str(train["published_at"].iloc[-1]),
+                test_served_mask=_test_served_mask(test),
+            )
+        return time_ordered_split(df, train_frac=train_frac)
+    feature_idx, label_end_idx = indexed
+    if boundary < 1 or boundary >= n_rows:
+        return time_ordered_split(df, train_frac=train_frac)
+    next_session = int(np.min(feature_idx[boundary:]))
+    train_end = prefix_end_before_session(
+        label_end_idx, candidate_end=boundary, next_session=next_session
+    )
+    if train_end == boundary and split_policy != SPLIT_POLICY_NESTED_V1_DATE_ANCHOR:
+        return time_ordered_split(df, train_frac=train_frac)
+    logger.info(
+        "locked-test trading-day embargo train_end=%s boundary=%s dropped=%s policy=%s",
+        train_end,
+        boundary,
+        boundary - train_end,
+        split_policy,
+    )
+    names = list(FEATURE_NAMES)
+    train = df.iloc[:train_end]
+    test = df.iloc[boundary:]
+    return SplitData(
+        x_train=train[names].to_numpy(dtype=float),
+        y_train=train["label_high_risk"].to_numpy(dtype=int),
+        x_test=test[names].to_numpy(dtype=float),
+        y_test=test["label_high_risk"].to_numpy(dtype=int),
+        train_start=str(train["published_at"].iloc[0]),
+        train_end=str(train["published_at"].iloc[-1]),
+        test_served_mask=_test_served_mask(test),
+    )
+
+
+def expanding4_folds(
+    n_rows: int,
+    *,
+    train_frac: float = 0.8,
+    n_dev: int | None = None,
+    embargo_rows: int | None = None,
+    horizon_rows: int | None = LABEL_HORIZON_ROWS,
+) -> tuple[list[FoldIndex], int, str]:
+    """Return 4 purged expanding folds and the locked-test start index.
+
+    Val blocks are contiguous slices of dev. Train for fold k is the prefix
+    that ends `embargo_rows` before that val block. Locked-test rows start at n_dev.
+    """
+    if n_dev is None:
+        n_dev = int(n_rows * train_frac)
+    if n_dev < 1 or n_dev >= n_rows:
+        raise ValueError(f"dev block must be a proper prefix: n_dev={n_dev} n_rows={n_rows}")
+    embargo, source = resolve_embargo_rows(n_dev, embargo_rows, horizon_rows)
+    logger.info(
+        "walk-forward embargo_rows=%s source=%s n_dev=%s n_rows=%s",
+        embargo,
+        source,
+        n_dev,
+        n_rows,
+    )
+    fracs = (0.40, 0.55, 0.70, 0.85, 1.0)
+    cuts = [int(n_dev * frac) for frac in fracs]
+    cuts[-1] = n_dev
+    for i in range(1, len(cuts)):
+        if cuts[i] <= cuts[i - 1]:
+            raise ValueError(f"dev block too small for expanding4 cuts: {cuts}")
+
+    folds: list[FoldIndex] = []
+    for k in range(4):
+        val_start, val_end = cuts[k], cuts[k + 1]
+        train_end = val_start - embargo
+        if train_end < 1:
+            raise ValueError(
+                f"fold {k} train empty after embargo={embargo} (val_start={val_start})"
+            )
+        if val_end > n_dev:
+            raise ValueError(f"fold {k} val crosses locked test: val_end={val_end} n_dev={n_dev}")
+        folds.append(
+            FoldIndex(
+                fold=k,
+                train_start=0,
+                train_end=train_end,
+                val_start=val_start,
+                val_end=val_end,
+                embargo_rows=embargo,
+            )
+        )
+    return folds, n_dev, source
+
+
+def _aggregate(folds: list[WalkForwardFoldMetrics]) -> WalkForwardAggregate:
+    mean: dict[str, float] = {}
+    minimum: dict[str, float] = {}
+    std: dict[str, float] = {}
+    for key in _AGG_KEYS:
+        vals = np.asarray([float(getattr(fold, key)) for fold in folds], dtype=float)
+        mean[key] = float(vals.mean())
+        minimum[key] = float(vals.min())
+        std[key] = float(vals.std(ddof=1)) if len(vals) >= 2 else 0.0
+    return WalkForwardAggregate(mean=mean, min=minimum, std=std)
+
+
+def _fit_fold_calibrator(
+    method: str, train_probs: np.ndarray, y_train: np.ndarray
+) -> ProbabilityCalibrator:
+    """Fit calibration on this fold's train rows only. Never on val or test."""
+    calibrator = ProbabilityCalibrator(method)  # type: ignore[arg-type]
+    if method != "none" and len(np.unique(y_train)) >= 2:
+        calibrator.fit(train_probs, y_train)
+    return calibrator
+
+
+def evaluate_expanding4(
+    df: pd.DataFrame,
+    config: RunConfig,
+    *,
+    n_dev: int,
+    embargo_rows: int | None = None,
+) -> tuple[WalkForwardBlock, list[FoldScore]]:
+    """Train one booster per fold. Threshold is train_f1_max on that fold's train."""
+    from alphaguard.ml.study_executor import _build_booster_params
+
+    folds, locked_start, source = expanding4_folds(
+        len(df),
+        train_frac=config.train_frac,
+        n_dev=n_dev,
+        embargo_rows=embargo_rows,
+    )
+    indexed = _session_indices(df)
+    if indexed is not None:
+        feature_idx, label_end_idx = indexed
+        folds, purged = apply_trading_day_embargo(folds, label_end_idx, feature_idx)
+        if purged:
+            source = "trading_day_horizon"
+            logger.info(
+                "walk-forward trading-day embargo gaps=%s",
+                [fold.val_start - fold.train_end for fold in folds],
+            )
+    x_all = df[list(FEATURE_NAMES)].to_numpy(dtype=float)
+    y_all = df["label_high_risk"].to_numpy(dtype=int)
+    scored: list[FoldScore] = []
+    metrics: list[WalkForwardFoldMetrics] = []
+
+    for fold in folds:
+        y_tr = y_all[fold.train_start : fold.train_end]
+        x_tr = x_all[fold.train_start : fold.train_end]
+        n_pos = int(y_tr.sum())
+        if n_pos == 0 or n_pos == len(y_tr):
+            raise ValueError(f"fold {fold.fold} train is single-class (n_pos={n_pos})")
+        spw = float(len(y_tr) - n_pos) / float(n_pos)
+        params = _build_booster_params(config, spw)
+        dtrain = xgb.DMatrix(x_tr, label=y_tr, feature_names=list(FEATURE_NAMES))
+        booster = xgb.train(
+            params, dtrain, num_boost_round=config.model_params.num_boost_round
+        )
+        raw_train = booster.predict(dtrain)
+        calibrator = _fit_fold_calibrator(config.calibration_method, raw_train, y_tr)
+        train_probs = calibrator.predict_proba(raw_train)
+        threshold = fit_threshold_train_f1(y_tr, train_probs)
+
+        y_va = y_all[fold.val_start : fold.val_end]
+        x_va = x_all[fold.val_start : fold.val_end]
+        dval = xgb.DMatrix(x_va, feature_names=list(FEATURE_NAMES))
+        val_probs = calibrator.predict_proba(booster.predict(dval))
+        suite = compute_metrics_suite(y_va, val_probs, threshold=threshold, beta=config.beta)
+        n_rows = int(len(y_va))
+        positive_rate = float(y_va.sum() / n_rows) if n_rows else 0.0
+        logger.info(
+            "walk-forward fold=%s n_rows=%s positive_rate=%.6f",
+            fold.fold,
+            n_rows,
+            positive_rate,
+        )
+        fold_metrics = WalkForwardFoldMetrics(
+            fold=fold.fold,
+            n_rows=n_rows,
+            positive_rate=positive_rate,
+            precision=float(suite["precision"]),
+            recall=float(suite["recall"]),
+            f1=float(suite["f1"]),
+            auprc=float(suite["auprc"]),
+            threshold=float(threshold),
+            train_start=fold.train_start,
+            train_end=fold.train_end,
+            val_start=fold.val_start,
+            val_end=fold.val_end,
+        )
+        metrics.append(fold_metrics)
+        scored.append(
+            FoldScore(
+                index=fold,
+                y_val=y_va,
+                probs_val=val_probs,
+                threshold=float(threshold),
+                metrics=fold_metrics,
+            )
+        )
+
+    block = WalkForwardBlock(
+        embargo_rows=folds[0].embargo_rows,
+        embargo_source=source,
+        n_dev=locked_start,
+        locked_test_start=locked_start,
+        folds=metrics,
+        aggregate=_aggregate(metrics),
+    )
+    return block, scored

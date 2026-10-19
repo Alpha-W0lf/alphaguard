@@ -1,0 +1,11 @@
+split,mode,train_end,test_start,test_end,global_session_overlap_rows,same_ticker_overlap_rows,affected_tickers
+fold_0,purge_off,2845,2850,3918,24,6,QQQ
+fold_1,purge_off,3913,3918,4987,6,5,NVDA
+fold_2,purge_off,4982,4987,6056,33,26,GOOGL|NVDA|QQQ
+fold_3,purge_off,6051,6056,7125,70,70,GOOGL|NVDA|QQQ
+fold_0,purge_on,2821,2850,3918,0,0,
+fold_1,purge_on,3907,3918,4987,0,0,
+fold_2,purge_on,4949,4987,6056,0,0,
+fold_3,purge_on,5981,6056,7125,0,0,
+nested_locked_test,purge_off,7125,7125,8907,96,92,GOOGL|META|NVDA|QQQ
+nested_locked_test,purge_on_counterfactual,7029,7125,8907,0,0,
